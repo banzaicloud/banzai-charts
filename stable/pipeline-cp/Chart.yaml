@@ -1,0 +1,10 @@
+apiVersion: v1
+description: A Helm chart for Kubernetes
+name: pipeline-cp
+version: 0.0.1
+keywords:
+    - pipeline
+    - controlplane
+home: https://banzaicloud.com
+sources:
+  - https://github.com/banzaicloud/charts/

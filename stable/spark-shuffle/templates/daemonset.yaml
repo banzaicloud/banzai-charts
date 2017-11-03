@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    app: spark-shuffle-service
+    spark-version: {{ .Values.spark.version }}
+  name: shuffle
+spec:
+  template:
+    metadata:
+      labels:
+        app: spark-shuffle-service
+        spark-version: {{ .Values.spark.version }}
+    spec:
+      volumes:
+        - name: temp-volume
+          hostPath:
+            path: '/tmp'
+      containers:
+        - name: shuffle
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy}}"
+          volumeMounts:
+            - mountPath: '/tmp'
+              name: temp-volume
+
+          resources:
+             requests:
+               cpu: "200m"
+             limits:
+               cpu: "200m"

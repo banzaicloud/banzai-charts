@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.zeppelin.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.zeppelin.image.repository }}:{{ .Values.zeppelin.image.tag }}"
+        imagePullPolicy: {{ .Values.zeppelin.image.pullPolicy }}        
+        env:
+          - name: SPARK_SUBMIT_OPTIONS
+            value: >-
+              --deploy-mode {{ .Values.sparkSubmitOptions.deployMode }} 
+              --kubernetes-namespace {{ .Values.sparkSubmitOptions.k8sNameSpace }} 
+              --master {{ .Values.sparkSubmitOptions.masterAddress }}
+              --conf spark.driver.memory={{ .Values.sparkSubmitOptions.sparkDriverMemory }}
+              --conf spark.executor.memory={{ .Values.sparkSubmitOptions.sparkExcutorMemory }}
+              --conf spark.kubernetes.driver.docker.image={{ .Values.sparkSubmitOptions.DriverImage }}  
+              --conf spark.kubernetes.executor.docker.image={{ .Values.sparkSubmitOptions.ExecutorImage }} 
+              --conf spark.kubernetes.initcontainer.docker.image={{ .Values.sparkSubmitOptions.initContainerImage }}
+              --conf spark.dynamicAllocation.enabled={{ .Values.sparkSubmitOptions.dynamicAllocation }}   
+              --conf spark.shuffle.service.enabled={{ .Values.sparkSubmitOptions.shuffleService }} 
+              --conf spark.kubernetes.shuffle.namespace={{ .Values.sparkSubmitOptions.shuffleNameSpace }}  
+              --conf spark.kubernetes.shuffle.labels={{ .Values.sparkSubmitOptions.shuffleLabels }}
+              --conf spark.metrics.conf={{ .Values.sparkSubmitOptions.sparkMetricsConf }}
+              --conf spark.kubernetes.resourceStagingServer.uri={{ .Values.sparkSubmitOptions.resourceStagingServerExt }}
+              --conf spark.kubernetes.resourceStagingServer.internal.uri={{ .Values.sparkSubmitOptions.resourceStagingServerInt }}
+              --conf spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
+
+        ports:
+        - containerPort: {{ .Values.zeppelin.service.internalPort }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.zeppelin.service.internalPort }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.zeppelin.service.internalPort }}
+          initialDelaySeconds: 20
+          timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.zeppelin.resources | indent 12 }}

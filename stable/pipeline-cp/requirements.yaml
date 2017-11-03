@@ -1,0 +1,16 @@
+dependencies:
+- name: grafana
+  version: 0.5.0
+  repository: https://kubernetes-charts.storage.googleapis.com/
+
+- name: traefik
+  version: 1.12.1
+  repository: https://kubernetes-charts.storage.googleapis.com/
+
+- name: prometheus
+  version: 4.6.9
+  repository: https://kubernetes-charts.storage.googleapis.com/
+
+- name: pipeline
+  version: 0.0.1
+  repository: alias:banzaicloud-stable

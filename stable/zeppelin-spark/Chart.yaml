@@ -1,0 +1,10 @@
+name: zeppelin-spark
+version: 0.0.1
+description: A Helm chart for Kubernetes
+home: https://banzaicloud.com
+sources:
+  - https://github.com/banzaicloud/zeppelin
+  - https://github.com/banzaicloud/spark
+keywords:
+- spark
+- zeppelin

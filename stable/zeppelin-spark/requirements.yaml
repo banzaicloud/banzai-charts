@@ -1,0 +1,8 @@
+dependencies:
+- name: spark
+  version: 0.0.1
+  repository: alias:banzaicloud-stable
+
+- name: zeppelin
+  version: 0.0.1
+  repository: alias:banzaicloud-stable

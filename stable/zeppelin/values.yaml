@@ -1,0 +1,44 @@
+# Default values for zeppelin
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+zeppelin:
+  replicaCount: 1
+
+  image:
+    repository: banzaicloud/zeppelin-server
+    tag: v2.2.0-k8s-1.0.34
+    pullPolicy: IfNotPresent
+
+
+  service:
+    name: zeppelin-service
+    type: ClusterIP
+    internalPort: 8080
+    externalPort:  8080
+
+  resources:
+    limits:
+      cpu: 2
+      memory: 2048Mi
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+
+sparkSubmitOptions:
+  deployMode: cluster
+  k8sNameSpace: default
+  masterAddress: k8s://https://kubernetes:443 
+  sparkDriverMemory: 4G 
+  sparkExcutorMemory: 2G
+  sparkMetricsConf: /opt/spark/conf/metrics.properties  
+  dynamicAllocation: true
+  shuffleService: true
+  shuffleNameSpace: default
+  shuffleLabels: app=spark-shuffle-service,spark-version=2.2.0
+  DriverImage: banzaicloud/spark-driver-py:v2.2.0-k8s-1.0.161
+  ExecutorImage: banzaicloud/spark-executor-py:v2.2.0-k8s-1.0.161
+  initContainerImage: banzaicloud/spark-init:v2.2.0-k8s-1.0.161
+  resourceStagingServerInt: http://spark-rss:10000
+  resourceStagingServerExt: http://spark-rss:10000
+  sparkLocalDir: /tmp/spark-local

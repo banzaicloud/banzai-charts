@@ -1,0 +1,60 @@
+# Golang CircleCI 2.0 configuration file
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: banzaicloud/helm-aws-s3
+
+        environment:
+          AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+          AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+          HELM_REPO_USER: $HELM_REPO_USER
+          HELM_REPO_PASS: $HELM_REPO_PASS
+
+    steps:
+      - checkout
+
+      - run:
+          name: Build Charts
+          no_output_timeout: 2700
+          command: |
+            GIT_REV=$(git rev-parse --short HEAD)
+            GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+            helm init -c
+            echo 52.214.21.9 kubernetes-charts.banzaicloud.com | tee -a /etc/hosts
+            echo 52.214.21.9 kubernetes-charts-incubator.banzaicloud.com | tee -a /etc/hosts
+            cat /etc/hosts
+            ls -1
+            helm repo add banzaicloud-stable http://$HELM_REPO_USER:$HELM_REPO_PASS@kubernetes-charts.banzaicloud.com
+            helm repo add banzaicloud-incubator http://$HELM_REPO_USER:$HELM_REPO_PASS@kubernetes-charts-incubator.banzaicloud.com
+            helm repo update
+            helm repo list
+
+            echo "REPO -> STABLE"
+            cd ./stable
+            mkdir /s3-chart/stable
+            echo "helm dependency update:"
+            find . ! -path ./  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm dependency update {} \;
+            echo "helm dependency build:"
+            find . ! -path ./  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm dependency build {} \;
+            echo "Remove requirements.lock files"
+            find . -name requirements.lock  -maxdepth 3 -type f -exec rm {} \;
+            echo "helm helm package:"
+            find . ! -path ./  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm package -d /s3-chart/stable {} \;
+            helm repo index /s3-chart/stable
+            s3cmd sync /s3-chart/stable/*  s3://banzaicloud-charts-stable/
+
+            echo "REPO -> INCUBATOR"
+            cd ../incubator
+            mkdir /s3-chart/incubator
+            echo "helm dependency update:"
+            find . ! -path ./  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm dependency update {} \;
+            echo "helm dependency build:"
+            find . ! -path ./  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm dependency build {} \;
+            echo "Remove requirements.lock files"
+            find . -name requirements.lock  -maxdepth 3 -type f -exec rm {} \;
+            echo "helm helm package:"
+            find . ! -path ./  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm package -d /s3-chart/incubator {} \;
+            helm repo index /s3-chart/incubator
+            s3cmd sync /s3-chart/incubator/*  s3://banzaicloud-charts-incubator/
