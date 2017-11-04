@@ -22,8 +22,6 @@ jobs:
             GIT_REV=$(git rev-parse --short HEAD)
             GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
             helm init -c
-            echo 52.214.21.9 kubernetes-charts.banzaicloud.com | tee -a /etc/hosts
-            echo 52.214.21.9 kubernetes-charts-incubator.banzaicloud.com | tee -a /etc/hosts
             cat /etc/hosts
             ls -1
             helm repo add banzaicloud-stable http://$HELM_REPO_USER:$HELM_REPO_PASS@kubernetes-charts.banzaicloud.com
