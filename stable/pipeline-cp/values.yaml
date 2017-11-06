@@ -213,6 +213,8 @@ prometheus:
     persistentVolume:
       enabled: false
 
+    configMapOverrideName: cp-alertmanager
+
     ingress:
       enabled: false
     baseURL: /alertmanager
@@ -220,24 +222,25 @@ prometheus:
     extraArgs:
       "web.external-url": "http://localhost:9093/alertmanager"
 
+    slack_api_url: ""
+    slack_channel: ""
 
+    smtp_address: ""
+    smtp_username: ""
+    smtp_password: ""
+    smtp_to: ""
+    smtp_from: ""
 
   nodeExporter:
     enabled: false
 
 
   server:
+
     alertmanagerURL: http://prometheus-alertmanager:80/alertmanager
 
     ingress:
       enabled: false
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        ingress.kubernetes.io/auth-type: basic
-        ingress.kubernetes.io/auth-secret: myauthsecret
-        ingress.kubernetes.io/auth-realm: "Authentication Required - Prometheus"
-        ingress.kubernetes.io/ssl-redirect: "false"
-        ingress.kubernetes.io/rewrite-target: /prometheus
 
     baseURL: /prometheus
 
@@ -246,6 +249,11 @@ prometheus:
     extraArgs:
       "query.staleness-delta": "5m0s"
       "web.external-url": "http://localhost:9090/prometheus"
+
+    clusterIngress:
+      user: ""
+      password: ""
+
 
   pushgateway:
     enabled: false

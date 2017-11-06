@@ -78,7 +78,7 @@ spec:
           mountPath: /root/conf/
         - mountPath: /opt/helm
           name: helm
-        - mountPath: /root/.ssh
+        - mountPath: /.ssh
           name: ssh
         - mountPath: /statestore
           name: statestore

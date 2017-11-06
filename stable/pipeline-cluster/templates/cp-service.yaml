@@ -12,11 +12,6 @@ spec:
     nodePort: 30080
     protocol: TCP
     name: http
-  - port: 443
-    targetPort: 443
-    nodePort: 443
-    protocol: TCP
-    name: https
   selector:
     app: "{{ .Release.Name }}-traefik"
 

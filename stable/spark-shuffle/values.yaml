@@ -6,11 +6,11 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/spark-shuffle
-  tag: v2.2.0-k8s-1.0.161
+  tag: v2.2.0-k8s-1.0.158
   pullPolicy: IfNotPresent
 
 spark:
-  version: 2.1.0
+  version: 2.2.0
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
