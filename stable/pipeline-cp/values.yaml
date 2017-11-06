@@ -250,11 +250,6 @@ prometheus:
       "query.staleness-delta": "5m0s"
       "web.external-url": "http://localhost:9090/prometheus"
 
-    clusterIngress:
-      user: ""
-      password: ""
-
-
   pushgateway:
     enabled: false
 
