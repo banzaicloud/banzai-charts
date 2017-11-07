@@ -7,7 +7,7 @@ zeppelin:
 
   image:
     repository: banzaicloud/zeppelin-server
-    tag: v2.2.0-k8s-1.0.34
+    tag: v2.2.0-k8s-1.0.44
     pullPolicy: IfNotPresent
 
 
@@ -36,9 +36,9 @@ sparkSubmitOptions:
   shuffleService: true
   shuffleNameSpace: default
   shuffleLabels: app=spark-shuffle-service,spark-version=2.2.0
-  DriverImage: banzaicloud/spark-driver-py:v2.2.0-k8s-1.0.158
-  ExecutorImage: banzaicloud/spark-executor-py:v2.2.0-k8s-1.0.158
-  initContainerImage: banzaicloud/spark-init:v2.2.0-k8s-1.0.158
+  DriverImage: banzaicloud/spark-driver-py:v2.2.0-k8s-1.0.161
+  ExecutorImage: banzaicloud/spark-executor-py:v2.2.0-k8s-1.0.161
+  initContainerImage: banzaicloud/spark-init:v2.2.0-k8s-1.0.161
   resourceStagingServerInt: http://spark-rss:10000
   resourceStagingServerExt: http://spark-rss:10000
   sparkLocalDir: /tmp/spark-local
