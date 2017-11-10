@@ -4,11 +4,11 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
 
 - name: traefik
-  version: 1.12.1
+  version: 1.14.1
   repository: https://kubernetes-charts.storage.googleapis.com/
 
 - name: prometheus
-  version: 4.6.9
+  version: 4.6.12
   repository: https://kubernetes-charts.storage.googleapis.com/
 
 - name: pipeline
