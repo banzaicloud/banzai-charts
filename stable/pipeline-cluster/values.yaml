@@ -4,11 +4,16 @@
 
 traefik:
   serviceType: NodePort
+  service:
+    nodePorts: 
+      http: 30080
+
   dashboard:
     enabled: true
     domain: ""
   rbac:
     enabled: true
+
 
 prometheus:
   rbac:
@@ -29,6 +34,7 @@ prometheus:
     ## Prometheus server container name
     ##
     name: server
+    baseURL: /prometheus
 
     ## Prometheus server container image
     ##

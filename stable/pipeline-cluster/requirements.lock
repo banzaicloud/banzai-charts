@@ -1,9 +1,0 @@
-dependencies:
-- name: traefik
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 1.12.1
-- name: prometheus
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 4.6.9
-digest: sha256:638c4fd250c13be8ae51c4ec237c904baf167c66de88da0b567a22a203c170ad
-generated: 2017-11-03T13:35:39.95508+01:00

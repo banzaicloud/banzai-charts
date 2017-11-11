@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.zetcd.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+        - name: {{ template "fullname" . }}
+          image: "{{ .Values.zetcd.image.repository }}:{{ .Values.zetcd.image.tag }}"
+          imagePullPolicy: {{ .Values.zetcd.image.pullPolicy }}
+          command:
+            - "/usr/local/bin/zetcd"
+            - "--logtostderr" 
+            - "-v"
+            - "9"
+            - "--zkaddr"
+            - "0.0.0.0:{{ .Values.zetcd.service.port }}"
+            - "--endpoints" 
+            - "{{ .Values.zetcd.etcd.endpoint }}"
+          ports:
+            - containerPort: {{ .Values.zetcd.service.port }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.zetcd.service.port }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.zetcd.service.port }}
+          resources:
+{{ toYaml .Values.zetcd.resources | indent 12 }}
+    {{- if .Values.zetcd.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.zetcd.nodeSelector | indent 8 }}
+    {{- end }}
