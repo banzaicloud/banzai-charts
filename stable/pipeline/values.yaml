@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/pipeline-prod
-  tag: 11
+  tag: 28
   pullPolicy: IfNotPresent
 
 service:

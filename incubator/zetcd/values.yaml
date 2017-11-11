@@ -1,0 +1,20 @@
+zetcd:
+  name: zetcd
+  replicaCount: 1
+
+  resources: {}
+
+  nodeSelector: {}
+
+  image:
+    repository: quay.io/coreos/zetcd
+    tag: v0.0.4
+    pullPolicy: IfNotPresent
+
+  service:
+    name: zetcd-service
+    type: ClusterIP
+    port: 2181
+  
+  etcd:
+    endpoint: example-etcd-cluster-client:2379
