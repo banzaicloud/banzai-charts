@@ -1,6 +1,6 @@
 zetcd:
   name: zetcd
-  replicaCount: 1
+  replicaCount: 2
 
   resources: {}
 
@@ -17,4 +17,4 @@ zetcd:
     port: 2181
   
   etcd:
-    endpoint: example-etcd-cluster-client:2379
+    endpoint: etcd-cluster-client:2379
