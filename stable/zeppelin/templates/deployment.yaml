@@ -38,18 +38,21 @@ spec:
               --conf spark.kubernetes.resourceStagingServer.uri={{ .Values.sparkSubmitOptions.resourceStagingServerExt }}
               --conf spark.kubernetes.resourceStagingServer.internal.uri={{ .Values.sparkSubmitOptions.resourceStagingServerInt }}
               --conf spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
-
+          {{- if .Values.pipelineIngress.enabled }}
+          - name: JAVA_OPTS
+            value: -Dzeppelin.server.context.path={{ .Values.pipelineIngress.baseURL }}
+          {{- end }}
         ports:
         - containerPort: {{ .Values.zeppelin.service.internalPort }}
         livenessProbe:
           httpGet:
-            path: /
+            path: {{ .Values.pipelineIngress.baseURL }}
             port: {{ .Values.zeppelin.service.internalPort }}
           initialDelaySeconds: 30
           timeoutSeconds: 1
         readinessProbe:
           httpGet:
-            path: /
+            path: {{ .Values.pipelineIngress.baseURL }}
             port: {{ .Values.zeppelin.service.internalPort }}
           initialDelaySeconds: 20
           timeoutSeconds: 1

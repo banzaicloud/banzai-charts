@@ -1,0 +1,8 @@
+{{- if .Values.pipelineIngress.ingressURL }}
+  http://{{- .Values.pipelineIngress.baseURL }}{{- .Values.pipelineIngress.baseURL }}
+{{- end }}
+
+{{- if .Values.pipelineIngress.auth.enabled }}
+    Username: {{- .Values.pipelineIngress.auth.username }}
+    Password: {{- .Values.pipelineIngress.auth.password }}
+{{- end }}
