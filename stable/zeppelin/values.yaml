@@ -16,6 +16,7 @@ zeppelin:
     type: ClusterIP
     internalPort: 8080
     externalPort:  8080
+  
 
   resources:
     limits:
@@ -24,6 +25,21 @@ zeppelin:
     requests:
       cpu: 500m
       memory: 1024Mi
+
+ingresspasswordgenerator:
+  image:
+    repository: banzaicloud/htpasswd-gen
+    tag: "0.1"
+    pullPolicy: IfNotPresent
+
+pipelineIngress:
+  enabled: true
+  ingressURL:
+  baseURL: /zeppelin
+  auth:
+    enabled: false
+    username: ""
+    password: ""
 
 sparkSubmitOptions:
   deployMode: cluster
