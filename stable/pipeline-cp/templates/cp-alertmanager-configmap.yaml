@@ -10,18 +10,18 @@ metadata:
 data:
   alertmanager.yml: |-
     global:
-      slack_api_url: {{ .Values.prometheus.alertmanager.slack_api_url }}
-      smtp_smarthost: {{ .Values.prometheus.alertmanager.smtp_address }}
-      smtp_from: {{ .Values.prometheus.alertmanager.smtp_from }}
-      smtp_auth_username: {{ .Values.prometheus.alertmanager.smtp_username }}
-      smtp_auth_password: {{ .Values.prometheus.alertmanager.smtp_password }}
+      slack_api_url: {{ default "https://hooks.slack.com/services/abc123" .Values.prometheus.alertmanager.slack_api_url | quote }}
+      smtp_smarthost: {{ default "mail.example.com" .Values.prometheus.alertmanager.smtp_address | quote }}
+      smtp_from: {{ default "mail@example.com" .Values.prometheus.alertmanager.smtp_from | quote }}
+      smtp_auth_username: {{ default "username" .Values.prometheus.alertmanager.smtp_username | quote }}
+      smtp_auth_password: {{ default "password" .Values.prometheus.alertmanager.smtp_from | quote }}
     receivers:
       - name: default-receiver
         slack_configs:
         - channel: {{ .Values.prometheus.alertmanager.slack_channel }}
           send_resolved: true
         email_configs:
-        - to: {{ .Values.prometheus.alertmanager.smtp_to }}
+        - to: {{ default "mail@example.com" .Values.prometheus.alertmanager.smtp_to | quote }}
     route:
       group_wait: 10s
       group_interval: 5m

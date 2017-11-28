@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: {{ template "grafana.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  name: {{ template "grafana.fullname" . }}-grafana-dashboard-job-kubernetes
+spec:
+  activeDeadlineSeconds: 450
+  template:
+    metadata:
+      labels:
+        app: {{ template "grafana.fullname" . }}
+        release: "{{ .Release.Name }}"
+    spec:
+      containers:
+      - name: {{ template "grafana.fullname" . }}-grafana-dashboard-curl
+        image: "appropriate/curl:latest"
+        env:
+        - name: ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "grafana.server.fullname" . }}
+              key: grafana-admin-user
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "grafana.server.fullname" . }}
+              key: grafana-admin-password
+        - name: DASHBOARD_JSON
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "grafana.fullname" . }}-grafana-dashboard-configmap
+              key: kubernetes-cluster.json
+        args:
+          - "http://$(ADMIN_USER):$(ADMIN_PASSWORD)@{{ template "grafana.fullname" . }}:{{ .Values.grafana.server.httpPort }}/api/dashboards/db"
+          - "--max-time"
+          - "10"
+          - "-H"
+          - "Content-Type: application/json;charset=UTF-8"
+          - "--data-binary"
+          - "{ \"dashboard\":$(DASHBOARD_JSON), \"overwrite\":false }"
+      restartPolicy: "OnFailure"
