@@ -75,4 +75,4 @@ do
   sleep 5
 done
 
-helm install /opt/helm/pipeline-cluster
+helm install /opt/helm/pipeline-cluster --name monitor 
