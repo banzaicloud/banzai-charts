@@ -5,7 +5,7 @@
 traefik:
   serviceType: NodePort
   dashboard:
-    enabled: true
+    enabled: false
     domain: ""
   rbac:
     enabled: true
@@ -25,9 +25,20 @@ pipeline:
     WebhookUrl: ""
     Channel: ""
 
+drone:
+  server:
+    env:
+      DRONE_DEBUG: "true"
+      DRONE_ORGS: ""
+      DRONE_PROVIDER: "github"
+      DRONE_GITHUB: "true"
+      DRONE_GITHUB_CLIENT: ""
+      DRONE_GITHUB_SECRET: ""
 
 grafana:
   server:
+    httpPort: 80
+  
     ingress:
       enabled: false
 
@@ -207,7 +218,6 @@ prometheus:
     auth:
       enabled: false
 
-
   alertmanager:
     enabled: true
     persistentVolume:
@@ -249,6 +259,13 @@ prometheus:
     extraArgs:
       "query.staleness-delta": "5m0s"
       "web.external-url": "http://localhost:9090/prometheus"
+
+    extraHostPathMounts:
+      - name: pipeline-statestore
+        mountPath:  /opt/pipeline/statestore
+        hostPath:  /opt/pipeline/statestore
+        readOnly: true
+
 
   pushgateway:
     enabled: false

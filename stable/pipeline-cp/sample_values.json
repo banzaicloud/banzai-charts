@@ -8,6 +8,15 @@
             }
         }
     },
+    "drone": {
+        "server": {
+            "env": {
+                "DRONE_ORGS" : "",
+                "DRONE_GITHUB_CLIENT" : "",
+                "DRONE_GITHUB_SECRET" : ""
+            }
+        }
+    },
     "pipeline": {
         "ingress": {
             "user": "",
@@ -21,8 +30,10 @@
         "Slack": {
             "WebhookUrl": "",
             "Channel": ""
+        },
+        "image": {
+            "tag": ""
         }
-
     },
     "prometheus": {
         "ingress": {
