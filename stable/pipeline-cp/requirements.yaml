@@ -14,3 +14,8 @@ dependencies:
 - name: pipeline
   version: 0.0.1
   repository: alias:banzaicloud-stable
+
+- name: drone
+  version: 0.1.0
+  repository: alias:banzaicloud-stable
+
