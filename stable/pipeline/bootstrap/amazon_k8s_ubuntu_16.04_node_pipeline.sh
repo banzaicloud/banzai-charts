@@ -3,6 +3,9 @@ set -e
 cd ~
 
 #------------------------------------------------------------------------------------------------
+hostname -f > /etc/hostname
+hostnamectl set-hostname $(hostname -f)
+
 #curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 #touch /etc/apt/sources.list.d/kubernetes.list
 #sh -c 'echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list'
@@ -30,10 +33,10 @@ systemctl restart kubelet.service
 
 export KUBECONFIG=/etc/kubernetes/kubelet.conf
 
-until kubectl get node | grep $(hostname -f)
+until kubectl get node
 do
+  echo "Waiting...."
   kubeadm reset
   kubeadm join --token ${TOKEN} ${MASTER}
-  echo "Waiting for Master to start up..."
   sleep 10
 done
