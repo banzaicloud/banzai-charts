@@ -55,7 +55,7 @@ parameters:
 EOF
 
 # Thanks Kelsey :)
-kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" --kubeconfig /etc/kubernetes/admin.conf
+kubectl apply -f https://raw.githubusercontent.com/banzaicloud/banzai-charts/master/stable/pipeline/bootstrap/weave.yml --kubeconfig /etc/kubernetes/admin.conf
 
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
