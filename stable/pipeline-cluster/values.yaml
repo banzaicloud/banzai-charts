@@ -3,6 +3,9 @@
 # Declare variables to be passed into your templates.
 
 traefik:
+  image: traefik
+  imageTag: 1.4.4
+  
   serviceType: NodePort
   service:
     nodePorts: 
