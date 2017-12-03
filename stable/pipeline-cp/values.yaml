@@ -9,6 +9,8 @@ traefik:
     domain: ""
   rbac:
     enabled: true
+  cpuLimit: 200m
+  memoryLimit: 250Mi
 
 pipeline:
   ingress:
