@@ -16,7 +16,9 @@ zeppelin:
     type: ClusterIP
     internalPort: 8080
     externalPort:  8080
-  
+
+ingress:
+  enabled: false
 
   resources:
     limits:
