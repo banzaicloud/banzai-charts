@@ -9,8 +9,6 @@ jobs:
         environment:
           AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
           AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-          HELM_REPO_USER: $HELM_REPO_USER
-          HELM_REPO_PASS: $HELM_REPO_PASS
 
     steps:
       - checkout
@@ -24,8 +22,8 @@ jobs:
             helm init -c
             cat /etc/hosts
             ls -1
-            helm repo add banzaicloud-stable http://$HELM_REPO_USER:$HELM_REPO_PASS@kubernetes-charts.banzaicloud.com
-            helm repo add banzaicloud-incubator http://$HELM_REPO_USER:$HELM_REPO_PASS@kubernetes-charts-incubator.banzaicloud.com
+            helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com
+            helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com
             helm repo update
             helm repo list
 
@@ -41,7 +39,7 @@ jobs:
             echo "helm helm package:"
             find . ! -path ./  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm package -d /s3-chart/stable {} \;
             helm repo index /s3-chart/stable
-            s3cmd sync /s3-chart/stable/*  s3://banzaicloud-charts-stable/
+            s3cmd sync /s3-chart/stable/*  s3://kubernetes-charts.banzaicloud.com/
 
             echo "REPO -> INCUBATOR"
             cd ../incubator
@@ -55,4 +53,4 @@ jobs:
             echo "helm helm package:"
             find . ! -path ./  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm package -d /s3-chart/incubator {} \;
             helm repo index /s3-chart/incubator
-            s3cmd sync /s3-chart/incubator/*  s3://banzaicloud-charts-incubator/
+            s3cmd sync /s3-chart/incubator/*  s3://kubernetes-charts-incubator.banzaicloud.com/
