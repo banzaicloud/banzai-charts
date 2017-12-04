@@ -4,8 +4,8 @@ appVersion: "0.8.1"
 ## https://hub.docker.com/r/drone/drone/tags/
 ##
 image:
-  repository: "docker.io/drone/drone"
-  tag: "0.8.1"
+  repository: "banzaicloud/drone-server"
+  tag: "0.1.0"
   pullPolicy: "IfNotPresent"
 
 ## Since version 8.x drone splitted agent and server into two
@@ -15,8 +15,8 @@ image:
 ## https://hub.docker.com/r/drone/agent/tags/
 ##
 agentImage:
-  repository: "docker.io/drone/agent"
-  tag: "0.8.1"
+  repository: "banzaicloud/drone-agent"
+  tag: "0.1.0"
   pullPolicy: "IfNotPresent"
 
 service:
