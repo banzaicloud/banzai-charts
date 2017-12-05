@@ -4,7 +4,7 @@ metadata:
   name: spark
   namespace: {{ .Release.Namespace }}
   labels:
-    spark-version: {{- .Values.spark.version }}
+    spark-version: {{ .Values.spark.version }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
