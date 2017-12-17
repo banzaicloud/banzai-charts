@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "tidb.fullname" . }}-tikv"
+  labels:
+    app: "{{ template "tidb.fullname" . }}-tikv"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.tikv.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "tidb.fullname" . }}
+    spec:
+      containers:
+      - name: tikv
+        image: "{{ .Values.tikv.image }}"
+        imagePullPolicy: {{ .Values.tikv.imagePullPolicy | quote }}
+        env:
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        ports:
+          - containerPort: 20160
+        args: ["-S", "raftkv",  "--store=/data", "--addr=0.0.0.0:20160", "--advertise-addr=$(MY_POD_IP):20160", "--pd=pd:2379", "--cluster-id=1"]
+
+
+
+        resources:
+{{ toYaml .Values.tikv.resources | indent 10 }}
+
+        volumeMounts:
+        - name: timestamp
+          mountPath: /etc/localtime
+
+      volumes:
+      - name: timestamp
+        hostPath:
+          path: /etc/localtime
+
