@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "tidb.fullname" . }}-db"
+  labels:
+    app: "{{ template "tidb.fullname" . }}-tidb"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "tidb.fullname" . }}
+    spec:
+      containers:
+      - name: tidb
+        image: "{{ .Values.tidb.image }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        ports:
+          - containerPort: 4000
+          - containerPort: 10080
+        args: ["-L=info", "--store=tikv", "--path=pd:2379?cluster=1", "-P=4000"]
+
+
+
+        resources:
+{{ toYaml .Values.tidb.resources | indent 10 }}
+
+        volumeMounts:
+        - name: timestamp
+          mountPath: /etc/localtime
+
+      volumes:
+      - name: timestamp
+        hostPath:
+          path: /etc/localtime
+
