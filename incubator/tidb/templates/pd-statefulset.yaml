@@ -1,0 +1,103 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "tidb.fullname" . }}-pd"
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    app: "{{ template "tidb.fullname" . }}-pd"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  ports:
+  - port: {{ .Values.pd.service.ClientPort }}
+    name:  pd-server
+  - port: {{ .Values.pd.service.PeerPort }}
+    name: peer
+  clusterIP: None
+  selector:
+    component: "{{ .Release.Name }}-{{ .Values.pd.Component }}"
+---
+
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: "{{ template "tidb.fullname" . }}-pd"
+  labels:
+    app: "{{ template "tidb.fullname" . }}-pd"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  serviceName: "{{ template "tidb.fullname" . }}-pd"
+  replicas: {{ default 3 .Values.pd.Replicas }}
+  updateStrategy:
+    type: RollingUpdate
+
+  template:
+    metadata:
+      name: {{ template "tidb.fullname" . }}
+      labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+        app: {{ template "tidb.fullname" . }}
+        component: "{{ .Release.Name }}-{{ .Values.pd.Component }}"
+
+
+    spec:
+      containers:
+      - name: "{{ template "tidb.fullname" . }}-pd"
+        image: "{{ .Values.pd.image }}"
+        imagePullPolicy: "{{ .Values.pd.imagePullPolicy }}"
+        
+        env:
+        - name: INITIAL_CLUSTER_SIZE
+          value: {{ default 3 .Values.Replicas | quote }}
+        - name: SET_NAME
+          value: "{{ template "tidb.fullname" . }}-pd"
+
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        args:
+
+
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          HOSTNAME=$(hostname)
+          echo "--client-urls=http://${MY_POD_IP}:{{ .Values.pd.service.ClientPort }}"
+          echo "--peer-urls=http://${MY_POD_IP}:{{ .Values.pd.service.PeerPort }}"
+          PEERS=""
+            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
+                PEERS="${PEERS}${PEERS:+,}${SET_NAME}-${i}=http://${SET_NAME}-${i}.${SET_NAME}:{{ .Values.pd.service.PeerPort }}"
+            done
+          
+          echo ${PEERS}
+
+          if [[ "${HOSTNAME}" == "${SET_NAME}-0" ]]; then
+          echo "MASTER"
+
+          /pd-server --name=${HOSTNAME} \
+          --client-urls=http://${MY_POD_IP}:{{ .Values.pd.service.ClientPort }} \
+          --peer-urls=http://${MY_POD_IP}:{{ .Values.pd.service.PeerPort }} \
+          --initial-cluster ${PEERS}
+          
+          else
+          echo "Join"
+          /pd-server --name=${HOSTNAME} \
+          --client-urls=http://${MY_POD_IP}:{{ .Values.pd.service.ClientPort }} \
+          --peer-urls=http://${MY_POD_IP}:{{ .Values.pd.service.PeerPort }} \
+          --join=http://${SET_NAME}-0.${SET_NAME}:{{ .Values.pd.service.ClientPort }}           
+          fi
+
+        ports:
+        - containerPort: {{ .Values.pd.service.ClientPort }}
+          name: pd-server
+          protocol: TCP
+        - containerPort: {{ .Values.pd.service.PeerPort }}
+          name: peer
+          protocol: TCP
