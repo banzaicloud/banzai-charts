@@ -68,31 +68,37 @@ spec:
         - "/bin/sh"
         - "-ecx"
         - |
+
           HOSTNAME=$(hostname)
+
           echo "--client-urls=http://${MY_POD_IP}:{{ .Values.pd.service.ClientPort }}"
           echo "--peer-urls=http://${MY_POD_IP}:{{ .Values.pd.service.PeerPort }}"
+
           PEERS=""
-            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
-                PEERS="${PEERS}${PEERS:+,}${SET_NAME}-${i}=http://${SET_NAME}-${i}.${SET_NAME}:{{ .Values.pd.service.PeerPort }}"
-            done
-          
-          echo ${PEERS}
 
-          if [[ "${HOSTNAME}" == "${SET_NAME}-0" ]]; then
-          echo "MASTER"
+          for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
+            PEERS="${PEERS}${PEERS:+,}${SET_NAME}-${i}=http://${SET_NAME}-${i}.${SET_NAME}:{{ .Values.pd.service.PeerPort }}"
+
+            if [[ "${HOSTNAME}" == "${SET_NAME}-${i}" ]]; then
+              continue
+            fi
+
+            IS_MEMBER=$(/pd-ctl --pd http://${SET_NAME}-${i}.${SET_NAME}:{{ .Values.pd.service.ClientPort }} -d member list | grep \"\\\"http://${HOSTNAME}.${SET_NAME}:{{ .Values.pd.service.PeerPort }}\\\"\" 2>/dev/null || echo "" )
+
+            if [ -n "${IS_MEMBER}" ]; then
+                # the member hash exists but for some reason etcd failed
+                # as the datadir has not be created, we can remove the member
+                # and retrieve new hash
+                /pd-ctl --pd http://${SET_NAME}-${i}.${SET_NAME}:{{ .Values.pd.service.ClientPort }} -d member delete name ${HOSTNAME} || echo ""
+            fi
+          done
 
           /pd-server --name=${HOSTNAME} \
-          --client-urls=http://${MY_POD_IP}:{{ .Values.pd.service.ClientPort }} \
-          --peer-urls=http://${MY_POD_IP}:{{ .Values.pd.service.PeerPort }} \
+          --client-urls=http://0.0.0.0:{{ .Values.pd.service.ClientPort }} \
+          --peer-urls=http://0.0.0.0:{{ .Values.pd.service.PeerPort }} \
+          --advertise-client-urls=http://$(MY_POD_IP):{{ .Values.pd.service.ClientPort }} \
+          --advertise-peer-urls=http://${HOSTNAME}.${SET_NAME}:{{ .Values.pd.service.PeerPort }} \
           --initial-cluster ${PEERS}
-          
-          else
-          echo "Join"
-          /pd-server --name=${HOSTNAME} \
-          --client-urls=http://${MY_POD_IP}:{{ .Values.pd.service.ClientPort }} \
-          --peer-urls=http://${MY_POD_IP}:{{ .Values.pd.service.PeerPort }} \
-          --join=http://${SET_NAME}-0.${SET_NAME}:{{ .Values.pd.service.ClientPort }}           
-          fi
 
         ports:
         - containerPort: {{ .Values.pd.service.ClientPort }}
