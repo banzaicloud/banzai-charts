@@ -7,9 +7,20 @@ zeppelin:
 
   image:
     repository: banzaicloud/zeppelin-server
-    tag: v0.8.0-k8s-1.0.86
+    tag: v0.8.0-k8s-1.0.90
     pullPolicy: IfNotPresent
 
+  resources:
+    limits:
+      cpu: 2
+      memory: 2048Mi
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+
+  vmMemoryOptions:
+    initial: 1024m
+    max: 2048m
 
   service:
     name: zeppelin-service
@@ -19,14 +30,6 @@ zeppelin:
 
 ingress:
   enabled: false
-
-  resources:
-    limits:
-      cpu: 2
-      memory: 2048Mi
-    requests:
-      cpu: 500m
-      memory: 1024Mi
 
 ingresspasswordgenerator:
   image:
@@ -44,12 +47,13 @@ pipelineIngress:
     password: ""
 
 sparkSubmitOptions:
-  deployMode: cluster
   k8sNameSpace: default
-  masterAddress: k8s://https://kubernetes:443 
-  sparkDriverMemory: 4G 
+  sparkDriverCores: 1
+  sparkDriverLimitCores: 2
+  sparkExecutorCores: 1
+  sparkDriverMemory: 4G
   sparkExcutorMemory: 2G
-  sparkMetricsConf: /opt/spark/conf/metrics.properties  
+  sparkMetricsConf: /opt/spark/conf/metrics.properties
   dynamicAllocation: true
   shuffleService: true
   shuffleNameSpace: default
