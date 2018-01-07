@@ -3,10 +3,8 @@
 # Declare variables to be passed into your templates.
 
 traefik:
-  serviceType: NodePort
-  service:
-    nodePorts: 
-      http: 30080
+  serviceType: LoadBalancer
+  loadBalancerIP:
 
   dashboard:
     enabled: true
