@@ -1,38 +1,47 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "tidb.fullname" . }}-db"
+  name: "{{ template "db.tidb.fullname" . }}"
   labels:
-    app: "{{ template "tidb.fullname" . }}-tidb"
+    app: "{{ template "db.tidb.fullname" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+  replicas: {{ .Values.tidb.replicaCount }}
+
   template:
     metadata:
       labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
         app: {{ template "tidb.fullname" . }}
+        component: "{{ template "db.tidb.fullname" . }}"
+
     spec:
       containers:
       - name: tidb
         image: "{{ .Values.tidb.image }}"
-        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        imagePullPolicy: {{ .Values.tidb.imagePullPolicy | quote }}
         ports:
-          - containerPort: 4000
-          - containerPort: 10080
+          - containerPort: {{ .Values.tidb.service.mysql }}
+          - containerPort: {{ .Values.tidb.service.status }}
         args: ["-L=info", "--store=tikv", "--path=pd:2379?cluster=1", "-P=4000"]
 
+        env:
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
 
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          /tidb-server \
+          --store=tikv \
+          --path="{{ template "tidb.fullname" . }}-pd:{{ .Values.pd.service.ClientPort }}"
 
         resources:
 {{ toYaml .Values.tidb.resources | indent 10 }}
-
-        volumeMounts:
-        - name: timestamp
-          mountPath: /etc/localtime
-
-      volumes:
-      - name: timestamp
-        hostPath:
-          path: /etc/localtime
 

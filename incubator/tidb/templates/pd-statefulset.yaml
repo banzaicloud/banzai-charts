@@ -1,37 +1,15 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: "{{ template "tidb.fullname" . }}-pd"
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-  labels:
-    app: "{{ template "tidb.fullname" . }}-pd"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
-spec:
-  ports:
-  - port: {{ .Values.pd.service.ClientPort }}
-    name:  pd-server
-  - port: {{ .Values.pd.service.PeerPort }}
-    name: peer
-  clusterIP: None
-  selector:
-    component: "{{ .Release.Name }}-{{ .Values.pd.Component }}"
----
-
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: "{{ template "tidb.fullname" . }}-pd"
+  name: "{{ template "pd.tidb.fullname" . }}"
   labels:
-    app: "{{ template "tidb.fullname" . }}-pd"
+    app: "{{ template "pd.tidb.fullname" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  serviceName: "{{ template "tidb.fullname" . }}-pd"
-  replicas: {{ default 3 .Values.pd.Replicas }}
+  serviceName: "{{ template "pd.tidb.fullname" . }}"
+  replicas: {{ default 3 .Values.pd.replicaCount }}
   updateStrategy:
     type: RollingUpdate
 
@@ -42,55 +20,36 @@ spec:
         heritage: "{{ .Release.Service }}"
         release: "{{ .Release.Name }}"
         app: {{ template "tidb.fullname" . }}
-        component: "{{ .Release.Name }}-{{ .Values.pd.Component }}"
-
+        component: "{{ template "pd.tidb.fullname" . }}"
 
     spec:
       containers:
-      - name: "{{ template "tidb.fullname" . }}-pd"
+      - name: "{{ template "pd.tidb.fullname" . }}"
         image: "{{ .Values.pd.image }}"
         imagePullPolicy: "{{ .Values.pd.imagePullPolicy }}"
         
         env:
         - name: INITIAL_CLUSTER_SIZE
-          value: {{ default 3 .Values.Replicas | quote }}
+          value: {{ default 3 .Values.replicaCount | quote }}
         - name: SET_NAME
-          value: "{{ template "tidb.fullname" . }}-pd"
+          value: "{{ template "pd.tidb.fullname" . }}"
 
         - name: MY_POD_IP
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        args:
-
 
         command:
         - "/bin/sh"
-        - "-ecx"
+        - "-ec"
         - |
 
           HOSTNAME=$(hostname)
-
-          echo "--client-urls=http://${MY_POD_IP}:{{ .Values.pd.service.ClientPort }}"
-          echo "--peer-urls=http://${MY_POD_IP}:{{ .Values.pd.service.PeerPort }}"
 
           PEERS=""
 
           for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
             PEERS="${PEERS}${PEERS:+,}${SET_NAME}-${i}=http://${SET_NAME}-${i}.${SET_NAME}:{{ .Values.pd.service.PeerPort }}"
-
-            if [[ "${HOSTNAME}" == "${SET_NAME}-${i}" ]]; then
-              continue
-            fi
-
-            IS_MEMBER=$(/pd-ctl --pd http://${SET_NAME}-${i}.${SET_NAME}:{{ .Values.pd.service.ClientPort }} -d member list | grep \"\\\"http://${HOSTNAME}.${SET_NAME}:{{ .Values.pd.service.PeerPort }}\\\"\" 2>/dev/null || echo "" )
-
-            if [ -n "${IS_MEMBER}" ]; then
-                # the member hash exists but for some reason etcd failed
-                # as the datadir has not be created, we can remove the member
-                # and retrieve new hash
-                /pd-ctl --pd http://${SET_NAME}-${i}.${SET_NAME}:{{ .Values.pd.service.ClientPort }} -d member delete name ${HOSTNAME} || echo ""
-            fi
           done
 
           /pd-server --name=${HOSTNAME} \
@@ -107,3 +66,6 @@ spec:
         - containerPort: {{ .Values.pd.service.PeerPort }}
           name: peer
           protocol: TCP
+
+        resources:
+{{ toYaml .Values.pd.resources | indent 10 }}

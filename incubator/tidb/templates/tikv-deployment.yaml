@@ -1,19 +1,28 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "tidb.fullname" . }}-tikv"
+  name: "{{ template "kv.tidb.fullname" . }}"
   labels:
-    app: "{{ template "tidb.fullname" . }}-tikv"
+    app: "{{ template "kv.tidb.fullname" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.tikv.replicas }}
+  replicas: {{ .Values.tikv.replicaCount }}
   template:
     metadata:
       labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
         app: {{ template "tidb.fullname" . }}
+        component: "{{ template "kv.tidb.fullname" . }}"
+
     spec:
+      initContainers:
+      - name: check-pd-port
+        image: busybox
+        command: ['sh', '-c', 'echo STATUS nc -w 1 {{ template "tidb.fullname" . }}-pd:{{ .Values.pd.service.ClientPort }}']
+
       containers:
       - name: tikv
         image: "{{ .Values.tikv.image }}"
@@ -23,21 +32,41 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
+
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          /tikv-server \
+          --addr="0.0.0.0:{{ .Values.tikv.service.ClientPort }}" \
+          --advertise-addr="$(MY_POD_IP):{{ .Values.tikv.service.ClientPort }}" \
+          --data-dir="/data/tikv" \
+          --pd="{{ template "tidb.fullname" . }}-pd:{{ .Values.pd.service.ClientPort }}"
+
         ports:
-          - containerPort: 20160
-        args: ["-S", "raftkv",  "--store=/data", "--addr=0.0.0.0:20160", "--advertise-addr=$(MY_POD_IP):20160", "--pd=pd:2379", "--cluster-id=1"]
-
-
-
+          - containerPort: {{ .Values.tikv.service.ClientPort }}
+        livenessProbe:
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.tikv.service.ClientPort }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.tikv.service.ClientPort }}
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
         resources:
 {{ toYaml .Values.tikv.resources | indent 10 }}
-
         volumeMounts:
-        - name: timestamp
-          mountPath: /etc/localtime
-
+        - name: data
+          mountPath: /data/tikv
       volumes:
-      - name: timestamp
-        hostPath:
-          path: /etc/localtime
-
+      - name: data
+      {{- if .Values.tikv.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.tikv.persistence.existingClaim | default (include "tidb.fullname" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}

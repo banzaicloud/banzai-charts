@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "pd.tidb.fullname" . }}"
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    app: "{{ template "pd.tidb.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  ports:
+  - port: {{ .Values.pd.service.ClientPort }}
+    name:  pd-server
+  - port: {{ .Values.pd.service.PeerPort }}
+    name: peer
+  clusterIP: None
+  selector:
+    component: "{{ template "pd.tidb.fullname" . }}"
