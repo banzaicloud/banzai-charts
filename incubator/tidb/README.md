@@ -3,7 +3,7 @@
 [TiDB](https://www.pingcap.com/docs/) (The pronunciation is: /‘taɪdiːbi:/ tai-D-B, etymology: titanium) is a Hybrid Transactional/Analytical Processing (HTAP) database. Inspired by the design of Google F1 and Google Spanner, TiDB features infinite horizontal scalability, strong consistency, and high availability. The goal of TiDB is to serve as a one-stop solution for online transactions and analyses.
 
 
-## TL;DR;
+## tl;dr:
 
 ```bash
 $ helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com
@@ -13,7 +13,7 @@ $ helm install banzaicloud-incubator/tidb
 
 ## Introduction
 
-This chart bootstraps a [TiDB](https://github.com/banzaicloud/banzai-charts) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [TiDB](https://github.com/banzaicloud/banzai-charts/incubator/tidb) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -86,9 +86,9 @@ The following tables lists the configurable parameters of the TiDB chart and the
 | `tikv.persistence.size`          | Size of data volume                        | `8Gi`                                       |
 | `tikv.resources`                 | CPU/Memory resource requests/limits        | Memory: `128Mi`, CPU: `250m`                |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. 
 
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
+Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 
 ```bash
 $ helm install --name my-release -f values.yaml banzaicloud-incubator/tidb
