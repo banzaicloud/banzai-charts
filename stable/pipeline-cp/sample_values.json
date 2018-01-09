@@ -27,6 +27,10 @@
         },
         "awsSecretAccessKey": "",
         "awsAccessKeyId": "",
+        "azureClientId": "",
+        "azureClientSecret": "",
+        "azureSubscriptionId": "",
+        "azureTenantId": "",
         "Slack": {
             "WebhookUrl": "",
             "Channel": ""
