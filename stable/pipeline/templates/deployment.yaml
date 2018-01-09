@@ -59,6 +59,27 @@ spec:
               name: {{ template "fullname" . }}
               key: awsAccessKeyId
 
+        - name: AZURE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azureClientId
+        - name: AZURE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azureClientSecret
+        - name: AZURE_SUBSCRIPTION_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azureSubscriptionId
+        - name: AZURE_TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azureTenantId
+
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
