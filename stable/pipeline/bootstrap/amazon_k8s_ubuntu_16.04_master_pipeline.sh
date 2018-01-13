@@ -60,6 +60,7 @@ kubectl apply -f https://raw.githubusercontent.com/banzaicloud/banzai-charts/mas
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
+#remove helm-init and ingress install PR-63
 #kubectl create serviceaccount --namespace kube-system tiller --kubeconfig /etc/kubernetes/admin.conf
 #kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller --kubeconfig /etc/kubernetes/admin.conf
 #helm init --service-account tiller
