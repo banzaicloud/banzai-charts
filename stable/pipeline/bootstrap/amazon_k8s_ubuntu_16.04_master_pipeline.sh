@@ -60,19 +60,20 @@ kubectl apply -f https://raw.githubusercontent.com/banzaicloud/banzai-charts/mas
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
-kubectl create serviceaccount --namespace kube-system tiller --kubeconfig /etc/kubernetes/admin.conf
-kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller --kubeconfig /etc/kubernetes/admin.conf
-helm init --service-account tiller
+#remove helm-init and ingress install PR-36
+#kubectl create serviceaccount --namespace kube-system tiller --kubeconfig /etc/kubernetes/admin.conf
+#kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller --kubeconfig /etc/kubernetes/admin.conf
+#helm init --service-account tiller
 
 mkdir -p /home/ubuntu/.kube
 cp /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
 chown -R ubuntu:ubuntu /home/ubuntu/.kube
 
-until helm list
-do
-  echo "Waiting...."
-  kubectl get po --all-namespaces
-  sleep 5
-done
+#until helm list
+#do
+#  echo "Waiting...."
+#  kubectl get po --all-namespaces
+#  sleep 5
+#done
 
-helm install /opt/helm/pipeline-cluster-ingress
+#helm install /opt/helm/pipeline-cluster-ingress
