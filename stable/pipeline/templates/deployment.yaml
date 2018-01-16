@@ -48,6 +48,11 @@ spec:
         - name: SLACK_CHANNEL
           value: "{{ .Values.Slack.Channel }}"
 
+        - name: PIPELINE_DEV_RETRYATTEMPT
+          value: "{{ .Values.Helm.retryAttempt }}"
+        - name: PIPELINE_DEV_RETRYSLEEPSECONDS
+          value: "{{ .Values.Helm.retrySleepSeconds }}"
+
         - name: AWS_SECRET_ACCESS_KEY
           valueFrom:
             secretKeyRef:

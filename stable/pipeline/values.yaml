@@ -19,6 +19,9 @@ Slack:
   WebhookUrl: ""
   Channel: ""
 
+Helm:
+  retryAttempt: 30
+  retrySleepSeconds: 15
 
 ##
 ## MariaDB chart configuration
