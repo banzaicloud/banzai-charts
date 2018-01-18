@@ -48,7 +48,7 @@ cat <<EOF | kubectl --kubeconfig /etc/kubernetes/admin.conf create -f -
 kind: StorageClass
 apiVersion: storage.k8s.io/v1beta1
 metadata:
-  name: standard
+  name: default
 provisioner: kubernetes.io/aws-ebs
 parameters:
   type: gp2
