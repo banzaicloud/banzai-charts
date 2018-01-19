@@ -1,0 +1,28 @@
+# Default values for spark-rss
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+app:
+  replicaCount: 1
+
+  image:
+    repository: banzaicloud/spark-history-server
+    tag: v2.2.0-k8s-1.0.196
+    pullPolicy: IfNotPresent
+
+  service:
+    name: spark-hs
+    externalPort: 80
+    internalPort: 18080
+    type: LoadBalancer
+
+  logDirectory: s3a://spark-k8-logs/eventLog
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+    limits:
+      cpu: 500m
+      memory: 512Mi
