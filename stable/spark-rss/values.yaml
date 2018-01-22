@@ -7,9 +7,9 @@ app:
 
   image:
     repository: banzaicloud/spark-resource-staging-server
-    tag: v2.2.0-k8s-1.0.179
+    tag: v2.2.0-k8s-1.0.197
     pullPolicy: IfNotPresent
-  
+
   service:
     name: spark-rss
     externalPort: 10000
@@ -24,4 +24,3 @@ app:
     limits:
       cpu: 500m
       memory: 512Mi
-
