@@ -58,9 +58,9 @@ sparkSubmitOptions:
   shuffleService: true
   shuffleNameSpace: default
   shuffleLabels: app=spark-shuffle-service,spark-version=2.2.0
-  DriverImage: banzaicloud/spark-driver-r:v2.2.0-k8s-1.0.179
-  ExecutorImage: banzaicloud/spark-executor-r:v2.2.0-k8s-1.0.179
-  initContainerImage: banzaicloud/spark-init:v2.2.0-k8s-1.0.179
+  DriverImage: banzaicloud/spark-driver-r:v2.2.0-k8s-1.0.197
+  ExecutorImage: banzaicloud/spark-executor-r:v2.2.0-k8s-1.0.197
+  initContainerImage: banzaicloud/spark-init:v2.2.0-k8s-1.0.197
   resourceStagingServerInt: http://spark-rss:10000
   resourceStagingServerExt: http://spark-rss:10000
   sparkLocalDir: /tmp/spark-local
