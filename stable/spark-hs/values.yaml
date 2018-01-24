@@ -1,0 +1,44 @@
+# Default values for spark-rss
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+app:
+  replicaCount: 1
+
+  image:
+    repository: banzaicloud/spark-history-server
+    tag: v2.2.0-k8s-1.0.197
+    pullPolicy: IfNotPresent
+
+  service:
+    name: spark-hs
+    externalPort: 80
+    internalPort: 18080
+    type: ClusterIP
+
+  logDirectory: s3a://spark-k8-logs/eventLog
+  azureStorageAccessKey: ""
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+ingresspasswordgenerator:
+  image:
+    repository: banzaicloud/htpasswd-gen
+    tag: "0.1"
+    pullPolicy: IfNotPresent
+
+pipelineIngress:
+  enabled: true
+  ingressURL:
+  baseURL: /spark-hs
+  auth:
+    enabled: false
+    username: ""
+    password: ""

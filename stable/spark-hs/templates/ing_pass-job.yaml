@@ -1,0 +1,36 @@
+{{- if .Values.pipelineIngress.auth.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-spark-hs-ingresspasswordgenerator"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: counter
+        image: "{{ .Values.ingresspasswordgenerator.image.repository }}:{{ .Values.ingresspasswordgenerator.image.tag }}"
+        imagePullPolicy: "{{ .Values.ingresspasswordgenerator.image.pullPolicy }}"
+        env:
+          - name: INGRESS_USER
+            value: "{{ .Values.pipelineIngress.auth.username }}"
+          - name: INGRESS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name:  "{{ .Release.Name }}-spark-hs-ingresspasswordgenerator-pass"
+                key: pass
+          - name: INGRESS_SECRET
+            value: "{{ .Release.Name }}-spark-hs-ingress"
+          - name: KUBERNETES_NAMESPACE
+            value: "default"
+
+      restartPolicy: Never
+      serviceAccountName: "{{ template "fullname" . }}-spark-hs"
+{{- end }}
