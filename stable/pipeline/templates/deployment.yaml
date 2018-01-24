@@ -102,8 +102,6 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /root/conf/
-        - mountPath: /opt/helm
-          name: helm
         - mountPath: /root/.ssh
           name: ssh
         - mountPath: /statestore
@@ -114,9 +112,6 @@ spec:
       - name: config-volume
         configMap:
           name: "{{ template "fullname" . }}"
-      - name: helm
-        hostPath:
-          path: /opt/helm
       - name: ssh
         hostPath:
           path: /opt/pipeline/.ssh/
