@@ -27,7 +27,7 @@ spec:
             -Dspark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
             -Dspark.history.fs.logDirectory={{ .Values.app.logDirectory }}
             {{- if .Values.app.azureStorageAccessKey }}
-            -Dspark.hadoop.fs.azure.account.key.sparklogsaccount.blob.core.windows.net={{ .Values.app.azureStorageAccessKey }}
+            -Dspark.hadoop.fs.azure.account.key.{{ .Values.app.azureStorageAccountName }}.blob.core.windows.net={{ .Values.app.azureStorageAccessKey }}
             {{- end }}
         ports:
            - containerPort: {{ .Values.app.service.internalPort }}
