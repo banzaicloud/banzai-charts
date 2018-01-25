@@ -18,6 +18,7 @@ app:
 
   logDirectory: s3a://spark-k8-logs/eventLog
   azureStorageAccessKey: ""
+  azureStorageAccountName: ""
 
   resources:
     requests:
