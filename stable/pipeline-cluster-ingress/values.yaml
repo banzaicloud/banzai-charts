@@ -7,7 +7,7 @@ traefik:
   loadBalancerIP:
 
   dashboard:
-    enabled: true
+    enabled: false
     domain: ""
   rbac:
     enabled: true
