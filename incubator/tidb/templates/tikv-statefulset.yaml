@@ -1,5 +1,5 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   name: "{{ template "kv.tidb.fullname" . }}"
   labels:
@@ -8,6 +8,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+  serviceName: "{{ template "kv.tidb.fullname" . }}"
   replicas: {{ .Values.tikv.replicaCount }}
   template:
     metadata:
@@ -59,14 +60,30 @@ spec:
           timeoutSeconds: 1
         resources:
 {{ toYaml .Values.tikv.resources | indent 10 }}
-        volumeMounts:
-        - name: data
-          mountPath: /data/tikv
-      volumes:
-      - name: data
-      {{- if .Values.tikv.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ .Values.tikv.persistence.existingClaim | default (include "tidb.fullname" .) }}
+
+{{- if .Values.tikv.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        annotations:
+        {{- range $key, $value := .Values.tikv.persistence.annotations }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      spec:
+        accessModes:
+          - {{ .Values.tikv.persistence.accessMode | quote }}
+        resources:
+          requests:
+            storage: {{ .Values.tikv.persistence.size | quote }}
+      {{- if .Values.tikv.persistence.storageClass }}
+      {{- if (eq "-" .Values.tikv.persistence.storageClass) }}
+        storageClassName: ""
       {{- else }}
-        emptyDir: {}
-      {{- end -}}
+        storageClassName: "{{ .Values.tikv.persistence.storageClass }}"
+      {{- end }}
+      {{- end }}
+{{- else }}
+      volumes:
+        - name: data
+          emptyDir: {}
+{{- end }}

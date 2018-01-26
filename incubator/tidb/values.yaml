@@ -45,7 +45,7 @@ pd:
   resources:
     requests:
       memory: 256Mi
-      cpu: 250m
+      cpu: 120m
 
 
 tidb:
@@ -91,7 +91,7 @@ tidb:
   resources:
     requests:
       memory: 128Mi
-      cpu: 250m
+      cpu: 100m
 
 
 tikv:
@@ -151,5 +151,5 @@ tikv:
   resources:
     requests:
       memory: 128Mi
-      cpu: 250m
+      cpu: 100m
 
