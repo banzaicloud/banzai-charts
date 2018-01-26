@@ -39,6 +39,13 @@ spec:
               --conf spark.kubernetes.resourceStagingServer.uri={{ .Values.sparkSubmitOptions.resourceStagingServerExt }}
               --conf spark.kubernetes.resourceStagingServer.internal.uri={{ .Values.sparkSubmitOptions.resourceStagingServerInt }}
               --conf spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
+              {{- if .Values.sparkSubmitOptions.eventLogDirectory }}
+              --conf spark.eventLog.dir={{ .Values.sparkSubmitOptions.eventLogDirectory }}
+              --conf spark.eventLog.enabled=true
+              {{- end }}
+              {{- if .Values.sparkSubmitOptions.azureStorageAccessKey }}
+              --conf spark.hadoop.fs.azure.account.key.{{ .Values.sparkSubmitOptions.azureStorageAccountName }}.blob.core.windows.net={{ .Values.sparkSubmitOptions.azureStorageAccessKey }}
+              {{- end }}
           - name: ZEPPELIN_MEM
             value: -Xms{{ .Values.zeppelin.vmMemoryOptions.initial }} -Xmx{{ .Values.zeppelin.vmMemoryOptions.max }}
           {{- if .Values.pipelineIngress.enabled }}

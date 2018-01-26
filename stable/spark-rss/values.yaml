@@ -24,3 +24,7 @@ app:
     limits:
       cpu: 500m
       memory: 512Mi
+
+pipelineIngress:
+  enabled: false
+  baseURL: /

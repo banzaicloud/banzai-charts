@@ -64,3 +64,6 @@ sparkSubmitOptions:
   resourceStagingServerInt: http://spark-rss:10000
   resourceStagingServerExt: http://spark-rss:10000
   sparkLocalDir: /tmp/spark-local
+  eventLogDirectory: ""
+  azureStorageAccountName: ""
+  azureStorageAccessKey: ""
