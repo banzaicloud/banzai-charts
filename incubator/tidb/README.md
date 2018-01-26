@@ -55,7 +55,7 @@ The following tables lists the configurable parameters of the TiDB chart and the
 | `pd.service.PeerPort`            | Port to bind to for Peer service type      | `2380`                                      |
 | `pd.service.ClientPort`          | Port to bind to for Client service type    | `2379`                                      |
 | `pd.imagePullPolicy`             | Image pull policy.                         | `IfNotPresent`                              |
-| `pd.resources`                   | CPU/Memory resource requests/limits        | Memory: `256Mi`, CPU: `250m`                |
+| `pd.resources`                   | CPU/Memory resource requests/limits        | Memory: `256Mi`, CPU: `100m`                |
 | `tidb.name`                      | TiDB container name                        | `db`                                        |
 | `tidb.image`                     | TiDB container image                       | `pingcap/tidb:{VERSION}`                    |
 | `tidb.replicaCount`              | Replica Count                              | `2`                                         |
@@ -70,7 +70,7 @@ The following tables lists the configurable parameters of the TiDB chart and the
 | `tidb.persistence.storageClass`  | Storage class of backing PVC               | `nil` (uses alpha storage class annotation) |
 | `tidb.persistence.accessMode`    | Use volume as ReadOnly or ReadWrite        | `ReadWriteOnce`                             |
 | `tidb.persistence.size`          | Size of data volume                        | `8Gi`                                       |
-| `tidb.resources`                 | CPU/Memory resource requests/limits        | Memory: `128Mi`, CPU: `250m`                |
+| `tidb.resources`                 | CPU/Memory resource requests/limits        | Memory: `128Mi`, CPU: `100m`                |
 | `tikv.name`                      | TiKV container name                        | `kv`                                        |
 | `tikv.image`                     | TiKV container image                       | `pingcap/tikv:{VERSION}`                    |
 | `tikv.replicaCount`              | Replica Count                              | `3`                                         |
@@ -84,7 +84,7 @@ The following tables lists the configurable parameters of the TiDB chart and the
 | `tikv.persistence.storageClass`  | Storage class of backing PVC               | `nil` (uses alpha storage class annotation) |
 | `tikv.persistence.accessMode`    | Use volume as ReadOnly or ReadWrite        | `ReadWriteOnce`                             |
 | `tikv.persistence.size`          | Size of data volume                        | `8Gi`                                       |
-| `tikv.resources`                 | CPU/Memory resource requests/limits        | Memory: `128Mi`, CPU: `250m`                |
+| `tikv.resources`                 | CPU/Memory resource requests/limits        | Memory: `128Mi`, CPU: `100m`                |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. 
 
