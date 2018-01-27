@@ -15,7 +15,7 @@ app:
     internalPort: 18080
     type: ClusterIP
 
-  logDirectory: s3a://spark-k8-logs/eventLog
+  logDirectory: ""
   azureStorageAccessKey: ""
   azureStorageAccountName: ""
 
