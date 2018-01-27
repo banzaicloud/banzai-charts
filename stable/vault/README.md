@@ -50,7 +50,7 @@ The following tables lists the configurable parameters of the vault chart and th
 |-------------------------|-------------------------------------|-----------------------------------------------------|
 | `image.pullPolicy`      | Container pull policy               | `IfNotPresent`                                      |
 | `image.repository`      | Container image to use              | `vault`                                             |
-| `image.tag`             | Container image tag to deploy       | `0.9.0`                                             |
+| `image.tag`             | Container image tag to deploy       | `0.9.1`                                             |
 | `vault.dev`             | Use Vault in dev mode               | true (set to false in production)                   |
 | `vault.customSecrets`   | Custom secrets available to Vault   | `[]`                                                |
 | `vault.config`          | Vault configuration                 | No default backend                                  |
