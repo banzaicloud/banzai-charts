@@ -1,6 +1,6 @@
 # Vault Helm Chart
 
-This directory contains a Kubernetes chart to deploy a Vault server.
+This directory contains a Kubernetes Helm chart to deploy a Vault server. For furhter details of how are we using Vault read this [post](https://banzaicloud.com/blog/oauth2-vault/).
 
 ## Prerequisites Details
 
