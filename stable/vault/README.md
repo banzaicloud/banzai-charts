@@ -21,11 +21,12 @@ provided under this option will be converted to JSON for the final vault
 
 ## Installing the Chart
 
-To install the chart, use the following, this backs vault with a Consul cluster:
+To install the chart, use the following, this backs Vault with a Consul cluster:
 
-```console
-$ helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
-$ helm install incubator/vault --set vault.dev=false --set vault.config.storage.consul.address="myconsul-svc-name:8500",vault.config.storage.consul.path="vault"
+```
+helm init -c; 
+helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com
+helm install banzaicloud-stable/vault --set vault.dev=false --set vault.config.storage.consul.address="myconsul-svc-name:8500",vault.config.storage.consul.path="vault"
 ```
 
 An alternative example using the Amazon S3 backend can be specified using:
