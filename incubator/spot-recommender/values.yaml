@@ -9,7 +9,7 @@ recommender:
   ##
   image:
     repository: "banzaicloud/spot-recommender"
-    tag: "latest"
+    tag: "0.1.0"
 
     ## Specify an imagePullPolicy (Required)
     ## It's recommended to change this to 'Always' if the image tag is 'latest'
