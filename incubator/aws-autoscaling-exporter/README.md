@@ -12,7 +12,7 @@ $ helm install banzaicloud-incubator/aws-autoscaling-exporter
 
 ## Introduction
 
-This chart bootstraps a [TiDB](https://github.com/banzaicloud/banzai-charts/incubator/aws-autoscaling-exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an AWS [Autoscaling exporter](https://github.com/banzaicloud/banzai-charts/incubator/aws-autoscaling-exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
