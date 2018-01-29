@@ -7,7 +7,7 @@ zeppelin:
 
   image:
     repository: banzaicloud/zeppelin-server
-    tag: v0.8.0-k8s-1.0.90
+    tag: v0.8.0-k8s-1.0.93
     pullPolicy: IfNotPresent
 
   resources:
