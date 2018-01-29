@@ -1,6 +1,6 @@
 # Hollowtrees Spot Recommender
 
-[SpotRecommender]https://github.com/banzaicloud/spot-recommender/blob/master/README.md) Spot instance recommender is a building block of the Hollowtrees project. 
+[SpotRecommender](https://github.com/banzaicloud/spot-recommender) Spot instance recommender is a building block of the Hollowtrees project. 
 
 ## tl;dr:
 
