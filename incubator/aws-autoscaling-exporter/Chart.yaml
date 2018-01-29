@@ -1,0 +1,11 @@
+name: aws-autoscaling-exporter
+home: https://banzaicloud.com
+sources:
+  - https://github.com/banzaicloud/charts/
+version: 0.0.1
+description: A aws autoscaling exporter Helm chart for Kubernetes
+keywords:
+- autoscaling
+- aws
+- exporter
+- lifecycle
