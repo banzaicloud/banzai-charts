@@ -12,7 +12,7 @@ $ helm install banzaicloud-incubator/spot-recommender
 
 ## Introduction
 
-This chart bootstraps a [TiDB](https://github.com/banzaicloud/banzai-charts/incubator/spot-recommender) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [AWS spot recommender](https://github.com/banzaicloud/banzai-charts/incubator/spot-recommender) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -40,7 +40,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the TiDB chart and their default values.
+The following tables lists the configurable parameters of the SpotRecommender chart and their default values.
 
 |               Parameter             |                          Description                         |                   Default                   |
 | ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------- |
