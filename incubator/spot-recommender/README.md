@@ -45,7 +45,7 @@ The following tables lists the configurable parameters of the SpotRecommender ch
 |               Parameter             |                          Description                         |                   Default                   |
 | ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------- |
 | `recommender.name`                  | Spot Recommender container name                              | `recommender`                               |
-| `recommender.image`                 | Spot Recommender container image                             | `banzaicloud/spot-recommende:{VERSION}`     |
+| `recommender.image`                 | Spot Recommender container image                             | `banzaicloud/spot-recommender:{VERSION}`     |
 | `recommender.replicaCount`          | Replica Count                                                | `3`                                         |
 | `recommender.service.type`          | Kubernetes service type to expose                            | `ClusterIP`                                 |
 | `recommender.service.nodePort`      | Port to bind to for NodePort service type                    | `nil`                                       |
