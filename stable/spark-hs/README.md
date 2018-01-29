@@ -9,7 +9,7 @@
 To install the chart:
 
 ```
-$ helm install --set app.logDirectory=s3a://yourBucketName/eventLogFoloder .
+$ helm install --set app.logDirectory=s3a://yourBucketName/eventLogFoloder banzaicloud-stable/spark-hs
 ```
 
 ## Configuration
@@ -26,4 +26,3 @@ The following tables lists the configurable parameters of the Spark History Seve
 
 * in case of using S3, we don't pass AWS keys we're using IAM roles and policies to allow S3 access
 * in case of Azure the storage account name would be the dns prefix it's created (e.g. mystorage.blob.core.windows.net - the name would be mystorage), and you can you either the `primary` or `secondary` keys
-
