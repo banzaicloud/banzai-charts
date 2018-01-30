@@ -21,6 +21,7 @@ spec:
       containers:
       - name: {{ template "drone.fullname" . }}-server
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["./drone-server"]
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
           - name: DRONE_SECRET
