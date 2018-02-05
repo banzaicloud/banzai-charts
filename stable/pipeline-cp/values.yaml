@@ -333,3 +333,6 @@ prometheus:
             regex: (.+):(?:\d+)
             replacement: ${1}
             target_label: cluster
+
+global:
+  mariadbPassword: ""
