@@ -12,7 +12,7 @@ $ helm install banzaicloud-incubator/spot-termination-collector
 
 ## Introduction
 
-This chart bootstraps an BanzaiCloud  [Hollowtrees Spot Termination Collector](https://github.com/banzaicloud/banzai-charts/incubator/spot-termination-collector) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a Banzai Cloud  [Hollowtrees Spot Termination Collector](https://github.com/banzaicloud/banzai-charts/incubator/spot-termination-collector) deployment to a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release banzaicloud-incubator/spot-termination-collector
 ```
 
-The command deploys Hollowtrees Spot Termination Collector on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys Hollowtrees Spot Termination Collector on the Kubernetes cluster with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 ## Uninstalling the Chart
 
