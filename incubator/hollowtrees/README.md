@@ -1,4 +1,4 @@
-# Hollowtrees Logic
+# Hollowtrees 
 
 [Hollowtrees](https://github.com/banzaicloud/hollowtrees) 
 
@@ -12,7 +12,7 @@ $ helm install banzaicloud-incubator/hollowtrees
 
 ## Introduction
 
-This chart bootstraps an BanzaiCloud  [Hollowtrees](https://github.com/banzaicloud/banzai-charts/incubator/Hollowtrees) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a Banzai Cloud  [Hollowtrees](https://github.com/banzaicloud/banzai-charts/incubator/Hollowtrees) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release banzaicloud-incubator/hollowtrees
 ```
 
-The command deploys Hollowtrees logic on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys Hollowtrees to a Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 ## Uninstalling the Chart
 
