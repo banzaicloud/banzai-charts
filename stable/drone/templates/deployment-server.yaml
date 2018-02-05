@@ -39,6 +39,10 @@ spec:
           - name: {{ $key }}
             value: {{ $value | quote }}
           {{ end }}
+          - name: DRONE_DATABASE_DRIVER
+            value: "mysql"
+          - name: DRONE_DATABASE_DATASOURCE
+            value: bonanzabanzai:{{ Values.global.mariadbPassword }}@tcp({{ .Release.Name }}-pipeline-db:3306)/drone?parseTime=true
         volumeMounts:
         - mountPath: /var/lib/drone
           name: drone-disk

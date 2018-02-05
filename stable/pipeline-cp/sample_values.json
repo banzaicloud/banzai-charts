@@ -67,5 +67,8 @@
             "adminUser": "",
             "adminPassword": ""
         }
+    },
+    "global": {
+        "mariadbPassword": ""
     }
 }
