@@ -1,0 +1,11 @@
+name: spot-termination-collector
+home: https://banzaicloud.com
+sources:
+  - https://github.com/banzaicloud/banzai-charts
+version: 0.0.1
+description: Spot Termination Collector Helm chart for Kubernetes
+keywords:
+- spot
+- aws
+- lifecycle
+- hollowtrees

@@ -1,14 +1,14 @@
-# Default values for spot-recommender
+# Default values for spot-termination-collector
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-recommender:
+spotTerminationCollector:
 
-  ## The official Banzai Spot Recommender image, change tag to use a different version.
-  ## https://hub.docker.com/r/banzaicloud/spot-recommender/tags/
+  ## The official Banzai spot-termination-collector image, change tag to use a different version.
+  ## https://hub.docker.com/r/banzaicloud/spot-termination-collector/tags/
   ##
   image:
-    repository: "banzaicloud/spot-recommender"
+    repository: "banzaicloud/spot-termination-collector"
     tag: "0.0.1"
 
     ## Specify an imagePullPolicy (Required)
@@ -34,21 +34,17 @@ recommender:
     # annotations:
 
 
-
-  logLevel: "info"
+  logLevel: "debug"
   
   # The address to listen on for HTTP requests. 
-  appPort: 9090
+  bindAddr: 9189
 
+  # Metadata endpoint to query
+  metadataEndpoint: "http://169.254.169.254/latest/meta-data/"
+  
+  # Path to metrics endpoint
+  metricsPath: "/metrics"
 
-  # Recommendations are cached for these instance types (comma separated list)
-  cacheInstanceTypes: "m4.xlarge,m5.xlarge,c5.xlarge"
-  
-  # Time (in seconds) between reevaluating the recommendations.
-  reevaluationInterval: "1m0s"
-  
-  #AWS region where the recommender should work.
-  region: "eu-west-1"
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
