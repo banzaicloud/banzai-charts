@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "htActionPlugin.fullname" . }}"
+  labels:
+    app: "{{ template "htActionPlugin.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.htActionPlugin.replicaCount }}
+
+  template:
+    metadata:
+      labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+        app: {{ template "htActionPlugin.fullname" . }}
+        component: "{{ template "htActionPlugin.fullname" . }}"
+
+    spec:
+      containers:
+      - name: ht-k8s-action-plugin
+        image: "{{ .Values.htActionPlugin.image.repository }}:{{ .Values.htActionPlugin.image.tag }}"
+        imagePullPolicy: {{ .Values.htActionPlugin.image.imagePullPolicy | quote }}
+
+
+        ports:
+        - name: grpc
+          containerPort: {{ .Values.htActionPlugin.bindAddr }}
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.htActionPlugin.bindAddr }}
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.htActionPlugin.bindAddr }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+
+        resources:
+{{ toYaml .Values.htActionPlugin.resources | indent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /conf/
+      volumes:
+      - name: config
+        configMap:
+          name: {{ template "htActionPlugin.fullname" . }}

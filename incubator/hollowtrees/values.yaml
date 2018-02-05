@@ -1,14 +1,14 @@
-# Default values for spot-recommender
+# Default values for hollowtrees
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-recommender:
+hollowtrees:
 
-  ## The official Banzai Spot Recommender image, change tag to use a different version.
-  ## https://hub.docker.com/r/banzaicloud/spot-recommender/tags/
+  ## The official Banzai hollowtrees image, change tag to use a different version.
+  ## https://hub.docker.com/r/banzaicloud/hollowtrees/tags/
   ##
   image:
-    repository: "banzaicloud/spot-recommender"
+    repository: "banzaicloud/hollowtrees"
     tag: "0.0.1"
 
     ## Specify an imagePullPolicy (Required)
@@ -35,20 +35,32 @@ recommender:
 
 
 
-  logLevel: "info"
+  logLevel: "debug"
+  logFormat: "text"
   
   # The address to listen on for HTTP requests. 
-  appPort: 9090
+  bindAddr: 9092
+  buffersize: 100
 
 
-  # Recommendations are cached for these instance types (comma separated list)
-  cacheInstanceTypes: "m4.xlarge,m5.xlarge,c5.xlarge"
-  
-  # Time (in seconds) between reevaluating the recommendations.
-  reevaluationInterval: "1m0s"
-  
-  #AWS region where the recommender should work.
-  region: "eu-west-1"
+  rules:
+      - name: "spot_to_drainer"
+        description: "spot to k8s drainer"
+        event_type: "prometheus.server.alert.SpotTerminationNotice"
+        action_plugins:
+            - "ht-k8s-action-plugin"
+            - "ht-aws-asg-action-plugin"
+        match:
+            - cluster_name: "marton-cluster"
+
+      - name: "spot_rebalance"
+        description: "price alert to asg rebalance"
+        event_type: "prometheus.server.alert.SpotInstanceTooExpensive"
+        action_plugins:
+            - "ht-aws-asg-action-plugin"
+        match:
+            - asg_name: "marci-test"
+
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

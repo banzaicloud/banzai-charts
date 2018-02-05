@@ -9,7 +9,7 @@ autoscalingExporter:
   ##
   image:
     repository: "banzaicloud/aws-autoscaling-exporter"
-    tag: "0.1.0"
+    tag: "0.0.1"
 
     ## Specify an imagePullPolicy (Required)
     ## It's recommended to change this to 'Always' if the image tag is 'latest'

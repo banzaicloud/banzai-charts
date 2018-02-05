@@ -1,14 +1,14 @@
-# Default values for spot-recommender
+# Default values for ht-aws-asg-action-plugin
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-recommender:
+htAsgActionPlugin:
 
-  ## The official Banzai Spot Recommender image, change tag to use a different version.
-  ## https://hub.docker.com/r/banzaicloud/spot-recommender/tags/
+  ## The official Banzai ht-aws-asg-action-plugin image, change tag to use a different version.
+  ## https://hub.docker.com/r/banzaicloud/ht-aws-asg-action-plugin/tags/
   ##
   image:
-    repository: "banzaicloud/spot-recommender"
+    repository: "banzaicloud/ht-aws-asg-action-plugin"
     tag: "0.0.1"
 
     ## Specify an imagePullPolicy (Required)
@@ -35,20 +35,14 @@ recommender:
 
 
 
-  logLevel: "info"
+  logLevel: "debug"
+  logFormat: "text"
   
   # The address to listen on for HTTP requests. 
-  appPort: 9090
+  bindAddr: 8887
 
-
-  # Recommendations are cached for these instance types (comma separated list)
-  cacheInstanceTypes: "m4.xlarge,m5.xlarge,c5.xlarge"
-  
-  # Time (in seconds) between reevaluating the recommendations.
-  reevaluationInterval: "1m0s"
-  
-  #AWS region where the recommender should work.
   region: "eu-west-1"
+
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
