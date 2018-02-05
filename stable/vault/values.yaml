@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: vault
-  tag: 0.9.1
+  tag: 0.9.3
   pullPolicy: IfNotPresent
 service:
   name: vault
@@ -83,7 +83,7 @@ vault:
         # tls_cert_file: /vault/tls/server.crt
         # tls_key_file: /vault/tls/server.key
     # See https://www.vaultproject.io/docs/configuration/storage/ for storage backends
-    storage:
+    storage: {}
       # consul:
       #   address: ""
       #   path: ""

@@ -23,6 +23,10 @@ Helm:
   retryAttempt: 30
   retrySleepSeconds: 15
 
+auth:
+  enabled: false
+  
+
 ##
 ## MariaDB chart configuration
 ##
@@ -49,6 +53,14 @@ mariadb:
   ##
   # mariadbPassword:
 
+  ## File containing SQL statements that will be executed by the server on startup.
+  ## ref: https://mariadb.com/kb/en/library/server-system-variables/#init_file
+  ##
+  initSQL: |-
+    CREATE DATABASE IF NOT EXISTS drone;
+    GRANT ALL PRIVILEGES ON drone.* TO 'bonanzabanzai'@'%';
+    FLUSH PRIVILEGES;
+
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -65,6 +77,21 @@ mariadb:
     # accessMode: ReadWriteOnce
     # size: 8Gi
 
+vault:
+  vault:
+    dev: true
+    policies:
+      - name: allow_accesstokens
+        rules: path "secret/accesstokens/*" {
+                capabilities = ["create", "read", "update", "delete", "list"]
+               }
+    roles:
+      # Allow every pod in the default namespace to use the secret kv store
+      - name: pipeline
+        bound_service_account_names: pipeline
+        bound_service_account_namespaces: "*"
+        policies: allow_accesstokens
+        ttl: 1h
 
 resources:
   requests:

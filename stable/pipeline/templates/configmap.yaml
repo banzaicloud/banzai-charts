@@ -23,26 +23,8 @@ data:
     #helm properties
     chartpath = "/opt/helm"
     #
-    auth0pub = "/root/conf/auth0api.pub"
-
-  auth0api.pub: |-
-    -----BEGIN CERTIFICATE-----
-    MIIDWjCCAkICCQDPqgAOXpvKMDANBgkqhkiG9w0BAQUFADBvMQswCQYDVQQGEwJI
-    VTERMA8GA1UECAwIQnVkYXBlc3QxETAPBgNVBAcMCEJ1ZGFwZXN0MRQwEgYDVQQK
-    DAtiYW56YWljbG91ZDEkMCIGCSqGSIb3DQEJARYVamFub3NAYmFuemFpY2xvdWQu
-    Y29tMB4XDTE3MTEwMzE5NDkzNloXDTIwMDczMTE5NDkzNlowbzELMAkGA1UEBhMC
-    SFUxETAPBgNVBAgMCEJ1ZGFwZXN0MREwDwYDVQQHDAhCdWRhcGVzdDEUMBIGA1UE
-    CgwLYmFuemFpY2xvdWQxJDAiBgkqhkiG9w0BCQEWFWphbm9zQGJhbnphaWNsb3Vk
-    LmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANb6JN+Hhpegg1Ml
-    sOf/efhkCkNZWpRRywJcUhAXNpx8J1it9qsFSitT3B8rm8lyCOtQcEKymntDwVgm
-    26orFkxPBTy+8TBuUCLsMfnqHRsqdurhZZXzO1UKrSdXxHFxlEKskThWerOJCWNG
-    DDEg13pP5OflfwQTHGV7BdjJm5++ClqkyLxTdzYeDM5uv9mcNIAMNTKGBFwqVFbR
-    hJcqsgCnrL2/TCzEl4QHt5Oc5A4xsh0Tiii/5377XeAVFSGSIEiTvjaKUtCEaSGj
-    ZTpbQ1CM1TsWX8JeHNc2a/lHHtsjkQMghZ24WAk3doTWz+hXmBmo9fMWX/ytVuZr
-    rtaIAqkCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAfZfhvqETZDbkkGkBUUYCasuC
-    /TGoxmk9CDwTqEvJjehICAPkVbq1XYTNI0AYu40eMHkOg4UMAlr0I2Tw1SQlI2kn
-    I7IBy+UX/wPDsmrB/JpHa8VvWa7E1ZZ07Cj+wwcIXiWqlRhyHjh2pJCJFhmSmGcP
-    zaaJGTvG3/2EViSoLJFg9L7lbbE8N1VEkqpUk4THXg94KS2zjLrXcpekH8NMQxOJ
-    SY9ab2PvQ3PEnrxXIx26M1L1/LQFh+TE6LaGvFVzhZRRV3+cH1Y152tSgJAqzOfT
-    DWl0QsK8IUOWezdeCQKVivIE3Y7AoEQpvZJM4AT3663Jp/LB7zDn4C/Niya87w==
-    -----END CERTIFICATE-----
+    [auth]
+    enabled = {{ .Values.auth.enabled }}
+    clientid = {{ .Values.auth.clientid }}
+    clientsecret = {{ .Values.auth.clientid }}
+    tokensigningkey = {{ randAlphaNum 16 }}

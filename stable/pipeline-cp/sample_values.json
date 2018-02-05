@@ -41,6 +41,11 @@
         },
         "image": {
             "tag": ""
+        },
+        "auth": {
+            "enabled": false,
+            "clientid": "",
+            "clientsecret": ""
         }
     },
     "prometheus": {
