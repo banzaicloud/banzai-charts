@@ -75,6 +75,12 @@ persistence:
 #   [mysqld]
 #   innodb_buffer_pool_size=2G
 
+## File containing SQL statements that will be executed by the server on startup.
+## ref: https://mariadb.com/kb/en/library/server-system-variables/#init_file
+##
+# initSQL: |-
+#   CREATE DATABASE IF NOT EXISTS mydb;
+
 metrics:
   enabled: false
   image: prom/mysqld-exporter

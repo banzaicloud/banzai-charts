@@ -64,6 +64,7 @@ The following tables lists the configurable parameters of the MariaDB chart and 
 | `persistence.size`          | Size of data volume                        | `8Gi`                                       |
 | `resources`                 | CPU/Memory resource requests/limits        | Memory: `256Mi`, CPU: `250m`                |
 | `config`                    | Multi-line string for my.cnf configuration | `nil`                                       |
+| `initSQL`                   | Multi-line string for init.sql script      | `nil`                                       |
 | `metrics.enabled`           | Start a side-car prometheus exporter       | `false`                                     |
 | `metrics.image`             | Exporter image                             | `prom/mysqld-exporter`                      |
 | `metrics.imageTag`          | Exporter image                             | `v0.10.0`                                   |

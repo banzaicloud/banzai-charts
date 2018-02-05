@@ -20,7 +20,7 @@ spec:
       - name: "copy-custom-config"
         image: "busybox"
         imagePullPolicy: "{{ .Values.imagePullPolicy }}"
-        command: ["sh", "-c", "mkdir -p /bitnami/mariadb/conf && cp /bitnami/mariadb_config/my.cnf /bitnami/mariadb/conf/my_custom.cnf"]
+        command: ["sh", "-c", "mkdir -p /bitnami/mariadb/conf && cp /bitnami/mariadb_config/my.cnf /bitnami/mariadb/conf/my_custom.cnf && cp /bitnami/mariadb_config/init.sql /bitnami/mariadb/conf/init.sql"]
         volumeMounts:
         - name: config
           mountPath: /bitnami/mariadb_config
@@ -52,6 +52,10 @@ spec:
           value: {{ default "" .Values.mariadbUser | quote }}
         - name: MARIADB_DATABASE
           value: {{ default "" .Values.mariadbDatabase | quote }}
+        {{- if .Values.initSQL }}
+        - name: MARIADB_EXTRA_FLAGS
+          value: "--init-file=/bitnami/mariadb/conf/init.sql"
+        {{- end }}
         ports:
         - name: mysql
           containerPort: 3306

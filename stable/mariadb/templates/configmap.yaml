@@ -9,6 +9,13 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   my.cnf: |-
+    # Content of my.cnf
 {{- if .Values.config }}
 {{ .Values.config | indent 4 }}
+{{- end -}}
+    # End of my.cnf
+
+  init.sql: |-
+{{- if .Values.initSQL }}
+{{ .Values.initSQL | indent 4 }}
 {{- end -}}
