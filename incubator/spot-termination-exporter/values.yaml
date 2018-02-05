@@ -1,14 +1,14 @@
-# Default values for spot-termination-collector
+# Default values for spot-termination-exporter
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-spotTerminationCollector:
+spotTerminationexporter:
 
-  ## The official Banzai spot-termination-collector image, change tag to use a different version.
-  ## https://hub.docker.com/r/banzaicloud/spot-termination-collector/tags/
+  ## The official Banzai spot-termination-exporter image, change tag to use a different version.
+  ## https://hub.docker.com/r/banzaicloud/spot-termination-exporter/tags/
   ##
   image:
-    repository: "banzaicloud/spot-termination-collector"
+    repository: "banzaicloud/spot-termination-exporter"
     tag: "0.0.1"
 
     ## Specify an imagePullPolicy (Required)
