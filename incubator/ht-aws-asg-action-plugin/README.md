@@ -12,7 +12,7 @@ $ helm install banzaicloud-incubator/ht-aws-asg-action-plugin
 
 ## Introduction
 
-This chart bootstraps an BanzaiCloud  [Hollowtrees ASG Action Plugin](https://github.com/banzaicloud/banzai-charts/incubator/ht-aws-asg-action-plugin) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a Banzai Cloud  [Hollowtrees ASG Action Plugin](https://github.com/banzaicloud/banzai-charts/incubator/ht-aws-asg-action-plugin) deployment to a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release banzaicloud-incubator/ht-aws-asg-action-plugin
 ```
 
-The command deploys Hollowtrees ASG action plugin on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys Hollowtrees ASG action plugin to a Kubernetes cluster with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 ## Uninstalling the Chart
 
