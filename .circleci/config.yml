@@ -43,9 +43,9 @@ jobs:
             find . ! -path /tmp/  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm package -d /tmp/s3-chart/stable {} \;
             helm repo index /tmp/s3-chart/stable
 
-            s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/
-
-            if [ "$GIT_TAG" = "" ]; then
+            if [ "GIT_BRANCH" = "master" ]; then
+                s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/
+            elif [ "$GIT_TAG" = "" ]; then
                 s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/
             elif [ "$GIT_TAG" != "" ]; then
                 s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/
@@ -65,9 +65,9 @@ jobs:
             find . ! -path /tmp/  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm package -d /tmp/s3-chart/incubator {} \;
             helm repo index /tmp/s3-chart/incubator
 
-            s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/
-
-            if [ "$GIT_TAG" = "" ]; then
+            if [ "GIT_BRANCH" = "master" ]; then
+                s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/
+            elif [ "$GIT_TAG" = "" ]; then
                 s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/
             elif [ "$GIT_TAG" != "" ]; then
                 s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/
