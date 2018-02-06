@@ -49,14 +49,6 @@ mariadb:
   ##
   # mariadbPassword:
 
-  ## File containing SQL statements that will be executed by the server on startup.
-  ## ref: https://mariadb.com/kb/en/library/server-system-variables/#init_file
-  ##
-  initSQL: |-
-    CREATE DATABASE IF NOT EXISTS drone;
-    GRANT ALL PRIVILEGES ON drone.* TO 'bonanzabanzai'@'%';
-    FLUSH PRIVILEGES;
-
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
