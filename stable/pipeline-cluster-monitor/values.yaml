@@ -10,12 +10,19 @@ prometheus:
     auth:
       enabled: false
 
-
   alertmanager:
     enabled: false
 
   nodeExporter:
-    enabled: false
+    enabled: true
+    tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: "NoSchedule"
+        operator: "Exists"
+    service:
+      annotations:
+        prometheus.io/probe: node-exporter
+        prometheus.io/scrape: "true"
 
   server:
     ## Prometheus server container name
@@ -27,7 +34,7 @@ prometheus:
     ##
     image:
       repository: prom/prometheus
-      tag: v1.7.1
+      tag: v1.8.2
       pullPolicy: IfNotPresent
 
     ## (optional) alertmanager URL
@@ -114,6 +121,7 @@ prometheus:
 
     service:
       annotations: {}
+
       labels: {}
       clusterIP: ""
 
@@ -143,19 +151,25 @@ prometheus:
     ##
     image:
       repository: banzaicloud/pushgateway
-      tag: v0.3.1
+      tag: v0.4.0-allowtimestamp
       pullPolicy: IfNotPresent
 
     service:
       annotations:
+        prometheus.io/probe: pushgateway
         prometheus.io/scrape: "true"
+        prometheus.io/skip_from_service_endpoint: "true"
 
+    ## Additional Prometheus pushgateway container arguments
+    ##
+    extraArgs:
+        "push.accept-timestamp": "true"
 
   serverFiles:
     k8sclusters.json: |-
       
 
-    prometheus.yml: |-      
+    prometheus.yml: |-
       global:
         scrape_interval: 15s
         scrape_timeout: 10s
@@ -222,6 +236,8 @@ prometheus:
           # will add targets for each API server which Kubernetes adds an endpoint to
           # the default/kubernetes service.
           relabel_configs:
+            - action: labelmap
+              regex: __meta_kubernetes_node_label_(.+)
             - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
               action: keep
               regex: default;kubernetes;https
@@ -301,47 +317,17 @@ prometheus:
             - source_labels: [__meta_kubernetes_service_label_component]
               action: replace
               target_label: component
-            # - action: labelmap
-            #   regex: __meta_kubernetes_service_label_(.+)
-            # - source_labels: [__meta_kubernetes_namespace]
-            #   action: replace
-            #   target_label: kubernetes_namespace
-            # - source_labels: [__meta_kubernetes_service_name]
-            #   action: replace
-            #   target_label: kubernetes_name
-
-
-        # Example scrape config for probing services via the Blackbox Exporter.
-        #
-        # The relabeling allows the actual service scrape endpoint to be configured
-        # via the following annotations:
-        #
-        # * `prometheus.io/probe`: Only probe services that have a value of `true`
-        - job_name: 'kubernetes-services'
-
-          metrics_path: /probe
-          params:
-            module: [http_2xx]
-
-          kubernetes_sd_configs:
-            - role: service
-
-          relabel_configs:
-            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
-              action: keep
-              regex: true
-            - source_labels: [__address__]
-              target_label: __param_target
-            - target_label: __address__
-              replacement: blackbox
-            - source_labels: [__param_target]
-              target_label: instance
             - action: labelmap
               regex: __meta_kubernetes_service_label_(.+)
             - source_labels: [__meta_kubernetes_namespace]
+              action: replace
               target_label: kubernetes_namespace
             - source_labels: [__meta_kubernetes_service_name]
+              action: replace
               target_label: kubernetes_name
+            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_skip_from_service_endpoint]
+              action: drop
+              regex: true
 
         # Scrape config for Kubelet cAdvisor.
         #
@@ -395,10 +381,8 @@ prometheus:
         # * `prometheus.io/path`: If the metrics path is not `/metrics` override this.
         # * `prometheus.io/port`: Scrape the pod on the indicated port instead of the default of `9102`.
         - job_name: 'kubernetes-pods'
-
           kubernetes_sd_configs:
             - role: pod
-
           relabel_configs:
             - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
               action: keep
@@ -421,40 +405,103 @@ prometheus:
               action: replace
               target_label: kubernetes_pod_name
 
-        - job_name: 'node_exporter'
-
-          # Default to scraping over https. If required, just disable this or change to
-          # `http`.
-          scheme: https
-
-          # This TLS & bearer token file config is used to connect to the actual scrape
-          # endpoints for cluster components. This is separate to discovery auth
-          # configuration because discovery & scraping are two separate concerns in
-          # Prometheus. The discovery auth config is automatic if Prometheus runs inside
-          # the cluster. Otherwise, more config options have to be provided within the
-          # <kubernetes_sd_config>.
-          tls_config:
-            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-            # If your node certificates are self-signed or use a different CA to the
-            # master CA, then disable certificate verification below. Note that
-            # certificate verification is an integral part of a secure infrastructure
-            # so this should only be disabled in a controlled environment. You can
-            # disable certificate verification by uncommenting the line below.
-            #
-            insecure_skip_verify: true
-          bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-
-          scrape_interval: 5s
-          scrape_timeout:  5s
+        - job_name: 'banzaicloud-pushgateway'
+          honor_labels: false
 
           kubernetes_sd_configs:
-          - role: node
+            - role: endpoints
 
           relabel_configs:
-            - target_label: __address__
-              replacement: kubernetes.default.svc:443
+            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+              action: keep
+              regex: "pushgateway"
+            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+              action: keep
+              regex: true
+            - source_labels: [__meta_kubernetes_pod_node_name]
+              action: replace
+              target_label: node
+            - source_labels: [__meta_kubernetes_pod_template_hash]
+              action: replace
+              replacement: ''
+              target_label: pod_template_hash
+            # - source_labels: [__meta_kubernetes_pod_ip]
+            #   action: replace
+            #   target_label: instance
+
+
+          metric_relabel_configs:
+            - source_labels: [role,__name__]
+              regex: '[driver|executor]+;(.*)'
+              replacement: '$1'
+              target_label: __oldname__
+
+            - source_labels: [__oldname__]
+              regex: '(?P<spark_app_name>\w[^_]+)_(?P<interpreter_group_id>\w[^_]+)__(?P<notebook_id>\w[^_]+)_(?P<role>[driver|0-9]+)((\w[^_]+)_(\w[^_]+)__(\w[^_]+))?_(?P<metric_name>.*)'
+              replacement: '${spark_app_name}'
+              target_label: spark_app_name
+
+            - source_labels: [__oldname__]
+              regex: '(?P<spark_app_name>\w[^_]+)_(?P<interpreter_group_id>\w[^_]+)__(?P<notebook_id>\w[^_]+)_(?P<role>[driver|0-9]+)((\w[^_]+)_(\w[^_]+)__(\w[^_]+))?_(?P<metric_name>.*)'
+              replacement: '${notebook_id}'
+              target_label: notebook_id
             
-            - source_labels: [__meta_kubernetes_node_name]
-              regex: (.+)
-              target_label: __metrics_path__
-              replacement: /api/v1/nodes/${1}:9100/proxy/metrics
+            # Metrics from zeppelin
+            - source_labels: [__oldname__]
+              regex: '(?P<spark_app_name>\w[^_]+)_(?P<interpreter_group_id>\w[^_]+)__(?P<notebook_id>\w[^_]+)_(?P<role>[driver|0-9]+)((\w[^_]+)_(\w[^_]+)__(\w[^_]+))?_(?P<metric_name>.*)'
+              replacement: 'zeppelin'
+              target_label: application
+            # Metrics from spark submit
+            - source_labels: [application,__oldname__]
+              regex: ';(?P<spark_app_name>\w+)_(?P<role>[driver|0-9]+)((\w[^_]+)_(\w[^_]+)__(\w[^_]+))?_(?P<metric_name>.*)'
+              replacement: 'spark'
+              target_label: application
+            - source_labels: [exported_job]
+              regex: '[shuffle]+'
+              replacement: 'shuffle'
+              target_label: application
+
+            - source_labels: [__oldname__]
+              regex: '(?P<app_name>\w+)_(?P<role>[driver|0-9]+)((\w[^_]+)_(\w[^_]+)__(\w[^_]+))?_(?P<metric_name>.*)'
+              replacement: '${metric_name}'
+              target_label: __name__
+
+            - source_labels: [__oldname__]
+              replacement: ''
+              target_label: __oldname__
+            # Inspired by https://www.robustperception.io/extracting-labels-from-legacy-metric-names/
+            - source_labels: [__name__]
+              regex: '(jvm_pools)_(.*)_(\w+)'
+              replacement: '${2}'
+              target_label: pool
+            - source_labels: [__name__]
+              regex: '(jvm_pools)_(.*)_(\w+)'
+              replacement: 'jvm_memory_pools_${3}_bytes'
+              target_label: __name__
+            - source_labels: [__name__]
+              regex: 'jvm_([PS_MarkSweep|PS_Scavenge]+)_([time|count]+)'
+              replacement: '${1}'
+              target_label: gc
+            - source_labels: [__name__]
+              regex: 'jvm_([PS_MarkSweep|PS_Scavenge]+)_([time|count]+)'
+              replacement: 'jvm_memory_gc_${2}'
+              target_label: __name__
+            - source_labels: [__name__]
+              regex: 'jvm_([heap|non_heap|total]+)_(\w+)'
+              replacement: '${1}'
+              target_label: type
+            - source_labels: [__name__]
+              regex: 'jvm_([heap|non_heap|total]+)_(\w+)'
+              replacement: 'jvm_memory_${2}'
+              target_label: __name__
+            - source_labels: [exported_job]
+              action: replace
+              replacement: ''
+              target_label: exported_job
+            - source_labels: [exported_instance]
+              action: replace
+              target_label: instance
+            - source_labels: [exported_instance]
+              action: replace
+              replacement: ''
+              target_label: exported_instance

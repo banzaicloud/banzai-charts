@@ -3,7 +3,7 @@ kind: Service
 metadata:
   annotations:
     prometheus.io/probe: pushgateway
-    prometheus.io/scrape: "true"
+    prometheus.io/scrape: "false"
 
   labels:
     app: {{ template "prometheus.name" . }}
