@@ -166,6 +166,8 @@ prometheus:
       annotations:
         prometheus.io/scrape: "true"
 
+    extraArgs:
+      "push.accept-timestamp": "true"
 
   serverFiles:
     k8sclusters.json: |-

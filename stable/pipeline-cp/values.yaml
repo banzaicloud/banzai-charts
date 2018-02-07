@@ -322,6 +322,7 @@ prometheus:
               - '{job="kubernetes-apiservers"}'
               - '{job="kubernetes-service-endpoints"}'
               - '{job="kubernetes-cadvisor"}'
+              - '{job="banzaicloud-pushgateway"}'
               - '{job="node_exporter"}'
 
           file_sd_configs:
