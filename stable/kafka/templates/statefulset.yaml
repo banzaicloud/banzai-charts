@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: broker
-        image: banzaicloud/kafka_2.12-1.2.0-etcd:0.1-dev
+        image: banzaicloud/kafka:2.12-1.2.0-etcd-0.0.1
         env:
         - name: KAFKA_LOG4J_OPTS
           value: -Dlog4j.configuration=file:config/log4j.properties
