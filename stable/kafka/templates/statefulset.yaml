@@ -16,10 +16,14 @@ spec:
         app: kafka
       annotations:
     spec:
+      initContainers:
+      - name: wait-for-etcd-to-come-up
+        image: tenstartups/etcdctl
+        command: ['sh', '-c', 'until ETCDCTL_API=3 etcdctl --endpoints=etcd-cluster-client:2379 get "" --prefix; do echo waiting for etcd to come up; sleep 1; done;']
       terminationGracePeriodSeconds: 30
       containers:
       - name: broker
-        image: solsson/kafka:1.0.0@sha256:17fdf1637426f45c93c65826670542e36b9f3394ede1cb61885c6a4befa8f72d
+        image: banzaicloud/kafka:2.12-1.2.0-etcd-0.0.1
         env:
         - name: KAFKA_LOG4J_OPTS
           value: -Dlog4j.configuration=file:config/log4j.properties
@@ -35,7 +39,7 @@ spec:
         command:
         - sh
         - -c
-        - "./bin/kafka-server-start.sh config/server.properties --override zookeeper.connect=zetcd-service:2181 --override log.retention.hours=-1 --override log.dirs=/var/lib/kafka/data/topics --override auto.create.topics.enable=false --override broker.id=${HOSTNAME##*-}"
+        - "./bin/kafka-server-start.sh config/server.properties --override metastore.connect=etcd://etcd-cluster-client:2379 --override log.retention.hours=168 --override log.dirs=/var/lib/kafka/data/topics --override auto.create.topics.enable=false --override broker.id=${HOSTNAME##*-}"
         resources:
           requests:
             cpu: 100m

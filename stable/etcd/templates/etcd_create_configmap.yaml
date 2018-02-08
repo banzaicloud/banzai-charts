@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "etcd.fullname" . }}-etcd-cluster-configmap
+data:
+  cluster.yml: |-
+    apiVersion: "etcd.database.coreos.com/v1beta2"
+    kind: "EtcdCluster"
+    metadata:
+      labels:
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        app: "{{ template "etcd.fullname" . }}"
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+      name: "{{ .Values.etcd.cluster.name }}"
+    spec:
+      size: {{ .Values.etcd.cluster.size }}
+      version: "{{ .Values.etcd.cluster.version }}"
+      pod:
+    {{ toYaml .Values.etcd.cluster.pod | indent 4 }}
