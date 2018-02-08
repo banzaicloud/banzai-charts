@@ -9,6 +9,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   type: {{ .Values.spotTerminationexporter.service.type }}
+  clusterIP: "None"
   ports:
   - name: http
     port: {{ default "9189" .Values.spotTerminationexporter.bindAddr }}
