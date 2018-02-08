@@ -16,6 +16,8 @@ spec:
         release: "{{ .Release.Name }}"
         app: {{ template "spotTerminationexporter.fullname" . }}
         component: "{{ template "spotTerminationexporter.fullname" . }}"
+      annotations:
+        prometheus.io/scrape: "true"
 
     spec:
       containers:
@@ -54,4 +56,3 @@ spec:
 
         resources:
 {{ toYaml .Values.spotTerminationexporter.resources | indent 10 }}
-

@@ -40,7 +40,7 @@ drone:
 grafana:
   server:
     httpPort: 80
-  
+
     ingress:
       enabled: false
 
@@ -109,7 +109,7 @@ grafana:
       [security]
       ;admin_user = admin
       ;admin_password = admin
-      ;secret_key = 
+      ;secret_key =
       ;login_remember_days = 7
       ;cookie_username = grafana_user
       ;cookie_remember_name = grafana_remember
@@ -188,7 +188,7 @@ grafana:
       level = info
 
       [log.console]
-      ;level =  
+      ;level =
       ;format = console
 
       [event_publisher]
@@ -210,7 +210,7 @@ grafana:
 
       [grafana_net]
       url =
-        
+
 
 prometheus:
   rbac:
@@ -274,9 +274,9 @@ prometheus:
 
   serverFiles:
     k8sclusters.json: |-
-      
 
-    prometheus.yml: |-      
+
+    prometheus.yml: |-
       global:
         scrape_interval: 10s
         scrape_timeout: 7s
@@ -298,7 +298,7 @@ prometheus:
 
           honor_labels: true
           metrics_path: '/prometheus/federate'
-          
+
           scheme: http
 
           tls_config:
@@ -318,6 +318,7 @@ prometheus:
           params:
             'match[]':
               - '{job="kubernetes-nodes"}'
+              - '{job="kubernetes-pods"}'
               - '{job="kubernetes-apiservers"}'
               - '{job="kubernetes-service-endpoints"}'
               - '{job="kubernetes-cadvisor"}'
