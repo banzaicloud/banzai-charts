@@ -3,7 +3,7 @@ kind: Job
 metadata:
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "etcd.fullname" . }}"
+    app: "{{ template "fullname" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
   name: "{{ .Values.etcd.cluster.name }}"
@@ -11,18 +11,19 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "etcd.fullname" . }}
+        app: {{ template "fullname" . }}
         release: "{{ .Release.Name }}"
     spec:
       containers:
-      - name: {{ template "etcd.fullname" . }}-etcd-create-etcd
+      - name: {{ template "fullname" . }}-init
         image: "solsson/kafka-initutils@sha256:c98d7fb5e9365eab391a5dcd4230fc6e72caf929c60f29ff091e3b0215124713"
         command: [ "/bin/bash", "-c", "until kubectl get crd -o jsonpath='{.items[].metadata.name}' | grep -q etcdclusters.etcd.database.coreos.com; do echo waiting for crd ; sleep 3 ; done ;kubectl create -f /etcd_chart/cluster.yml;"]
         volumeMounts:
         - name: config
           mountPath: /etcd_chart
       restartPolicy: "OnFailure"
+      serviceAccountName: {{ template "fullname" . }}
       volumes:
       - name: config
         configMap: 
-          name: {{ template "etcd.fullname" . }}-etcd-cluster-configmap
+          name: {{ template "fullname" . }}-configmap
