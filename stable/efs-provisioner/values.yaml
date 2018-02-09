@@ -1,0 +1,15 @@
+# Default values for zeppelin
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+efs:
+  replicaCount: 1
+
+  image:
+    repository: quay.io/external_storage/efs-provisioner
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  awsRegion: ""
+  fileSystemId: ""
+  pvcName: "efs"
