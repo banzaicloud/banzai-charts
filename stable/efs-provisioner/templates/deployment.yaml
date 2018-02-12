@@ -1,0 +1,33 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: efs-provisioner
+spec:
+  replicas: {{ .Values.efs.replicaCount }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: efs-provisioner
+    spec:
+      serviceAccount: efs-provisioner
+        containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.efs.image.repository }}:{{ .Values.efs.image.tag }}"
+          imagePullPolicy: {{ .Values.efs.image.pullPolicy }}
+          env:
+            - name: FILE_SYSTEM_ID
+              value: {{ .Values.efs.fileSystemId }}
+            - name: AWS_REGION
+              value: {{ .Values.efs.awsRegion }}
+            - name: PROVISIONER_NAME
+              value: banzaicloud.com/aws-efs
+          volumeMounts:
+            - name: pv-volume
+              mountPath: /persistentvolumes
+      volumes:
+        - name: pv-volume
+          nfs:
+            server: "{{ .Values.efs.fileSystemId }}.efs.{{ .Values.efs.awsRegion }}.amazonaws.com"
+            path: /
