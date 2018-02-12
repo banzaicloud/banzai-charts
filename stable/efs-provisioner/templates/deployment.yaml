@@ -12,7 +12,7 @@ spec:
         app: efs-provisioner
     spec:
       serviceAccount: efs-provisioner
-        containers:
+      containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.efs.image.repository }}:{{ .Values.efs.image.tag }}"
           imagePullPolicy: {{ .Values.efs.image.pullPolicy }}
