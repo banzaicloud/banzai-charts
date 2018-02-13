@@ -1,5 +1,7 @@
 # TiDB
 
+TiDB on Kubernetes: https://banzaicloud.com/blog/tidb-kubernetes/
+
 [TiDB](https://www.pingcap.com/docs/) (The pronunciation is: /‘taɪdiːbi:/ tai-D-B, etymology: titanium) is a Hybrid Transactional/Analytical Processing (HTAP) database. Inspired by the design of Google F1 and Google Spanner, TiDB features infinite horizontal scalability, strong consistency, and high availability. The goal of TiDB is to serve as a one-stop solution for online transactions and analyses.
 
 
