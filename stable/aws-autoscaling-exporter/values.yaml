@@ -59,3 +59,8 @@ autoscalingExporter:
     requests:
       memory: 256Mi
       cpu: 120m
+
+#AWS access key ID used to describe auto scaling groups
+awsAccessKeyId: ""
+#AWS secret key used to describe auto scaling groups
+awsSecretAccessKey: ""
