@@ -8,7 +8,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.autoscalingExporter.replicaCount }}
+  replicas: {{ .Values.autoscalingExporter.replicas }}
 
   template:
     metadata:
@@ -33,6 +33,7 @@ spec:
           -metrics-path={{ .Values.autoscalingExporter.metricsPath }} \
           -recommender-url={{ .Values.autoscalingExporter.recommenderUrl }} \
           -region={{ .Values.autoscalingExporter.region }} \
+          -auto-scaling-groups={{ .Values.autoscalingExporter.autoScalingGroups }} \
           -log-level={{ .Values.autoscalingExporter.logLevel }}
 
         ports:
@@ -56,4 +57,3 @@ spec:
 
         resources:
 {{ toYaml .Values.autoscalingExporter.resources | indent 10 }}
-
