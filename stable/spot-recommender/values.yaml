@@ -36,17 +36,17 @@ recommender:
 
 
   logLevel: "info"
-  
-  # The address to listen on for HTTP requests. 
+
+  # The address to listen on for HTTP requests.
   appPort: 9090
 
 
   # Recommendations are cached for these instance types (comma separated list)
   cacheInstanceTypes: "m4.xlarge,m5.xlarge,c5.xlarge"
-  
+
   # Time (in seconds) between reevaluating the recommendations.
   reevaluationInterval: "1m0s"
-  
+
   #AWS region where the recommender should work.
   region: "eu-west-1"
 
@@ -57,3 +57,8 @@ recommender:
     requests:
       memory: 256Mi
       cpu: 120m
+
+  #AWS access key ID used to describe auto scaling groups
+  awsAccessKeyId: ""
+  #AWS secret key used to describe auto scaling groups
+  awsSecretAccessKey: ""
