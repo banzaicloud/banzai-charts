@@ -23,6 +23,17 @@ spec:
       - name: recommender
         image: "{{ .Values.recommender.image.repository }}:{{ .Values.recommender.image.tag }}"
         imagePullPolicy: {{ .Values.recommender.image.imagePullPolicy | quote }}
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "recommender.fullname" . }}
+                key: awsAccessKeyId
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "recommender.fullname" . }}
+                key: awsSecretAccessKey
 
         command:
         - "/bin/sh"
@@ -56,4 +67,3 @@ spec:
 
         resources:
 {{ toYaml .Values.recommender.resources | indent 10 }}
-
