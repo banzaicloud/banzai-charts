@@ -36,19 +36,21 @@ autoscalingExporter:
 
 
   logLevel: "info"
-  
-  # The address to listen on for HTTP requests. 
+
+  # The address to listen on for HTTP requests.
   appPort: 8089
 
-
-  # URL of the spot instance recommender 
+  # URL of the spot instance recommender
   recommenderUrl: "http://localhost:9090"
-  
-  # Path to metrics endpoint 
-  metricsPath: "1m0s"
-  
+
+  # Path to metrics endpoint
+  metricsPath: "/metrics"
+
   #AWS region where the recommender should work.
   region: "eu-west-1"
+
+  #Comma separated list of auto scaling groups to monitor. Empty value means all groups in the region.
+  autoScalingGroups: ""
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -57,3 +59,8 @@ autoscalingExporter:
     requests:
       memory: 256Mi
       cpu: 120m
+
+#AWS access key ID used to describe auto scaling groups
+awsAccessKeyId: ""
+#AWS secret key used to describe auto scaling groups
+awsSecretAccessKey: ""

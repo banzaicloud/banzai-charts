@@ -8,7 +8,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.autoscalingExporter.replicaCount }}
+  replicas: {{ .Values.autoscalingExporter.replicas }}
 
   template:
     metadata:
@@ -23,7 +23,17 @@ spec:
       - name: autoscalingexporter
         image: "{{ .Values.autoscalingExporter.image.repository }}:{{ .Values.autoscalingExporter.image.tag }}"
         imagePullPolicy: {{ .Values.autoscalingExporter.image.imagePullPolicy | quote }}
-
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "autoscalingExporter.fullname" . }}
+                key: awsAccessKeyId
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "autoscalingExporter.fullname" . }}
+                key: awsSecretAccessKey
         command:
         - "/bin/sh"
         - "-ecx"
@@ -33,6 +43,7 @@ spec:
           -metrics-path={{ .Values.autoscalingExporter.metricsPath }} \
           -recommender-url={{ .Values.autoscalingExporter.recommenderUrl }} \
           -region={{ .Values.autoscalingExporter.region }} \
+          -auto-scaling-groups={{ .Values.autoscalingExporter.autoScalingGroups }} \
           -log-level={{ .Values.autoscalingExporter.logLevel }}
 
         ports:
@@ -56,4 +67,3 @@ spec:
 
         resources:
 {{ toYaml .Values.autoscalingExporter.resources | indent 10 }}
-
