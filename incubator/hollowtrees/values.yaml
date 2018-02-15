@@ -37,8 +37,8 @@ hollowtrees:
 
   logLevel: "debug"
   logFormat: "text"
-  
-  # The address to listen on for HTTP requests. 
+
+  # The address to listen on for HTTP requests.
   bindAddr: 9092
   buffersize: 100
 

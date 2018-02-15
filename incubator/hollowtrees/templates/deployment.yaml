@@ -30,14 +30,14 @@ spec:
           containerPort: {{ .Values.hollowtrees.bindAddr }}
         livenessProbe:
           httpGet:
-            path: /
+            path: /health
             port: http
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           httpGet:
-            path: /
+            path: /health
             port: http
             httpHeaders:
           initialDelaySeconds: 30
