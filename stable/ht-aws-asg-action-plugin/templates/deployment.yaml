@@ -23,7 +23,17 @@ spec:
       - name: ht-k8s-action-plugin
         image: "{{ .Values.htAsgActionPlugin.image.repository }}:{{ .Values.htAsgActionPlugin.image.tag }}"
         imagePullPolicy: {{ .Values.htAsgActionPlugin.image.imagePullPolicy | quote }}
-
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "autoscalingExporter.fullname" . }}
+                key: awsAccessKeyId
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "autoscalingExporter.fullname" . }}
+                key: awsSecretAccessKey
 
         ports:
         - name: grpc

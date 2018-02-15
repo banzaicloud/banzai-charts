@@ -37,8 +37,8 @@ htAsgActionPlugin:
 
   logLevel: "debug"
   logFormat: "text"
-  
-  # The address to listen on for HTTP requests. 
+
+  # The address to listen on for HTTP requests.
   bindAddr: 8887
 
   region: "eu-west-1"
@@ -51,3 +51,8 @@ htAsgActionPlugin:
     requests:
       memory: 256Mi
       cpu: 120m
+
+#AWS access key ID used to describe auto scaling groups
+awsAccessKeyId: ""
+#AWS secret key used to describe auto scaling groups
+awsSecretAccessKey: ""
