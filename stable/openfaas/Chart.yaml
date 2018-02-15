@@ -10,8 +10,3 @@ icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stac
 keywords:
 - functions
 - service
-maintainers:
-- name: alexellis
-  email: alex@openfaas.com
-- name: rimusz
-  email: rmocius@gmail.com
