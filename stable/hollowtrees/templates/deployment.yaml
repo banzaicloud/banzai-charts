@@ -27,7 +27,7 @@ spec:
 
         ports:
         - name: http
-          containerPort: {{ .Values.hollowtrees.bindAddr }}
+          containerPort: {{ .Values.hollowtrees.port }}
         livenessProbe:
           httpGet:
             path: /health

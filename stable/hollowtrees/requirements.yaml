@@ -1,0 +1,12 @@
+dependencies:
+- name: ht-aws-asg-action-plugin
+  version: 0.0.1
+  condition: asgplugin.enabled
+  repository: alias:banzaicloud-stable
+  alias: asgplugin
+
+- name: ht-k8s-action-plugin
+  version: 0.0.1
+  condition: k8splugin.enabled
+  repository: alias:banzaicloud-stable
+  alias: k8splugin

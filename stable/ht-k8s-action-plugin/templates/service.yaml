@@ -11,7 +11,7 @@ spec:
   type: {{ .Values.htActionPlugin.service.type }}
   ports:
   - name: grpc
-    port: {{ default "8887" .Values.htActionPlugin.bindAddr }}
+    port: {{ default "8080" .Values.htActionPlugin.port }}
     protocol: TCP
     targetPort: grpc
   selector:
