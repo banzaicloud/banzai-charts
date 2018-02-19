@@ -33,13 +33,10 @@ htActionPlugin:
     ##
     # annotations:
 
-
-
   logLevel: "debug"
-  logFormat: "text"
-  
-  # The address to listen on for HTTP requests. 
-  bindAddr: 8887
+
+  # The address to listen on for HTTP requests.
+  port: 8080
 
 
   ## Configure resource requests and limits

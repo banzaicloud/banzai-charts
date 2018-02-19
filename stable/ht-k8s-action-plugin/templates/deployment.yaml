@@ -23,6 +23,13 @@ spec:
       - name: ht-k8s-action-plugin
         image: "{{ .Values.htActionPlugin.image.repository }}:{{ .Values.htActionPlugin.image.tag }}"
         imagePullPolicy: {{ .Values.htActionPlugin.image.imagePullPolicy | quote }}
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          ht-k8s-action-plugin \
+          -bind.address=0.0.0.0:{{ .Values.htActionPlugin.port }} \
+          -log-level={{ .Values.htActionPlugin.logLevel }}
 
 
         ports:
@@ -43,10 +50,3 @@ spec:
 
         resources:
 {{ toYaml .Values.htActionPlugin.resources | indent 10 }}
-        volumeMounts:
-        - name: config
-          mountPath: /conf/
-      volumes:
-      - name: config
-        configMap:
-          name: {{ template "htActionPlugin.fullname" . }}
