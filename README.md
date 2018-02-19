@@ -11,6 +11,7 @@ At Banzai Cloud we use Helm as our package manager to deploy Kubernetes applicat
   - [etcd operator](stable/etcd-operator )
   - [etcd](stable/etcd)
   - [Hollowtrees AWS autoscaling exporter](stable/aws-autoscaling-exporter)
+  - [Hollowtrees Kubernetes plugin](stable/ht-k8s-action-plugin)
   - [Hollowtrees spot instance recommender](stable/spot-recommender)
   - [Hollowtrees spot termination exporter](stable/termination-exporter)
   - [Kafka](stable/kafka)
@@ -27,6 +28,7 @@ At Banzai Cloud we use Helm as our package manager to deploy Kubernetes applicat
   - [Vault](stable/vault)
   - [Zeppelin](stable/zeppelin)
 - [Incubator](#architecture-overview)
+
 
 ### Testing
 
