@@ -43,6 +43,8 @@ htAsgActionPlugin:
   # The name of the AWS region where the plugin works
   region: "eu-west-1"
 
+  # The address of the spot instance recommender that's used by the plugin
+  recommenderUrl: "http://sr-spot-recommender:9090"
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
