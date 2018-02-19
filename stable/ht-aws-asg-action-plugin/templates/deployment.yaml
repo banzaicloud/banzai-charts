@@ -30,7 +30,8 @@ spec:
           ht-aws-asg-action-plugin \
           -bind.address=0.0.0.0:{{ .Values.htAsgActionPlugin.port }} \
           -log.level={{ .Values.htAsgActionPlugin.logLevel }} \
-          -aws.region={{ .Values.htAsgActionPlugin.region }}
+          -aws.region={{ .Values.htAsgActionPlugin.region }} \
+          -recommender.url={{ .Values.htAsgActionPlugin.recommenderUrl }}
         env:
           - name: AWS_ACCESS_KEY_ID
             valueFrom:
