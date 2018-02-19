@@ -20,33 +20,45 @@ spec:
 
     spec:
       containers:
-      - name: ht-k8s-action-plugin
+      - name: ht-aws-asg-action-plugin
         image: "{{ .Values.htAsgActionPlugin.image.repository }}:{{ .Values.htAsgActionPlugin.image.tag }}"
         imagePullPolicy: {{ .Values.htAsgActionPlugin.image.imagePullPolicy | quote }}
-
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          ht-aws-asg-action-plugin \
+          -bind.address=0.0.0.0:{{ .Values.htAsgActionPlugin.port }} \
+          -log.level={{ .Values.htAsgActionPlugin.logLevel }} \
+          -aws.region={{ .Values.htAsgActionPlugin.region }} \
+          -recommender.url={{ .Values.htAsgActionPlugin.recommenderUrl }}
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "htAsgActionPlugin.fullname" . }}
+                key: awsAccessKeyId
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "htAsgActionPlugin.fullname" . }}
+                key: awsSecretAccessKey
 
         ports:
         - name: grpc
-          containerPort: {{ .Values.htAsgActionPlugin.bindAddr }}
+          containerPort: {{ .Values.htAsgActionPlugin.port }}
         livenessProbe:
           tcpSocket:
-            port: {{ .Values.htAsgActionPlugin.bindAddr }}
+            port: {{ .Values.htAsgActionPlugin.port }}
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           tcpSocket:
-            port: {{ .Values.htAsgActionPlugin.bindAddr }}
+            port: {{ .Values.htAsgActionPlugin.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 3
           periodSeconds: 5
 
         resources:
 {{ toYaml .Values.htAsgActionPlugin.resources | indent 10 }}
-        volumeMounts:
-        - name: config
-          mountPath: /conf/
-      volumes:
-      - name: config
-        configMap:
-          name: {{ template "htAsgActionPlugin.fullname" . }}

@@ -23,30 +23,30 @@ spec:
       - name: ht-k8s-action-plugin
         image: "{{ .Values.htActionPlugin.image.repository }}:{{ .Values.htActionPlugin.image.tag }}"
         imagePullPolicy: {{ .Values.htActionPlugin.image.imagePullPolicy | quote }}
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          ht-k8s-action-plugin \
+          -bind.address=0.0.0.0:{{ .Values.htActionPlugin.port }} \
+          -log.level={{ .Values.htActionPlugin.logLevel }}
 
 
         ports:
         - name: grpc
-          containerPort: {{ .Values.htActionPlugin.bindAddr }}
+          containerPort: {{ .Values.htActionPlugin.port }}
         livenessProbe:
           tcpSocket:
-            port: {{ .Values.htActionPlugin.bindAddr }}
+            port: {{ .Values.htActionPlugin.port }}
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           tcpSocket:
-            port: {{ .Values.htActionPlugin.bindAddr }}
+            port: {{ .Values.htActionPlugin.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 3
           periodSeconds: 5
 
         resources:
 {{ toYaml .Values.htActionPlugin.resources | indent 10 }}
-        volumeMounts:
-        - name: config
-          mountPath: /conf/
-      volumes:
-      - name: config
-        configMap:
-          name: {{ template "htActionPlugin.fullname" . }}
