@@ -20,9 +20,17 @@ spec:
 
     spec:
       containers:
-      - name: ht-k8s-action-plugin
+      - name: ht-aws-asg-action-plugin
         image: "{{ .Values.htAsgActionPlugin.image.repository }}:{{ .Values.htAsgActionPlugin.image.tag }}"
         imagePullPolicy: {{ .Values.htAsgActionPlugin.image.imagePullPolicy | quote }}
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          ht-aws-asg-action-plugin \
+          -bind.address=0.0.0.0:{{ .Values.htAsgActionPlugin.port }} \
+          -log.level={{ .Values.htAsgActionPlugin.logLevel }} \
+          -aws.region={{ .Values.htAsgActionPlugin.region }}
         env:
           - name: AWS_ACCESS_KEY_ID
             valueFrom:
@@ -53,10 +61,3 @@ spec:
 
         resources:
 {{ toYaml .Values.htAsgActionPlugin.resources | indent 10 }}
-        volumeMounts:
-        - name: config
-          mountPath: /conf/
-      volumes:
-      - name: config
-        configMap:
-          name: {{ template "htAsgActionPlugin.fullname" . }}
