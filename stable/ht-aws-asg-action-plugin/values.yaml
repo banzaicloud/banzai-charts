@@ -36,13 +36,15 @@ htAsgActionPlugin:
 
 
   logLevel: "debug"
-  logFormat: "text"
-  
-  # The address to listen on for HTTP requests. 
-  bindAddr: 8887
 
+  # The address to listen on for HTTP requests.
+  port: 8080
+
+  # The name of the AWS region where the plugin works
   region: "eu-west-1"
 
+  # The address of the spot instance recommender that's used by the plugin
+  recommenderUrl: "http://sr-spot-recommender:9090"
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -51,3 +53,8 @@ htAsgActionPlugin:
     requests:
       memory: 256Mi
       cpu: 120m
+
+#AWS access key ID used to describe auto scaling groups
+awsAccessKeyId: ""
+#AWS secret key used to describe auto scaling groups
+awsSecretAccessKey: ""
