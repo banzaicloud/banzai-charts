@@ -36,11 +36,11 @@ htAsgActionPlugin:
 
 
   logLevel: "debug"
-  logFormat: "text"
 
   # The address to listen on for HTTP requests.
-  bindAddr: 8887
+  port: 8080
 
+  # The name of the AWS region where the plugin works
   region: "eu-west-1"
 
 

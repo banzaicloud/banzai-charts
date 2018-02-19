@@ -29,7 +29,7 @@ spec:
         - |
           ht-k8s-action-plugin \
           -bind.address=0.0.0.0:{{ .Values.htActionPlugin.port }} \
-          -log-level={{ .Values.htActionPlugin.logLevel }}
+          -log.level={{ .Values.htActionPlugin.logLevel }}
 
 
         ports:
