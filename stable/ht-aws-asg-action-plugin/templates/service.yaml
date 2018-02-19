@@ -12,7 +12,7 @@ spec:
   ports:
   - name: grpc
     protocol: TCP
-    port: {{ default "8888" .Values.htAsgActionPlugin.bindAddr }}
+    port: {{ default "8080" .Values.htAsgActionPlugin.port }}
     targetPort: grpc
   selector:
     app: "{{ template "htAsgActionPlugin.fullname" . }}"

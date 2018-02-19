@@ -10,7 +10,7 @@ metadata:
 data:
   config.yaml: |-
     global:
-        bindAddr: ":{{ .Values.hollowtrees.bindAddr }}"
+        bindAddr: ":{{ .Values.hollowtrees.port }}"
         buffersize: {{ .Values.hollowtrees.buffersize }}
 
     # logger settings
@@ -20,12 +20,15 @@ data:
 
     # action plugin settings
     action_plugins:
+      {{if .Values.k8splugin.enabled}}
         - name: "ht-k8s-action-plugin"
-          address: "{{ .Release.Name }}-ht-k8s-action-plugin:8887"
+          address: "{{ .Release.Name }}-k8splugin:{{ .Values.k8splugin.htActionPlugin.port }}"
+      {{end}}
 
+      {{if .Values.asgplugin.enabled}}
         - name: "ht-aws-asg-action-plugin"
-          address: "{{ .Release.Name }}-ht-aws-asg-action-plugin:8888"
-
+          address: "{{ .Release.Name }}-asgplugin:{{ .Values.asgplugin.htAsgActionPlugin.port }}"
+      {{end}}
 
     # action plugin rules
     rules:

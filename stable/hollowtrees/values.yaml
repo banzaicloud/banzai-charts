@@ -33,15 +33,12 @@ hollowtrees:
     ##
     # annotations:
 
-
-
   logLevel: "debug"
   logFormat: "text"
 
   # The address to listen on for HTTP requests.
-  bindAddr: 9092
+  port: 8080
   buffersize: 100
-
 
   rules:
       - name: "spot_to_drainer"
@@ -50,17 +47,12 @@ hollowtrees:
         action_plugins:
             - "ht-k8s-action-plugin"
             - "ht-aws-asg-action-plugin"
-        match:
-            - cluster_name: "marton-cluster"
 
       - name: "spot_rebalance"
         description: "price alert to asg rebalance"
         event_type: "prometheus.server.alert.SpotInstanceTooExpensive"
         action_plugins:
             - "ht-aws-asg-action-plugin"
-        match:
-            - asg_name: "marci-test"
-
 
   ## Configure resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -69,3 +61,11 @@ hollowtrees:
     requests:
       memory: 256Mi
       cpu: 120m
+
+asgplugin:
+  enabled: true
+  awsAccessKeyId: ""
+  awsSecretAccessKey: ""
+
+k8splugin:
+  enabled: true
