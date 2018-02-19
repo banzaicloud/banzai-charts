@@ -6,7 +6,7 @@ At Banzai Cloud we use Helm as our package manager to deploy Kubernetes applicat
 
 ### Chart collections
   
-- [Stable](#pipeline)
+- [Stable](stable/)
   - [Drone](stable/drone)
   - [etcd operator](stable/etcd-operator )
   - [etcd](stable/etcd)
@@ -27,8 +27,7 @@ At Banzai Cloud we use Helm as our package manager to deploy Kubernetes applicat
   - [Spark](stable/spark)
   - [Vault](stable/vault)
   - [Zeppelin](stable/zeppelin)
-- [Incubator](#architecture-overview)
-
+- [Incubator](incubator/)
 
 ### Testing
 
@@ -54,5 +53,5 @@ Or if you want to test it from Pipeline, you can do it by specifying the followi
 PIPELINE_HELM_BANZAIREPOSITORYURL="http://kubernetes-charts.banzaicloud.com/branch/fb-1"
 ```
 
-Clusters created with Pipeline will add this helm repo as `banzaicloud-stable`.
+Clusters created with Pipeline will add this Helm repo as `banzaicloud-stable`.
 
