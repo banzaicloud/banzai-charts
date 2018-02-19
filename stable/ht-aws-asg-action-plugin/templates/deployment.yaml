@@ -36,26 +36,26 @@ spec:
           - name: AWS_ACCESS_KEY_ID
             valueFrom:
               secretKeyRef:
-                name: {{ template "autoscalingExporter.fullname" . }}
+                name: {{ template "htAsgActionPlugin.fullname" . }}
                 key: awsAccessKeyId
           - name: AWS_SECRET_ACCESS_KEY
             valueFrom:
               secretKeyRef:
-                name: {{ template "autoscalingExporter.fullname" . }}
+                name: {{ template "htAsgActionPlugin.fullname" . }}
                 key: awsSecretAccessKey
 
         ports:
         - name: grpc
-          containerPort: {{ .Values.htAsgActionPlugin.bindAddr }}
+          containerPort: {{ .Values.htAsgActionPlugin.port }}
         livenessProbe:
           tcpSocket:
-            port: {{ .Values.htAsgActionPlugin.bindAddr }}
+            port: {{ .Values.htAsgActionPlugin.port }}
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           tcpSocket:
-            port: {{ .Values.htAsgActionPlugin.bindAddr }}
+            port: {{ .Values.htAsgActionPlugin.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 3
           periodSeconds: 5

@@ -34,16 +34,16 @@ spec:
 
         ports:
         - name: grpc
-          containerPort: {{ .Values.htActionPlugin.bindAddr }}
+          containerPort: {{ .Values.htActionPlugin.port }}
         livenessProbe:
           tcpSocket:
-            port: {{ .Values.htActionPlugin.bindAddr }}
+            port: {{ .Values.htActionPlugin.port }}
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           tcpSocket:
-            port: {{ .Values.htActionPlugin.bindAddr }}
+            port: {{ .Values.htActionPlugin.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 3
           periodSeconds: 5
