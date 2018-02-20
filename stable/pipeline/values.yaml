@@ -25,7 +25,7 @@ Helm:
 
 auth:
   enabled: false
-  
+
 
 ##
 ## MariaDB chart configuration

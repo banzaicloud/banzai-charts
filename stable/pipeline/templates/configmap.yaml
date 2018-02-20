@@ -25,6 +25,6 @@ data:
     #
     [auth]
     enabled = {{ .Values.auth.enabled }}
-    clientid = {{ .Values.auth.clientid }}
-    clientsecret = {{ .Values.auth.clientid }}
-    tokensigningkey = {{ randAlphaNum 16 }}
+    clientid = "{{ .Values.auth.clientid }}"
+    clientsecret = "{{ .Values.auth.clientid }}"
+    tokensigningkey = "{{ randAlphaNum 16 }}"
