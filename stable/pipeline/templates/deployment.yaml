@@ -86,7 +86,7 @@ spec:
               key: azureTenantId
 
         - name: VAULT_ADDR
-          value: http://{{ template "vault.fullname" . }}:8200
+          value: http://{{ .Release.Name }}-vault:8200
     
         ports:
         - containerPort: {{ .Values.service.internalPort }}
@@ -122,4 +122,4 @@ spec:
         hostPath:
           path: /opt/pipeline/statestore/
 
-      serviceAccountName: {{ template "fullname" . }}
+      serviceAccountName: pipeline
