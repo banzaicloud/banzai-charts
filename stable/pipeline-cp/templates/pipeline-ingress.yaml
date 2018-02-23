@@ -11,7 +11,7 @@ metadata:
     ingress.kubernetes.io/ssl-redirect: "false"
     traefik.frontend.rule.type: PathPrefixStrip
 
-    {{- if .Values.pipeline.ingress.auth.enabled }}
+    {{- if and (not .Values.pipeline.auth.enabled) (.Values.pipeline.ingress.auth.enabled) }}
     ingress.kubernetes.io/auth-type: "basic"
     ingress.kubernetes.io/auth-secret: "{{ .Release.Name }}-pipeline-traefik-secret"
     {{- end }}
