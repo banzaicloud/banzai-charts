@@ -1,8 +1,8 @@
-
+{{- if .Values.pipeline.auth.enabled }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-drone
+  name: {{ .Release.Name }}-auth-ingress
   namespace: default
   labels:
     release: {{ .Release.Name }}
@@ -10,14 +10,14 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik
     ingress.kubernetes.io/ssl-redirect: "false"
-    traefik.frontend.rule.type: PathPrefixStrip
-    traefik.frontend.priority: "1"
+    traefik.frontend.priority: "2"
 
 spec:
   rules:
     - http:
         paths:
-          - path: /
+          - path: /auth
             backend:
-             serviceName: {{ .Release.Name }}-drone
-             servicePort: 80
+             serviceName: {{ .Release.Name }}-pipeline
+             servicePort: 9090
+{{- end }}
