@@ -11,7 +11,9 @@ metadata:
     kubernetes.io/ingress.class: traefik
     ingress.kubernetes.io/ssl-redirect: "false"
     traefik.frontend.rule.type: PathPrefixStrip
+    {{- if .Values.pipeline.auth.enabled }}
     traefik.frontend.priority: "1"
+    {{- end }}
 
 spec:
   rules:
