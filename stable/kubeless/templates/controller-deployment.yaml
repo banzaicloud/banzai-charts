@@ -17,4 +17,4 @@ spec:
       - name: controller
         image: "{{ .Values.controller.deployment.image.repository }}:{{ .Values.controller.deployment.image.tag }}"
         imagePullPolicy: {{ .Values.controller.deployment.image.pullPolicy }}
-    serviceAccountName: controller-acct
+      serviceAccountName: controller-acct

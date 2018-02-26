@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-topic-creator
+spec:
+  containers:
+  - name: kafka-topic-creator
+    image: banzaicloud/kafka:2.12-1.2.0-etcd-0.0.1
+    # Just spin & wait forever
+    command: [ "/bin/bash", "-c", "--" ]
+    args: [ "while true; do sleep 3000; done;" ]
