@@ -26,3 +26,4 @@ spec:
         - proxy
         - "-p"
         - "8080"
+      serviceAccountName: controller-acct
