@@ -35,6 +35,9 @@ htActionPlugin:
 
   logLevel: "debug"
 
+  # location that holds (multiple) k8s config files
+  clusterConfigRoot: "/statestore"
+
   # The address to listen on for HTTP requests.
   port: 8080
 
