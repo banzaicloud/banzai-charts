@@ -104,7 +104,7 @@ spec:
 
         volumeMounts:
         - name: config-volume
-          mountPath: /root/conf/
+          mountPath: /root/config/
         - mountPath: /root/.ssh
           name: ssh
         - mountPath: /statestore
