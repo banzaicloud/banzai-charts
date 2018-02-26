@@ -19,5 +19,5 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Create a random password for MariaDB.
 */}}
 {{- define "mariadb.password" -}}
-{{- derivePassword 1 "long" (.Release.Time | toString) "bonanzabanzai" (print .Release.Name "-pipeline-db:3306") -}}
+{{- (derivePassword 1 "long" (.Release.Time | toString) "bonanzabanzai" (print .Release.Name "-pipeline-db:3306") | b64enc ) -}}
 {{- end -}}
