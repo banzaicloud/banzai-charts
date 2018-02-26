@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "ingressauthgenerator.fullname" . }}"
+  labels:
+    app: "{{ template "ingressauthgenerator.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.ingressauthgenerator.replicaCount }}
+
+  template:
+    metadata:
+      labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+        app: {{ template "ingressauthgenerator.fullname" . }}
+        component: "{{ template "ingressauthgenerator.fullname" . }}"
+
+
+  
+    spec:
+      serviceAccountName: "{{ template "ingressauthgenerator.fullname" . }}-rbac"
+      containers:
+      - name: ingressauthgenerator
+        image: "{{ .Values.ingressauthgenerator.image.repository }}:{{ .Values.ingressauthgenerator.image.tag }}"
+        imagePullPolicy: {{ .Values.ingressauthgenerator.image.imagePullPolicy | quote }}
+
+
+        resources:
+{{ toYaml .Values.ingressauthgenerator.resources | indent 10 }}
+
