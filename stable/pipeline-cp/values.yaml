@@ -13,6 +13,21 @@ traefik:
   memoryLimit: 250Mi
 
 pipeline:
+
+  auth:
+    enabled: true 
+    clientid: "" 
+    clientsecret: "" 
+
+  drone:
+    enabled: false 
+
+  cloud: 
+    cloudprovider: aws
+    gkeCredentialPath: ""
+    keypath: "/opt/pipeline/.ssh"
+
+
   ingress:
     auth:
       enabled: false

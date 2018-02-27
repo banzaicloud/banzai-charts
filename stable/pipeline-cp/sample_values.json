@@ -18,6 +18,20 @@
         }
     },
     "pipeline": {
+        "auth": {
+                "enabled": true,
+                "clientid": "",
+                "clientsecret": ""
+            },
+        "drone": {
+            "enabled": false
+        },
+        "cloud": {
+            "cloudprovider": "aws",
+            "gkeCredentialPath": "",
+            "keypath": ""
+ 
+        },
         "ingress": {
             "user": "",
             "password": "",
@@ -41,13 +55,7 @@
         },
         "image": {
             "tag": ""
-        },
-        "auth": {
-            "enabled": false,
-            "clientid": "",
-            "clientsecret": ""
-        }
-    },
+        }    },
     "prometheus": {
         "ingress": {
             "user": "",

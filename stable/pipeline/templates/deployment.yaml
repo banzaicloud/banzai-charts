@@ -43,6 +43,48 @@ spec:
               name:  "{{ .Release.Name }}-pipeline-db"
               key: mariadb-password
 
+        - name: PIPELINE_LOGGING_LOGFORMAT
+          value: {{ .Values.logging.logformat | quote }}
+        - name: PIPELINE_LOGGING_LOGLEVEL
+          value: {{ .Values.logging.loglevel | quote }}
+        - name: PIPELINE_LOGGING_KUBICORNLOGLEVEL
+          value: {{ .Values.logging.kubicornloglevel | quote }}
+
+        - name: PIPELINE_CLOUD_CLOUDPROVIDER
+          value: {{ .Values.cloud.cloudprovider | quote }}
+        - name: PIPELINE_CLOUD_CLOUDPROFILE
+          value: {{ .Values.cloud.cloudprofile | quote }}
+        - name: PIPELINE_CLOUD_GKECREDENTIALPATH
+          value: {{ .Values.cloud.gkeCredentialPath | quote }}
+        - name: PIPELINE_CLOUD_KEYPATH
+          value: {{ .Values.cloud.keypath | quote }}
+
+        - name: PIPELINE_AUTH_ENABLED
+          value: {{ .Values.auth.keypath | quote }}
+        - name: PIPELINE_AUTH_CLIENTID
+          value: {{ .Values.auth.clientid | quote }}
+        - name: PIPELINE_AUTH_CLIENTSECRET
+          value: {{ .Values.auth.clientsecret | quote }}
+        - name: PIPELINE_AUTH_TOKENSIGNGKEY
+          value: {{ randAlphaNum 16 | quote }}
+        - name: PIPELINE_AUTH_JWTISSUEER
+          value: {{ .Values.auth.jwtissueer | quote }}
+        - name: PIPELINE_AUTH_JWTAUDIENCE
+          value: {{ .Values.auth.jwtaudience | quote }}
+
+        - name: PIPELINE_DRONE_ENABLED
+          value: {{ .Values.drone.enabled | quote }}
+
+        - name: PIPELINE_HELM_RETRYATTEMPT
+          value: {{ .Values.helm.retryAttempt | quote }}
+        - name: PIPELINE_HELM_RETRYSLEEPSECONDS
+          value: {{ .Values.helm.enabled | quote }}
+        - name: PIPELINE_HELM_STABLEREPOSITORYURL
+          value: {{ .Values.helm.stableRepositoryURL | quote }}
+        - name: PIPELINE_HELM_BANZAIREPOSITORYURL
+          value: {{ .Values.helm.banzaiRepositoryURL | quote }}
+
+
         - name: SLACK_WEBHOOK_URL
           value: "{{ .Values.Slack.WebhookUrl }}"
         - name: SLACK_CHANNEL
