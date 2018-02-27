@@ -8,23 +8,3 @@ controller:
       repository: bitnami/kubeless-controller@sha256
       tag: 53592e0f023353665569313a1662a3aff18141e48caf4beca54d68436e71e0dc
       pullPolicy: IfNotPresent
-
-## UI configuration
-ui:
-  deployment:
-    replicaCount: 1
-    ui:
-      image:
-        repository: bitnami/kubeless-ui
-        tag: v0.1.0
-        pullPolicy: IfNotPresent
-    proxy:
-      image:
-        repository: kelseyhightower/kubectl
-        tag: 1.4.0
-        pullPolicy: IfNotPresent
-
-  service:
-    name: ui-port
-    type: NodePort
-    externalPort: 3000

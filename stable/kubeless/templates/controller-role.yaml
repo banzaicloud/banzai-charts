@@ -40,9 +40,6 @@ rules:
   - functions
   verbs:
   - get
-  - create
-  - update
-  - patch
   - list
   - watch
 - apiGroups:
