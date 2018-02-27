@@ -15,6 +15,34 @@ service:
   internalPort: 9090
   externalPort:  9090
 
+logging:
+  logformat: text
+  loglevel: debug
+  kubicornloglevel: debug
+
+cloud:
+  cloudprovider: aws
+  cloudprofile: default
+  gkeCredentialPath: ""
+  keypath: "/opt/pipeline/.ssh"
+
+auth:
+  enabled: true
+  clientid: ""
+  clientsecret: ""
+  jwtissueer: "https://banzaicloud.com/"
+  jwtaudience: "https://pipeline.banzaicloud.com"
+
+drone:
+  enabled: false
+
+helm:
+  retryAttempt: "30"
+  retrySleepSeconds: "15"
+
+  stableRepositoryURL: "https://kubernetes-charts.storage.googleapis.com"
+  banzaiRepositoryURL: "http://kubernetes-charts.banzaicloud.com"
+
 Slack:
   WebhookUrl: ""
   Channel: ""
