@@ -31,13 +31,13 @@ spec:
         - name: KUBERNETES_RELEASE_NAME
           value: "{{ .Release.Name }}"
 
-        - name: PIPELINE_DEV_HOST
+        - name: PIPELINE_DATABASE_HOST
           value: "{{ .Release.Name }}-pipeline-db"
-        - name: PIPELINE_DEV_DBNAME
+        - name: PIPELINE_DATABASE_DBNAME
           value: {{ default "" .Values.mariadb.mariadbDatabase | quote }}
-        - name: PIPELINE_DEV_USER
+        - name: PIPELINE_DATABASE_USER
           value: {{ default "" .Values.mariadb.mariadbUser | quote }}
-        - name: PIPELINE_DEV_PASSWORD
+        - name: PIPELINE_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name:  "{{ .Release.Name }}-pipeline-db"
@@ -48,9 +48,9 @@ spec:
         - name: SLACK_CHANNEL
           value: "{{ .Values.Slack.Channel }}"
 
-        - name: PIPELINE_DEV_RETRYATTEMPT
+        - name: PIPELINE_HELM_RETRYATTEMPT
           value: "{{ .Values.Helm.retryAttempt }}"
-        - name: PIPELINE_DEV_RETRYSLEEPSECONDS
+        - name: PIPELINE_HELM_RETRYSLEEPSECONDS
           value: "{{ .Values.Helm.retrySleepSeconds }}"
 
         - name: AWS_SECRET_ACCESS_KEY
