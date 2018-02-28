@@ -20,7 +20,7 @@ data:
     cloudprovider = "aws"
     cloudprofile = "default"
     gkeCredentialPath = ""
-    keypath = "/opt/pipeline/.ssh"
+    keypath = "/root/.ssh/id_rsa.pub"
 
     [cors]
 
