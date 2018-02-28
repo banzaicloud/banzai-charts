@@ -164,4 +164,4 @@ spec:
         hostPath:
           path: /opt/pipeline/statestore/
 
-      serviceAccountName: {{ template "fullname" . }}
+      serviceAccountName: pipeline
