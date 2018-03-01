@@ -1,8 +1,7 @@
-
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-drone
+  name: {{ .Release.Name }}-pipeline-ui
   namespace: default
   labels:
     release: {{ .Release.Name }}
@@ -11,12 +10,13 @@ metadata:
     kubernetes.io/ingress.class: traefik
     ingress.kubernetes.io/ssl-redirect: "false"
     traefik.frontend.rule.type: PathPrefixStrip
+    traefik.frontend.priority: "1"
 
 spec:
   rules:
     - http:
         paths:
-          - path: /drone
+          - path: /ui
             backend:
-             serviceName: {{ .Release.Name }}-drone
+             serviceName: {{ .Release.Name }}-pipeline-ui
              servicePort: 80
