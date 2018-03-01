@@ -1,0 +1,18 @@
+
+
+replicaCount: 1
+
+image:
+  repository: banzaicloud/pipeline-ui
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  port: 80
+  type: ClusterIP
+  name: pipeline-ui
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
