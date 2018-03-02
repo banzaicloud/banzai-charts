@@ -4,7 +4,7 @@ metadata:
   name: "{{ template "fullname" . }}-rbac"
 subjects:
   - kind: ServiceAccount
-    name: {{ template "fullname" . }}
+    name: pipeline
     namespace: default
 roleRef:
   kind: ClusterRole
