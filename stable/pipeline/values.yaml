@@ -34,7 +34,7 @@ auth:
   jwtaudience: "https://pipeline.banzaicloud.com"
 
 drone:
-  enabled: false
+  enabled: true
 
 helm:
   retryAttempt: "30"

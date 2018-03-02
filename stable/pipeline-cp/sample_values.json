@@ -24,7 +24,7 @@
                 "clientsecret": ""
             },
         "drone": {
-            "enabled": false
+            "enabled": true
         },
         "cloud": {
             "cloudprovider": "aws",
