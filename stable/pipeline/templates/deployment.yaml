@@ -22,6 +22,19 @@ spec:
       - name: check-db-port
         image: busybox
         command: ['sh', '-c', 'echo STATUS nc -w 2 {{ .Release.Name }}-pipeline-db 3306']
+      - name: ssh-key-generator
+        image: banzaicloud/sshkeygenerator:0.0.5
+        env:
+        - name: NAMESPACE
+          value: default  
+        - name: SECRET_NAME
+          value: {{ template "fullname" . }}-ssh
+        - name: PRIVATE_KEY_NAME
+          value: id_rsa
+        - name: PUBLIC_KEY_NAME
+          value: id_rsa.pub
+        - name: KEY_SIGNATURE
+          value: pipeline@banzaicloud.com
 
       containers:
       - name: pipeline
@@ -31,26 +44,68 @@ spec:
         - name: KUBERNETES_RELEASE_NAME
           value: "{{ .Release.Name }}"
 
-        - name: PIPELINE_DEV_HOST
+        - name: PIPELINE_DATABASE_HOST
           value: "{{ .Release.Name }}-pipeline-db"
-        - name: PIPELINE_DEV_DBNAME
+        - name: PIPELINE_DATABASE_DBNAME
           value: {{ default "" .Values.mariadb.mariadbDatabase | quote }}
-        - name: PIPELINE_DEV_USER
+        - name: PIPELINE_DATABASE_USER
           value: {{ default "" .Values.mariadb.mariadbUser | quote }}
-        - name: PIPELINE_DEV_PASSWORD
+        - name: PIPELINE_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name:  "{{ .Release.Name }}-pipeline-db"
               key: mariadb-password
+
+        - name: PIPELINE_LOGGING_LOGFORMAT
+          value: {{ .Values.logging.logformat | quote }}
+        - name: PIPELINE_LOGGING_LOGLEVEL
+          value: {{ .Values.logging.loglevel | quote }}
+        - name: PIPELINE_LOGGING_KUBICORNLOGLEVEL
+          value: {{ .Values.logging.kubicornloglevel | quote }}
+
+        - name: PIPELINE_CLOUD_CLOUDPROVIDER
+          value: {{ .Values.cloud.cloudprovider | quote }}
+        - name: PIPELINE_CLOUD_CLOUDPROFILE
+          value: {{ .Values.cloud.cloudprofile | quote }}
+        - name: PIPELINE_CLOUD_GKECREDENTIALPATH
+          value: {{ .Values.cloud.gkeCredentialPath | quote }}
+        - name: PIPELINE_CLOUD_KEYPATH
+          value: {{ .Values.cloud.keypath | quote }}
+
+        - name: PIPELINE_AUTH_ENABLED
+          value: {{ .Values.auth.keypath | quote }}
+        - name: PIPELINE_AUTH_CLIENTID
+          value: {{ .Values.auth.clientid | quote }}
+        - name: PIPELINE_AUTH_CLIENTSECRET
+          value: {{ .Values.auth.clientsecret | quote }}
+        - name: PIPELINE_AUTH_TOKENSIGNGKEY
+          value: {{ randAlphaNum 16 | quote }}
+        - name: PIPELINE_AUTH_JWTISSUEER
+          value: {{ .Values.auth.jwtissueer | quote }}
+        - name: PIPELINE_AUTH_JWTAUDIENCE
+          value: {{ .Values.auth.jwtaudience | quote }}
+
+        - name: PIPELINE_DRONE_ENABLED
+          value: {{ .Values.drone.enabled | quote }}
+
+        - name: PIPELINE_HELM_RETRYATTEMPT
+          value: {{ .Values.helm.retryAttempt | quote }}
+        - name: PIPELINE_HELM_RETRYSLEEPSECONDS
+          value: {{ .Values.helm.enabled | quote }}
+        - name: PIPELINE_HELM_STABLEREPOSITORYURL
+          value: {{ .Values.helm.stableRepositoryURL | quote }}
+        - name: PIPELINE_HELM_BANZAIREPOSITORYURL
+          value: {{ .Values.helm.banzaiRepositoryURL | quote }}
+
 
         - name: SLACK_WEBHOOK_URL
           value: "{{ .Values.Slack.WebhookUrl }}"
         - name: SLACK_CHANNEL
           value: "{{ .Values.Slack.Channel }}"
 
-        - name: PIPELINE_DEV_RETRYATTEMPT
+        - name: PIPELINE_HELM_RETRYATTEMPT
           value: "{{ .Values.Helm.retryAttempt }}"
-        - name: PIPELINE_DEV_RETRYSLEEPSECONDS
+        - name: PIPELINE_HELM_RETRYSLEEPSECONDS
           value: "{{ .Values.Helm.retrySleepSeconds }}"
 
         - name: AWS_SECRET_ACCESS_KEY
@@ -87,7 +142,7 @@ spec:
 
         - name: VAULT_ADDR
           value: http://{{ .Release.Name }}-vault:8200
-    
+
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
@@ -105,8 +160,11 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /root/config/
-        - mountPath: /root/.ssh
-          name: ssh
+        
+        - name: ssh
+          mountPath: /root/.ssh
+          readOnly: true
+        
         - mountPath: /statestore
           name: statestore
 
@@ -116,10 +174,15 @@ spec:
         configMap:
           name: "{{ template "fullname" . }}"
       - name: ssh
-        hostPath:
-          path: /opt/pipeline/.ssh/
+        secret:
+          secretName: {{ template "fullname" . }}-ssh
       - name: statestore
+        {{- if and .Values.statestore.persistence.enabled (not .Values.statestore.persistence.existingClaim) }}
+        persistentVolumeClaim:
+                claimName: {{ template "fullname" . }}-statestore
+        {{- else }}
         hostPath:
           path: /opt/pipeline/statestore/
+        {{- end }}
 
       serviceAccountName: pipeline

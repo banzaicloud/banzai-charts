@@ -15,6 +15,34 @@ service:
   internalPort: 9090
   externalPort:  9090
 
+logging:
+  logformat: text
+  loglevel: debug
+  kubicornloglevel: debug
+
+cloud:
+  cloudprovider: aws
+  cloudprofile: default
+  gkeCredentialPath: ""
+  keypath: "/opt/pipeline/.ssh"
+
+auth:
+  enabled: true
+  clientid: ""
+  clientsecret: ""
+  jwtissueer: "https://banzaicloud.com/"
+  jwtaudience: "https://pipeline.banzaicloud.com"
+
+drone:
+  enabled: false
+
+helm:
+  retryAttempt: "30"
+  retrySleepSeconds: "15"
+
+  stableRepositoryURL: "https://kubernetes-charts.storage.googleapis.com"
+  banzaiRepositoryURL: "http://kubernetes-charts.banzaicloud.com"
+
 Slack:
   WebhookUrl: ""
   Channel: ""
@@ -26,6 +54,25 @@ Helm:
 auth:
   enabled: false
 
+statestore:
+  persistence:
+    enabled: true
+
+    ## A manually managed Persistent Volume and Claim
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+
+    ## Pipeline StateStore data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    accessMode: ReadWriteOnce
+    size: 128Mi
 
 ##
 ## MariaDB chart configuration
