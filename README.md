@@ -17,6 +17,7 @@ At Banzai Cloud we use Helm as our package manager to deploy Kubernetes applicat
   - [Hollowtrees spot instance recommender](stable/spot-recommender)
   - [Hollowtrees spot termination exporter](stable/termination-exporter)
   - [Kafka](stable/kafka)
+  - [Kubeless](stable/kubeless)
   - [MariaDB](stable/mariadb)
   - [OpenFaaS](stable/openfaas)
   - [Pipeline cluster ingress](stable/pipeline-cluster-ingress)
