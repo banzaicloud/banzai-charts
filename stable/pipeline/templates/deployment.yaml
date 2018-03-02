@@ -22,6 +22,19 @@ spec:
       - name: check-db-port
         image: busybox
         command: ['sh', '-c', 'echo STATUS nc -w 2 {{ .Release.Name }}-pipeline-db 3306']
+      - name: ssh-key-generator
+        image: banzaicloud/sshkeygenerator:0.0.5
+        env:
+        - name: NAMESPACE
+          value: default  
+        - name: SECRET_NAME
+          value: {{ template "fullname" . }}-ssh
+        - name: PRIVATE_KEY_NAME
+          value: id_rsa
+        - name: PUBLIC_KEY_NAME
+          value: id_rsa.pub
+        - name: KEY_SIGNATURE
+          value: pipeline@banzaicloud.com
 
       containers:
       - name: pipeline
@@ -129,7 +142,7 @@ spec:
 
         - name: VAULT_ADDR
           value: http://{{ .Release.Name }}-vault:8200
-    
+
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
@@ -147,8 +160,11 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /root/config/
-        - mountPath: /root/.ssh
-          name: ssh
+        
+        - name: ssh
+          mountPath: /root/.ssh
+          readOnly: true
+        
         - mountPath: /statestore
           name: statestore
 
@@ -158,10 +174,15 @@ spec:
         configMap:
           name: "{{ template "fullname" . }}"
       - name: ssh
-        hostPath:
-          path: /opt/pipeline/.ssh/
+        secret:
+          secretName: {{ template "fullname" . }}-ssh
       - name: statestore
+        {{- if and .Values.statestore.persistence.enabled (not .Values.statestore.persistence.existingClaim) }}
+        persistentVolumeClaim:
+                claimName: {{ template "fullname" . }}-statestore
+        {{- else }}
         hostPath:
           path: /opt/pipeline/statestore/
+        {{- end }}
 
       serviceAccountName: pipeline
