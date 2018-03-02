@@ -56,7 +56,7 @@ auth:
 
 statestore:
   persistence:
-    enabled: true
+    enabled: false
 
     ## A manually managed Persistent Volume and Claim
     ## Requires persistence.enabled: true
