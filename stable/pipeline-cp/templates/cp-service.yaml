@@ -1,4 +1,4 @@
-{{- if .Values.traefik.serviceType == "NodePort" }}
+{{- if eq .Values.traefik.serviceType "NodePort" }}
 apiVersion: v1
 kind: Service
 metadata:
