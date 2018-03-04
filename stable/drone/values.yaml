@@ -5,7 +5,7 @@ appVersion: "0.8.1"
 ##
 image:
   repository: "banzaicloud/drone-server"
-  tag: "0.2.0"
+  tag: "0.3.0"
   pullPolicy: "IfNotPresent"
 
 ## Since version 8.x drone splitted agent and server into two
