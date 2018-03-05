@@ -24,8 +24,18 @@ jobs:
             GIT_TAG=${CIRCLE_TAG}
 
             helm init -c
-            helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com
-            helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com
+            
+            if [ "$GIT_BRANCH" = "master" ]; then
+                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com
+                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com
+            elif [ "$GIT_TAG" = "" ]; then
+                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/
+                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/
+            elif [ "$GIT_TAG" != "" ]; then
+                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/
+                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/
+            fi
+   
             helm repo update
             helm repo list
 

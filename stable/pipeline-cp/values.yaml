@@ -16,11 +16,9 @@ pipeline:
 
   auth:
     enabled: true 
-    clientid: "" 
-    clientsecret: "" 
 
   drone:
-    enabled: false 
+    enabled: true 
 
   cloud: 
     cloudprovider: aws
@@ -39,12 +37,9 @@ pipeline:
 drone:
   server:
     env:
-      DRONE_DEBUG: "true"
-      DRONE_ORGS: ""
+      DRONE_DEBUG: "false"
       DRONE_PROVIDER: "github"
       DRONE_GITHUB: "true"
-      DRONE_GITHUB_CLIENT: ""
-      DRONE_GITHUB_SECRET: ""
 
 grafana:
   server:
@@ -238,10 +233,9 @@ prometheus:
 
     ingress:
       enabled: false
-    baseURL: /alertmanager
 
-    extraArgs:
-      "web.external-url": "http://localhost:9093/alertmanager"
+    baseURL: /alertmanager
+    prefixURL: /alertmanager
 
     slack_api_url: ""
     slack_channel: ""
@@ -257,90 +251,33 @@ prometheus:
 
 
   server:
-
-    alertmanagerURL: http://prometheus-alertmanager:80/alertmanager
-
     ingress:
       enabled: false
 
+    prefixURL: /prometheus
     baseURL: /prometheus
 
-    persistentVolume:
-      enabled: false
     extraArgs:
-      "query.staleness-delta": "5m0s"
-      "web.external-url": "http://localhost:9090/prometheus"
+      "query.lookback-delta": "5m"
+#      "config.file": "/etc/config/prometheus-custom.yml"
 
-    extraHostPathMounts:
-      - name: pipeline-statestore
-        mountPath:  /opt/pipeline/statestore
-        hostPath:  /opt/pipeline/statestore
+    extraConfigmapMounts:
+      - name: prometheus-certs
+        mountPath: /etc/config/certs
+        configMap: prometheus-certs
         readOnly: true
-
 
   pushgateway:
     enabled: false
 
   serverFiles:
-    k8sclusters.json: |-
-
-
-    prometheus.yml: |-
+    prometheus.yml: null
+    prometheus.yml:
       global:
-        scrape_interval: 10s
-        scrape_timeout: 7s
-        evaluation_interval: 15s
-
-        scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+        scrape_interval:     10s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
         evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
-        # scrape_timeout is set to the global default (10s).
+        scrape_timeout: 7s # scrape_timeout is set to the global default (10s).
 
         # Attach these labels to any time series or alerts when communicating with
         # external systems (federation, remote storage, Alertmanager).
-
-      rule_files:
-        - /etc/config/*.rules
-
-      scrape_configs:
-
-        - job_name: 'federate'
-
-          honor_labels: true
-          metrics_path: '/prometheus/federate'
-
-          scheme: http
-
-          tls_config:
-            # ca_file: /certs/ca.crt
-            # If your node certificates are self-signed or use a different CA to the
-            # master CA, then disable certificate verification below. Note that
-            # certificate verification is an integral part of a secure infrastructure
-            # so this should only be disabled in a controlled environment. You can
-            # disable certificate verification by uncommenting the line below.
-            #
-            insecure_skip_verify: true
-
-          basic_auth:
-            username: 'admin'
-            password: '1GLutrzynYsF'
-
-          params:
-            'match[]':
-              - '{job="kubernetes-nodes"}'
-              - '{job="kubernetes-pods"}'
-              - '{job="kubernetes-apiservers"}'
-              - '{job="kubernetes-service-endpoints"}'
-              - '{job="kubernetes-cadvisor"}'
-              - '{job="banzaicloud-pushgateway"}'
-              - '{job="node_exporter"}'
-
-          file_sd_configs:
-            - files:
-              - /etc/config/k8sclusters.json
-
-          relabel_configs:
-          - source_labels: [__address__]
-            action: replace
-            regex: (.+):(?:\d+)
-            replacement: ${1}
-            target_label: cluster
+      scrape_configs: []

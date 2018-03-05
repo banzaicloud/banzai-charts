@@ -35,10 +35,22 @@ spec:
           {{- else }}
             value: {{ template "drone.fullname" . }}
           {{- end }}
+
           {{ range $key, $value := .Values.server.env }}
           - name: {{ $key }}
             value: {{ $value | quote }}
           {{ end }}
+
+          {{ if not (hasKey .Values.server.env "DRONE_GITHUB_CLIENT") }}
+          - name: DRONE_GITHUB_CLIENT
+            value: {{ .Values.global.auth.clientid | quote }}
+          {{ end }}
+
+          {{ if not (hasKey .Values.server.env "DRONE_GITHUB_SECRET") }}
+          - name: DRONE_GITHUB_SECRET
+            value: {{ .Values.global.auth.clientsecret | quote }}
+          {{ end }}
+
           - name: DRONE_DATABASE_DRIVER
             value: "mysql"
           - name: DRONE_DATABASE_DATASOURCE

@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/pipeline
-  tag: latest
+  tag: dev_3636c549
   pullPolicy: IfNotPresent
 
 service:
@@ -28,8 +28,6 @@ cloud:
 
 auth:
   enabled: true
-  clientid: ""
-  clientsecret: ""
   jwtissueer: "https://banzaicloud.com/"
   jwtaudience: "https://pipeline.banzaicloud.com"
 
@@ -51,9 +49,14 @@ Helm:
   retryAttempt: 30
   retrySleepSeconds: 15
 
+monitor:
+  enabled: true
+  configMap: prometheus-certs
+  mountPath: /etc/prometheus-certs
+
 statestore:
   persistence:
-    enabled: false
+    enabled: true
 
     ## A manually managed Persistent Volume and Claim
     ## Requires persistence.enabled: true
