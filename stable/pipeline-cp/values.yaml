@@ -27,12 +27,6 @@ pipeline:
     gkeCredentialPath: ""
     keypath: "/opt/pipeline/.ssh"
 
-
-  ingress:
-    auth:
-      enabled: false
-
-
   IngressUrl: ""
 
   awsSecretAccessKey: ""

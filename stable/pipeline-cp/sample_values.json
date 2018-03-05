@@ -32,13 +32,6 @@
             "keypath": ""
  
         },
-        "ingress": {
-            "user": "",
-            "password": "",
-            "auth": {
-                "enabled": true
-            }
-        },
         "awsSecretAccessKey": "",
         "awsAccessKeyId": "",
         "azureClientId": "",
