@@ -4,7 +4,7 @@ appVersion: "0.8.1"
 ## https://hub.docker.com/r/drone/drone/tags/
 ##
 image:
-  repository: "banzaicloud/drone-server"
+  repository: "banzaicloud/drone"
   tag: "0.3.0"
   pullPolicy: "IfNotPresent"
 
@@ -15,8 +15,8 @@ image:
 ## https://hub.docker.com/r/drone/agent/tags/
 ##
 agentImage:
-  repository: "banzaicloud/drone-agent"
-  tag: "0.2.0"
+  repository: "banzaicloud/drone"
+  tag: "0.3.0"
   pullPolicy: "IfNotPresent"
 
 service:
@@ -67,8 +67,8 @@ server:
   env:
     DRONE_DEBUG: "false"
     DRONE_OPEN: "true"
-    DRONE_DATABASE_DRIVER: "sqlite3"
-    DRONE_DATABASE_DATASOURCE: "/var/lib/drone/drone.sqlite"
+    # DRONE_DATABASE_DRIVER: "sqlite3"
+    # DRONE_DATABASE_DATASOURCE: "/var/lib/drone/drone.sqlite"
 
     ## Drone requires some environment variables to bootstrap the
     ## git service or it won't start up.
@@ -83,7 +83,7 @@ server:
     # DRONE_GITHUB_SECRET: "github-oauth2-client-secret"
 
   persistentVolume:
-    enabled: false
+    enabled: true
 
     ## A manually managed Persistent Volume and Claim
     ## Requires persistence.enabled: true

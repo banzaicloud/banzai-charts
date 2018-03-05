@@ -16,11 +16,9 @@ pipeline:
 
   auth:
     enabled: true 
-    clientid: "" 
-    clientsecret: "" 
 
   drone:
-    enabled: false 
+    enabled: true 
 
   cloud: 
     cloudprovider: aws
@@ -39,12 +37,9 @@ pipeline:
 drone:
   server:
     env:
-      DRONE_DEBUG: "true"
-      DRONE_ORGS: ""
+      DRONE_DEBUG: "false"
       DRONE_PROVIDER: "github"
       DRONE_GITHUB: "true"
-      DRONE_GITHUB_CLIENT: ""
-      DRONE_GITHUB_SECRET: ""
 
 grafana:
   server:

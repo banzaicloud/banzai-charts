@@ -77,9 +77,9 @@ spec:
         - name: PIPELINE_AUTH_ENABLED
           value: {{ .Values.auth.keypath | quote }}
         - name: PIPELINE_AUTH_CLIENTID
-          value: {{ .Values.auth.clientid | quote }}
+          value: {{ default .Values.global.auth.clientid .Values.auth.clientid | quote }}
         - name: PIPELINE_AUTH_CLIENTSECRET
-          value: {{ .Values.auth.clientsecret | quote }}
+          value: {{ default .Values.global.auth.clientsecret .Values.auth.clientsecret | quote }}
         - name: PIPELINE_AUTH_TOKENSIGNGKEY
           value: {{ randAlphaNum 16 | quote }}
         - name: PIPELINE_AUTH_JWTISSUEER
@@ -89,6 +89,9 @@ spec:
 
         - name: PIPELINE_DRONE_ENABLED
           value: {{ .Values.drone.enabled | quote }}
+
+        - name: PIPELINE_MONITOR_ENABLED
+          value: {{ .Values.monitor.enabled | quote }}
 
         - name: PIPELINE_HELM_RETRYATTEMPT
           value: {{ .Values.helm.retryAttempt | quote }}
