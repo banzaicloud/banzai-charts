@@ -63,7 +63,7 @@ spec:
 {{ toYaml .Values.server.resources | indent 10 }}
       volumes:
       - name: drone-disk
-        {{- if and .Values.server.persistence.enabled (not .Values.server.persistence.existingClaim) }}
+        {{- if and .Values.server.persistentVolume.enabled (not .Values.server.persistentVolume.existingClaim) }}
         persistentVolumeClaim:
                 claimName: {{ template "fullname" . }}-server
         {{- else }}

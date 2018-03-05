@@ -1,13 +1,18 @@
-{{- if and .Values.server.persistence.enabled (not .Values.server.persistence.existingClaim) }}
-kind: PersistentVolumeClaim
+{{- if .Values.server.persistentVolume.enabled -}}
+{{- if not .Values.server.persistentVolume.existingClaim -}}
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: {{ template "fullname" . }}-server
+  {{- if .Values.server.persistentVolume.annotations }}
+  annotations:
+{{ toYaml .Values.server.persistentVolume.annotations | indent 4 }}
+  {{- end }}
   labels:
     app: {{ template "fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  name: {{ template "fullname" . }}-server
 spec:
   accessModes:
 {{ toYaml .Values.server.persistentVolume.accessModes | indent 4 }}
