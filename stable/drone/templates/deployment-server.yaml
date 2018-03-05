@@ -62,9 +62,14 @@ spec:
         resources:
 {{ toYaml .Values.server.resources | indent 10 }}
       volumes:
-      - hostPath:
+      - name: drone-disk
+        {{- if and .Values.server.persistence.enabled (not .Values.server.persistence.existingClaim) }}
+        persistentVolumeClaim:
+                claimName: {{ template "fullname" . }}-server
+        {{- else }}
+        hostPath:
           path: /opt/drone
-          type: ""
-        name: drone-disk
+        {{- end }}
+
 
 {{ end }}

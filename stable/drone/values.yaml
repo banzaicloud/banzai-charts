@@ -82,6 +82,26 @@ server:
     # DRONE_GITHUB_CLIENT: "github-oauth2-client-id"
     # DRONE_GITHUB_SECRET: "github-oauth2-client-secret"
 
+  persistence:
+    enabled: false
+
+    ## A manually managed Persistent Volume and Claim
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+
+    ## Pipeline StateStore data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    accessMode: ReadWriteOnce
+    size: 128Mi
+
+
   ## CPU and memory limits for drone server
   ##
   resources: {}
