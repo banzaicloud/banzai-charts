@@ -20,7 +20,7 @@ spec:
       containers:
       - name: {{ template "drone.fullname" . }}-agent
         image: "{{ .Values.agentImage.repository }}:{{ .Values.agentImage.tag }}"
-        command: ["./drone-agent"]
+        command: ["/bin/drone-agent"]
         imagePullPolicy: {{ .Values.agentImage.pullPolicy }}
         env:
           - name: DRONE_SERVER
