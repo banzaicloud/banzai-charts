@@ -1,4 +1,3 @@
-{{- if .Values.pipeline.auth.enabled }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -20,4 +19,3 @@ spec:
             backend:
              serviceName: {{ .Release.Name }}-pipeline
              servicePort: 9090
-{{- end }}

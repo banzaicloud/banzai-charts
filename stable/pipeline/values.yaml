@@ -51,9 +51,6 @@ Helm:
   retryAttempt: 30
   retrySleepSeconds: 15
 
-auth:
-  enabled: false
-
 statestore:
   persistence:
     enabled: false
