@@ -82,7 +82,7 @@ server:
     # DRONE_GITHUB_CLIENT: "github-oauth2-client-id"
     # DRONE_GITHUB_SECRET: "github-oauth2-client-secret"
 
-  persistence:
+  persistentVolume:
     enabled: false
 
     ## A manually managed Persistent Volume and Claim
@@ -98,10 +98,22 @@ server:
     ##   GKE, AWS & OpenStack)
     ##
     # storageClass: "-"
-    accessMode: ReadWriteOnce
-    size: 128Mi
+    accessModes:
+      - ReadWriteOnce
+
+    ## Drone server data Persistent Volume existing claim name
+    ## Requires server.persistentVolume.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    existingClaim: ""
+
+    ## Drone server data Persistent Volume size
+    ##
+    size: 1Gi
 
 
+    ## Drone server data Persistent Volume annotations
+    ##
+    annotations: {}
   ## CPU and memory limits for drone server
   ##
   resources: {}
