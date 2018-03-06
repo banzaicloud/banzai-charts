@@ -176,8 +176,14 @@ spec:
         - mountPath: /statestore
           name: statestore
 
+        - mountPath: /root/gke
+          name: gke-credential
+
 
       volumes:
+      - name: gke-credential
+        secret:
+          secretName: "{{ template "fullname" . }}-gke"
       - name: config-volume
         configMap:
           name: "{{ template "fullname" . }}"

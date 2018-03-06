@@ -23,8 +23,14 @@ logging:
 cloud:
   cloudprovider: aws
   cloudprofile: default
-  gkeCredentialPath: ""
+  gkeCredentialPath: "/root/gke/gke-credential.json"
   keypath: "/opt/pipeline/.ssh"
+
+gkeCredentials:
+  client_id: ""
+  client_secret": ""
+  refresh_token": ""
+  type": ""
 
 auth:
   enabled: true
