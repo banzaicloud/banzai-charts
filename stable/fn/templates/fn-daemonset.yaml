@@ -1,0 +1,71 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: {{ template "fullname" . }}-api
+spec:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        role: fn-service
+      annotations:
+      {{- if .Values.fnserver.prometheus.enabled }}
+        prometheus.io/scrape: "true"
+      {{- end }}
+    spec:
+      {{- if .Values.fnserver.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.fnserver.nodeSelector | indent 8 }}
+{{- end }}
+      {{- if .Values.fnserver.tolerations }}
+      tolerations:
+{{ toYaml .Values.fnserver.tolerations | indent 8 }}
+{{- end }}
+      containers:
+      - name: fn-service
+        image: {{ .Values.fnserver.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        resources:
+{{ toYaml .Values.fnserver.resources | indent 12 }}
+        securityContext:
+          privileged: true
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /v1/apps
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        env:
+        - name: LOG_LEVEL
+          value: {{ .Values.fnserver.logLevel }}
+        - name: FN_PORT
+          value: "80"
+        - name: FN_DB_PASSWD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-mysql
+              key: mysql-password
+        - name: FN_DB_HOST
+          value: {{ .Release.Name }}-mysql
+        - name: FN_DB_URL
+          value: mysql://fnapp:$(FN_DB_PASSWD)@tcp($(FN_DB_HOST):3306)/fndb
+        - name: FN_MQ_HOST
+          value: {{ .Release.Name }}-redis
+#  TODO:
+#        - name: MQ_PASSWD
+#          valueFrom:
+#            secretKeyRef:
+#              name: {{ .Release.Name }}-redis
+#              key: redis-password
+        - name: FN_MQ_URL
+          value: redis://$(FN_MQ_HOST):6379/
