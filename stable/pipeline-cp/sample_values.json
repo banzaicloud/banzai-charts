@@ -26,6 +26,11 @@
         "drone": {
             "enabled": true
         },
+        "statestore": {
+            "persistence": {
+                "enabled": false
+            }
+        },
         "cloud": {
             "cloudprovider": "aws",
             "gkeCredentialPath": "",
