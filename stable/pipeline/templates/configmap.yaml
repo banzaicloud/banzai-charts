@@ -41,3 +41,23 @@ data:
 
     stableRepositoryURL = "https://kubernetes-charts.storage.googleapis.com"
     banzaiRepositoryURL = "http://kubernetes-charts.banzaicloud.com"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-gke
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  gke-credential.json: |
+    {
+      "client_id": "{{ .Values.gkeCredentials.client_id }}",
+      "client_secret": "{{ .Values.gkeCredentials.client_secret }}",
+      "refresh_token": "{{ .Values.gkeCredentials.refresh_token }}",
+      "type": "{{ .Values.gkeCredentials.type }}"
+    }
