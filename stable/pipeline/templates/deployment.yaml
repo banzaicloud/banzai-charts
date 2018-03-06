@@ -23,10 +23,12 @@ spec:
         image: busybox
         command: ['sh', '-c', 'echo STATUS nc -w 2 {{ .Release.Name }}-pipeline-db 3306']
       - name: ssh-key-generator
-        image: banzaicloud/sshkeygenerator:0.0.5
+        image: banzaicloud/sshkeygenerator:0.0.6
         env:
         - name: NAMESPACE
           value: default  
+        - name: SECRET_OVERRIDE
+          value: false
         - name: SECRET_NAME
           value: {{ template "fullname" . }}-ssh
         - name: PRIVATE_KEY_NAME
