@@ -10,3 +10,6 @@ ingress:
 
 pipelineIngress:
   enabled: false
+
+historyServer:
+  enabled: false
