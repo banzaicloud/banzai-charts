@@ -14,6 +14,9 @@
                 "DRONE_ORGS" : "",
                 "DRONE_GITHUB_CLIENT" : "",
                 "DRONE_GITHUB_SECRET" : ""
+            },
+            "persistentVolume": {
+                "enabled":true
             }
         }
     },
@@ -55,6 +58,21 @@
             "tag": ""
         }    },
     "prometheus": {
+        "server": {
+            "persistentVolume":{
+                "enabled":true
+            },
+            "extraHostPathMounts":[{
+                "name":"pipeline-statestore"
+            },{
+                "mountPath":"/opt/pipeline/statestore"
+            },{
+                "hostPath":"/opt/pipeline/statestore"
+            },{
+                "readOnly":true
+            }]
+        },
+
         "ingress": {
             "user": "",
             "password": "",
