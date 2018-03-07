@@ -28,9 +28,9 @@ cloud:
 
 gkeCredentials:
   client_id: ""
-  client_secret": ""
-  refresh_token": ""
-  type": ""
+  client_secret: ""
+  refresh_token: ""
+  type: ""
 
 auth:
   enabled: true
