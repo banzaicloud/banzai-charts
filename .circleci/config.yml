@@ -26,14 +26,14 @@ jobs:
             helm init -c
             
             if [ "$GIT_BRANCH" = "master" ]; then
-                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com
-                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com
+                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com || true
+                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com || true
             elif [ "$GIT_TAG" = "" ]; then
-                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/
-                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/
+                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/ || true
+                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/ || true
             elif [ "$GIT_TAG" != "" ]; then
-                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/
-                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/
+                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/ || true
+                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/ || true
             fi
    
             helm repo update
