@@ -18,6 +18,9 @@
         "server": {
             "env": {
                 "DRONE_ORGS" : ""
+            },
+            "persistentVolume": {
+                "enabled": true
             }
         }
     },
