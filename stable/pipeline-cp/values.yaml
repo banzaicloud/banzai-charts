@@ -263,7 +263,7 @@ prometheus:
 
     extraConfigmapMounts:
       - name: prometheus-certs
-        mountPath: /etc/config/certs
+        mountPath: /etc/prometheus-certs
         configMap: prometheus-certs
         readOnly: true
 
