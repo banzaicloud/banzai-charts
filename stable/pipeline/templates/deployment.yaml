@@ -28,7 +28,7 @@ spec:
         - name: NAMESPACE
           value: default  
         - name: SECRET_OVERRIDE
-          value: "false"
+          value: "true"
         - name: SECRET_NAME
           value: {{ template "fullname" . }}-ssh
         - name: PRIVATE_KEY_NAME

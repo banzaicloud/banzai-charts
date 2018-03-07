@@ -24,7 +24,7 @@ cloud:
   cloudprovider: aws
   cloudprofile: default
   gkeCredentialPath: "/root/gke/gke-credential.json"
-  keypath: "/opt/pipeline/.ssh"
+  keypath: "/root/.ssh/id_rsa.pub"
 
 gkeCredentials:
   client_id: ""
