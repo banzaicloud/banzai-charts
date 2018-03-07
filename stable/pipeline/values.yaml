@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/pipeline
-  tag: dev_3636c549
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:
