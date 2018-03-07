@@ -1,4 +1,10 @@
 {
+    "global": {
+        "auth": {
+            "clientid": "",
+            "clientsecret": ""
+        }
+    },
     "traefik": {
         "dashboard": {
             "auth": {
@@ -11,20 +17,13 @@
     "drone": {
         "server": {
             "env": {
-                "DRONE_ORGS" : "",
-                "DRONE_GITHUB_CLIENT" : "",
-                "DRONE_GITHUB_SECRET" : ""
-            },
-            "persistentVolume": {
-                "enabled":true
+                "DRONE_ORGS" : ""
             }
         }
     },
     "pipeline": {
         "auth": {
-                "enabled": true,
-                "clientid": "",
-                "clientsecret": ""
+                "enabled": true
             },
         "drone": {
             "enabled": true
