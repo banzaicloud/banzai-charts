@@ -20,7 +20,7 @@
                 "DRONE_ORGS" : ""
             },
             "persistentVolume": {
-                "enabled": true
+                "enabled": false
             }
         }
     },
@@ -62,7 +62,7 @@
     "prometheus": {
         "server": {
             "persistentVolume":{
-                "enabled":true
+                "enabled":false
             },
             "extraHostPathMounts":[{
                 "name":"pipeline-statestore"
