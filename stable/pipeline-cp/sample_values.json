@@ -65,12 +65,9 @@
                 "enabled":false
             },
             "extraHostPathMounts":[{
-                "name":"pipeline-statestore"
-            },{
-                "mountPath":"/opt/pipeline/statestore"
-            },{
-                "hostPath":"/opt/pipeline/statestore"
-            },{
+                "name":"pipeline-statestore",
+                "mountPath":"/opt/pipeline/statestore",
+                "hostPath":"/opt/pipeline/statestore",
                 "readOnly":true
             }]
         },
