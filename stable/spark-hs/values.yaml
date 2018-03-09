@@ -7,7 +7,7 @@ app:
 
   image:
     repository: banzaicloud/spark-history-server
-    tag: v2.2.0-k8s-1.0.210
+    tag: v2.2.1-k8s-1.0.8
     pullPolicy: IfNotPresent
 
   service:
