@@ -18,11 +18,11 @@ The following tables lists the configurable parameters of the Zeppelin Sever cha
 
 | Parameter                            | Required | Description                                                       |Example                           |
 | ------------------------------------ | ---------|----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| sparkSubmitOptions.eventLogDirectory                     | yes      |the URL to the directory for event logs | s3a://yourBucketName/eventLogFoloder or wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog|  
+| sparkSubmitOptions.eventLogDirectory                     | yes      |the URL to the directory for event logs | s3a://yourBucketName/eventLogFoloder wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog gs://yourBucketName/eventLogFoloder|  
 | sparkSubmitOptions.azureStorageAccountName          | only in case of using Azure Storage| Name of your Azure storage account        | see Notes |
 | sparkSubmitOptions.azureStorageAccessKey            | only in case of using Azure Storage| Access key for your Azure storage account | see Notes |
 
 ## Notes
 
-* in case of using S3, we don't pass AWS keys we're using IAM roles and policies to allow S3 access
+* in case of using S3 and Google Storage, we don't pass credentials and access keys we're using IAM roles and policies on Amazon and Service Account based access on Google Cloud
 * in case of Azure the storage account name would be the dns prefix it's created (e.g. **mystorage.blob.core.windows.net** - the name would be mystorage), and you can you either the `primary` or `secondary` keys
