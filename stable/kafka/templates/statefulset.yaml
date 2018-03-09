@@ -12,30 +12,60 @@ spec:
     type: OnDelete
   template:
     metadata:
-      labels:
-        app: kafka
+{{- if .Values.statefullset.annotations }}
       annotations:
+{{ toYaml .Values.statefullset.annotations | indent 8 }}
+{{- end }}
+      labels:
+        app: "kafka"
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+  {{- if .Values.statefullset.labels }}
+{{ toYaml .Values.statefullset.labels | indent 8 }}
+{{- end }}
     spec:
       initContainers:
       - name: wait-for-etcd-to-come-up
         image: tenstartups/etcdctl
         command: ['sh', '-c', 'until ETCDCTL_API=3 etcdctl --endpoints=etcd-cluster-client:2379 get "" --prefix; do echo waiting for etcd to come up; sleep 1; done;']
+{{- if eq (index .Values.statefullset.annotations "prometheus.io/scrape") "true" }}
+      - name: jmx-export
+        image: banzaicloud/jmx_exporter:latest
+        command: ['cp', '/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.3.1-SNAPSHOT.jar', '/opt/jmx-exporter/']
+        volumeMounts:
+        - name: jmx-jar-data
+          mountPath: /opt/jmx-exporter/
+{{- end }}
       terminationGracePeriodSeconds: 30
       containers:
       - name: broker
-        image: banzaicloud/kafka:2.12-1.2.0-etcd-0.0.1
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}    
         env:
         - name: KAFKA_LOG4J_OPTS
           value: -Dlog4j.configuration=file:config/log4j.properties
+{{- if .Values.jmx.enabled }}
         - name: JMX_PORT
-          value: "5555"
+          value: "{{ .Values.jmx.port }}"
+        - name: KAFKA_JMX_OPTS
+          value: "-Djava.net.preferIPv4Stack=true -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.rmi.port={{ .Values.jmx.port }} -Djava.rmi.server.hostname=127.0.0.1"
+{{- end }}
+{{- if eq (index .Values.statefullset.annotations "prometheus.io/scrape") "true" }}
+        - name: KAFKA_OPTS
+          value: "-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.3.1-SNAPSHOT.jar=9020:/etc/jmx-exporter/config.yaml"
+{{- end }}
         ports:
-        - name: inside
-          containerPort: 9092
-        - name: outside
-          containerPort: 9094
+        - name: kafka
+          containerPort: {{ .Values.port }}
+{{- if eq (index .Values.statefullset.annotations "prometheus.io/scrape") "true" }}
+        - name: prometheus
+          containerPort: {{ index .Values.statefullset.annotations "prometheus.io/port" }}
+{{- end }}
+{{- if .Values.jmx.enabled }}
         - name: jmx
-          containerPort: 5555
+          containerPort: {{ .Values.jmx.port }}
+{{- end }}
         command:
         - sh
         - -c
@@ -46,11 +76,27 @@ spec:
             memory: 512Mi
         readinessProbe:
           tcpSocket:
-            port: 9092
+            port: {{ .Values.port }}
           timeoutSeconds: 1
         volumeMounts:
         - name: data
           mountPath: /var/lib/kafka/data
+{{- if eq (index .Values.statefullset.annotations "prometheus.io/scrape") "true" }}
+        - name: jmx-jar-data
+          mountPath: /opt/jmx-exporter/
+          readOnly: true
+        - name: jmx-config
+          mountPath: /etc/jmx-exporter/
+          readOnly: true
+{{- end }}
+      volumes:
+      - name: jmx-jar-data
+        emptyDir: {}
+{{- if eq (index .Values.statefullset.annotations "prometheus.io/scrape") "true" }}
+      - name: jmx-config
+        configMap:
+          name: "{{ template "fullname" . }}-jmx-exporter"
+{{- end }}
   volumeClaimTemplates:
   - metadata:
       name: data

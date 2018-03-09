@@ -6,7 +6,7 @@ metadata:
   name: kafka-dns
 spec:
   ports:
-  - port: 9092
+  - port: {{ .Values.port }}
   clusterIP: None
   selector:
     app: kafka
