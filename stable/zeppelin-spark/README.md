@@ -1,6 +1,6 @@
 # Zeppelin-Spark Chart
 
-This is an composite chart deploying the following sub-charts:
+This is a composite chart deploying the following sub-charts:
 
 - [Zeppelin](https://github.com/banzaicloud/banzai-charts/tree/master/stable/zeppelin)
 - [Spark](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark) this is again a composite charts deploying the following sub-charts:
