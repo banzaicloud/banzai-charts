@@ -16,7 +16,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /drone
+          - path: /build
             backend:
              serviceName: {{ .Release.Name }}-drone
              servicePort: 80
