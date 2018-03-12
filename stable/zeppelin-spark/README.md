@@ -20,7 +20,7 @@ $ helm install banzaicloud-stable/zeppelin
 
 ## Configuration
 
-Helm let's you override all parameters in `values.yaml` of every chart and sub-chart, however in you don't need anything special you can install this chart as it is, with default values. If you want to use Spark History Server, you need to enable it and set some cloud storage for event logs file, depending on your cloud provider.  The below table lists the required parameters you need to set if you want to enable `Spark History Server`.
+Helm let's you override all parameters in `values.yaml` of every chart and sub-chart, however in this chart you don't need anything special you can install this as it is, with default values. If you want to use Spark History Server, you need to enable it and set some cloud storage for event logs file, depending on your cloud provider.  The below table lists the required parameters you need to set if you want to enable `Spark History Server`.
 
 | Parameter                            | Required | Description                                                       |Example                           |
 | ------------------------------------ | ---------|----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
