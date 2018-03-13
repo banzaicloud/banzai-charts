@@ -134,8 +134,11 @@ vault:
   vault:
     dev: true
     policies:
-      - name: allow_accesstokens
+      - name: allow_accesstokens_and_orgs
         rules: path "secret/accesstokens/*" {
+                capabilities = ["create", "read", "update", "delete", "list"]
+               }
+               path "secret/orgs/*" {
                 capabilities = ["create", "read", "update", "delete", "list"]
                }
     roles:
@@ -143,7 +146,7 @@ vault:
       - name: pipeline
         bound_service_account_names: pipeline
         bound_service_account_namespaces: "*"
-        policies: allow_accesstokens
+        policies: allow_accesstokens_and_orgs
         ttl: 1h
 
 resources:
