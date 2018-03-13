@@ -24,11 +24,11 @@ Helm let's you override all parameters in `values.yaml` of every chart and sub-c
 
 | Parameter                            | Required | Description                                                       |Example                           |
 | ------------------------------------ | ---------|----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| zeppelin.sparkSubmitOptions.eventLogDirectory                     | yes      |the URL to the directory for event logs | s3a://yourBucketName/eventLogFoloder wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog gs://yourBucketName/eventLogFoloder|  
+| zeppelin.sparkSubmitOptions.eventLogDirectory                     | yes      |the URL to the directory for event logs | s3a://yourBucketName/eventLogFoloder<br>wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog<br>gs://yourBucketName/eventLogFoloder|  
 | zeppelin.sparkSubmitOptions.azureStorageAccountName          | only in case of using Azure Storage| Name of your Azure storage account        | see Notes |
 | zeppelin.sparkSubmitOptions.azureStorageAccessKey            | only in case of using Azure Storage| Access key for your Azure storage account | see Notes |
 | historyServer.enabled           | false by default| Enable deploying Spark History Server | true / false |
-| spark.spark-hs.app.logDirectory                     | yes      |the URL to the directory containing application event logs to load| s3a://yourBucketName/eventLogFoloder wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog gs://yourBucketName/eventLogFoloder|  
+| spark.spark-hs.app.logDirectory                     | yes      |the URL to the directory containing application event logs to load| s3a://yourBucketName/eventLogFoloder<br>wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog<br>gs://yourBucketName/eventLogFoloder|  
 | spark.spark-hs.app.azureStorageAccountName          | in case of WASB| Name of your Azure storage account        | see Notes |
 | spark.spark-hs.app.azureStorageAccessKey            | in case of WASB| Access key for your Azure storage account | see Notes |
 
