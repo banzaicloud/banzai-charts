@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 traefik:
-  serviceType: NodePort
+  serviceType: LoadBalancer
   dashboard:
     enabled: false
     domain: ""
