@@ -15,14 +15,13 @@ traefik:
 pipeline:
 
   auth:
-    enabled: true 
+    enabled: true
 
   drone:
-    enabled: true 
+    enabled: true
 
-  cloud: 
+  cloud:
     cloudprovider: aws
-    gkeCredentialPath: ""
     keypath: "/opt/pipeline/.ssh"
 
   IngressUrl: ""
