@@ -6,6 +6,7 @@
         }
     },
     "traefik": {
+        "serviceType": "NodePort",
         "dashboard": {
             "auth": {
                 "basic": {
@@ -57,8 +58,9 @@
             "Channel": ""
         },
         "image": {
-            "tag": ""
-        }    },
+            "tag": "latest"
+        }    
+    },
     "prometheus": {
         "server": {
             "persistentVolume":{
