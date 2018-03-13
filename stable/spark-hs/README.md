@@ -18,7 +18,7 @@ The following tables lists the configurable parameters of the Spark History Seve
 
 | Parameter                            | Required | Description                                                       |Example                           |
 | ------------------------------------ | ---------|----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| app.logDirectory                     | yes      |the URL to the directory containing application event logs to load| s3a://yourBucketName/eventLogFoloder wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog gs://yourBucketName/eventLogFoloder|  
+| app.logDirectory                     | yes      |the URL to the directory containing application event logs to load|s3a://yourBucketName/eventLogFoloder<br>wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog<br>gs://yourBucketName/eventLogFoloder|  
 | app.azureStorageAccountName          | in case of WASB| Name of your Azure storage account        | see Notes |
 | app.azureStorageAccessKey            | in case of WASB| Access key for your Azure storage account | see Notes |
 
