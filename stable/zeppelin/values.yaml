@@ -67,3 +67,4 @@ sparkSubmitOptions:
   eventLogDirectory: ""
   azureStorageAccountName: ""
   azureStorageAccessKey: ""
+  driverServiceAccountName: "spark"
