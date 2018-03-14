@@ -88,7 +88,7 @@ spec:
         - name: PIPELINE_DRONE_ENABLED
           value: {{ .Values.drone.enabled | quote }}
         - name: PIPELINE_DRONE_URL
-          value: http://{{ .Release.Name }}-drone:8000
+          value: http://{{ .Release.Name }}-drone:80
 
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
