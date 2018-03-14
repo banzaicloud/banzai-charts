@@ -26,9 +26,6 @@
         }
     },
     "pipeline": {
-        "auth": {
-                "enabled": true
-            },
         "drone": {
             "enabled": true
         },
