@@ -25,7 +25,6 @@ data:
     [cors]
 
     [auth]
-    enabled = {{ .Values.auth.enabled }}
     clientid = ""
     clientsecret = ""
     tokensigningkey = "{{ randAlphaNum 16 }}"
