@@ -33,7 +33,6 @@ gkeCredentials:
   type: ""
 
 auth:
-  enabled: true
   jwtissueer: "https://banzaicloud.com/"
   jwtaudience: "https://pipeline.banzaicloud.com"
 

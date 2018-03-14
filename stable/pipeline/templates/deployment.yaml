@@ -74,8 +74,6 @@ spec:
         - name: PIPELINE_CLOUD_KEYPATH
           value: {{ .Values.cloud.keypath | quote }}
 
-        - name: PIPELINE_AUTH_ENABLED
-          value: {{ .Values.auth.enabled | quote }}
         - name: PIPELINE_AUTH_CLIENTID
           value: {{ default .Values.global.auth.clientid .Values.auth.clientid | quote }}
         - name: PIPELINE_AUTH_CLIENTSECRET
