@@ -39,6 +39,7 @@ spec:
               --conf spark.kubernetes.resourceStagingServer.uri={{ .Values.sparkSubmitOptions.resourceStagingServerExt }}
               --conf spark.kubernetes.resourceStagingServer.internal.uri={{ .Values.sparkSubmitOptions.resourceStagingServerInt }}
               --conf spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
+              --conf spark.kubernetes.authenticate.driver.serviceAccountName={{ .Values.sparkSubmitOptions.driverServiceAccountName }}
               {{- if .Values.sparkSubmitOptions.eventLogDirectory }}
               --conf spark.eventLog.dir={{ .Values.sparkSubmitOptions.eventLogDirectory }}
               --conf spark.eventLog.enabled=true
