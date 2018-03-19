@@ -11,8 +11,12 @@ traefik:
     enabled: true
   cpuLimit: 200m
   memoryLimit: 250Mi
+  debug:
+    enabled: false
 
 pipeline:
+  image:
+    tag: "0.3.0"
 
   drone:
     enabled: true
