@@ -57,7 +57,7 @@ parameters:
 EOF
 
 # Thanks Kelsey :)
-kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.2.1/weave-daemonset.yaml --kubeconfig /etc/kubernetes/admin.conf
+kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.2.1/weave-daemonset-k8s-1.7.yaml --kubeconfig /etc/kubernetes/admin.conf
 
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
