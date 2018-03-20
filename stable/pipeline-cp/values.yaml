@@ -43,6 +43,7 @@ drone:
 
 grafana:
   server:
+    image: "banzaicloud/grafana:0.3.0"
     httpPort: 80
 
     ingress:
