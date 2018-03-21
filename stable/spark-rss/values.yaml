@@ -7,7 +7,7 @@ app:
 
   image:
     repository: banzaicloud/spark-resource-staging-server
-    tag: v2.2.1-k8s-1.0.10
+    tag: v2.2.1-k8s-1.0.11
     pullPolicy: IfNotPresent
 
   service:
