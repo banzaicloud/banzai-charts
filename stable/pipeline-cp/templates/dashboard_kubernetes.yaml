@@ -35,11 +35,12 @@ spec:
               name: {{ template "grafana.fullname" . }}-grafana-dashboard-configmap
               key: kubernetes-cluster.json
         args:
-          - "http://$(ADMIN_USER):$(ADMIN_PASSWORD)@{{ template "grafana.fullname" . }}:{{ .Values.grafana.server.httpPort }}/api/dashboards/db"
+          - "http://$(ADMIN_USER):$(ADMIN_PASSWORD)@{{ template "grafana.fullname" . }}:{{ .Values.grafana.server.httpPort }}/api/dashboards/import"
           - "--max-time"
           - "10"
           - "-H"
           - "Content-Type: application/json;charset=UTF-8"
           - "--data-binary"
-          - "{ \"dashboard\":$(DASHBOARD_JSON), \"overwrite\":false }"
+          - "{ \"dashboard\":$(DASHBOARD_JSON),\"inputs\":[{\"name\":\"DS_PROMETHEUS\",\"type\":\"datasource\",\"pluginId\":\"prometheus\",\"value\":\"prometheus\"}],\"overwrite\":false }"
+
       restartPolicy: "OnFailure"
