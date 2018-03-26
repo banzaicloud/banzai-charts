@@ -25,14 +25,11 @@ data:
     [cors]
 
     [auth]
-    clientid = ""
-    clientsecret = ""
-    tokensigningkey = "{{ randAlphaNum 16 }}"
     jwtissueer = "https://banzaicloud.com/"
     jwtaudience = "https://pipeline.banzaicloud.com"
 
     [drone]
-    enabled = false
+    enabled = true
 
     [helm]
     retryAttempt = 30

@@ -75,11 +75,20 @@ spec:
           value: {{ .Values.cloud.keypath | quote }}
 
         - name: PIPELINE_AUTH_CLIENTID
-          value: {{ default .Values.global.auth.clientid .Values.auth.clientid | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: githubClientId
         - name: PIPELINE_AUTH_CLIENTSECRET
-          value: {{ default .Values.global.auth.clientsecret .Values.auth.clientsecret | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: githubClientSecret
         - name: PIPELINE_AUTH_TOKENSIGNGKEY
-          value: {{ randAlphaNum 16 | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: tokenSigningKey
         - name: PIPELINE_AUTH_JWTISSUEER
           value: {{ .Values.auth.jwtissueer | quote }}
         - name: PIPELINE_AUTH_JWTAUDIENCE
