@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: "{{ .Release.Name }}"
+    spec:
+      initContainers:
+      - name: download-artifact
+        image: busybox
+        command: ["wget", "{{ .Values.artifactUrl }}/{{ .Values.artifactName }}", "-O", "/opt/{{ .Values.artifactName }}"]
+        volumeMounts:
+        - mountPath: /opt/
+          name: artifact-volume
+          readOnly: false
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/opt/{{ .Values.artifactName }}"]
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+        - mountPath: /opt/
+          name: artifact-volume
+          readOnly: false
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      volumes:
+      - name: artifact-volume
+        emptyDir: {}

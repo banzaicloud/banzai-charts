@@ -1,0 +1,10 @@
+name: springboot
+home: https://banzaicloud.com
+sources:
+  - https://github.com/banzaicloud/banzai-charts
+version: 0.0.1
+description: A springboot application example
+keywords:
+- java
+- tomcat
+- springboot
