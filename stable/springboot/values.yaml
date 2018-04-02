@@ -10,7 +10,7 @@ replicas: 1
 
 resources:
   requests:
-    memory: 32Mi
+    memory: 250Mi
     cpu: 40m
   limits:
     memory: 2Gi
