@@ -15,3 +15,9 @@ resources:
   limits:
     memory: 2Gi
     cpu: 1
+
+service:
+  name: tomcat
+  type: ClusterIP
+  internalPort: 8080
+  externalPort:  8080

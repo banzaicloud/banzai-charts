@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
+        app: {{ template "fullname" . }}
         release: "{{ .Release.Name }}"
     spec:
       initContainers:
