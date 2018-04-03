@@ -29,6 +29,7 @@ At Banzai Cloud we use Helm as our package manager to deploy Kubernetes applicat
   - [Spark resource staging server](stable/spark-rss)
   - [Spark shuffle](stable/spark-shuffle)
   - [Spark](stable/spark)
+  - [Spring Boot](/stable/spring-boot)
   - [Vault](stable/vault)
   - [Zeppelin](stable/zeppelin)
 - [Incubator](incubator/)
