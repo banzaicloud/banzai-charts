@@ -1,0 +1,87 @@
+{{- $artifactUrl := splitList "/" .Values.artifactUrl }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        release: "{{ .Release.Name }}"
+    {{- if .Values.podAnnotations }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}
+    {{- end }}
+    spec:
+      initContainers:
+      - name: download-artifact
+        image: busybox
+        command: ["wget", "{{ .Values.artifactUrl }}", "-O", "/opt/{{ last $artifactUrl }}"]
+        volumeMounts:
+        - mountPath: /opt/
+          name: artifact-volume
+          readOnly: false
+{{- if eq (index .Values.podAnnotations "prometheus.io/scrape") "true" }}
+      - name: jmx-export
+        image: banzaicloud/jmx_exporter:latest
+        command: ['cp', '/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.3.1-SNAPSHOT.jar', '/opt/jmx-exporter/']
+        volumeMounts:
+        - name: jmx-jar-data
+          mountPath: /opt/jmx-exporter/
+{{- end }}
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command:
+          - sh
+          - -c
+          - |
+            java $JAVAAGENT_OPTS $JAVA_OPTS -jar /opt/{{ last $artifactUrl }} $ARGS
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+{{- if eq (index .Values.podAnnotations "prometheus.io/scrape") "true" }}
+          - name: JAVAAGENT_OPTS
+            value: "-javaagent:/opt/jmx-exporter/jmx_prometheus_javaagent-0.3.1-SNAPSHOT.jar={{ index .Values.podAnnotations "prometheus.io/port" }}:/etc/jmx-exporter/config.yaml"
+{{- end}}
+{{- if .Values.env }}
+{{ toYaml .Values.env | indent 10 }}
+{{- end}}
+        volumeMounts:
+        - mountPath: /opt/
+          name: artifact-volume
+          readOnly: false
+{{- if eq (index .Values.podAnnotations "prometheus.io/scrape") "true" }}
+        - name: jmx-jar-data
+          mountPath: /opt/jmx-exporter/
+          readOnly: true
+        - name: jmx-config
+          mountPath: /etc/jmx-exporter/
+          readOnly: true
+{{- end }}
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      volumes:
+{{- if eq (index .Values.podAnnotations "prometheus.io/scrape") "true" }}
+      - name: jmx-jar-data
+        emptyDir: {}
+      - name: jmx-config
+        configMap:
+          name: "{{ template "fullname" . }}-jmx-exporter"
+{{- end }}
+      - name: artifact-volume
+        emptyDir: {}
