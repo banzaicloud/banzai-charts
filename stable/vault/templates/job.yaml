@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "vault.fullname" . }}-init
+  labels:
+    app: {{ template "vault.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "vault.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: vault-init
+        image: "{{ .Values.unsealer.image.repository }}:{{ .Values.unsealer.image.tag }}"
+        imagePullPolicy: {{ .Values.unsealer.image.pullPolicy }}
+        command: ["bank-vaults", "init"]
+        args: {{ toJson .Values.unsealer.args }}
+        env:
+          - name: VAULT_ADDR
+            value: http://{{ template "vault.fullname" . }}:8200
+      restartPolicy: OnFailure
