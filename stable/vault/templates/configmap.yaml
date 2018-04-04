@@ -10,3 +10,5 @@ metadata:
 data:
   config.json: |
     {{ .Values.vault.config | toJson }}
+  vault-config.yml: |
+    {{ .Values.vault.externalConfig | toJson }}
