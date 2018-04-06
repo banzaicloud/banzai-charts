@@ -84,7 +84,7 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: githubClientSecret
-        - name: PIPELINE_AUTH_TOKENSIGNGKEY
+        - name: PIPELINE_AUTH_TOKENSIGNINGKEY
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}
