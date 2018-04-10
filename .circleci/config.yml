@@ -25,7 +25,7 @@ jobs:
 
             helm init -c
             
-            if [ "$GIT_BRANCH" = "master" ]; then
+            if [ "$GIT_TAG" = "0.3.0" ]; then
                 helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com || true
                 helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com || true
             elif [ "$GIT_TAG" = "" ]; then
@@ -38,47 +38,60 @@ jobs:
    
             helm repo update
             helm repo list
+            helm repo remove local
 
             echo "REPO -> STABLE"
             cd ./stable
 
-            mkdir -p /tmp/s3-chart/stable
-            echo "helm dependency update:"
-            find . ! -path /tmp/  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm dependency update {} \;
-            echo "helm dependency build:"
-            find . ! -path /tmp/  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm dependency build {} \;
-            echo "Remove requirements.lock files"
-            find . -name requirements.lock  -maxdepth 3 -type f -exec rm {} \;
-            echo "helm helm package:"
-            find . ! -path /tmp/  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm package -d /tmp/s3-chart/stable {} \;
-            helm repo index /tmp/s3-chart/stable
+            #TODO: Dirty hack to solve multi level dependency
+            for i in {1..3}
+            do
+                mkdir -p /tmp/s3-chart/stable
 
-            if [ "$GIT_BRANCH" = "master" ]; then
-                s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/
-            elif [ "$GIT_TAG" = "" ]; then
-                s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/
-            elif [ "$GIT_TAG" != "" ]; then
-                s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/
-            fi
+                echo "helm dependency update and build"
+                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm dependency update {} \; -exec helm dependency build {} \;
+
+                echo "Remove requirements.lock files"
+                find . -maxdepth 3 -name requirements.lock -type f -delete -print 
+
+                echo "Create helm package:"
+                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm package -d /tmp/s3-chart/stable {} \;
+
+                helm repo index /tmp/s3-chart/stable
+
+                if [ "$GIT_TAG" = "0.3.0" ]; then
+                    s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/
+                elif [ "$GIT_TAG" = "" ]; then
+                    s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/
+                elif [ "$GIT_TAG" != "" ]; then
+                    s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/
+                fi
+            done
 
             echo "REPO -> INCUBATOR"
             cd ../incubator
 
-            mkdir -p /tmp/s3-chart/incubator
-            echo "helm dependency update:"
-            find . ! -path /tmp/  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm dependency update {} \;
-            echo "helm dependency build:"
-            find . ! -path /tmp/  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm dependency build {} \;
-            echo "Remove requirements.lock files"
-            find . -name requirements.lock  -maxdepth 3 -type f -exec rm {} \;
-            echo "helm helm package:"
-            find . ! -path /tmp/  ! -path ./.circleci ! -path ./.git  -maxdepth 1 -type d -exec helm package -d /tmp/s3-chart/incubator {} \;
-            helm repo index /tmp/s3-chart/incubator
+            #TODO: Dirty hack to solve multi level dependency
+            for i in {1..3}
+            do
 
-            if [ "$GIT_BRANCH" = "master" ]; then
-                s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/
-            elif [ "$GIT_TAG" = "" ]; then
-                s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/
-            elif [ "$GIT_TAG" != "" ]; then
-                s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/
-            fi
+                mkdir -p /tmp/s3-chart/incubator
+                echo "helm dependency update and build"
+                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm dependency update {} \; -exec helm dependency build {} \;
+
+                echo "Remove requirements.lock files"
+                find . -maxdepth 3 -name requirements.lock -type f -delete -print 
+
+                echo "Create helm package:"
+                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm package -d /tmp/s3-chart/incubator {} \;
+
+                helm repo index /tmp/s3-chart/incubator
+
+                if [ "$GIT_TAG" = "0.3.0" ]; then
+                    s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/
+                elif [ "$GIT_TAG" = "" ]; then
+                    s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/
+                elif [ "$GIT_TAG" != "" ]; then
+                    s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/
+                fi
+            done
