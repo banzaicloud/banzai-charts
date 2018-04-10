@@ -42,17 +42,17 @@ jobs:
             cd ./stable
 
             #TODO: Dirty hack to solve multi level dependency
-            for i in {1..3}
+            for i in $(seq 1 3);
             do
                 mkdir -p /tmp/s3-chart/stable
 
-                echo "helm dependency update and build"
-                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm dependency update {} \; -exec helm dependency build {} \;
+                echo "Dependency update and build"
+                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -exec helm dependency update {} \; -exec helm dependency build {} \;
 
                 echo "Remove requirements.lock files"
-                find . -maxdepth 3 -name requirements.lock -type f -delete -print 
+                find . -maxdepth 3 -name requirements.lock -type f -delete -print
 
-                echo "Create helm package:"
+                echo "Create helm packages"
                 find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm package -d /tmp/s3-chart/stable {} \;
 
                 helm repo index /tmp/s3-chart/stable
@@ -70,17 +70,18 @@ jobs:
             cd ../incubator
 
             #TODO: Dirty hack to solve multi level dependency
-            for i in {1..3}
+            for i in $(seq 1 3);
             do
 
                 mkdir -p /tmp/s3-chart/incubator
-                echo "helm dependency update and build"
+
+                echo "Dependency update and build"
                 find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm dependency update {} \; -exec helm dependency build {} \;
 
                 echo "Remove requirements.lock files"
-                find . -maxdepth 3 -name requirements.lock -type f -delete -print 
+                find . -maxdepth 3 -name requirements.lock -type f -delete -print
 
-                echo "Create helm package:"
+                echo "Create helm packages"
                 find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm package -d /tmp/s3-chart/incubator {} \;
 
                 helm repo index /tmp/s3-chart/incubator
