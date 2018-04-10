@@ -1,18 +1,16 @@
 # Golang CircleCI 2.0 configuration file
-#
-version: 2
+version: 2.0
+
 jobs:
   build:
     docker:
       - image: banzaicloud/helm-aws-s3
-
         environment:
           AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
           AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
 
     steps:
       - checkout
-
       - run:
           name: Build Charts
           no_output_timeout: 2700
@@ -95,3 +93,12 @@ jobs:
                     s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/
                 fi
             done
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
