@@ -29,7 +29,7 @@ items:
       release: {{ .Release.Name }}
       heritage: {{ .Release.Service }}
   roleRef:
-    kind: Role
+    kind: ClusterRole
     name: {{ template "vault.fullname" . }}-secret-access
     apiGroup: rbac.authorization.k8s.io
   subjects:
