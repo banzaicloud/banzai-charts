@@ -53,6 +53,7 @@ The following tables lists the configurable parameters of the vault chart and th
 | `image.tag`             | Container image tag to deploy       | `0.9.1`                                             |
 | `vault.customSecrets`   | Custom secrets available to Vault   | `[]`                                                |
 | `vault.config`          | Vault configuration                 | No default backend                                  |
+| `vault.externalConfig`  | Vault API based configuration       | No default backend                                  |
 | `replicaCount`          | k8s replicas                        | `1`                                                 |
 | `resources.limits.cpu`  | Container requested CPU             | `nil`                                               |
 | `resources.limits.memory` | Container requested memory        | `nil`                                               |
