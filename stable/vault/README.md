@@ -25,7 +25,7 @@ To install the chart, use the following, this backs Vault with a Consul cluster:
 
 ```
 helm init -c; 
-helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com
+helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
 helm install banzaicloud-stable/vault --set vault.config.storage.consul.address="myconsul-svc-name:8500",vault.config.storage.consul.path="vault"
 ```
 
