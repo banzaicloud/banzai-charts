@@ -24,3 +24,4 @@ spec:
           - name: VAULT_ADDR
             value: http://{{ template "vault.fullname" . }}:8200
       restartPolicy: OnFailure
+      serviceAccountName: {{ template "vault.fullname" . }}
