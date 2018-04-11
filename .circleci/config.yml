@@ -23,19 +23,6 @@ jobs:
 
             helm init -c
             
-            if [ "$GIT_TAG" = "0.3.0" ]; then
-                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com || true
-                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com || true
-            elif [ "$GIT_TAG" = "" ]; then
-                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/ || true
-                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/ || true
-            elif [ "$GIT_TAG" != "" ]; then
-                helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/ || true
-                helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/ || true
-            fi
-   
-            helm repo update
-            helm repo list
             helm repo remove local
 
             echo "REPO -> STABLE"
@@ -44,6 +31,20 @@ jobs:
             #TODO: Dirty hack to solve multi level dependency
             for i in $(seq 1 3);
             do
+                if [ "$GIT_TAG" = "0.3.0" ]; then
+                    helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com || true
+                    helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com || true
+                elif [ "$GIT_TAG" = "" ]; then
+                    helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/ || true
+                    helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/ || true
+                elif [ "$GIT_TAG" != "" ]; then
+                    helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/ || true
+                    helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/ || true
+                fi
+    
+                helm repo update
+                helm repo list
+
                 mkdir -p /tmp/s3-chart/stable
 
                 echo "Dependency update and build"
