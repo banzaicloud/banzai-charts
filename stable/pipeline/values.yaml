@@ -131,22 +131,22 @@ mariadb:
 
 vault:
   vault:
-    dev: true
-    policies:
-      - name: allow_accesstokens_and_orgs
-        rules: path "secret/accesstokens/*" {
-                capabilities = ["create", "read", "update", "delete", "list"]
-               }
-               path "secret/orgs/*" {
-                capabilities = ["create", "read", "update", "delete", "list"]
-               }
-    roles:
-      # Allow every pod in the default namespace to use the secret kv store
-      - name: pipeline
-        bound_service_account_names: pipeline
-        bound_service_account_namespaces: "*"
-        policies: allow_accesstokens_and_orgs
-        ttl: 1h
+    externalConfig:
+      policies:
+        - name: allow_accesstokens_and_orgs
+          rules: path "secret/accesstokens/*" {
+                  capabilities = ["create", "read", "update", "delete", "list"]
+                }
+                path "secret/orgs/*" {
+                  capabilities = ["create", "read", "update", "delete", "list"]
+                }
+      roles:
+        # Allow every pod in the default namespace to use the secret kv store
+        - name: pipeline
+          bound_service_account_names: pipeline
+          bound_service_account_namespaces: "*"
+          policies: allow_accesstokens_and_orgs
+          ttl: 1h
 
 resources:
   requests:
