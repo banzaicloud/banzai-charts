@@ -60,7 +60,7 @@ jobs:
                 echo "Create helm packages"
                 find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm package -d /tmp/s3-chart/stable {} \;
 
-                helm repo index /tmp/s3-chart/stable
+                helm repo index --url http://kubernetes-charts.banzaicloud.com /tmp/s3-chart/stable
 
                 if [ "$GIT_TAG" = "0.3.0" ]; then
                     s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/
@@ -95,7 +95,7 @@ jobs:
                 echo "Create helm packages"
                 find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm package -d /tmp/s3-chart/incubator {} \;
 
-                helm repo index /tmp/s3-chart/incubator
+                helm repo index --url http://kubernetes-charts-incubator.banzaicloud.com /tmp/s3-chart/incubator
 
                 if [ "$GIT_TAG" = "0.3.0" ]; then
                     s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/
