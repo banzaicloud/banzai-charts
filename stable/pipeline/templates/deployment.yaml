@@ -191,8 +191,8 @@ spec:
 
       volumes:
       - name: gke-credential
-        configMap:
-          name: "{{ template "fullname" . }}-gke"
+        secret:
+          secretName: "{{ template "fullname" . }}-gke"
       - name: config-volume
         configMap:
           name: "{{ template "fullname" . }}"
