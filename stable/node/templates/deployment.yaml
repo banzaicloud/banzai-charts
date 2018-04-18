@@ -1,0 +1,64 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "node.fullname" . }}
+  labels:
+    app: {{ template "node.name" . }}
+    chart: {{ template "node.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "node.name" . }}
+#      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "node.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ template "node.fullname" . }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.image.readinessProbe.httpGet.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.image.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.image.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.image.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.image.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.image.readinessProbe.timeoutSeconds }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.image.livenessProbe.httpGet.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.image.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.image.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.image.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.image.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.image.livenessProbe.timeoutSeconds }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.container.containerPort }}
+              protocol: TCP
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
