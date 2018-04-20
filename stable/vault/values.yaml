@@ -102,7 +102,7 @@ vault:
 unsealer:
   image:
     repository: banzaicloud/bank-vaults
-    tag: canary
+    tag: 0.1.0
     pullPolicy: Always
   args: [
       "--mode",
