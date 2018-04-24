@@ -28,6 +28,9 @@ zeppelin:
     internalPort: 8080
     externalPort:  8080
 
+username: "admin"
+password: "$shiro1$SHA-256$500000$VOmOT2BnDoOhH50MgrwgbQ==$wmPark/qVVhF3UFj63ojr9l6gKPoLsDUii60XA9KTTE="
+
 ingress:
   enabled: false
 
