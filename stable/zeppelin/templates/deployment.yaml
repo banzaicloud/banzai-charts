@@ -15,6 +15,13 @@ spec:
         app: {{ template "fullname" . }}
 
     spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: shiro-config
+            items:
+            - key: shiro.ini
+              path: shiro.ini
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.zeppelin.image.repository }}:{{ .Values.zeppelin.image.tag }}"
@@ -67,5 +74,9 @@ spec:
             port: {{ .Values.zeppelin.service.internalPort }}
           initialDelaySeconds: 20
           timeoutSeconds: 1
+        volumeMounts:
+          - name: config-volume
+            mountPath: /opt/zeppelin/conf/shiro.ini
+            subPath: shiro.ini
         resources:
 {{ toYaml .Values.zeppelin.resources | indent 12 }}
