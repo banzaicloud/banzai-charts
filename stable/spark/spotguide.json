@@ -1,0 +1,26 @@
+{
+  "options": [
+    {
+      "name": "History Server",
+      "type": "boolean",
+      "info": "Enable Spark History server.",
+      "default": true,
+      "key": "historyServer.enabled"
+    },
+    {
+      "name": "Monitoring",
+      "type": "boolean",
+      "info": "Enable Prometheus Monitoring",
+      "default": true,
+      "key": "monitor.enabled"
+    },
+    {
+      "name": "Alerting",
+      "type": "boolean",
+      "info": "Enable Prometheus Alerting",
+      "default": false,
+      "key": "prometheus.alertmanager.enabled"
+    }
+  ],
+  "info": "One of the default spotguides describes an Apache Spark deployment. For further information about the Apache Spark spotguide please follow this guide. A typical example of a Spark flow is this."
+}
