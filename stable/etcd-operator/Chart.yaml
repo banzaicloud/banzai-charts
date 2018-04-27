@@ -4,3 +4,7 @@ name: etcd-operator
 version: 0.1
 appVersion: 0.6.1
 home: https://github.com/coreos/etcd-operator
+keywords:
+- operator
+- etcd
+
