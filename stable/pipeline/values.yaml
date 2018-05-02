@@ -9,6 +9,8 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
+basepath: /pipeline
+
 service:
   name: pipeline
   type: ClusterIP
