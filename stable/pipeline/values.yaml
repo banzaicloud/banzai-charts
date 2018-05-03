@@ -36,9 +36,6 @@ auth:
   jwtissueer: "https://banzaicloud.com/"
   jwtaudience: "https://pipeline.banzaicloud.com"
 
-drone:
-  enabled: true
-
 helm:
   retryAttempt: "30"
   retrySleepSeconds: "15"
@@ -140,14 +137,25 @@ vault:
                 path "secret/orgs/*" {
                   capabilities = ["create", "read", "update", "delete", "list"]
                 }
-      roles:
-        # Allow every pod in the default namespace to use the secret kv store
-        - name: pipeline
-          bound_service_account_names: pipeline
-          bound_service_account_namespaces: "*"
-          policies: allow_accesstokens_and_orgs
-          ttl: 1h
-
+      auth:
+        - type: kubernetes
+          # Allows creating roles in Vault which can be used later on for the Kubernetes based
+          # authentication.
+          # See https://www.vaultproject.io/docs/auth/kubernetes.html#creating-a-role for
+          # more information.
+          roles:
+            # Allow pipeline pod in the all namespaces to use the secret kv store
+            - name: pipeline
+              bound_service_account_names: pipeline
+              bound_service_account_namespaces: "*"
+              policies: allow_accesstokens_and_orgs
+              ttl: 1h
+      secrets:
+        - path: secret
+          type: kv
+          description: General secrets.
+          options:
+            version: 1
 resources:
   requests:
     cpu: 250m
