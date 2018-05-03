@@ -103,7 +103,7 @@ spec:
       volumes:
         - name: vault-config
           configMap:
-            name: "{{ template "vault.fullname" . }}-config-{{ .Release.Revision }}"
+            name: "{{ template "vault.fullname" . }}-config"
         - name: vault-root
           emptyDir: {}
         - name: vault-file
