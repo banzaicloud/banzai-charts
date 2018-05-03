@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ template "node.fullname" . }}
-data:
-# define the configmap from the appropriate source (files, folders etc...)
-  SHOULD_FAIL_WITHIN: "100000"
-  READINESS_PROBE_DELAY: "40000"
-  PORT: "{{ .Values.container.containerPort }}"
