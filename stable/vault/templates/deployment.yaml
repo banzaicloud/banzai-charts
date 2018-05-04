@@ -20,14 +20,26 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command: ["vault", "server", "-config", "/vault/config/config.json"]
+        env:
+          - name: VAULT_CACERT
+            value: /vault/tls/ca.crt
         ports:
         - containerPort: {{ .Values.service.port }}
+          name: vault
+        # This probe makes sure Vault is responsive in a HTTPS manner
+        # See: https://www.vaultproject.io/api/system/init.html
         livenessProbe:
-          tcpSocket:
-            port: {{ .Values.service.port }}
+          httpGet:
+            scheme: HTTPS
+            path: /v1/sys/init
+            port: vault
+        # This probe makes sure that only the active Vault instance gets traffic
+        # See: https://www.vaultproject.io/api/system/health.html
         readinessProbe:
-          tcpSocket:
-            port: {{ .Values.service.port }}
+          httpGet:
+            scheme: HTTPS
+            path: /v1/sys/health
+            port: vault
         securityContext:
           readOnlyRootFilesystem: true
           capabilities:
@@ -40,6 +52,8 @@ spec:
           mountPath: /root/
         - name: vault-file
           mountPath: /vault/file
+        - name: vault-tls
+          mountPath: /vault/tls
         {{- range .Values.vault.customSecrets }}
         - name: {{ .secretName }}
           mountPath: {{ .mountPath }}
@@ -49,11 +63,14 @@ spec:
       - name: vault-unsealer
         image: "{{ .Values.unsealer.image.repository }}:{{ .Values.unsealer.image.tag }}"
         imagePullPolicy: {{ .Values.unsealer.image.pullPolicy }}
-        command: ["bank-vaults", "unseal"]
+        command: ["bank-vaults", "unseal", "--init"]
         args: {{ toJson .Values.unsealer.args }}
         env:
-          - name: VAULT_ADDR
-            value: http://[::]:8200
+          - name: VAULT_CACERT
+            value: /vault/tls/ca.crt
+        volumeMounts:
+        - name: vault-tls
+          mountPath: /vault/tls
         resources:
 {{ toYaml .Values.resources | indent 10 }}
       - name: vault-configurer
@@ -62,10 +79,12 @@ spec:
         command: ["bank-vaults", "configure"]
         args: {{ toJson .Values.unsealer.args }}
         env:
-          - name: VAULT_ADDR
-            value: http://[::]:8200
+          - name: VAULT_CACERT
+            value: /vault/tls/ca.crt
         workingDir: /config
         volumeMounts:
+        - name: vault-tls
+          mountPath: /vault/tls
         - name: vault-config
           mountPath: /config/
         resources:
@@ -84,7 +103,7 @@ spec:
       volumes:
         - name: vault-config
           configMap:
-            name: "{{ template "vault.fullname" . }}-config-{{ .Release.Revision }}"
+            name: "{{ template "vault.fullname" . }}-config"
         - name: vault-root
           emptyDir: {}
         - name: vault-file
@@ -94,3 +113,6 @@ spec:
           secret:
             secretName: {{ .secretName }}
         {{- end }}
+        - name: vault-tls
+          secret:
+            secretName: "{{ template "vault.fullname" . }}-tls"

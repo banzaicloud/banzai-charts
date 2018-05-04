@@ -159,7 +159,9 @@ spec:
               key: azureTenantId
 
         - name: VAULT_ADDR
-          value: http://{{ .Release.Name }}-vault:8200
+          value: https://{{ .Release.Name }}-vault:8200
+        - name: VAULT_CACERT
+          value: /vault/tls/ca.crt
 
         ports:
         - containerPort: {{ .Values.service.internalPort }}
@@ -189,6 +191,8 @@ spec:
         - mountPath: /root/gke
           name: gke-credential
 
+        - name: vault-tls
+          mountPath: /vault/tls
 
       volumes:
       - name: gke-credential
@@ -208,5 +212,8 @@ spec:
         hostPath:
           path: /opt/pipeline/statestore/
         {{- end }}
+      - name: vault-tls
+        secret:
+          secretName: "{{ .Release.Name }}-vault-tls"
 
       serviceAccountName: pipeline
