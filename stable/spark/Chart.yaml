@@ -6,3 +6,5 @@ sources:
   - https://github.com/banzaicloud/spark
 keywords:
 - spark
+- spotguide
+icon: https://spark.apache.org/images/spark-logo-trademark.png

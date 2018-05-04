@@ -46,6 +46,9 @@ spec:
         - name: KUBERNETES_RELEASE_NAME
           value: "{{ .Release.Name }}"
 
+        - name: PIPELINE_PIPELINE_BASEPATH
+          value: {{ .Values.basepath | quote }}
+
         - name: PIPELINE_DATABASE_HOST
           value: "{{ .Release.Name }}-pipeline-db"
         - name: PIPELINE_DATABASE_DBNAME
