@@ -5,10 +5,6 @@ statefullset:
     prometheus.io/port: "9020"
   labels: {}
 
-service:
-  annotations: {}
-  labels: {}
-
 jmx:
   enabled: false
   port: 5555
