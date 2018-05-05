@@ -18,8 +18,8 @@ spec:
       labels:
         app: {{ template "nodejs.name" . }}
         release: {{ .Release.Name }}
-      annotation:
-{{ toYaml .Values.podAnnotation | indent 12 }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}
     spec:
       containers:
         - name: {{ template "nodejs.name" . }}

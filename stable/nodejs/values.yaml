@@ -9,7 +9,7 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
-podAnnotation: {}
+podAnnotations: {}
   # prometheus.io/scrape: "true"
   # prometheus.io/path: "/metrics"
   # prometheus.io/port: "9999"
@@ -57,7 +57,7 @@ extraPorts:
     protocol: TCP
 
 service:
-  type: ClusterIp
+  type: ClusterIP
   internalPort: 3001  
   externalPort: 80
 
