@@ -16,6 +16,6 @@ dependencies:
   repository: alias:banzaicloud-stable
 
 - name: drone
-  version: 0.1.0
+  version: 0.1.1
   repository: alias:banzaicloud-stable
 
