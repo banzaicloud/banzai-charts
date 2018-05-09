@@ -13,5 +13,5 @@ port: 9092
 
 image:
   repository: banzaicloud/kafka
-  tag: 2.12-1.2.0-etcd-0.0.1
+  tag: 2.12-2.0.0-etcd-0.0.3
   pullPolicy: IfNotPresent
