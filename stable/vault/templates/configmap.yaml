@@ -9,6 +9,10 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
 data:
   config.json: |
+    {{- if .Values.vault.config.storage }}
     {{ .Values.vault.config | toJson }}
+    {{ else }}
+    {{ (merge .Values.vault.config .Values.vault.defaultStorage) | toJson }}
+    {{ end -}}
   vault-config.yml: |
     {{ .Values.vault.externalConfig | toJson }}

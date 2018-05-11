@@ -83,9 +83,9 @@ vault:
         tls_cert_file: /vault/tls/server.crt
         tls_key_file: /vault/tls/server.key
     # See https://www.vaultproject.io/docs/configuration/storage/ for storage backends
-    storage:
-      file:
-        path: "/vault/file"
+    storage: {}
+      # file:
+      #   path: "/vault/file"
       # consul:
       #   address: ""
       #   path: ""
@@ -106,6 +106,13 @@ vault:
       #   credentials_file: ""
       #   ha_enabled: "true"
     # api_addr: http://localhost:8200
+
+  # Until this issue is fixed: https://github.com/kubernetes/helm/issues/3117
+  # we have to workaround the default storage problem.
+  defaultStorage:
+    storage:
+      file:
+        path: "/vault/file"
 
 unsealer:
   image:
