@@ -123,7 +123,7 @@ unsealer:
       "--mode",
       "k8s",
       "--k8s-secret-namespace",
-      "vault",
+      "default",
       "--k8s-secret-name",
       "bank-vaults"
   ]
