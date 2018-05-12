@@ -117,13 +117,13 @@ vault:
 unsealer:
   image:
     repository: banzaicloud/bank-vaults
-    tag: 0.1.0
+    tag: latest
     pullPolicy: Always
   args: [
       "--mode",
       "k8s",
       "--k8s-secret-namespace",
-      "default",
+      "vault",
       "--k8s-secret-name",
       "bank-vaults"
   ]

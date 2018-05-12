@@ -13,6 +13,6 @@ data:
     {{ .Values.vault.config | toJson }}
     {{ else }}
     {{ (merge .Values.vault.config .Values.vault.defaultStorage) | toJson }}
-    {{ end -}}
+    {{ end }}
   vault-config.yml: |
     {{ .Values.vault.externalConfig | toJson }}
