@@ -12,7 +12,7 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
 
 - name: pipeline
-  version: 0.0.2
+  version: 0.0.3
   repository: alias:banzaicloud-stable
 
 - name: drone
