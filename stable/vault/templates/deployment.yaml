@@ -102,8 +102,8 @@ spec:
       serviceAccountName: {{ template "vault.fullname" . }}
       volumes:
         - name: vault-config
-          configMap:
-            name: "{{ template "vault.fullname" . }}-config"
+          secret:
+            secretName: "{{ template "vault.fullname" . }}-config"
         - name: vault-root
           emptyDir: {}
         - name: vault-file
