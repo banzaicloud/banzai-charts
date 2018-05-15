@@ -77,7 +77,7 @@ spec:
         {{- range .Values.vault.customSecrets }}
         - secretRef:
             name: {{ .secretName }}
-        {{- end }}        
+        {{- end }}
         volumeMounts:
         - name: vault-tls
           mountPath: /vault/tls
@@ -91,6 +91,11 @@ spec:
         env:
           - name: VAULT_CACERT
             value: /vault/tls/ca.crt
+        envFrom:
+        {{- range .Values.vault.customSecrets }}
+        - secretRef:
+            name: {{ .secretName }}
+        {{- end }}
         workingDir: /config
         volumeMounts:
         - name: vault-tls
