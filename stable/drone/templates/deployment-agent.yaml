@@ -30,19 +30,9 @@ spec:
               secretKeyRef:
                 name: {{ template "drone.fullname" . }}
                 key: secret
-          - name: DOCKER_HOST
-            value: unix:///var/run/docker.sock
           {{ range $key, $value := .Values.agent.env }}
           - name: {{ $key }}
             value: {{ $value | quote }}
           {{ end }}
-        volumeMounts:
-        - mountPath: /var/run/docker.sock
-          name: docker-sock
         resources:
 {{ toYaml .Values.agent.resources | indent 10 }}
-      volumes:
-      - hostPath:
-          path: /var/run/docker.sock
-          type: ""
-        name: docker-sock
