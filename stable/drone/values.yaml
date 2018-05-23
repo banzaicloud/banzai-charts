@@ -131,6 +131,7 @@ agent:
   ##
   env:
     DRONE_DEBUG: "false"
+    DRONE_MAX_PROCS: "16"
 
   ## CPU and memory limits for drone agent
   ##
