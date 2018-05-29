@@ -47,7 +47,7 @@ spec:
           value: "{{ .Release.Name }}"
 
         - name: PIPELINE_PIPELINE_BASEPATH
-          value: {{ .Values.basepath | quote }}
+          value: {{ .Values.global.pipelineBasepath | quote }}
 
         - name: PIPELINE_DATABASE_HOST
           value: "{{ .Release.Name }}-pipeline-db"

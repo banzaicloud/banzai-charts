@@ -41,6 +41,9 @@ drone:
       DRONE_PROVIDER: "github"
       DRONE_GITHUB: "true"
 
+global:
+  pipelineBasepath: /pipeline
+
 grafana:
   server:
     image: "banzaicloud/grafana:0.3.0"

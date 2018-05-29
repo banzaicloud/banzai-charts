@@ -57,7 +57,7 @@ spec:
             value: bonanzabanzai:{{ include "mariadb.password" . }}@tcp({{ .Release.Name }}-pipeline-db:3306)/drone?parseTime=true
 
           - name: PIPELINE_BASE_URL
-            value: http://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090/pipeline/api/v1
+            value: http://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090/{{ .Values.global.pipelineBasepath }}api/v1
 
         volumeMounts:
         - mountPath: /var/lib/drone
