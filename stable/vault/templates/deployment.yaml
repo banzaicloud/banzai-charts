@@ -14,6 +14,8 @@ spec:
       labels:
         app: {{ template "vault.name" . }}
         release: {{ .Release.Name }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}
     spec:
       containers:
       - name: vault
@@ -27,7 +29,7 @@ spec:
         {{- range .Values.vault.customSecrets }}
         - secretRef:
             name: {{ .secretName }}
-        {{- end }}        
+        {{- end }}
         ports:
         - containerPort: {{ .Values.service.port }}
           name: vault
@@ -104,6 +106,18 @@ spec:
           mountPath: /config/
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+      - name: prometheus-statsd-exporter
+        image: "prom/statsd-exporter:latest"
+        imagePullPolicy: IfNotPresent
+        args: ["-statsd.mapping-config=/tmp/statsd-mapping.conf"]
+        ports:
+        - containerPort: 9102
+          name: prometheus
+        volumeMounts:
+        - name: statsd-mapping
+          mountPath: /tmp/
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -131,3 +145,6 @@ spec:
         - name: vault-tls
           secret:
             secretName: "{{ template "vault.fullname" . }}-tls"
+        - name: statsd-mapping
+          configMap:
+            name: "{{ template "vault.fullname" . }}-statsd-mapping"
