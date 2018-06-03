@@ -80,6 +80,8 @@ statestore:
 ## MariaDB chart configuration
 ##
 mariadb:
+  enabled: true
+
   nameOverride: pipeline-db
 
   ## MariaDB admin password
