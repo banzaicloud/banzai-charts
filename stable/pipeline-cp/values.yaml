@@ -45,6 +45,7 @@ global:
   pipelineBasepath: /pipeline
 
 grafana:
+  enabled: true
   server:
     image: "banzaicloud/grafana:0.3.0"
     httpPort: 80
@@ -221,6 +222,7 @@ grafana:
 
 
 prometheus:
+  enabled: true
   rbac:
     create: true
 
