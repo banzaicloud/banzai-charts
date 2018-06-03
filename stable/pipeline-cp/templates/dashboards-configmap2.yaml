@@ -1,6 +1,8 @@
+{{- if .Values.grafana.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "grafana.fullname" . }}-grafana-dashboard-configmap
 data:
 {{ (.Files.Glob "dashboards/*.json").AsConfig | indent 2 }}
+{{- end }}

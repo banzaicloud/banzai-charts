@@ -1,3 +1,4 @@
+{{- if .Values.grafana.enabled }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -16,3 +17,4 @@ spec:
             backend:
               serviceName: {{ .Release.Name }}-grafana
               servicePort: 80
+{{- end }}
