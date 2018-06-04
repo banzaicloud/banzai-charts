@@ -7,8 +7,7 @@ appVersion: 1.2.2
 home: https://github.com/kubernetes/autoscaler
 sources:
 - https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler
-- https://github.com/spotinst/kubernetes-autoscaler/tree/master/cluster-autoscaler
 maintainers:
-- name: mgoodness
-  email: mgoodness@gmail.com
+- name: szander
+  email: szander@banzaicloud.com
 engine: gotpl
