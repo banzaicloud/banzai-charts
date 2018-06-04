@@ -25,6 +25,10 @@ ingress:
   #   - secretName: chart-example-tls
   #     hosts:
   #       - chart-example.local
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "9102"
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -82,6 +86,10 @@ vault:
         # tls_disable: true
         tls_cert_file: /vault/tls/server.crt
         tls_key_file: /vault/tls/server.key
+
+    telemetry:
+      statsd_address: localhost:9125
+
     # See https://www.vaultproject.io/docs/configuration/storage/ for storage backends
     storage: {}
       # file:
@@ -127,3 +135,12 @@ unsealer:
       "--k8s-secret-name",
       "bank-vaults"
   ]
+
+statsd:
+  config:
+    mappings:
+    - match: vault.route.*.*
+      name: "vault_route"
+      labels:
+        method: "$1"
+        path: "$2"
