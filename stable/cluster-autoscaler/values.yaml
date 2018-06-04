@@ -45,7 +45,7 @@ cloudConfigPath: /etc/gce.conf
 
 image:
   repository: banzaicloud/cluster-autoscaler
-  tag: dev_18
+  tag: v1.2.2.1
   pullPolicy: IfNotPresent
 
 tolerations: []
@@ -56,8 +56,8 @@ extraArgs:
   logtostderr: true
   # write-status-configmap: true
   # leader-elect: true
-  # skip-nodes-with-local-storage: false
-  # expander: least-waste
+  skip-nodes-with-local-storage: false
+  expander: least-waste
   # scale-down-enabled: true
   # balance-similar-node-groups: true
   # min-replica-count: 2
@@ -65,8 +65,8 @@ extraArgs:
   # scale-down-non-empty-candidates-count: 5
   # max-node-provision-time: 15m0s
   # scan-interval: 10s
-  # scale-down-delay: 10m
-  # scale-down-unneeded-time: 10m
+  scale-down-delay: 3m
+  scale-down-unneeded-time: 3m
   # skip-nodes-with-local-storage: false
   # skip-nodes-with-system-pods: true
 
