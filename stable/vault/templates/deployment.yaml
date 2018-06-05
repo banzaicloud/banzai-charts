@@ -25,6 +25,8 @@ spec:
         env:
           - name: VAULT_CACERT
             value: /vault/tls/ca.crt
+          - name: VAULT_LOG_LEVEL
+            value: {{ .Values.vault.logLevel }}
         envFrom:
         {{- range .Values.vault.customSecrets }}
         - secretRef:

@@ -122,6 +122,8 @@ vault:
       file:
         path: "/vault/file"
 
+  logLevel: info
+
 unsealer:
   image:
     repository: banzaicloud/bank-vaults
