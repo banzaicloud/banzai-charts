@@ -124,6 +124,20 @@ server:
   #    memory: 2Gi
   #    cpu: 1
 
+##
+## CloudSQL configuration
+##
+cloudsql:
+  enabled: false
+  instance: ""
+  dbName: ""
+  dbUserName: ""
+  dbUserPass: ""
+  image:
+    repository: gcr.io/cloudsql-docker/gce-proxy
+    tag: 1.11
+    pullPolicy: IfNotPresent
+
 agent:
   ## Drone agent configuration.
   ## Values in here get injected as environment variables.
