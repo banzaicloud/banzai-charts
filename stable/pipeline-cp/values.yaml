@@ -15,6 +15,7 @@ traefik:
     enabled: false
 
 pipeline:
+  host: ""
   image:
     tag: "0.3.0"
 
