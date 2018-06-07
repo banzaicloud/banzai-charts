@@ -2,6 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  auth:
+    clientid: ""
+    clientsecret: ""
+
 replicaCount: 1
 
 image:
@@ -35,6 +40,8 @@ gkeCredentials:
 auth:
   jwtissueer: "https://banzaicloud.com/"
   jwtaudience: "https://pipeline.banzaicloud.com"
+  clientid: ""
+  clientsecret: ""
 
 helm:
   retryAttempt: "30"
@@ -80,8 +87,7 @@ statestore:
 ## MariaDB chart configuration
 ##
 mariadb:
-  enabled: true
-
+  enabled: false
   nameOverride: pipeline-db
 
   ## MariaDB admin password
@@ -127,6 +133,21 @@ mariadb:
     # storageClass: "-"
     # accessMode: ReadWriteOnce
     # size: 8Gi
+
+##
+## CloudSQL configuration
+##
+cloudsql:
+  enabled: true
+  instance: ""
+  dbName: ""
+  dbUserName: ""
+  dbUserPass: ""
+  image:
+    repository: gcr.io/cloudsql-docker/gce-proxy
+    tag: 1.11
+    pullPolicy: IfNotPresent
+
 
 vault:
   vault:

@@ -16,29 +16,23 @@ spec:
 
     spec:
       initContainers:
+      {{- if .Values.mariadb.enabled  }}
       - name: check-db-service
         image: busybox
         command: ['sh', '-c', 'until nslookup {{ .Release.Name }}-pipeline-db; do echo waiting for {{ .Release.Name }}-pipeline-db; sleep 1; done;']
       - name: check-db-port
         image: busybox
         command: ['sh', '-c', 'echo STATUS nc -w 2 {{ .Release.Name }}-pipeline-db 3306']
-      - name: ssh-key-generator
-        image: banzaicloud/sshkeygenerator:0.0.7
-        env:
-        - name: NAMESPACE
-          value: default  
-        - name: SECRET_OVERRIDE
-          value: "true"
-        - name: SECRET_NAME
-          value: {{ template "fullname" . }}-ssh
-        - name: PRIVATE_KEY_NAME
-          value: id_rsa
-        - name: PUBLIC_KEY_NAME
-          value: id_rsa.pub
-        - name: KEY_SIGNATURE
-          value: pipeline@banzaicloud.com
+      {{- end }}
 
       containers:
+      {{- if .Values.cloudsql.enabled  }}
+      - name: cloudsql-proxy
+        image: {{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}
+        command: ["/cloud_sql_proxy",
+                  "-instances={{ .Values.cloudsql.instance }}=tcp:3306"]
+      {{- end }}
+
       - name: pipeline
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}        
@@ -49,6 +43,7 @@ spec:
         - name: PIPELINE_PIPELINE_BASEPATH
           value: {{ .Values.global.pipelineBasepath | quote }}
 
+        {{- if .Values.mariadb.enabled  }}
         - name: PIPELINE_DATABASE_HOST
           value: "{{ .Release.Name }}-pipeline-db"
         - name: PIPELINE_DATABASE_DBNAME
@@ -60,6 +55,22 @@ spec:
             secretKeyRef:
               name:  "{{ .Release.Name }}-pipeline-db"
               key: mariadb-password
+        {{- else if .Values.cloudsql.enabled }}
+        - name: PIPELINE_DATABASE_HOST
+          value: "127.0.0.1"
+        - name: PIPELINE_DATABASE_DBNAME
+          value: {{ default "" .Values.cloudsql.dbName | quote }}
+        - name: PIPELINE_DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name:  "{{ template "fullname" . }}-cloudsql"
+              key: dbUserName
+        - name: PIPELINE_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name:  "{{ template "fullname" . }}-cloudsql"
+              key: dbUserPass
+        {{- end }}
 
         - name: PIPELINE_LOGGING_LOGFORMAT
           value: {{ .Values.logging.logformat | quote }}
@@ -180,11 +191,7 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /root/config/
-        
-        - name: ssh
-          mountPath: /root/.ssh
-          readOnly: true
-        
+
         - mountPath: /statestore
           name: statestore
 
@@ -201,9 +208,6 @@ spec:
       - name: config-volume
         configMap:
           name: "{{ template "fullname" . }}"
-      - name: ssh
-        secret:
-          secretName: {{ template "fullname" . }}-ssh
       - name: statestore
         {{- if and .Values.statestore.persistence.enabled (not .Values.statestore.persistence.existingClaim) }}
         persistentVolumeClaim:
