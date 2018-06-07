@@ -41,6 +41,14 @@ drone:
       DRONE_PROVIDER: "github"
       DRONE_GITHUB: "true"
 
+  cloudsql:
+    enabled: false
+    instance: ""
+    dbName: ""
+    dbUserName: ""
+    dbUserPass: ""
+
+
 global:
   pipelineBasepath: /pipeline
 
