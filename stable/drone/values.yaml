@@ -124,6 +124,9 @@ server:
   #    memory: 2Gi
   #    cpu: 1
 
+mariadb:
+  enabled: false
+
 ##
 ## CloudSQL configuration
 ##
