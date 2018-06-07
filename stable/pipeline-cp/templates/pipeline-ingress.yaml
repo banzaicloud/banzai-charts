@@ -9,12 +9,14 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik
     ingress.kubernetes.io/ssl-redirect: "false"
-    traefik.frontend.rule.type: PathPrefixStrip
 spec:
   rules:
     - http:
         paths:
-          - path: /pipeline
+          - path: /
             backend:
              serviceName: {{ .Release.Name }}-pipeline
              servicePort: 9090
+      {{- if .Values.pipeline.host }}
+      host: {{ .Values.pipeline.host }}
+      {{- end }}
