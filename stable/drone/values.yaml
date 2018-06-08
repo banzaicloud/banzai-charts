@@ -5,8 +5,8 @@ appVersion: "0.8.1"
 ##
 image:
   repository: "banzaicloud/drone"
-  tag: "0.3.0"
-  pullPolicy: "IfNotPresent"
+  tag: "kubernetes"
+  pullPolicy: "Always"
 
 ## Since version 8.x drone splitted agent and server into two
 ## different images.
@@ -16,8 +16,8 @@ image:
 ##
 agentImage:
   repository: "banzaicloud/drone"
-  tag: "0.3.0"
-  pullPolicy: "IfNotPresent"
+  tag: "kubernetes"
+  pullPolicy: "Always"
 
 service:
   httpPort: 80
