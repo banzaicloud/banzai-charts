@@ -16,7 +16,7 @@ spec:
 
     spec:
       initContainers:
-      {{- if .Values.mariadb.enabled  }}
+      {{- if .Values.mysql.enabled  }}
       - name: check-db-service
         image: busybox
         command: ['sh', '-c', 'until nslookup {{ .Release.Name }}-pipeline-db; do echo waiting for {{ .Release.Name }}-pipeline-db; sleep 1; done;']
@@ -43,18 +43,18 @@ spec:
         - name: PIPELINE_PIPELINE_BASEPATH
           value: {{ .Values.global.pipelineBasepath | quote }}
 
-        {{- if .Values.mariadb.enabled  }}
+        {{- if .Values.mysql.enabled  }}
         - name: PIPELINE_DATABASE_HOST
           value: "{{ .Release.Name }}-pipeline-db"
         - name: PIPELINE_DATABASE_DBNAME
-          value: {{ default "" .Values.mariadb.mariadbDatabase | quote }}
+          value: {{ default "" .Values.mysql.mysqlDatabase | quote }}
         - name: PIPELINE_DATABASE_USER
-          value: {{ default "" .Values.mariadb.mariadbUser | quote }}
+          value: {{ default "" .Values.mysql.mysqlUser | quote }}
         - name: PIPELINE_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name:  "{{ .Release.Name }}-pipeline-db"
-              key: mariadb-password
+              key: mysql-password
         {{- else if .Values.cloudsql.enabled }}
         - name: PIPELINE_DATABASE_HOST
           value: "127.0.0.1"
