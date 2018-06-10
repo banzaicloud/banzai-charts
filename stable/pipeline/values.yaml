@@ -83,56 +83,31 @@ statestore:
     accessMode: ReadWriteOnce
     size: 128Mi
 
+## mysql image version
+## ref: https://hub.docker.com/r/library/mysql/tags/
 ##
-## MariaDB chart configuration
-##
-mariadb:
-  enabled: false
+mysql:
+  enabled: true
   nameOverride: pipeline-db
 
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # mariadbRootPassword:
+  mysqlDatabase: pipeline
+  mysqlUser: bonanzabanzai
 
-  ## Create a database
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
-  ##
-  mariadbDatabase: pipeline
+  ## Default: random 10 character string
+  # mysqlPassword:
 
-  ## Create a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
-  ##
-  mariadbUser: bonanzabanzai
-  
-  ## Password for mariadbUser
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
-  ##
-  # mariadbPassword:
+  initializationFiles:
+    drone-db.sql: |-
+      CREATE DATABASE IF NOT EXISTS drone;
+      GRANT ALL PRIVILEGES ON drone.* TO 'bonanzabanzai'@'%';
+      FLUSH PRIVILEGES;
 
-  ## File containing SQL statements that will be executed by the server on startup.
-  ## ref: https://mariadb.com/kb/en/library/server-system-variables/#init_file
-  ##
-  initSQL: |-
-    CREATE DATABASE IF NOT EXISTS drone;
-    GRANT ALL PRIVILEGES ON drone.* TO 'bonanzabanzai'@'%';
-    FLUSH PRIVILEGES;
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     enabled: false
-    ## mariadb data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
-    # accessMode: ReadWriteOnce
-    # size: 8Gi
 
 ##
 ## CloudSQL configuration

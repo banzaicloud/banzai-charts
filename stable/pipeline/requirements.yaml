@@ -1,8 +1,8 @@
 dependencies:
-- name: mariadb
-  version: 2.1.3
+- name: mysql
+  version: 0.7.0
   repository: alias:banzaicloud-stable
-  condition: mariadb.enabled
+  condition: mysql.enabled
 
 - name: vault
   version: 0.5.6
