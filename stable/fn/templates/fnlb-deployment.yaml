@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: fnlb
-          image: {{ .Values.fnlb.image }}
+          image: {{ .Values.fnlb.image }}:{{ .Values.fnlb.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           resources:
 {{ toYaml .Values.fnlb.resources | indent 12 }}
@@ -44,16 +44,8 @@ spec:
           - "-listen=:8081"
           - "-mgmt-listen=:8082"
           - "-target-port=80"
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: fnlb
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: view
-subjects:
-  - kind: ServiceAccount
-    name: default
-    namespace: {{ .Release.Namespace }}
+      {{- if .Values.rbac.enabled }}
+      serviceAccountName: {{ template "fullname" . }}
+      {{- else }}
+      serviceAccountName: default
+      {{- end }}

@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: flow
-          image: {{ .Values.flow.image }}
+          image: {{ .Values.flow.image }}:{{ .Values.flow.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           resources:
 {{ toYaml .Values.flow.resources | indent 12 }}

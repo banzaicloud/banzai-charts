@@ -16,10 +16,6 @@ spec:
         heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
         role: fn-service
-      annotations:
-      {{- if .Values.fnserver.prometheus.enabled }}
-        prometheus.io/scrape: "true"
-      {{- end }}
     spec:
       {{- if .Values.fnserver.nodeSelector }}
       nodeSelector:
@@ -31,7 +27,7 @@ spec:
 {{- end }}
       containers:
       - name: fn-service
-        image: {{ .Values.fnserver.image }}
+        image: {{ .Values.fnserver.image }}:{{ .Values.fnserver.tag }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
         resources:
 {{ toYaml .Values.fnserver.resources | indent 12 }}
