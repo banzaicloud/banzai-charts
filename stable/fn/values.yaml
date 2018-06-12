@@ -10,42 +10,30 @@ fn:
     type: LoadBalancer
     annotations: {}
 
-  ## API Ingress configuration options
-  ##
-  ingress:
-    enabled: false
-    annotations:
-        # kubernetes.io/ingress.class: nginx
-        # kubernetes.io/tls-acme: "true"
-    tls:
-        # - secretName: fn-api.cluster.local
-        #   hosts:
-        #     - fn-api.cluster.local
-    url: fn-api.cluster.local
-
-
-
 fnlb:
-  image: fnproject/fnlb:latest
+  image: fnproject/fnlb
+  tag: 0.0.268
   logLevel: info
   resources: {}
 
 fnserver:
-  image: fnproject/fnserver:latest
+  image: fnproject/fnserver
+  tag: 0.3.461
   logLevel: info
   resources: {}
   nodeSelector: {}
   tolerations: []
-  prometheus:
-    enabled: true
+
 
 ui:
   enabled: true
   fnui:
-    image: fnproject/ui:latest
+    image: fnproject/ui
+    tag: 0.0.26
     resources: {}
   flowui:
-    image: fnproject/flow:ui
+    image: fnproject/flow
+    tag: ui
     resources: {}
   service:
     flowuiPort: 3000
@@ -53,30 +41,15 @@ ui:
     type: LoadBalancer
     annotations: {}
 
-  ## UI Ingress configuration options
-  ##
-  ingress:
-    enabled: false
-    annotations:
-        # kubernetes.io/ingress.class: nginx
-        # kubernetes.io/tls-acme: "true"
-    tls:
-        # - secretName: fn-ui.cluster.local
-        #   hosts:
-        #     - fn-ui.cluster.local
-    url: fn-ui.cluster.local
-
-
-
 flow:
-  image: fnproject/flow:latest
+  image: fnproject/flow
+  tag: 0.1.83
   logLevel: info
   service:
     port: 80
     type: ClusterIP
     annotations: {}
   resources: {}
-
 
 ##
 ## MySQL chart configuration
@@ -108,3 +81,12 @@ redis:
     accessMode: ReadWriteOnce
     size: 8Gi
   usePassword: false
+
+## Ingress configuration.
+## ref: https://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  enabled: false
+
+rbac:
+  enabled: false

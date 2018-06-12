@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: fn-ui
-          image: {{ .Values.ui.fnui.image }}
+          image: {{ .Values.ui.fnui.image }}:{{ .Values.ui.fnui.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           resources:
 {{ toYaml .Values.ui.fnui.resources | indent 12 }}
@@ -34,7 +34,7 @@ spec:
           - name: FN_API_URL
             value: http://{{ template "fullname" . }}-api
         - name: flow-ui
-          image: {{ .Values.ui.flowui.image }}
+          image: {{ .Values.ui.flowui.image }}:{{ .Values.ui.flowui.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           resources:
 {{ toYaml .Values.ui.flowui.resources | indent 12 }}
