@@ -131,11 +131,17 @@ vault:
     externalConfig:
       policies:
         - name: allow_accesstokens_and_orgs
-          rules: path "secret/accesstokens/*" {
-                  capabilities = ["create", "read", "update", "delete", "list"]
+          rules: path "secret/data/accesstokens/*" {
+                  capabilities = ["create", "read", "update"]
                 }
-                path "secret/orgs/*" {
-                  capabilities = ["create", "read", "update", "delete", "list"]
+                path "secret/metadata/accesstokens/*" {
+                  capabilities = ["delete", "list"]
+                }
+                path "secret/data/orgs/*" {
+                  capabilities = ["create", "read", "update"]
+                }
+                path "secret/metadata/orgs/*" {
+                  capabilities = ["delete", "list"]
                 }
       auth:
         - type: kubernetes
@@ -155,7 +161,7 @@ vault:
           type: kv
           description: General secrets.
           options:
-            version: 1
+            version: 2
 resources:
   requests:
     cpu: 250m
