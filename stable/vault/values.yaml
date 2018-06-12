@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: vault
-  tag: 0.10.1
+  tag: 0.10.2
   pullPolicy: Always
 service:
   name: vault
@@ -76,7 +76,7 @@ vault:
         type: kv
         description: General secrets.
         options:
-          version: 1
+          version: 2
   config:
     # A YAML representation of a final vault config.json file.
     # See https://www.vaultproject.io/docs/configuration/ for more information.
