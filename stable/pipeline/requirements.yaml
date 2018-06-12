@@ -4,5 +4,5 @@ dependencies:
   repository: alias:banzaicloud-stable
 
 - name: vault
-  version: 0.5.3
+  version: 0.5.6
   repository: alias:banzaicloud-stable
