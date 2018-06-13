@@ -10,10 +10,10 @@ metadata:
 spec:
   ports:
     - name: http
-      port: {{ .Values.zeppelin.service.externalPort }}
+      port: {{ .Values.service.externalPort }}
       protocol: TCP
-      targetPort: {{ .Values.zeppelin.service.internalPort }}
+      targetPort: {{ .Values.service.internalPort }}
   selector:
     app: {{ template "fullname" . }}
-  type: {{ .Values.zeppelin.service.type }}
+  type: {{ .Values.service.type }}
 

@@ -8,24 +8,27 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.zeppelin.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-
     spec:
       volumes:
         - name: config-volume
           configMap:
-            name: shiro-config
+            name: {{ template "fullname" . }}
             items:
+            - key: log4j.properties
+              path: log4j.properties
+            - key: log4j_k8s_cluster.properties
+              path: log4j_k8s_cluster.properties
             - key: shiro.ini
               path: shiro.ini
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.zeppelin.image.repository }}:{{ .Values.zeppelin.image.tag }}"
-        imagePullPolicy: {{ .Values.zeppelin.image.pullPolicy }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
           - name: SPARK_SUBMIT_OPTIONS
             value: >-
@@ -46,6 +49,7 @@ spec:
               --conf spark.kubernetes.resourceStagingServer.uri={{ .Values.sparkSubmitOptions.resourceStagingServerExt }}
               --conf spark.kubernetes.resourceStagingServer.internal.uri={{ .Values.sparkSubmitOptions.resourceStagingServerInt }}
               --conf spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
+              --conf spark.executor.extraJavaOptions="-Dlog4j.configuration={{ .Values.sparkSubmitOptions.log4jConfigPath }}"
               --conf spark.kubernetes.authenticate.driver.serviceAccountName={{ .Values.sparkSubmitOptions.driverServiceAccountName }}
               {{- if .Values.sparkSubmitOptions.eventLogDirectory }}
               --conf spark.eventLog.dir={{ .Values.sparkSubmitOptions.eventLogDirectory }}
@@ -55,28 +59,34 @@ spec:
               --conf spark.hadoop.fs.azure.account.key.{{ .Values.sparkSubmitOptions.azureStorageAccountName }}.blob.core.windows.net={{ .Values.sparkSubmitOptions.azureStorageAccessKey }}
               {{- end }}
           - name: ZEPPELIN_MEM
-            value: -Xms{{ .Values.zeppelin.vmMemoryOptions.initial }} -Xmx{{ .Values.zeppelin.vmMemoryOptions.max }}
+            value: -Xms{{ .Values.vmMemoryOptions.initial }} -Xmx{{ .Values.vmMemoryOptions.max }}
           {{- if .Values.pipelineIngress.enabled }}
           - name: JAVA_OPTS
             value: -Dzeppelin.server.context.path={{ .Values.pipelineIngress.baseURL }}
           {{- end }}
         ports:
-        - containerPort: {{ .Values.zeppelin.service.internalPort }}
+        - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           httpGet:
             path: {{ .Values.pipelineIngress.baseURL }}
-            port: {{ .Values.zeppelin.service.internalPort }}
+            port: {{ .Values.service.internalPort }}
           initialDelaySeconds: 30
           timeoutSeconds: 1
         readinessProbe:
           httpGet:
             path: {{ .Values.pipelineIngress.baseURL }}
-            port: {{ .Values.zeppelin.service.internalPort }}
+            port: {{ .Values.service.internalPort }}
           initialDelaySeconds: 20
           timeoutSeconds: 1
         volumeMounts:
           - name: config-volume
+            mountPath: /opt/zeppelin/conf/log4j.properties
+            subPath: log4j.properties
+          - name: config-volume
+            mountPath: /opt/zeppelin/conf/log4j_k8s_cluster.properties
+            subPath: log4j_k8s_cluster.properties
+          - name: config-volume
             mountPath: /opt/zeppelin/conf/shiro.ini
             subPath: shiro.ini
         resources:
-{{ toYaml .Values.zeppelin.resources | indent 12 }}
+{{ toYaml .Values.resources | indent 12 }}
