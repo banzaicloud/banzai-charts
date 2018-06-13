@@ -35,6 +35,9 @@ pipeline:
     WebhookUrl: ""
     Channel: ""
 
+pipeline-ui:
+  enabled: false
+
 drone:
   server:
     env:
