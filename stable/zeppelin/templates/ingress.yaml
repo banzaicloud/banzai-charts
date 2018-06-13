@@ -19,5 +19,5 @@ spec:
         - path: "{{ .Values.pipelineIngress.baseURL }}"
           backend:
             serviceName: {{ template "fullname" . }}
-            servicePort: {{ .Values.zeppelin.service.externalPort }}
+            servicePort: {{ .Values.service.externalPort }}
 {{- end }}

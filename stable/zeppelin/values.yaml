@@ -1,35 +1,45 @@
 # Default values for zeppelin
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+replicaCount: 1
 
-zeppelin:
-  replicaCount: 1
+image:
+  repository: banzaicloud/zeppelin-server
+  tag: v0.9.0-k8s-1.0.21
+  pullPolicy: IfNotPresent
 
-  image:
-    repository: banzaicloud/zeppelin-server
-    tag: v0.9.0-k8s-1.0.12
-    pullPolicy: IfNotPresent
+resources:
+  limits:
+    cpu: 2
+    memory: 2048Mi
+  requests:
+    cpu: 500m
+    memory: 1024Mi
 
-  resources:
-    limits:
-      cpu: 2
-      memory: 2048Mi
-    requests:
-      cpu: 500m
-      memory: 1024Mi
+vmMemoryOptions:
+  initial: 1024m
+  max: 2048m
 
-  vmMemoryOptions:
-    initial: 1024m
-    max: 2048m
-
-  service:
-    name: zeppelin-service
-    type: ClusterIP
-    internalPort: 8080
-    externalPort:  8080
+service:
+  name: zeppelin-service
+  type: ClusterIP
+  internalPort: 8080
+  externalPort:  8080
 
 username: "admin"
 password: "$shiro1$SHA-256$500000$VOmOT2BnDoOhH50MgrwgbQ==$wmPark/qVVhF3UFj63ojr9l6gKPoLsDUii60XA9KTTE="
+
+logService:
+  zeppelinLogLevel: DEBUG
+  zeppelinFacility: LOCAL4
+  zeppelinLogPattern: "%5p [%d] ({%t} %F[%M]:%L) - %m%n"
+  sparkLogLevel: INFO
+  sparkFacility: LOCAL4
+  sparkLogPattern: "[%p] XXX %c:%L - %m%n"
+  applicationLoggerName: application
+  applicationLogLevel: INFO
+  applicationFacility: LOCAL4
+  applicationLogPattern: "[%p] XXX %c:%L - %m%n"
 
 ingress:
   enabled: false
@@ -71,3 +81,4 @@ sparkSubmitOptions:
   azureStorageAccountName: ""
   azureStorageAccessKey: ""
   driverServiceAccountName: "spark"
+  log4jConfigPath: "file:///var/spark-data/spark-files/log4j_k8s_cluster.properties"
