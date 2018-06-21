@@ -38,6 +38,11 @@ pipeline:
 pipeline-ui:
   enabled: false
 
+telescopes:
+  enabled: false
+  telescopes:
+    appPort: 80
+
 drone:
   server:
     env:
