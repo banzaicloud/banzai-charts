@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-telescopes
+  namespace: default
+  labels:
+    release: {{ .Release.Name }}
+
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/ssl-redirect: "false"
+    traefik.frontend.rule.type: PathPrefixStrip
+    traefik.frontend.priority: "1"
+
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /telescopes
+            backend:
+             serviceName: {{ .Release.Name }}-telescopes
+             servicePort: 80

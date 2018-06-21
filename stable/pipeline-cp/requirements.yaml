@@ -26,3 +26,7 @@ dependencies:
   version: 0.1.2
   repository: alias:banzaicloud-stable
 
+- name: telescopes
+  version: 0.0.1
+  repository: alias:banzaicloud-stable
+  condition: telescopes.enabled
