@@ -1,0 +1,68 @@
+# Default values for telescopes
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+telescopes:
+
+  ## The official Banzai Spot Recommender image, change tag to use a different version.
+  ## https://hub.docker.com/r/banzaicloud/telescopes/tags/
+  ##
+  image:
+    repository: "banzaicloud/productinfo"
+    tag: "latest"
+
+    ## Specify an imagePullPolicy (Required)
+    ## It's recommended to change this to 'Always' if the image tag is 'latest'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
+    imagePullPolicy: IfNotPresent
+
+  replicas: 1
+
+  service:
+    ## Kubernetes service type
+    type: ClusterIP
+
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+
+    ## Provide any additonal annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # annotations:
+
+
+
+  logLevel: "info"
+
+  # The address to listen on for HTTP requests.
+  appPort: 9090
+
+
+  # Recommendations are cached for these instance types (comma separated list)
+  cacheInstanceTypes: "m4.xlarge,m5.xlarge,c5.xlarge"
+
+  # Time (in seconds) between reevaluating the recommendations.
+  reevaluationInterval: "1m0s"
+
+  #AWS region where the telescopes should work.
+  region: "eu-west-1"
+
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 120m
+
+  auth:
+    awsAccessKeyId: ""
+    awsSecretAccessKey: ""
+    gceApiKey: ""
+    gceCredentials: ""
+    gceProjectId: ""
+    azureSubscriptionId: ""
+    azureCredentials: ""
