@@ -24,6 +24,8 @@ spec:
         image: "{{ .Values.telescopes.image.repository }}:{{ .Values.telescopes.image.tag }}"
         imagePullPolicy: {{ .Values.telescopes.image.imagePullPolicy | quote }}
         env:
+          - name: BASEPATH
+            value: /recommender
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /credentials/google.json
           - name: AZURE_AUTH_LOCATION

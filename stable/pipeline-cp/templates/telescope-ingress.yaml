@@ -9,14 +9,13 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik
     ingress.kubernetes.io/ssl-redirect: "false"
-    traefik.frontend.rule.type: PathPrefixStrip
     traefik.frontend.priority: "1"
 
 spec:
   rules:
     - http:
         paths:
-          - path: /telescopes
+          - path: /recommender
             backend:
              serviceName: {{ .Release.Name }}-telescopes
              servicePort: 80
