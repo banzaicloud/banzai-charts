@@ -141,6 +141,12 @@ vault:
                 path "secret/metadata/orgs/*" {
                   capabilities = ["delete", "list"]
                 }
+                path "secret/data/banzaicloud/*" {
+                  capabilities = ["create", "read"]
+                }
+                path "secret/metadata/banzaicloud/*" {
+                  capabilities = ["list"]
+                }
       auth:
         - type: kubernetes
           # Allows creating roles in Vault which can be used later on for the Kubernetes based
