@@ -398,12 +398,15 @@ prometheus:
               target_label: __address__
             - action: labelmap
               regex: __meta_kubernetes_pod_label_(.+)
+            # these labels tell Prometheus to automatically attach source
+            # pod and namespace information to each collected sample, so
+            # that they'll be exposed in the custom metrics API automatically.
             - source_labels: [__meta_kubernetes_namespace]
               action: replace
-              target_label: kubernetes_namespace
+              target_label: namespace
             - source_labels: [__meta_kubernetes_pod_name]
               action: replace
-              target_label: kubernetes_pod_name
+              target_label: pod
 
         - job_name: 'banzaicloud-pushgateway'
           honor_labels: false
