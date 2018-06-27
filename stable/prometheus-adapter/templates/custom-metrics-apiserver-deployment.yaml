@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "k8s-prometheus-adapter.name" . }}
+    chart: {{ template "k8s-prometheus-adapter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  name: {{ template "k8s-prometheus-adapter.fullname" . }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "k8s-prometheus-adapter.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "k8s-prometheus-adapter.name" . }}
+        chart: {{ template "k8s-prometheus-adapter.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+      name: {{ template "k8s-prometheus-adapter.name" . }}
+    spec:
+      serviceAccountName: {{ template "k8s-prometheus-adapter.serviceAccountName" . }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+        - /adapter
+        - --secure-port=6443
+{{- if .Values.tls.enable }}
+        - --tls-cert-file=/var/run/serving-cert/tls.crt
+        - --tls-private-key-file=/var/run/serving-cert/tls.key
+{{- else }}
+        - --cert-dir=/tmp/cert
+{{- end }}
+        - --logtostderr=true
+        - --prometheus-url={{ .Values.prometheus.url }}
+        - --metrics-relist-interval={{ .Values.metricsRelistInterval }}
+        - --rate-interval={{ .Values.rateInterval }}
+        - --v={{ .Values.logLevel }}
+        ports:
+        - containerPort: 6443
+{{- if .Values.tls.enable }}
+        volumeMounts:
+        - mountPath: /var/run/serving-cert
+          name: volume-serving-cert
+          readOnly: true
+      volumes:
+      - name: volume-serving-cert
+        secret:
+          secretName: {{ template "k8s-prometheus-adapter.fullname" . }}
+{{- end }}
