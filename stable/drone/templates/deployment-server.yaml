@@ -65,6 +65,8 @@ spec:
         {{- else if .Values.cloudsql.enabled }}
             value: {{ .Values.cloudsql.dbUserName }}:{{ .Values.cloudsql.dbUserPass }}@tcp(127.0.0.1:3306)/drone?parseTime=true
         {{- end }}
+          - name: DRONE_BASEPATH
+            value: /build
 
           - name: PIPELINE_BASE_URL
             value: http://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090{{ .Values.global.pipelineBasepath }}
