@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```console
-$ helm install incubator/prometheus-adapter
+$ helm install banzaicloud-stable/prometheus-adapter
 ```
 
 ## Introduction
@@ -20,7 +20,7 @@ Kubernetes 1.9+
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release stable/prometheus-adapter
+$ helm install --name my-release banzaicloud-stable/prometheus-adapter
 ```
 
 This command deploys the prometheus operator with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -65,11 +65,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install --name my-release \
   --set logLevel=1 \
- stable/prometheus-adapter
+ banzaicloud-stable/prometheus-adapter
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release -f values.yaml stable/prometheus-adapter
+$ helm install --name my-release -f values.yaml banzaicloud-stable/prometheus-adapter
 ```
