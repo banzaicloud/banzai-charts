@@ -1,0 +1,99 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "productinfo.fullname" . }}
+  labels:
+    app: {{ template "productinfo.name" . }}
+    chart: {{ template "productinfo.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "productinfo.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "productinfo.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - "/bin/sh"
+            - "-ecx"
+            - |
+              /bin/productinfo \
+            {{- if .Values.devmode }}
+              --dev-mode \
+            {{- end }}
+              --log-level {{ .Values.logLevel }} \
+              --listen-address 0.0.0.0:{{ .Values.service.internalPort }} \
+              --provider gce \
+              --gce-project-id $GKE_PROJECT_ID \
+              --gce-api-key=$GKE_API_KEY \
+              --provider ec2 \
+              --provider azure \
+              --azure-subscription-id=$AZURE_SUBSCRIPTION_ID \
+          env:
+            - name: BASEPATH
+              value: /recommender
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /credentials/google.json
+            - name: AZURE_AUTH_LOCATION
+              value: /credentials/azure.json
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "productinfo.fullname" . }}
+                  key: awsAccessKeyId
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "productinfo.fullname" . }}
+                  key: awsSecretAccessKey
+            - name: GKE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "productinfo.fullname" . }}
+                  key: gceApiKey
+            - name: GKE_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "productinfo.fullname" . }}
+                  key: gceProjectId
+            - name: AZURE_SUBSCRIPTION_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "productinfo.fullname" . }}
+                  key: azureSubscriptionId
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.internalPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /productinfo
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /productinfo
+              port: http
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
