@@ -1,0 +1,8 @@
+dependencies:
+- name: spark-shuffle
+  version: 0.0.1
+  repository: alias:banzaicloud-stable
+
+- name: spark-rss
+  version: 0.0.1
+  repository: alias:banzaicloud-stable
