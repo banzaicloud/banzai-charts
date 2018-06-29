@@ -66,6 +66,7 @@ jobs:
                 fi
             done
 
+workflows:
   version: 2
   build-and-deploy:
     jobs:
