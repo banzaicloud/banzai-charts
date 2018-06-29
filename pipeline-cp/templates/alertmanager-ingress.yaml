@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-alertmanager-ingress
+  namespace: default
+  labels:
+    release: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/ingress.class: traefik
+
+    {{- if .Values.prometheus.ingress.auth.enabled }}
+    ingress.kubernetes.io/auth-type: "basic"
+    ingress.kubernetes.io/auth-secret: "{{ .Release.Name }}-alertmanager-traefik-secret"
+    {{- end }}
+
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /alertmanager
+            backend:
+              serviceName: {{ .Release.Name }}-prometheus-alertmanager
+              servicePort: 80

@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "autoscalingExporter.fullname" . }}"
+  labels:
+    app: "{{ template "autoscalingExporter.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.autoscalingExporter.replicaCount }}
+
+  template:
+    metadata:
+      labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+        app: {{ template "autoscalingExporter.fullname" . }}
+        component: "{{ template "autoscalingExporter.fullname" . }}"
+
+    spec:
+      containers:
+      - name: autoscalingexporter
+        image: "{{ .Values.autoscalingExporter.image.repository }}:{{ .Values.autoscalingExporter.image.tag }}"
+        imagePullPolicy: {{ .Values.autoscalingExporter.image.imagePullPolicy | quote }}
+
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          aws-autoscaling-exporter \
+          -listen-address=0.0.0.0:{{ .Values.autoscalingExporter.appPort }} \
+          -metrics-path={{ .Values.autoscalingExporter.metricsPath }} \
+          -recommender-url={{ .Values.autoscalingExporter.recommenderUrl }} \
+          -region={{ .Values.autoscalingExporter.region }} \
+          -log-level={{ .Values.autoscalingExporter.logLevel }}
+
+        ports:
+        - name: http
+          containerPort: {{ .Values.autoscalingExporter.appPort }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+
+        resources:
+{{ toYaml .Values.autoscalingExporter.resources | indent 10 }}
+
