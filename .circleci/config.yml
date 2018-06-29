@@ -22,29 +22,24 @@ jobs:
             GIT_TAG=${CIRCLE_TAG}
 
             helm init -c
-            
+
             if [ "$GIT_TAG" = "0.3.0" ]; then
                 BANZAICLOUD_STABLE_REPO=http://kubernetes-charts.banzaicloud.com
-                BANZAICLOUD_INCUBATOR_REPO=http://kubernetes-charts-incubator.banzaicloud.com
             elif [ "$GIT_TAG" = "" ]; then
                 BANZAICLOUD_STABLE_REPO=http://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/
-                BANZAICLOUD_INCUBATOR_REPO=http://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/
             elif [ "$GIT_TAG" != "" ]; then
                 BANZAICLOUD_STABLE_REPO=http://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/
-                BANZAICLOUD_INCUBATOR_REPO=http://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/
             fi
 
             helm repo remove local
 
             echo "REPO -> STABLE"
-            cd ./stable
 
             #TODO: Dirty hack to solve multi level dependency
             for i in $(seq 1 3);
             do
 
                 helm repo add banzaicloud-stable ${BANZAICLOUD_STABLE_REPO} || true
-                helm repo add banzaicloud-incubator ${BANZAICLOUD_INCUBATOR_REPO} || true
 
                 helm repo update
                 helm repo list
@@ -68,41 +63,6 @@ jobs:
                     s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/branch/${GIT_BRANCH}/
                 elif [ "$GIT_TAG" != "" ]; then
                     s3cmd sync /tmp/s3-chart/stable/* s3://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/
-                fi
-            done
-
-            echo "REPO -> INCUBATOR"
-            cd ../incubator
-
-            #TODO: Dirty hack to solve multi level dependency
-            for i in $(seq 1 3);
-            do
-
-                helm repo add banzaicloud-stable ${BANZAICLOUD_STABLE_REPO} || true
-                helm repo add banzaicloud-incubator ${BANZAICLOUD_INCUBATOR_REPO} || true
-
-                helm repo update
-                helm repo list
-
-                mkdir -p /tmp/s3-chart/incubator
-
-                echo "Dependency update and build"
-                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm dependency update {} \; -exec helm dependency build {} \;
-
-                echo "Remove requirements.lock files"
-                find . -maxdepth 3 -name requirements.lock -type f -delete -print
-
-                echo "Create helm packages"
-                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm package -d /tmp/s3-chart/incubator {} \;
-
-                helm repo index --url $BANZAICLOUD_INCUBATOR_REPO /tmp/s3-chart/incubator
-
-                if [ "$GIT_TAG" = "0.3.0" ]; then
-                    s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/
-                elif [ "$GIT_TAG" = "" ]; then
-                    s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/branch/${GIT_BRANCH}/
-                elif [ "$GIT_TAG" != "" ]; then
-                    s3cmd sync /tmp/s3-chart/incubator/* s3://kubernetes-charts-incubator.banzaicloud.com/release/${GIT_TAG}/
                 fi
             done
 
