@@ -1,6 +1,0 @@
-apiVersion: v1
-description: Etcd Helm chart for Kubernetes
-name: etcd
-version: 0.1
-appVersion: 3.2.9
-home: https://github.com/coreos/etcd
