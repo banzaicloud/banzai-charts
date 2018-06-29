@@ -43,6 +43,14 @@ telescopes:
   telescopes:
     appPort: 80
 
+productinfo:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefix
+  hosts:
+     - "/productinfo"
+
 drone:
   server:
     env:
