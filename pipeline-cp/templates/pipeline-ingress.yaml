@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-pipeline-ingress
+  namespace: default
+  labels:
+    release: {{ .Release.Name }}
+
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/ssl-redirect: "false"
+    traefik.frontend.rule.type: PathPrefixStrip
+
+    {{- if .Values.pipeline.ingress.auth.enabled }}
+    ingress.kubernetes.io/auth-type: "basic"
+    ingress.kubernetes.io/auth-secret: "{{ .Release.Name }}-pipeline-traefik-secret"
+    {{- end }}
+
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /pipeline
+            backend:
+             serviceName: {{ .Release.Name }}-pipeline
+             servicePort: 9090

@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "recommender.fullname" . }}"
+  labels:
+    app: "{{ template "recommender.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.recommender.replicaCount }}
+
+  template:
+    metadata:
+      labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+        app: {{ template "recommender.fullname" . }}
+        component: "{{ template "recommender.fullname" . }}"
+
+    spec:
+      containers:
+      - name: recommender
+        image: "{{ .Values.recommender.image.repository }}:{{ .Values.recommender.image.tag }}"
+        imagePullPolicy: {{ .Values.recommender.image.imagePullPolicy | quote }}
+
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          spot-recommender \
+          -listen-address=0.0.0.0:{{ .Values.recommender.appPort }} \
+          -cache-instance-types={{ .Values.recommender.cacheInstanceTypes }} \
+          -reevaluation-interval={{ .Values.recommender.reevaluationInterval }} \
+          -region={{ .Values.recommender.region }} \
+          -log-level={{ .Values.recommender.logLevel }}
+
+        ports:
+        - name: http
+          containerPort: {{ .Values.recommender.appPort }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+
+        resources:
+{{ toYaml .Values.recommender.resources | indent 10 }}
+

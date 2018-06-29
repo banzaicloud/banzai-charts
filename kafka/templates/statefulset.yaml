@@ -1,0 +1,57 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: kafka
+spec:
+  selector:
+    matchLabels:
+      app: kafka
+  serviceName: "kafka-dns"
+  replicas: 3
+  updateStrategy:
+    type: OnDelete
+  template:
+    metadata:
+      labels:
+        app: kafka
+      annotations:
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: broker
+        image: solsson/kafka:1.0.0@sha256:17fdf1637426f45c93c65826670542e36b9f3394ede1cb61885c6a4befa8f72d
+        env:
+        - name: KAFKA_LOG4J_OPTS
+          value: -Dlog4j.configuration=file:config/log4j.properties
+        - name: JMX_PORT
+          value: "5555"
+        ports:
+        - name: inside
+          containerPort: 9092
+        - name: outside
+          containerPort: 9094
+        - name: jmx
+          containerPort: 5555
+        command:
+        - sh
+        - -c
+        - "./bin/kafka-server-start.sh config/server.properties --override zookeeper.connect=zetcd-service:2181 --override log.retention.hours=-1 --override log.dirs=/var/lib/kafka/data/topics --override auto.create.topics.enable=false --override broker.id=${HOSTNAME##*-}"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        readinessProbe:
+          tcpSocket:
+            port: 9092
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/kafka/data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

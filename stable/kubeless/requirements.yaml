@@ -1,4 +1,0 @@
-dependencies:
-- name: kafka
-  version: 0.1
-  repository: alias:banzaicloud-stable

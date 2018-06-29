@@ -1,4 +1,0 @@
-apiVersion: v1
-description: A Helm chart for Kubeless
-name: kubeless
-version: 0.0.1

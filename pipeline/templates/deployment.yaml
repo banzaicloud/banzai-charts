@@ -1,0 +1,122 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+
+    spec:
+      initContainers:
+      - name: check-db-service
+        image: busybox
+        command: ['sh', '-c', 'until nslookup {{ .Release.Name }}-pipeline-db; do echo waiting for {{ .Release.Name }}-pipeline-db; sleep 1; done;']
+      - name: check-db-port
+        image: busybox
+        command: ['sh', '-c', 'echo STATUS nc -w 2 {{ .Release.Name }}-pipeline-db 3306']
+
+      containers:
+      - name: pipeline
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}        
+        env:
+        - name: KUBERNETES_RELEASE_NAME
+          value: "{{ .Release.Name }}"
+
+        - name: PIPELINE_DEV_HOST
+          value: "{{ .Release.Name }}-pipeline-db"
+        - name: PIPELINE_DEV_DBNAME
+          value: {{ default "" .Values.mariadb.mariadbDatabase | quote }}
+        - name: PIPELINE_DEV_USER
+          value: {{ default "" .Values.mariadb.mariadbUser | quote }}
+        - name: PIPELINE_DEV_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name:  "{{ .Release.Name }}-pipeline-db"
+              key: mariadb-password
+
+        - name: SLACK_WEBHOOK_URL
+          value: "{{ .Values.Slack.WebhookUrl }}"
+        - name: SLACK_CHANNEL
+          value: "{{ .Values.Slack.Channel }}"
+
+        - name: PIPELINE_DEV_RETRYATTEMPT
+          value: "{{ .Values.Helm.retryAttempt }}"
+        - name: PIPELINE_DEV_RETRYSLEEPSECONDS
+          value: "{{ .Values.Helm.retrySleepSeconds }}"
+
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: awsSecretAccessKey
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: awsAccessKeyId
+
+        - name: AZURE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azureClientId
+        - name: AZURE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azureClientSecret
+        - name: AZURE_SUBSCRIPTION_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azureSubscriptionId
+        - name: AZURE_TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azureTenantId
+
+        ports:
+        - containerPort: {{ .Values.service.internalPort }}
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.service.internalPort }}
+          initialDelaySeconds: 15
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.service.internalPort }}
+          initialDelaySeconds: 10
+
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+
+        volumeMounts:
+        - name: config-volume
+          mountPath: /root/conf/
+        - mountPath: /root/.ssh
+          name: ssh
+        - mountPath: /statestore
+          name: statestore
+
+
+      volumes:
+      - name: config-volume
+        configMap:
+          name: "{{ template "fullname" . }}"
+      - name: ssh
+        hostPath:
+          path: /opt/pipeline/.ssh/
+      - name: statestore
+        hostPath:
+          path: /opt/pipeline/statestore/
+
+      serviceAccountName: {{ template "fullname" . }}

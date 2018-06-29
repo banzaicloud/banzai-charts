@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "htAsgActionPlugin.fullname" . }}"
+  labels:
+    app: "{{ template "htAsgActionPlugin.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.htAsgActionPlugin.replicaCount }}
+
+  template:
+    metadata:
+      labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+        app: {{ template "htAsgActionPlugin.fullname" . }}
+        component: "{{ template "htAsgActionPlugin.fullname" . }}"
+
+    spec:
+      containers:
+      - name: ht-k8s-action-plugin
+        image: "{{ .Values.htAsgActionPlugin.image.repository }}:{{ .Values.htAsgActionPlugin.image.tag }}"
+        imagePullPolicy: {{ .Values.htAsgActionPlugin.image.imagePullPolicy | quote }}
+
+
+        ports:
+        - name: grpc
+          containerPort: {{ .Values.htAsgActionPlugin.bindAddr }}
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.htAsgActionPlugin.bindAddr }}
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.htAsgActionPlugin.bindAddr }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+
+        resources:
+{{ toYaml .Values.htAsgActionPlugin.resources | indent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /conf/
+      volumes:
+      - name: config
+        configMap:
+          name: {{ template "htAsgActionPlugin.fullname" . }}

@@ -1,0 +1,70 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.zeppelin.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.zeppelin.image.repository }}:{{ .Values.zeppelin.image.tag }}"
+        imagePullPolicy: {{ .Values.zeppelin.image.pullPolicy }}
+        env:
+          - name: SPARK_SUBMIT_OPTIONS
+            value: >-
+              --kubernetes-namespace {{ .Values.sparkSubmitOptions.k8sNameSpace }}
+              --conf spark.driver.cores={{ .Values.sparkSubmitOptions.sparkDriverCores }}
+              --conf spark.kubernetes.driver.limit.cores={{ .Values.sparkSubmitOptions.sparkDriverLimitCores }}
+              --conf spark.executor.cores={{ .Values.sparkSubmitOptions.sparkExecutorCores }}
+              --conf spark.driver.memory={{ .Values.sparkSubmitOptions.sparkDriverMemory }}
+              --conf spark.executor.memory={{ .Values.sparkSubmitOptions.sparkExecutorMemory }}
+              --conf spark.kubernetes.driver.docker.image={{ .Values.sparkSubmitOptions.DriverImage }}
+              --conf spark.kubernetes.executor.docker.image={{ .Values.sparkSubmitOptions.ExecutorImage }}
+              --conf spark.kubernetes.initcontainer.docker.image={{ .Values.sparkSubmitOptions.initContainerImage }}
+              --conf spark.dynamicAllocation.enabled={{ .Values.sparkSubmitOptions.dynamicAllocation }}
+              --conf spark.shuffle.service.enabled={{ .Values.sparkSubmitOptions.shuffleService }}
+              --conf spark.kubernetes.shuffle.namespace={{ .Values.sparkSubmitOptions.shuffleNameSpace }}
+              --conf spark.kubernetes.shuffle.labels={{ .Values.sparkSubmitOptions.shuffleLabels }}
+              --conf spark.metrics.conf={{ .Values.sparkSubmitOptions.sparkMetricsConf }}
+              --conf spark.kubernetes.resourceStagingServer.uri={{ .Values.sparkSubmitOptions.resourceStagingServerExt }}
+              --conf spark.kubernetes.resourceStagingServer.internal.uri={{ .Values.sparkSubmitOptions.resourceStagingServerInt }}
+              --conf spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
+              {{- if .Values.sparkSubmitOptions.eventLogDirectory }}
+              --conf spark.eventLog.dir={{ .Values.sparkSubmitOptions.eventLogDirectory }}
+              --conf spark.eventLog.enabled=true
+              {{- end }}
+              {{- if .Values.sparkSubmitOptions.azureStorageAccessKey }}
+              --conf spark.hadoop.fs.azure.account.key.{{ .Values.sparkSubmitOptions.azureStorageAccountName }}.blob.core.windows.net={{ .Values.sparkSubmitOptions.azureStorageAccessKey }}
+              {{- end }}
+          - name: ZEPPELIN_MEM
+            value: -Xms{{ .Values.zeppelin.vmMemoryOptions.initial }} -Xmx{{ .Values.zeppelin.vmMemoryOptions.max }}
+          {{- if .Values.pipelineIngress.enabled }}
+          - name: JAVA_OPTS
+            value: -Dzeppelin.server.context.path={{ .Values.pipelineIngress.baseURL }}
+          {{- end }}
+        ports:
+        - containerPort: {{ .Values.zeppelin.service.internalPort }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.pipelineIngress.baseURL }}
+            port: {{ .Values.zeppelin.service.internalPort }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.pipelineIngress.baseURL }}
+            port: {{ .Values.zeppelin.service.internalPort }}
+          initialDelaySeconds: 20
+          timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.zeppelin.resources | indent 12 }}
