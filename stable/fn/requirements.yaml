@@ -1,7 +1,0 @@
-dependencies:
-- name: mysql
-  version: 0.3.0
-  repository: https://kubernetes-charts.storage.googleapis.com/
-- name: redis
-  version: 1.0.4
-  repository: https://kubernetes-charts.storage.googleapis.com/
