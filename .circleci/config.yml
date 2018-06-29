@@ -34,7 +34,6 @@ jobs:
             helm repo remove local
 
             echo "REPO -> STABLE"
-            cd ./stable
 
             #TODO: Dirty hack to solve multi level dependency
             for i in $(seq 1 3);
