@@ -47,13 +47,21 @@ jobs:
                 mkdir -p /tmp/s3-chart/stable
 
                 echo "Dependency update and build"
-                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -exec helm dependency update {} \; -exec helm dependency build {} \;
+                if [ $i == 3 ]; then
+                    for chart in $(find -H . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print)
+                    do
+                        helm dependency update $chart
+                        helm dependency build $chart
+                    done
+                else
+                    find -H . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -exec helm dependency update {} \; -exec helm dependency build {} \;
+                fi
 
                 echo "Remove requirements.lock files"
-                find . -maxdepth 3 -name requirements.lock -type f -delete -print
+                find -H . -maxdepth 3 -name requirements.lock -type f -delete -print
 
                 echo "Create helm packages"
-                find . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm package -d /tmp/s3-chart/stable {} \;
+                find -H . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print -exec helm package -d /tmp/s3-chart/stable {} \;
 
                 helm repo index --url $BANZAICLOUD_STABLE_REPO /tmp/s3-chart/stable
 
