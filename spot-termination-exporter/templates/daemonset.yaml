@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: "{{ template "spotTerminationexporter.fullname" . }}"
+  labels:
+    app: "{{ template "spotTerminationexporter.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+
+  template:
+    metadata:
+      labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+        app: {{ template "spotTerminationexporter.fullname" . }}
+        component: "{{ template "spotTerminationexporter.fullname" . }}"
+
+    spec:
+      containers:
+      - name: spot-termination-exporter
+        image: "{{ .Values.spotTerminationexporter.image.repository }}:{{ .Values.spotTerminationexporter.image.tag }}"
+        imagePullPolicy: {{ .Values.spotTerminationexporter.image.imagePullPolicy | quote }}
+
+        command:
+        - "/bin/sh"
+        - "-ecx"
+        - |
+          spot-termination-exporter \
+          --bind-addr :{{ .Values.spotTerminationexporter.bindAddr }} \
+          --metrics-path {{ .Values.spotTerminationexporter.metricsPath }} \
+          --metadata-endpoint {{ .Values.spotTerminationexporter.metadataEndpoint }} \
+          --log-level {{ .Values.spotTerminationexporter.logLevel }}
+
+        ports:
+        - name: http
+          containerPort: {{ .Values.spotTerminationexporter.bindAddr }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+
+        resources:
+{{ toYaml .Values.spotTerminationexporter.resources | indent 10 }}
+

@@ -1,0 +1,51 @@
+# Default values for ht-k8s-action-plugin
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+htActionPlugin:
+
+  ## The official Banzai ht-k8s-action-plugin image, change tag to use a different version.
+  ## https://hub.docker.com/r/banzaicloud/ht-k8s-action-plugin/tags/
+  ##
+  image:
+    repository: "banzaicloud/ht-k8s-action-plugin"
+    tag: "0.0.1"
+
+    ## Specify an imagePullPolicy (Required)
+    ## It's recommended to change this to 'Always' if the image tag is 'latest'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
+    imagePullPolicy: IfNotPresent
+
+  replicas: 1
+
+  service:
+    ## Kubernetes service type
+    type: ClusterIP
+
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+
+    ## Provide any additonal annotations which may be required. This can be used to
+    ## set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # annotations:
+
+
+
+  logLevel: "debug"
+  logFormat: "text"
+  
+  # The address to listen on for HTTP requests. 
+  bindAddr: 8887
+
+
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 120m

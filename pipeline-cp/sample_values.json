@@ -1,0 +1,71 @@
+{
+    "traefik": {
+        "dashboard": {
+            "auth": {
+                "basic": {
+                    "admin": ""
+                }
+            }
+        }
+    },
+    "drone": {
+        "server": {
+            "env": {
+                "DRONE_ORGS" : "",
+                "DRONE_GITHUB_CLIENT" : "",
+                "DRONE_GITHUB_SECRET" : ""
+            }
+        }
+    },
+    "pipeline": {
+        "ingress": {
+            "user": "",
+            "password": "",
+            "auth": {
+                "enabled": true
+            }
+        },
+        "awsSecretAccessKey": "",
+        "awsAccessKeyId": "",
+        "azureClientId": "",
+        "azureClientSecret": "",
+        "azureSubscriptionId": "",
+        "azureTenantId": "",
+        "Helm": {
+            "retryAttempt": "",
+            "retrySleepSeconds": ""
+        },
+        "Slack": {
+            "WebhookUrl": "",
+            "Channel": ""
+        },
+        "image": {
+            "tag": ""
+        }
+    },
+    "prometheus": {
+        "ingress": {
+            "user": "",
+            "password": "",
+            "auth": {
+                "enabled": true
+            }
+
+        },
+        "alertmanager": {
+            "slack_api_url": "",
+            "slack_channel": "",
+            "smtp_address": "",
+            "smtp_username": "",
+            "smtp_password": "",
+            "smtp_to": "",
+            "smtp_from": ""
+        }
+    },
+    "grafana": {
+        "server": {
+            "adminUser": "",
+            "adminPassword": ""
+        }
+    }
+}

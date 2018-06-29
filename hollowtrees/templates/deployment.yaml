@@ -1,0 +1,55 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "hollowtrees.fullname" . }}"
+  labels:
+    app: "{{ template "hollowtrees.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.hollowtrees.replicaCount }}
+
+  template:
+    metadata:
+      labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+        app: {{ template "hollowtrees.fullname" . }}
+        component: "{{ template "hollowtrees.fullname" . }}"
+
+    spec:
+      containers:
+      - name: hollowtrees
+        image: "{{ .Values.hollowtrees.image.repository }}:{{ .Values.hollowtrees.image.tag }}"
+        imagePullPolicy: {{ .Values.hollowtrees.image.imagePullPolicy | quote }}
+
+
+        ports:
+        - name: http
+          containerPort: {{ .Values.hollowtrees.bindAddr }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+
+        resources:
+{{ toYaml .Values.hollowtrees.resources | indent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /root/conf/
+      volumes:
+      - name: config
+        configMap:
+          name: {{ template "hollowtrees.fullname" . }}

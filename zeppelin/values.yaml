@@ -1,0 +1,69 @@
+# Default values for zeppelin
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+zeppelin:
+  replicaCount: 1
+
+  image:
+    repository: banzaicloud/zeppelin-server
+    tag: v0.8.0-k8s-1.0.93
+    pullPolicy: IfNotPresent
+
+  resources:
+    limits:
+      cpu: 2
+      memory: 2048Mi
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+
+  vmMemoryOptions:
+    initial: 1024m
+    max: 2048m
+
+  service:
+    name: zeppelin-service
+    type: ClusterIP
+    internalPort: 8080
+    externalPort:  8080
+
+ingress:
+  enabled: false
+
+ingresspasswordgenerator:
+  image:
+    repository: banzaicloud/htpasswd-gen
+    tag: "0.1"
+    pullPolicy: IfNotPresent
+
+pipelineIngress:
+  enabled: true
+  ingressURL:
+  baseURL: /zeppelin
+  auth:
+    enabled: false
+    username: ""
+    password: ""
+
+sparkSubmitOptions:
+  k8sNameSpace: default
+  sparkDriverCores: 1
+  sparkDriverLimitCores: 2
+  sparkExecutorCores: 1
+  sparkDriverMemory: 4G
+  sparkExcutorMemory: 2G
+  sparkMetricsConf: /opt/spark/conf/metrics.properties
+  dynamicAllocation: true
+  shuffleService: true
+  shuffleNameSpace: default
+  shuffleLabels: app=spark-shuffle-service,spark-version=2.2.0
+  DriverImage: banzaicloud/spark-driver-r:v2.2.0-k8s-1.0.197
+  ExecutorImage: banzaicloud/spark-executor-r:v2.2.0-k8s-1.0.197
+  initContainerImage: banzaicloud/spark-init:v2.2.0-k8s-1.0.197
+  resourceStagingServerInt: http://spark-rss:10000
+  resourceStagingServerExt: http://spark-rss:10000
+  sparkLocalDir: /tmp/spark-local
+  eventLogDirectory: ""
+  azureStorageAccountName: ""
+  azureStorageAccessKey: ""
