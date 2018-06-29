@@ -23,6 +23,10 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: secretgce
+            mountPath: /credentials
+            readOnly: true
           command:
             - "/bin/sh"
             - "-ecx"
@@ -85,6 +89,15 @@ spec:
               port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+      volumes:
+        - name: secretgce
+          secret:
+            secretName: {{ template "productinfo.fullname" . }}
+            items:
+            - key: gceCredentials
+              path: google.json
+            - key: azureCredentials
+              path: azure.json
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
