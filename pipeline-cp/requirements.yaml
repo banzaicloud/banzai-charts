@@ -32,6 +32,6 @@ dependencies:
   condition: telescopes.enabled
 
 - name: productinfo
-  version: 0.1.2
+  version: 0.1.1
   repository: alias:banzaicloud-stable
   condition: productinfo.enabled
