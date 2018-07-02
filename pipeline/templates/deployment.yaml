@@ -175,19 +175,23 @@ spec:
           value: /vault/tls/ca.crt
 
         - name: PIPELINE_PIPELINE_CERTFILE
-          value: /pipeline/tls/server.crt
+          value: /tls/server.crt
         - name: PIPELINE_PIPELINE_KEYFILE
-          value: /pipeline/tls/server.key
+          value: /tls/server.key
 
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
-          tcpSocket:
+          httpGet:
+            path: {{ .Values.global.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
+            scheme: HTTPS
           initialDelaySeconds: 15
         readinessProbe:
-          tcpSocket:
+          httpGet:
+            path: {{ .Values.global.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
+            scheme: HTTPS
           initialDelaySeconds: 10
 
         resources:
@@ -207,7 +211,7 @@ spec:
           mountPath: /vault/tls
 
         - name: pipeline-tls
-          mountPath: /pipeline/tls
+          mountPath: /tls
 
       volumes:
       - name: gke-credential
