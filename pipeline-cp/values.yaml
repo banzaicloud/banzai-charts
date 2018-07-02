@@ -13,6 +13,8 @@ traefik:
   memoryLimit: 250Mi
   debug:
     enabled: false
+  ssl:
+    insecureSkipVerify: true
 
 pipeline:
   host: ""

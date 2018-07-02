@@ -12,3 +12,5 @@ traefik:
   rbac:
     enabled: true
 
+  ssl:
+    insecureSkipVerify: true
