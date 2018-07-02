@@ -16,7 +16,7 @@ spec:
           - path: /
             backend:
              serviceName: {{ .Release.Name }}-pipeline
-             servicePort: 443
+             servicePort: 9090
       {{- if .Values.pipeline.host }}
       host: {{ .Values.pipeline.host }}
       {{- end }}

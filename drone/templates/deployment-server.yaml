@@ -69,7 +69,7 @@ spec:
             value: /build
 
           - name: PIPELINE_BASE_URL
-            value: http://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090{{ .Values.global.pipelineBasepath }}
+            value: https://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090{{ .Values.global.pipelineBasepath }}
 
         volumeMounts:
         - mountPath: /var/lib/drone
