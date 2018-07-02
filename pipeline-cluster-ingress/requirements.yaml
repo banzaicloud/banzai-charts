@@ -1,6 +1,6 @@
 dependencies:
 - name: traefik
-  version: 1.14.2
+  version: 1.34.0
   repository: https://kubernetes-charts.storage.googleapis.com/
 
 
