@@ -34,7 +34,7 @@ PORT=$(cat /etc/kubicorn/cluster.json | jq -r '.values.itemMap.INJECTEDPORT | to
 PUBLICIP=$(ec2metadata --public-ipv4 | cut -d " " -f 2)
 PRIVATEIP=$(ec2metadata --local-ipv4 | cut -d " " -f 2)
 
-kubeadm reset
+kubeadm reset -f 
 kubeadm init --apiserver-bind-port ${PORT} --token ${TOKEN}  --apiserver-advertise-address ${PUBLICIP} --apiserver-cert-extra-sans ${PUBLICIP} ${PRIVATEIP}
 
 sed -i -e 's|    - --address=127.0.0.1|    - --address=127.0.0.1\n    - --cloud-provider=aws\n    - --attach-detach-reconcile-sync-period=1m0s|' /etc/kubernetes/manifests/kube-controller-manager.yaml
