@@ -32,7 +32,7 @@ sed -i -e 's|Environment="KUBELET_CADVISOR_ARGS=--cadvisor-port=0"|Environment="
 TOKEN=$(cat /etc/kubicorn/cluster.json | jq -r '.values.itemMap.INJECTEDTOKEN')
 PORT=$(cat /etc/kubicorn/cluster.json | jq -r '.values.itemMap.INJECTEDPORT | tonumber')
 PUBLICIP=$(ec2metadata --public-ipv4 | cut -d " " -f 2)
-PRIVATEIP=$(ip addr show dev eth0 | awk '/inet / {print $2}' | cut -d"/" -f1)
+PRIVATEIP=$(ec2metadata --local-ipv4 | cut -d " " -f 2)
 
 kubeadm reset
 kubeadm init --apiserver-bind-port ${PORT} --token ${TOKEN}  --apiserver-advertise-address ${PUBLICIP} --apiserver-cert-extra-sans ${PUBLICIP} ${PRIVATEIP}
@@ -57,7 +57,7 @@ parameters:
 EOF
 
 # Thanks Kelsey :)
-kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.2.1/weave-daemonset-k8s-1.7.yaml --kubeconfig /etc/kubernetes/admin.conf
+kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.3.0/weave-daemonset-k8s-1.7.yaml --kubeconfig /etc/kubernetes/admin.conf
 
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
