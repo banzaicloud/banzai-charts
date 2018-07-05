@@ -94,7 +94,7 @@ spec:
             value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Xms{{ .Values.resources.requests.memory }}M
           {{- if .Values.pipelineIngress.enabled }}
           - name: JAVA_OPTS
-            value: -Dzeppelin.server.context.path={{ .Values.pipelineIngress.baseURL }}
+            value: -Dzeppelin.server.context.path={{ .Values.pipelineIngress.baseURL }} {{ .Values.additionalOptions }}
           {{- end }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
