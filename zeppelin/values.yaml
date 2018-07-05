@@ -5,20 +5,16 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/zeppelin-server
-  tag: v0.9.0-k8s-1.0.21
+  tag: v0.9.0-k8s-1.0.30
   pullPolicy: IfNotPresent
 
 resources:
   limits:
     cpu: 2
-    memory: 2048Mi
+    memory: 2048
   requests:
     cpu: 500m
-    memory: 1024Mi
-
-vmMemoryOptions:
-  initial: 1024m
-  max: 2048m
+    memory: 1024
 
 service:
   name: zeppelin-service
@@ -27,7 +23,7 @@ service:
   externalPort:  8080
 
 username: "admin"
-password: "$shiro1$SHA-256$500000$VOmOT2BnDoOhH50MgrwgbQ==$wmPark/qVVhF3UFj63ojr9l6gKPoLsDUii60XA9KTTE="
+password: "zeppelin"
 
 logService:
   zeppelinLogLevel: DEBUG

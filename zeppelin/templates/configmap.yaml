@@ -45,9 +45,9 @@ data:
     log4j.appender.{{ .Values.logService.applicationLoggerName }}.layout.conversionPattern={{ .Values.logService.applicationLogPattern }}
     {{- end }}
 
-  shiro.ini: |-
+  shiro.ini.template: |-
     [users]
-    {{ .Values.username }} = {{ .Values.password }}, admin
+    {{ .Values.username }} = ADMIN_PASSWORD, admin
 
     [main]
     sessionManager = org.apache.shiro.web.session.mgt.DefaultWebSessionManager
@@ -62,9 +62,6 @@ data:
     iniRealm.credentialsMatcher = $passwordMatcher
 
     [roles]
-    role1 = *
-    role2 = *
-    role3 = *
     admin = *
 
     [urls]
