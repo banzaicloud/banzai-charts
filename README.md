@@ -4,37 +4,6 @@ At Banzai Cloud we use Helm as our package manager to deploy Kubernetes applicat
 
 >We made Helm deployments available through a RESTful API as well - [Helm via REST](https://banzaicloud.com/blog/helm-rest-api/)
 
-### Chart collections
-  
-- [Stable](stable/)
-  - [Drone](stable/drone)
-  - [etcd operator](stable/etcd-operator )
-  - [etcd](stable/etcd)
-  - [Hollowtrees](stable/hollowtrees)
-  - [Hollowtrees AWS autoscaling exporter](stable/aws-autoscaling-exporter)
-  - [Hollowtrees AWS autoscaling plugin](stable/ht-aws-asg-action-plugin)
-  - [Hollowtrees Kubernetes plugin](stable/ht-k8s-action-plugin)
-  - [Hollowtrees spot instance recommender](stable/spot-recommender)
-  - [Hollowtrees spot termination exporter](stable/termination-exporter)
-  - [Fn](stable/fn)
-  - [Kafka](stable/kafka)
-  - [Kubeless](stable/kubeless)
-  - [MariaDB](stable/mariadb)
-  - [OpenFaaS](stable/openfaas)
-  - [Pipeline cluster ingress](stable/pipeline-cluster-ingress)
-  - [Pipeline cluster monitor](stable/pipeline-cluster-monitor)
-  - [Pipeline cluster](stable/pipeline-cluster)
-  - [Pipeline control plane](stable/pipeline-cluster-cp)
-  - [Pipeline](stable/pipeline)
-  - [Spark history server](stable/spark-hs)
-  - [Spark resource staging server](stable/spark-rss)
-  - [Spark shuffle](stable/spark-shuffle)
-  - [Spark](stable/spark)
-  - [Spring Boot](/stable/spring-boot)
-  - [Vault](stable/vault)
-  - [Zeppelin](stable/zeppelin)
-- [Incubator](incubator/)
-
 ### Testing
 
 Helm has some `requirements` for testing charts which can be cumbersome or requires resources developers might not have on their laptop. We have automated testing of Helm charts from a **feature** branch. 
