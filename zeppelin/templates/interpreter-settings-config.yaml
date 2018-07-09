@@ -1,0 +1,595 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-interpreter-config
+data:
+  interpreter.json: |-
+    {
+      "interpreterSettings": {
+        "2CYM9BXZH": {
+          "id": "2CYM9BXZH",
+          "name": "sh",
+          "group": "sh",
+          "properties": {
+            "zeppelin.shell.principal": {
+              "name": "zeppelin.shell.principal",
+              "value": "",
+              "type": "string"
+            },
+            "shell.working.directory.user.home": {
+              "name": "shell.working.directory.user.home",
+              "value": false,
+              "type": "checkbox"
+            },
+            "zeppelin.shell.auth.type": {
+              "name": "zeppelin.shell.auth.type",
+              "value": "",
+              "type": "string"
+            },
+            "zeppelin.shell.keytab.location": {
+              "name": "zeppelin.shell.keytab.location",
+              "value": "",
+              "type": "string"
+            },
+            "shell.command.timeout.millisecs": {
+              "name": "shell.command.timeout.millisecs",
+              "value": "60000",
+              "type": "number"
+            }
+          },
+          "status": "READY",
+          "interpreterGroup": [
+            {
+              "name": "sh",
+              "class": "org.apache.zeppelin.shell.ShellInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "sh",
+                "editOnDblClick": false
+              }
+            }
+          ],
+          "dependencies": [],
+          "option": {
+            "remote": true,
+            "port": -1,
+            "isExistingProcess": false,
+            "setPermission": false,
+            "owners": [],
+            "isUserImpersonate": false
+          }
+        },
+        "2CXX5TW2H": {
+          "id": "2CXX5TW2H",
+          "name": "spark",
+          "group": "spark",
+          "properties": {
+            "spark.executor.memory": {
+              "name": "spark.executor.memory",
+              "value": "",
+              "type": "string"
+            },
+            "zeppelin.spark.concurrentSQL": {
+              "name": "zeppelin.spark.concurrentSQL",
+              "value": false,
+              "type": "checkbox"
+            },
+            "zeppelin.R.knitr": {
+              "name": "zeppelin.R.knitr",
+              "value": true,
+              "type": "checkbox"
+            },
+            "zeppelin.R.cmd": {
+              "name": "zeppelin.R.cmd",
+              "value": "R",
+              "type": "string"
+            },
+            "spark.app.name": {
+              "name": "spark.app.name",
+              "value": "zri",
+              "type": "string"
+            },
+            "zeppelin.R.image.width": {
+              "name": "zeppelin.R.image.width",
+              "value": "100%",
+              "type": "number"
+            },
+            "spark.submit.deployMode": {
+              "name": "spark.submit.deployMode",
+              "value": "cluster",
+              "type": "string"
+            },
+            "zeppelin.spark.importImplicit": {
+              "name": "zeppelin.spark.importImplicit",
+              "value": true,
+              "type": "checkbox"
+            },
+            "zeppelin.dep.additionalRemoteRepository": {
+              "name": "zeppelin.dep.additionalRemoteRepository",
+              "value": "spark-packages,http://dl.bintray.com/spark-packages/maven,false;",
+              "type": "textarea"
+            },
+            "zeppelin.spark.maxResult": {
+              "name": "zeppelin.spark.maxResult",
+              "value": "1000",
+              "type": "number"
+            },
+            "master": {
+              "name": "master",
+              "value": "k8s://https://kubernetes:443",
+              "type": "string"
+            },
+            "zeppelin.pyspark.python": {
+              "name": "zeppelin.pyspark.python",
+              "value": "python",
+              "type": "string"
+            },
+            "args": {
+              "name": "args",
+              "value": "",
+              "type": "string"
+            },
+            "zeppelin.dep.localrepo": {
+              "name": "zeppelin.dep.localrepo",
+              "value": "local-repo",
+              "type": "string"
+            },
+            "zeppelin.spark.sql.stacktrace": {
+              "name": "zeppelin.spark.sql.stacktrace",
+              "value": false,
+              "type": "checkbox"
+            },
+            "zeppelin.spark.useHiveContext": {
+              "name": "zeppelin.spark.useHiveContext",
+              "value": true,
+              "type": "checkbox"
+            },
+            "zeppelin.spark.unSupportedVersionCheck": {
+              "name": "zeppelin.spark.unSupportedVersionCheck",
+              "value": true,
+              "type": "checkbox"
+            },
+            "zeppelin.R.render.options": {
+              "name": "zeppelin.R.render.options",
+              "value": "out.format \u003d \u0027html\u0027, comment \u003d NA, echo \u003d FALSE, results \u003d \u0027asis\u0027, message \u003d F, warning \u003d F",
+              "type": "textarea"
+            },
+            "zeppelin.spark.printREPLOutput": {
+              "name": "zeppelin.spark.printREPLOutput",
+              "value": true,
+              "type": "checkbox"
+            },
+            "spark.cores.max": {
+              "name": "spark.cores.max",
+              "value": "",
+              "type": "number"
+            }
+          },
+          "status": "READY",
+          "interpreterGroup": [
+            {
+              "name": "spark",
+              "class": "org.apache.zeppelin.spark.SparkInterpreter",
+              "defaultInterpreter": true,
+              "editor": {
+                "language": "scala"
+              }
+            },
+            {
+              "name": "sql",
+              "class": "org.apache.zeppelin.spark.SparkSqlInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "sql"
+              }
+            },
+            {
+              "name": "dep",
+              "class": "org.apache.zeppelin.spark.DepInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "scala"
+              }
+            },
+            {
+              "name": "pyspark",
+              "class": "org.apache.zeppelin.spark.PySparkInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "python"
+              }
+            },
+            {
+              "name": "r",
+              "class": "org.apache.zeppelin.spark.SparkRInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "r"
+              }
+            },
+            {
+              "name": "ipyspark",
+              "class": "org.apache.zeppelin.spark.IPySparkInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "python",
+                "editOnDblClick": false
+              }
+            }
+          ],
+          "dependencies": [],
+          "option": {
+            "remote": true,
+            "port": -1,
+            "perNote": "isolated",
+            "perUser": "",
+            "isExistingProcess": false,
+            "setPermission": false,
+            "owners": [],
+            "isUserImpersonate": false
+          }
+        },
+        "2CYVXG82Y": {
+          "id": "2CYVXG82Y",
+          "name": "angular",
+          "group": "angular",
+          "properties": {},
+          "status": "READY",
+          "interpreterGroup": [
+            {
+              "name": "angular",
+              "class": "org.apache.zeppelin.angular.AngularInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "editOnDblClick": true
+              }
+            }
+          ],
+          "dependencies": [],
+          "option": {
+            "remote": true,
+            "port": -1,
+            "isExistingProcess": false,
+            "setPermission": false,
+            "owners": [],
+            "isUserImpersonate": false
+          }
+        },
+        "2D1B3T53H": {
+          "id": "2D1B3T53H",
+          "name": "groovy",
+          "group": "groovy",
+          "properties": {
+            "GROOVY_CLASSES": {
+              "name": "GROOVY_CLASSES",
+              "value": "",
+              "type": "textarea"
+            }
+          },
+          "status": "READY",
+          "interpreterGroup": [
+            {
+              "name": "groovy",
+              "class": "org.apache.zeppelin.groovy.GroovyInterpreter",
+              "defaultInterpreter": false
+            }
+          ],
+          "dependencies": [],
+          "option": {
+            "remote": true,
+            "port": -1,
+            "isExistingProcess": false,
+            "setPermission": false,
+            "owners": [],
+            "isUserImpersonate": false
+          }
+        },
+        "2D245VY96": {
+          "id": "2D245VY96",
+          "name": "file",
+          "group": "file",
+          "properties": {
+            "hdfs.url": {
+              "name": "hdfs.url",
+              "value": "http://localhost:50070/webhdfs/v1/",
+              "type": "url"
+            },
+            "hdfs.user": {
+              "name": "hdfs.user",
+              "value": "hdfs",
+              "type": "string"
+            },
+            "hdfs.maxlength": {
+              "name": "hdfs.maxlength",
+              "value": "1000",
+              "type": "number"
+            }
+          },
+          "status": "READY",
+          "interpreterGroup": [
+            {
+              "name": "hdfs",
+              "class": "org.apache.zeppelin.file.HDFSFileInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "editOnDblClick": false
+              }
+            }
+          ],
+          "dependencies": [],
+          "option": {
+            "remote": true,
+            "port": -1,
+            "isExistingProcess": false,
+            "setPermission": false,
+            "owners": [],
+            "isUserImpersonate": false
+          }
+        },
+        "2D1KRUTHV": {
+          "id": "2D1KRUTHV",
+          "name": "jdbc",
+          "group": "jdbc",
+          "properties": {
+            "default.url": {
+              "name": "default.url",
+              "value": "jdbc:postgresql://localhost:5432/",
+              "type": "string"
+            },
+            "default.driver": {
+              "name": "default.driver",
+              "value": "org.postgresql.Driver",
+              "type": "string"
+            },
+            "zeppelin.jdbc.principal": {
+              "name": "zeppelin.jdbc.principal",
+              "value": "",
+              "type": "string"
+            },
+            "default.completer.ttlInSeconds": {
+              "name": "default.completer.ttlInSeconds",
+              "value": "120",
+              "type": "number"
+            },
+            "default.password": {
+              "name": "default.password",
+              "value": "",
+              "type": "password"
+            },
+            "default.completer.schemaFilters": {
+              "name": "default.completer.schemaFilters",
+              "value": "",
+              "type": "textarea"
+            },
+            "default.splitQueries": {
+              "name": "default.splitQueries",
+              "value": false,
+              "type": "checkbox"
+            },
+            "default.user": {
+              "name": "default.user",
+              "value": "gpadmin",
+              "type": "string"
+            },
+            "zeppelin.jdbc.concurrent.max_connection": {
+              "name": "zeppelin.jdbc.concurrent.max_connection",
+              "value": "10",
+              "type": "number"
+            },
+            "common.max_count": {
+              "name": "common.max_count",
+              "value": "1000",
+              "type": "number"
+            },
+            "default.precode": {
+              "name": "default.precode",
+              "value": "",
+              "type": "textarea"
+            },
+            "zeppelin.jdbc.auth.type": {
+              "name": "zeppelin.jdbc.auth.type",
+              "value": "",
+              "type": "string"
+            },
+            "zeppelin.jdbc.concurrent.use": {
+              "name": "zeppelin.jdbc.concurrent.use",
+              "value": true,
+              "type": "checkbox"
+            },
+            "zeppelin.jdbc.keytab.location": {
+              "name": "zeppelin.jdbc.keytab.location",
+              "value": "",
+              "type": "string"
+            }
+          },
+          "status": "READY",
+          "interpreterGroup": [
+            {
+              "name": "sql",
+              "class": "org.apache.zeppelin.jdbc.JDBCInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "sql",
+                "editOnDblClick": false
+              }
+            }
+          ],
+          "dependencies": [],
+          "option": {
+            "remote": true,
+            "port": -1,
+            "isExistingProcess": false,
+            "setPermission": false,
+            "owners": [],
+            "isUserImpersonate": false
+          }
+        },
+        "2D2A8488A": {
+          "id": "2D2A8488A",
+          "name": "md",
+          "group": "md",
+          "properties": {
+            "markdown.parser.type": {
+              "name": "markdown.parser.type",
+              "value": "pegdown",
+              "type": "string"
+            }
+          },
+          "status": "READY",
+          "interpreterGroup": [
+            {
+              "name": "md",
+              "class": "org.apache.zeppelin.markdown.Markdown",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "markdown",
+                "editOnDblClick": true
+              }
+            }
+          ],
+          "dependencies": [],
+          "option": {
+            "remote": true,
+            "port": -1,
+            "isExistingProcess": false,
+            "setPermission": false,
+            "owners": [],
+            "isUserImpersonate": false
+          }
+        },
+        "2CXW23SU3": {
+          "id": "2CXW23SU3",
+          "name": "python",
+          "group": "python",
+          "properties": {
+            "zeppelin.python": {
+              "name": "zeppelin.python",
+              "value": "python",
+              "type": "string"
+            },
+            "zeppelin.ipython.launch.timeout": {
+              "name": "zeppelin.ipython.launch.timeout",
+              "value": "30000",
+              "type": "number"
+            },
+            "zeppelin.python.useIPython": {
+              "name": "zeppelin.python.useIPython",
+              "value": true,
+              "type": "checkbox"
+            },
+            "zeppelin.python.maxResult": {
+              "name": "zeppelin.python.maxResult",
+              "value": "1000",
+              "type": "number"
+            }
+          },
+          "status": "READY",
+          "interpreterGroup": [
+            {
+              "name": "python",
+              "class": "org.apache.zeppelin.python.PythonInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "python",
+                "editOnDblClick": false
+              }
+            },
+            {
+              "name": "ipython",
+              "class": "org.apache.zeppelin.python.IPythonInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "python",
+                "editOnDblClick": false,
+                "completionKey": "TAB"
+              }
+            },
+            {
+              "name": "sql",
+              "class": "org.apache.zeppelin.python.PythonInterpreterPandasSql",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "sql",
+                "editOnDblClick": false,
+                "completionKey": "TAB"
+              }
+            },
+            {
+              "name": "conda",
+              "class": "org.apache.zeppelin.python.PythonCondaInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "sh",
+                "editOnDblClick": false
+              }
+            },
+            {
+              "name": "docker",
+              "class": "org.apache.zeppelin.python.PythonDockerInterpreter",
+              "defaultInterpreter": false,
+              "editor": {
+                "language": "sh",
+                "editOnDblClick": false
+              }
+            }
+          ],
+          "dependencies": [],
+          "option": {
+            "remote": true,
+            "port": -1,
+            "isExistingProcess": false,
+            "setPermission": false,
+            "owners": [],
+            "isUserImpersonate": false
+          }
+        }
+      },
+      "interpreterBindings": {
+        "2CYJ77JJ3": [
+          "2CXX5TW2H",
+          "2D2A8488A",
+          "2CYVXG82Y",
+          "2CYM9BXZH",
+          "2D245VY96",
+          "2CXW23SU3",
+          "2D1KRUTHV",
+          "2D1B3T53H"
+        ]
+      },
+      "interpreterRepositories": [
+        {
+          "id": "central",
+          "type": "default",
+          "url": "http://repo1.maven.org/maven2/",
+          "releasePolicy": {
+            "enabled": true,
+            "updatePolicy": "daily",
+            "checksumPolicy": "warn"
+          },
+          "snapshotPolicy": {
+            "enabled": true,
+            "updatePolicy": "daily",
+            "checksumPolicy": "warn"
+          },
+          "mirroredRepositories": [],
+          "repositoryManager": false
+        },
+        {
+          "id": "local",
+          "type": "default",
+          "url": "file:///root/.m2/repository",
+          "releasePolicy": {
+            "enabled": true,
+            "updatePolicy": "daily",
+            "checksumPolicy": "warn"
+          },
+          "snapshotPolicy": {
+            "enabled": true,
+            "updatePolicy": "daily",
+            "checksumPolicy": "warn"
+          },
+          "mirroredRepositories": [],
+          "repositoryManager": false
+        }
+      ]
+    }

@@ -17,7 +17,7 @@ spec:
       volumes:
         - name: config-init-volume
           configMap:
-            name: {{ template "fullname" . }}
+            name: {{ template "fullname" . }}-config
             items:
             - key: log4j.properties
               path: log4j.properties
@@ -25,6 +25,18 @@ spec:
               path: log4j_k8s_cluster.properties
             - key: shiro.ini.template
               path: shiro.ini.template
+        - name: zeppelin-site-config-volume
+          configMap:
+            name: {{ template "fullname" . }}-site-config
+            items:
+            - key: zeppelin-site.xml
+              path: zeppelin-site.xml
+        - name: interpreter-config-volume
+          configMap:
+            name: {{ template "fullname" . }}-interpreter-config
+            items:
+            - key: interpreter.json
+              path: interpreter.json
         - name: config-volume
           emptyDir: {}
       initContainers:
@@ -55,6 +67,12 @@ spec:
           - name: config-init-volume
             mountPath: /opt/zeppelin/conf/shiro.ini.template
             subPath: shiro.ini.template
+          - name: zeppelin-site-config-volume
+            mountPath: /opt/zeppelin/conf/zeppelin-site.xml
+            subPath: zeppelin-site.xml
+          - name: interpreter-config-volume
+            mountPath: /opt/zeppelin/conf/interpreter.json
+            subPath: interpreter.json
           - name: config-volume
             mountPath: /opt/zeppelin/prepared_conf
       containers:
@@ -88,14 +106,10 @@ spec:
               --conf spark.eventLog.enabled=true
               {{- end }}
               {{- if .Values.sparkSubmitOptions.azureStorageAccessKey }}
-              --conf spark.hadoop.fs.azure.account.key.{{ .Values.sparkSubmitOptions.azureStorageAccountName }}.blob.core.windows.net={{ .Values.sparkSubmitOptions.azureStorageAccessKey }}
+              --conf spark.hadoop.fs.azure.account.key.{{ .Values.azureStorageAccountName }}.blob.core.windows.net={{ .Values.azureStorageAccessKey }}
               {{- end }}
           - name: ZEPPELIN_MEM
             value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Xms{{ .Values.resources.requests.memory }}M
-          {{- if .Values.pipelineIngress.enabled }}
-          - name: JAVA_OPTS
-            value: -Dzeppelin.server.context.path={{ .Values.pipelineIngress.baseURL }} {{ .Values.additionalOptions }}
-          {{- end }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
