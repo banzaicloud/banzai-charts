@@ -25,7 +25,7 @@ spec:
         command: ["/cloud_sql_proxy",
                   "-instances={{ .Values.cloudsql.instance }}=tcp:3306"]
       {{- end }}
-      - name: {{ template "drone.fullname" . }}-server
+      - name: drone-server
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         command: ["/bin/drone-server"]
         imagePullPolicy: {{ .Values.image.pullPolicy }}

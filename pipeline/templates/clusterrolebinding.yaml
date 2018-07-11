@@ -5,7 +5,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: pipeline
-    namespace: default
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: cluster-admin
