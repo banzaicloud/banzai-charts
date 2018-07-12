@@ -10,10 +10,10 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - name: {{ template "productinfo.fullname" . }}
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.internalPort }}
       protocol: TCP
-      name: http
   selector:
     app: {{ template "productinfo.name" . }}
     release: {{ .Release.Name }}

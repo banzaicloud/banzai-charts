@@ -32,9 +32,6 @@ spec:
             - "-ecx"
             - |
               /bin/productinfo \
-            {{- if .Values.devmode }}
-              --dev-mode \
-            {{- end }}
               --log-level {{ .Values.logLevel }} \
               --listen-address 0.0.0.0:{{ .Values.service.internalPort }} \
               --provider gce \
@@ -42,10 +39,10 @@ spec:
               --gce-api-key=$GKE_API_KEY \
               --provider ec2 \
               --provider azure \
-              --azure-subscription-id=$AZURE_SUBSCRIPTION_ID \
+              --azure-subscription-id=$AZURE_SUBSCRIPTION_ID
           env:
-            - name: BASEPATH
-              value: /recommender
+            - name: PRODUCTINFO_BASEPATH
+              value: {{ .Values.basePath }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /credentials/google.json
             - name: AZURE_AUTH_LOCATION
@@ -81,11 +78,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /productinfo
+              path: {{ .Values.basePath }}/status
               port: http
           readinessProbe:
             httpGet:
-              path: /productinfo
+              path: {{ .Values.basePath }}/status
               port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
