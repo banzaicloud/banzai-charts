@@ -32,7 +32,7 @@ export KUBECONFIG=/etc/kubernetes/kubelet.conf
 
 until kubectl get node | grep $(hostname -f)
 do
-  kubeadm reset
+  kubeadm reset -f 
   kubeadm join --discovery-token-unsafe-skip-ca-verification --token ${TOKEN} ${MASTER}
   echo "Waiting for Master to start up..."
   sleep 10
