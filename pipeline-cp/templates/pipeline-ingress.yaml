@@ -1,11 +1,10 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-pipeline-ingress
+  name: {{ .Release.Name }}-pipeline
   namespace: default
   labels:
     release: {{ .Release.Name }}
-
   annotations:
     kubernetes.io/ingress.class: traefik
     ingress.kubernetes.io/ssl-redirect: "false"

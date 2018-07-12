@@ -39,21 +39,44 @@ pipeline:
 
 pipeline-ui:
   enabled: false
+  ingress:
+    enabled: false
+    hosts:
+       - "/ui"
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      traefik.frontend.rule.type: PathPrefix
 
 telescopes:
   enabled: false
-  telescopes:
-    appPort: 80
+  ingress:
+    enabled: true
+    hosts:
+       - "/recommender"
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      traefik.frontend.rule.type: PathPrefixStrip
 
 productinfo:
   enabled: false
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.frontend.rule.type: PathPrefix
-  hosts:
-     - "/productinfo"
+  basePath: /productinfo
+  ingress:
+    enabled: true
+    hosts:
+       - "/productinfo"
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      traefik.frontend.rule.type: PathPrefix
 
 drone:
+  enabled: true
+  ingress:
+    enabled: false
+    hosts:
+       - "/build"
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      traefik.frontend.rule.type: PathPrefixStrip
   server:
     env:
       DRONE_DEBUG: "false"
