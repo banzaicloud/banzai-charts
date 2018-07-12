@@ -1,10 +1,10 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "pipeline-ui.fullname" . }}
   labels:
-    app: {{ template "name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app: {{ template "pipeline-ui.name" . }}
+    chart: {{ template "pipeline-ui.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
+        app: {{ template "pipeline-ui.name" . }}
         release: {{ .Release.Name }}
     spec:
       containers:
@@ -20,13 +20,13 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: {{ .Values.service.port }}
+        - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           tcpSocket:
-            port: {{ .Values.service.port }}
+            port: {{ .Values.service.internalPort }}
         readinessProbe:
           tcpSocket:
-            port: {{ .Values.service.port }}
+            port: {{ .Values.service.internalPort }}
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/conf.d/
@@ -35,4 +35,4 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: "{{ template "fullname" . }}-config-{{ .Release.Revision }}"
+            name: {{ template "pipeline-ui.fullname" . }}
