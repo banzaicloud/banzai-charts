@@ -47,7 +47,9 @@ tolerations: []
 
 affinity: {}
 
-logLevel: "info"
+logLevel: "debug"
+
+basePath: ""
 
 auth:
   awsAccessKeyId: ""
