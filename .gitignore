@@ -2,3 +2,4 @@
 *.lock
 *.tgz
 index.yaml
+.DS_Store
