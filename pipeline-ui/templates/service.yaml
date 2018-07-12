@@ -1,18 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "pipeline-ui.fullname" . }}
   labels:
-    app: {{ template "name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app: {{ template "pipeline-ui.name" . }}
+    chart: {{ template "pipeline-ui.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-  - port: {{ .Values.service.port }}
-    protocol: TCP
-    name: {{ .Values.service.name }}
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.internalPort }}
+      protocol: TCP
+      name: {{ template "pipeline-ui.fullname" . }}
   selector:
-    app: {{ template "name" . }}
+    app: {{ template "pipeline-ui.name" . }}
     release: {{ .Release.Name }}
