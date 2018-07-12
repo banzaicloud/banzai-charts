@@ -8,100 +8,55 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.telescopes.replicaCount }}
-
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
         heritage: "{{ .Release.Service }}"
         release: "{{ .Release.Name }}"
         app: {{ template "telescopes.fullname" . }}
-        component: "{{ template "telescopes.fullname" . }}"
-
+        component: "{{ template "telescopes.name" . }}"
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}
     spec:
       containers:
       - name: telescopes
-        image: "{{ .Values.telescopes.image.repository }}:{{ .Values.telescopes.image.tag }}"
-        imagePullPolicy: {{ .Values.telescopes.image.imagePullPolicy | quote }}
-        env:
-          - name: BASEPATH
-            value: /recommender
-          - name: GOOGLE_APPLICATION_CREDENTIALS
-            value: /credentials/google.json
-          - name: AZURE_AUTH_LOCATION
-            value: /credentials/azure.json
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "telescopes.fullname" . }}
-                key: awsAccessKeyId
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "telescopes.fullname" . }}
-                key: awsSecretAccessKey
-          - name: GKE_API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "telescopes.fullname" . }}
-                key: gceApiKey
-          - name: GKE_PROJECT_ID
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "telescopes.fullname" . }}
-                key: gceProjectId
-          - name: AZURE_SUBSCRIPTION_ID
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "telescopes.fullname" . }}
-                key: azureSubscriptionId
-
-        volumeMounts:
-        - name: secretgce
-          mountPath: /credentials
-          readOnly: true
-
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.imagePullPolicy | quote }}
         command:
         - "/bin/sh"
         - "-ecx"
         - |
-          telescopes \
-          --listen-address=0.0.0.0:{{ .Values.telescopes.appPort }} \
-          --log-level={{ .Values.telescopes.logLevel }} \
-          --provider=gce \
-          --gce-project-id=$GKE_PROJECT_ID \
-          --gce-api-key=$GKE_API_KEY \
-          --dev-mode \
-          --provider ec2 \
-          --provider=azure \
-          --azure-subscription-id=$AZURE_SUBSCRIPTION_ID
-
+          /bin/telescopes \
+          --listen-address=0.0.0.0:{{ .Values.service.internalPort }} \
+          --log-level={{ .Values.app.logLevel }} \
+          --productinfo-address={{ .Values.app.productInfoAddress }} \
+        {{- if .Values.app.vaultAddress }}
+          --vault-address={{ .Values.app.vaultAddress }} \
+        {{- end }}
+        {{- if .Values.app.tokenSigningKey }}
+          --token-signing-key={{ .Values.app.tokenSigningKey }} \
+        {{- end }}
+        {{- if .Values.app.devMode }}
+          --dev-mode
+        {{- end }}
         ports:
         - name: http
-          containerPort: {{ .Values.telescopes.appPort }}
+          containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           httpGet:
-            path: /status
+            path: {{ .Values.app.basePath }}/status
             port: http
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           httpGet:
-            path: /status
+            path: {{ .Values.app.basePath }}/status
             port: http
             httpHeaders:
           initialDelaySeconds: 30
           timeoutSeconds: 3
           periodSeconds: 5
         resources:
-{{ toYaml .Values.telescopes.resources | indent 10 }}
-      volumes:
-        - name: secretgce
-          secret:
-            secretName: {{ template "telescopes.fullname" . }}
-            items:
-            - key: gceCredentials
-              path: google.json
-            - key: azureCredentials
-              path: azure.json
+{{ toYaml .Values.resources | indent 10 }}

@@ -8,10 +8,12 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  type: {{ .Values.telescopes.service.type }}
+  type: {{ .Values.service.type }}
   ports:
-  - name: http
-    port: {{ default "9090" .Values.telescopes.appPort }}
-    targetPort: http
+    - name: {{ template "telescopes.fullname" . }}
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.internalPort }}
+      protocol: TCP
   selector:
     app: "{{ template "telescopes.fullname" . }}"
+    release: {{ .Release.Name }}
