@@ -42,23 +42,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the telescopes chart and their default values.
 
-|               Parameter             |                          Description                         |                   Default                   |
-| ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------- |
-| `telescopes.name`                  |  Telescopes container name                              | `telescopes`                               |
-| `telescopes.image`                 | Telescopes container image                             | `banzaicloud/telescopes:{VERSION}`     |
-| `telescopes.replicaCount`          | Replica Count                                                | `3`                                         |
-| `telescopes.service.type`          | Kubernetes service type to expose                            | `ClusterIP`                                 |
-| `telescopes.service.nodePort`      | Port to bind to for NodePort service type                    | `nil`                                       |
-| `telescopes.service.annotations`   | Additional annotations to add to service                     | `nil`                                       |
-| `telescopes.imagePullPolicy`       | Image pull policy.                                           | `IfNotPresent`                              |
-| `telescopes.logLevel`              | Log level                                        | `info`                                      |
-| `telescopes.appPort`               | Port to bind to for Recommender service                      | `9090`                                      |
-| `telescopes.cacheInstanceTypes`    | Recommendations are cached for these instance types          | `m4.xlarge,m5.xlarge,c5.xlarge`             |
-| `telescopes.reevaluationInterval`  | Time (in seconds) between reevaluating the recommendations.  | `1m0s`                                      |
-| `telescopes.region`                | AWS region where the recommender should work.                | `eu-west-1`                                 |
-| `telescopes.resources`             | CPU/Memory resource requests/limits                          | Memory: `256Mi`, CPU: `100m`                |
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. 
+|          Parameter          |                Description                            |             Default             |
+| --------------------------- | ----------------------------------------------------- | ------------------------------- |
+| `image.repository`          | Container image repository                            | `banzaicloud/telescopes`        |
+| `image.tag       `          | Container image tag                                   | `latest`                        |
+| `image.pullPolicy`          | Container pull policy                                 | `Always`                        |
+| `service.type`              | The kubernetes service type to use                    | `ClusterIP`                     |
+| `service.name`              | The kubernetes service name to use                    | `telescopes`                    |
+| `service.port`              | Port to bind to for NodePort service type             | `nil`                           |
+| `service.annotations`       | The kubernetes service annotations                    | `nil`                           |
+| `app.logLevel`              | Log level                                             | `info`                          |
+| `app.productInfoAddress`    | The address of the Product Info service               | `http://localhost:9090/api/v1`  |
+| `app.devMode`               | Developer mode                                        | `false`                         |
+| `app.vaultAddress`          | The vault address for authentication token management | `nil`                           |
+| `app.tokenSigningKey`       | The token signing key for the authentication process  | `nil`                           |
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 

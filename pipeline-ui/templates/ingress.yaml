@@ -1,13 +1,13 @@
 {{- if .Values.ingress.enabled -}}
-{{- $serviceName := include "drone.fullname" . -}}
-{{- $servicePort := .Values.service.httpPort -}}
+{{- $serviceName := include "pipeline-ui.fullname" . -}}
+{{- $servicePort := .Values.service.internalPort -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "drone.fullname" . }}
+  name: {{ template "pipeline-ui.fullname" . }}
   labels:
-    app: {{ template "drone.name" . }}
-    chart: {{ template "drone.chart" . }}
+    app: {{ template "pipeline-ui.name" . }}
+    chart: {{ template "pipeline-ui.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}
@@ -37,4 +37,3 @@ spec:
               servicePort: {{ $servicePort }}
   {{- end}}
 {{- end }}
-

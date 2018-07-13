@@ -17,8 +17,9 @@ spec:
         release: "{{ .Release.Name }}"
         component: agent
     spec:
+      serviceAccount: {{ template "drone.fullname" . }}-agent
       containers:
-      - name: {{ template "drone.fullname" . }}-agent
+      - name: drone-agent
         image: "{{ .Values.agentImage.repository }}:{{ .Values.agentImage.tag }}"
         command: ["/bin/drone-agent"]
         imagePullPolicy: {{ .Values.agentImage.pullPolicy }}

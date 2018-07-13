@@ -1,6 +1,6 @@
 name: drone
 home: https://drone.io/
-version: 0.1.5
+version: 0.2.0
 appVersion: 0.8.5
 description: Drone CI
 keywords:
@@ -11,6 +11,7 @@ keywords:
 - drone
 - drone.io
 - go
+- kubernetes
 sources:
 - https://github.com/drone/drone
 maintainers:
