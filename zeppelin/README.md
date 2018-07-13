@@ -32,8 +32,10 @@ The following tables lists the configurable parameters of the Zeppelin Sever cha
 | logService.applicationLogLevel          | no      | log4j log level for Application logs | by default: INFO |
 | logService.applicationLogPattern        | no      | log4j log pattern for Application logs | by default: "[%p] %c:%L - %m%n" |
 | sparkSubmitOptions.eventLogDirectory                     | yes      |the URL to the directory for event logs |s3a://yourBucketName<br>wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net<br>gs://yourBucketName|  
-| sparkSubmitOptions.azureStorageAccountName          | only in case of using Azure Storage| Name of your Azure storage account        | see Notes |
-| sparkSubmitOptions.azureStorageAccessKey            | only in case of using Azure Storage| Access key for your Azure storage account | see Notes |
+| notebookStorage.type                     | no      |storage type for notebooks |s3<br>azure<br>gs<br>by default no storage is configured|
+| notebookStorage.path                     | no      |storage path for notebooks |bucket name in case of S3 / GS, file share name for Azure| 
+| azureStorageAccountName          | only in case of using Azure Storage| Name of your Azure storage account        | see Notes |
+| azureStorageAccessKey            | only in case of using Azure Storage| Access key for your Azure storage account | see Notes |
 
 ## Notes
 

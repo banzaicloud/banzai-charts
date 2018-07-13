@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "fullname" . }}-config
 data:
   log4j.properties: |-
     log4j.rootLogger = INFO, stdout, {{- if .Values.logService.host }}, syslog{{- end }}
