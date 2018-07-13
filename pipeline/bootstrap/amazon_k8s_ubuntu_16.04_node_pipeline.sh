@@ -31,7 +31,7 @@ systemctl restart kubelet.service
 
 export KUBECONFIG=/etc/kubernetes/kubelet.conf
 
-until kubectl get node | grep $(hostname -f)
+until kubectl get node | grep ${HOSTNAME}
 do
   kubeadm reset -f 
   kubeadm join --discovery-token-unsafe-skip-ca-verification --node-name ${HOSTNAME} --token ${TOKEN} ${MASTER}
