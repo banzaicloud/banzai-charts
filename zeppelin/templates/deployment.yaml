@@ -56,7 +56,7 @@ spec:
             cp conf/* prepared_conf;
             export NEW_PWD=$(java -jar /opt/zeppelin/bin/shiro-tools-hasher-1.3.2-cli.jar -gs -i 500000 -f shiro1 -a SHA-256 $ZEPPELIN_PASSWORD);
             echo $NEW_PWD;
-            sed 's/ADMIN_PASSWORD/'$NEW_PWD'/g' /opt/zeppelin/prepared_conf/shiro.ini.template > /opt/zeppelin/prepared_conf/shiro.ini;
+            sed 's|ADMIN_PASSWORD|'$NEW_PWD'|g' /opt/zeppelin/prepared_conf/shiro.ini.template > /opt/zeppelin/prepared_conf/shiro.ini;
         volumeMounts:
           - name: config-init-volume
             mountPath: /opt/zeppelin/conf/log4j.properties
