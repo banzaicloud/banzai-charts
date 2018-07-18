@@ -13,7 +13,10 @@ spec:
       port: {{ .Values.service.externalPort }}
       protocol: TCP
       targetPort: {{ .Values.service.internalPort }}
+    - name: rpc
+      port: {{ .Values.service.rpcPort }}
+      protocol: TCP
+      targetPort: {{ .Values.service.rpcPort }}     
   selector:
     app: {{ template "fullname" . }}
   type: {{ .Values.service.type }}
-

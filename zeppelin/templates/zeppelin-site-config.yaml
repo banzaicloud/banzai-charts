@@ -32,8 +32,21 @@ data:
     </property>
 
     <property>
+      <name>zeppelin.server.rpc.hostName</name>
+      <value>{{ template "fullname" . }}</value>
+      <description>RPC server address</description>
+    </property>
+
+    <property>
+      <name>zeppelin.server.rpc.portRange</name>
+      <value>{{ .Values.service.rpcPort }}:{{ .Values.service.rpcPort }}</value>
+      <description>RPC Server address port</description>
+    </property>
+
+
+    <property>
       <name>zeppelin.server.port</name>
-      <value>8080</value>
+      <value>{{ .Values.service.internalPort }}</value>
       <description>Server port.</description>
     </property>
 
