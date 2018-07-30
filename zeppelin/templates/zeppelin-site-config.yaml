@@ -89,7 +89,7 @@ data:
     {{- if eq .Values.notebookStorage.type "s3" }}
     <property>
       <name>zeppelin.notebook.s3.bucket</name>
-      <value>s3://{{ .Values.notebookStorage.path }}</value>
+      <value>{{ .Values.notebookStorage.path }}</value>
       <description>S3 bucket path</description>
     </property>
     <property>
