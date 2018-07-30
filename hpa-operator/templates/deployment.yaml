@@ -20,6 +20,9 @@ spec:
         heritage: "{{ .Release.Service }}"
         release: "{{ .Release.Name }}"
     spec:
+{{ if .Values.rbac.install }}
+      serviceAccountName: {{ template "hpa-operator.fullname" . }}
+{{ end }}
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
