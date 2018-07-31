@@ -24,29 +24,34 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-          - name: secretgce
+          - name: {{ template "productinfo.fullname" . }}-credentials
             mountPath: /credentials
+            readOnly: true
+          - name: {{ template "productinfo.fullname" . }}-oci
+            mountPath: /.oci
             readOnly: true
           command:
             - "/bin/sh"
             - "-ecx"
             - |
               /bin/productinfo \
-              --log-level {{ .Values.logLevel }} \
+              --gce-api-key=$GKE_API_KEY \
+              --azure-subscription-id=$AZURE_SUBSCRIPTION_ID \
+              --log-level {{ .Values.app.logLevel }} \
               --listen-address 0.0.0.0:{{ .Values.service.internalPort }} \
               --provider gce \
-              --gce-project-id $GKE_PROJECT_ID \
-              --gce-api-key=$GKE_API_KEY \
               --provider ec2 \
               --provider azure \
-              --azure-subscription-id=$AZURE_SUBSCRIPTION_ID
+              --provider oracle
           env:
             - name: PRODUCTINFO_BASEPATH
-              value: {{ .Values.basePath }}
+              value: {{ .Values.app.basePath }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /credentials/google.json
             - name: AZURE_AUTH_LOCATION
               value: /credentials/azure.json
+            - name: ORACLE_CLI_CONFIG_LOCATION
+              value: /.oci/oci.properties
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -62,11 +67,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "productinfo.fullname" . }}
                   key: gceApiKey
-            - name: GKE_PROJECT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "productinfo.fullname" . }}
-                  key: gceProjectId
             - name: AZURE_SUBSCRIPTION_ID
               valueFrom:
                 secretKeyRef:
@@ -87,7 +87,7 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
-        - name: secretgce
+        - name: {{ template "productinfo.fullname" . }}-credentials
           secret:
             secretName: {{ template "productinfo.fullname" . }}
             items:
@@ -95,6 +95,11 @@ spec:
               path: google.json
             - key: azureCredentials
               path: azure.json
+            - key: ociKey
+              path: oci_key.pem
+        - name: {{ template "productinfo.fullname" . }}-oci
+          configMap:
+            name: "{{ template "productinfo.fullname" . }}"
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
