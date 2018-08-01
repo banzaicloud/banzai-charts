@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/productinfo
-  tag: 0.1.1
+  tag: 0.1.3
   pullPolicy: IfNotPresent
 
 service:
@@ -19,7 +19,7 @@ ingress:
   annotations: {}
     #kubernetes.io/ingress.class: traefik
     #ingress.kubernetes.io/ssl-redirect: "false"
-    #traefik.frontend.rule.type: PathPrefix
+    #traefik.frontend.rule.type: PathPrefixStrip
   hosts:
     # - "/"
     # - "domain.com/xyz"
