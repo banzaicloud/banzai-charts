@@ -32,6 +32,12 @@ rules:
   - statefulsets
   verbs:
   - "*"
+- apiGroups:
+  - autoscaling
+  resources:
+  - '*'
+  verbs:
+  - '*'
 
 ---
 
