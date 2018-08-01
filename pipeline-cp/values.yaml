@@ -59,7 +59,8 @@ telescopes:
 
 productinfo:
   enabled: false
-  basePath: /productinfo
+  app:
+    basePath: /productinfo
   ingress:
     enabled: true
     hosts:
