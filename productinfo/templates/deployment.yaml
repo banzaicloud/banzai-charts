@@ -78,11 +78,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.basePath }}/status
+              path: {{ .Values.app.basePath }}/status
               port: http
           readinessProbe:
             httpGet:
-              path: {{ .Values.basePath }}/status
+              path: {{ .Values.app.basePath }}/status
               port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
