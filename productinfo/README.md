@@ -1,7 +1,7 @@
 
 # Productinfo Chart
 
-[Productinfo](https://github.com/banzaicloud/productinfo) Instance recommender is a building block of the Hollowtrees project. 
+[Productinfo](https://github.com/banzaicloud/productinfo) Provides resource and pricing information about products available on supported cloud providers - it is a building block of the Hollowtrees project. 
 
 ## tl;dr:
 
@@ -27,7 +27,7 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release banzaicloud-stable/productinfo
 ```
 
-The command deploys productinfo on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys **productinfo** on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 ## Uninstalling the Chart
 
