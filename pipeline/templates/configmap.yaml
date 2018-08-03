@@ -37,3 +37,4 @@ data:
 
     stableRepositoryURL = "https://kubernetes-charts.storage.googleapis.com"
     banzaiRepositoryURL = "http://kubernetes-charts.banzaicloud.com"
+
