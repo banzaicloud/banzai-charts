@@ -127,6 +127,9 @@ spec:
         - name: PIPELINE_HELM_BANZAIREPOSITORYURL
           value: {{ .Values.helm.banzaiRepositoryURL | quote }}
 
+        - name: PIPELINE_EKS_TEMPLATELOCATION
+          value: {{ .Values.eks.templateLocation | quote }}  
+
         - name: SLACK_WEBHOOK_URL
           value: "{{ .Values.Slack.WebhookUrl }}"
         - name: SLACK_CHANNEL

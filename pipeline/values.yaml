@@ -50,6 +50,9 @@ helm:
   stableRepositoryURL: "https://kubernetes-charts.storage.googleapis.com"
   banzaiRepositoryURL: "http://kubernetes-charts.banzaicloud.com"
 
+eks:
+  templateLocation: "https://raw.githubusercontent.com/banzaicloud/pipeline/master/templates/eks"
+
 Slack:
   WebhookUrl: ""
   Channel: ""
