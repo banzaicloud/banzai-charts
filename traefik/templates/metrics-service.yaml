@@ -1,0 +1,25 @@
+{{- if or .Values.metrics.prometheus.enabled .Values.metrics.datadog.enabled .Values.metrics.statsd.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "traefik.fullname" . }}-metrics
+  labels:
+    app: {{ template "traefik.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+  {{- if .Values.metrics.prometheus.service.annotations }}
+  {{- range $key, $value := .Values.metrics.prometheus.service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+spec:
+  selector:
+    app: {{ template "traefik.name" . }}
+    release: {{ .Release.Name }}
+  ports:
+  - port: {{ .Values.metrics.prometheus.service.port | default 8080 }}
+    name: metrics
+    targetPort: metrics
+{{- end }}

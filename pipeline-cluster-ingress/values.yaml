@@ -4,13 +4,13 @@
 
 traefik:
   serviceType: LoadBalancer
-  loadBalancerIP:
-
   dashboard:
-    enabled: false
-    domain: ""
+    enabled: true
   rbac:
     enabled: true
-
   ssl:
     insecureSkipVerify: true
+  metrics:
+    prometheus:
+      enabled: true
+  imageTag: 1.7
