@@ -15,6 +15,13 @@ traefik:
     enabled: false
   ssl:
     insecureSkipVerify: true
+  metrics:
+    prometheus:
+      enabled: true
+  service:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8080"
 
 pipeline:
   host: ""
@@ -91,224 +98,299 @@ drone:
     dbUserName: ""
     dbUserPass: ""
 
+prometheus:
+  nodeExporter:
+    enabled: true
+  server:
+    baseURL: /prometheus
+    prefixURL: /prometheus
+    ingress:
+      enabled: false
+      hosts:
+         - "/prometheus"
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        traefik.frontend.rule.type: PathPrefix
+    global:
+      scrape_interval: 15s
+    configMapOverrideName:
+      asd-pipeline-cp-prometheus-server
+  ## Prometheus server ConfigMap entries
+  ##
+  serverFiles:
+    alerts: {}
+    rules: {}
 
-global:
-  pipelineBasepath: /pipeline
+    prometheus.yml:
+      rule_files:
+        - /etc/config/rules
+        - /etc/config/alerts
+
+      scrape_configs:
+        - job_name: prometheus
+          metrics_path: /prometheus/metrics
+          static_configs:
+            - targets:
+              - localhost:9090
+
+        # A scrape configuration for running Prometheus on a Kubernetes cluster.
+        # This uses separate scrape configs for cluster components (i.e. API server, node)
+        # and services to allow each to use different authentication configs.
+        #
+        # Kubernetes labels will be added as Prometheus labels on metrics via the
+        # `labelmap` relabeling action.
+
+        # Scrape config for API servers.
+        #
+        # Kubernetes exposes API servers as endpoints to the default/kubernetes
+        # service so this uses `endpoints` role and uses relabelling to only keep
+        # the endpoints associated with the default/kubernetes service using the
+        # default named port `https`. This works for single API server deployments as
+        # well as HA API server deployments.
+        - job_name: 'kubernetes-apiservers'
+
+          kubernetes_sd_configs:
+            - role: endpoints
+
+          # Default to scraping over https. If required, just disable this or change to
+          # `http`.
+          scheme: https
+
+          # This TLS & bearer token file config is used to connect to the actual scrape
+          # endpoints for cluster components. This is separate to discovery auth
+          # configuration because discovery & scraping are two separate concerns in
+          # Prometheus. The discovery auth config is automatic if Prometheus runs inside
+          # the cluster. Otherwise, more config options have to be provided within the
+          # <kubernetes_sd_config>.
+          tls_config:
+            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            # If your node certificates are self-signed or use a different CA to the
+            # master CA, then disable certificate verification below. Note that
+            # certificate verification is an integral part of a secure infrastructure
+            # so this should only be disabled in a controlled environment. You can
+            # disable certificate verification by uncommenting the line below.
+            #
+            insecure_skip_verify: true
+          bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+          # Keep only the default/kubernetes service endpoints for the https port. This
+          # will add targets for each API server which Kubernetes adds an endpoint to
+          # the default/kubernetes service.
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+              action: keep
+              regex: default;kubernetes;https
+
+        - job_name: 'kubernetes-nodes'
+
+          # Default to scraping over https. If required, just disable this or change to
+          # `http`.
+          scheme: https
+
+          # This TLS & bearer token file config is used to connect to the actual scrape
+          # endpoints for cluster components. This is separate to discovery auth
+          # configuration because discovery & scraping are two separate concerns in
+          # Prometheus. The discovery auth config is automatic if Prometheus runs inside
+          # the cluster. Otherwise, more config options have to be provided within the
+          # <kubernetes_sd_config>.
+          tls_config:
+            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            # If your node certificates are self-signed or use a different CA to the
+            # master CA, then disable certificate verification below. Note that
+            # certificate verification is an integral part of a secure infrastructure
+            # so this should only be disabled in a controlled environment. You can
+            # disable certificate verification by uncommenting the line below.
+            #
+            insecure_skip_verify: true
+          bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+          kubernetes_sd_configs:
+            - role: node
+
+          relabel_configs:
+            - action: labelmap
+              regex: __meta_kubernetes_node_label_(.+)
+            - target_label: __address__
+              replacement: kubernetes.default.svc:443
+            - source_labels: [__meta_kubernetes_node_name]
+              regex: (.+)
+              target_label: __metrics_path__
+              replacement: /api/v1/nodes/${1}/proxy/metrics
+
+
+        - job_name: 'kubernetes-nodes-cadvisor'
+
+          # Default to scraping over https. If required, just disable this or change to
+          # `http`.
+          scheme: https
+
+          # This TLS & bearer token file config is used to connect to the actual scrape
+          # endpoints for cluster components. This is separate to discovery auth
+          # configuration because discovery & scraping are two separate concerns in
+          # Prometheus. The discovery auth config is automatic if Prometheus runs inside
+          # the cluster. Otherwise, more config options have to be provided within the
+          # <kubernetes_sd_config>.
+          tls_config:
+            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            # If your node certificates are self-signed or use a different CA to the
+            # master CA, then disable certificate verification below. Note that
+            # certificate verification is an integral part of a secure infrastructure
+            # so this should only be disabled in a controlled environment. You can
+            # disable certificate verification by uncommenting the line below.
+            #
+            insecure_skip_verify: true
+          bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+          kubernetes_sd_configs:
+            - role: node
+
+          # This configuration will work only on kubelet 1.7.3+
+          # As the scrape endpoints for cAdvisor have changed
+          # if you are using older version you need to change the replacement to
+          # replacement: /api/v1/nodes/${1}:4194/proxy/metrics
+          # more info here https://github.com/coreos/prometheus-operator/issues/633
+          relabel_configs:
+            - action: labelmap
+              regex: __meta_kubernetes_node_label_(.+)
+            - target_label: __address__
+              replacement: kubernetes.default.svc:443
+            - source_labels: [__meta_kubernetes_node_name]
+              regex: (.+)
+              target_label: __metrics_path__
+              replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+
+        # Scrape config for service endpoints.
+        #
+        # The relabeling allows the actual service scrape endpoint to be configured
+        # via the following annotations:
+        #
+        # * `prometheus.io/scrape`: Only scrape services that have a value of `true`
+        # * `prometheus.io/scheme`: If the metrics endpoint is secured then you will need
+        # to set this to `https` & most likely set the `tls_config` of the scrape config.
+        # * `prometheus.io/path`: If the metrics path is not `/metrics` override this.
+        # * `prometheus.io/port`: If the metrics are exposed on a different port to the
+        # service then set this appropriately.
+        - job_name: 'kubernetes-service-endpoints'
+
+          kubernetes_sd_configs:
+            - role: endpoints
+
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+              action: keep
+              regex: true
+            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+              action: replace
+              target_label: __scheme__
+              regex: (https?)
+            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+              action: replace
+              target_label: __metrics_path__
+              regex: (.+)
+            - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+              action: replace
+              target_label: __address__
+              regex: ([^:]+)(?::\d+)?;(\d+)
+              replacement: $1:$2
+            - action: labelmap
+              regex: __meta_kubernetes_service_label_(.+)
+            - source_labels: [__meta_kubernetes_namespace]
+              action: replace
+              target_label: kubernetes_namespace
+            - source_labels: [__meta_kubernetes_service_name]
+              action: replace
+              target_label: kubernetes_name
+
+        - job_name: 'prometheus-pushgateway'
+          honor_labels: true
+
+          kubernetes_sd_configs:
+            - role: service
+
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+              action: keep
+              regex: pushgateway
+
+        # Example scrape config for probing services via the Blackbox Exporter.
+        #
+        # The relabeling allows the actual service scrape endpoint to be configured
+        # via the following annotations:
+        #
+        # * `prometheus.io/probe`: Only probe services that have a value of `true`
+        - job_name: 'kubernetes-services'
+
+          metrics_path: /probe
+          params:
+            module: [http_2xx]
+
+          kubernetes_sd_configs:
+            - role: service
+
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+              action: keep
+              regex: true
+            - source_labels: [__address__]
+              target_label: __param_target
+            - target_label: __address__
+              replacement: blackbox
+            - source_labels: [__param_target]
+              target_label: instance
+            - action: labelmap
+              regex: __meta_kubernetes_service_label_(.+)
+            - source_labels: [__meta_kubernetes_namespace]
+              target_label: kubernetes_namespace
+            - source_labels: [__meta_kubernetes_service_name]
+              target_label: kubernetes_name
+
+        # Example scrape config for pods
+        #
+        # The relabeling allows the actual pod scrape endpoint to be configured via the
+        # following annotations:
+        #
+        # * `prometheus.io/scrape`: Only scrape pods that have a value of `true`
+        # * `prometheus.io/path`: If the metrics path is not `/metrics` override this.
+        # * `prometheus.io/port`: Scrape the pod on the indicated port instead of the default of `9102`.
+        - job_name: 'kubernetes-pods'
+
+          kubernetes_sd_configs:
+            - role: pod
+
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+              action: keep
+              regex: true
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+              action: replace
+              target_label: __metrics_path__
+              regex: (.+)
+            - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+              action: replace
+              regex: ([^:]+)(?::\d+)?;(\d+)
+              replacement: $1:$2
+              target_label: __address__
+            - action: labelmap
+              regex: __meta_kubernetes_pod_label_(.+)
+            - source_labels: [__meta_kubernetes_namespace]
+              action: replace
+              target_label: kubernetes_namespace
+            - source_labels: [__meta_kubernetes_pod_name]
+              action: replace
+              target_label: kubernetes_pod_name
 
 grafana:
   enabled: true
-  server:
-    image: "banzaicloud/grafana:0.3.0"
-    httpPort: 80
-
-    ingress:
-      enabled: false
-
-    installPlugins: "mtanda-histogram-panel"
-
-    persistentVolume:
-      enabled: false
-
-    adminUser: "admin"
-    adminPassword: ""
-
-    setDatasource:
-        enabled: true
-        datasource:
-          name: prometheus
-          type: prometheus
-          url: http://prometheus-server:80/prometheus
-          access: proxy
-          jsonData: null
-          isDefault: true
-        restartPolicy: OnFailure
-        image: appropriate/curl:latest
-
-  serverConfigFile:
-    grafana.ini: |
-      ; instance_name = ${HOSTNAME}
-      [paths]
-      data = /var/lib/grafana/data
-      logs = /var/log/grafana
-      plugins = /var/lib/grafana/plugins
-
-      [server]
-      ;protocol = http
-      ;http_addr =
-      ;http_port = 3000
-      ;domain = localhost
-      ;enforce_domain = false
-      root_url = %(protocol)s://%(domain)s:%(http_port)s/grafana
-      ;router_logging = false
-      ;static_root_path = public
-      ;enable_gzip = false
-      ;cert_file =
-      ;cert_key =
-
-      [database]
-      ;type = sqlite3
-      ;host = 127.0.0.1:3306
-      ;name = grafana
-      ;user = root
-      ;password =
-      ;ssl_mode = disable
-      ;path = grafana.db
-
-      [session]
-      ;provider = file
-      ;provider_config = sessions
-      ;cookie_name = grafana_sess
-      ;cookie_secure = false
-      ;session_life_time = 86400
-
-      [analytics]
-      ;reporting_enabled = true
-      check_for_updates = true
-      ;google_analytics_ua_id =
-
-      [security]
-      ;admin_user = admin
-      ;admin_password = admin
-      ;secret_key =
-      ;login_remember_days = 7
-      ;cookie_username = grafana_user
-      ;cookie_remember_name = grafana_remember
-      ;disable_gravatar = false
-      ;data_source_proxy_whitelist =
-
-      [snapshots]
-      ;external_enabled = true
-      ;external_snapshot_url = https://snapshots-origin.raintank.io
-      ;external_snapshot_name = Publish to snapshot.raintank.io
-
-      [users]
-      ;allow_sign_up = true
-      ;allow_org_create = true
-      ;auto_assign_org = true
-      ;auto_assign_org_role = Viewer
-      ;login_hint = email or username
-      ;default_theme = dark
-
-      [auth.anonymous]
-      ;enabled = false
-      ;org_name = Main Org.
-      ;org_role = Viewer
-
-      [auth.github]
-      ;enabled = false
-      ;allow_sign_up = false
-      ;client_id = some_id
-      ;client_secret = some_secret
-      ;scopes = user:email,read:org
-      ;auth_url = https://github.com/login/oauth/authorize
-      ;token_url = https://github.com/login/oauth/access_token
-      ;api_url = https://api.github.com/user
-      ;team_ids =
-      ;allowed_organizations =
-
-      [auth.google]
-      ;enabled = false
-      ;allow_sign_up = false
-      ;client_id = some_client_id
-      ;client_secret = some_client_secret
-      ;scopes = https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email
-      ;auth_url = https://accounts.google.com/o/oauth2/auth
-      ;token_url = https://accounts.google.com/o/oauth2/token
-      ;api_url = https://www.googleapis.com/oauth2/v1/userinfo
-      ;allowed_domains =
-
-      [auth.proxy]
-      ;enabled = false
-      ;header_name = X-WEBAUTH-USER
-      ;header_property = username
-      ;auto_sign_up = true
-
-      [auth.basic]
-      ;enabled = true
-
-      [auth.ldap]
-      ;enabled = false
-      ;config_file = /etc/grafana/ldap.toml
-
-      [smtp]
-      ;enabled = false
-      ;host = localhost:25
-      ;user =
-      ;password =
-      ;cert_file =
-      ;key_file =
-      ;skip_verify = false
-      ;from_address = admin@grafana.localhost
-
-      [emails]
-      ;welcome_email_on_sign_up = false
-
-      [log]
-      mode = console
-      level = info
-
-      [log.console]
-      ;level =
-      ;format = console
-
-      [event_publisher]
-      ;enabled = false
-      ;rabbitmq_url = amqp://localhost/
-      ;exchange = grafana_events
-
-      [dashboards.json]
-      enabled = true
-      path = /var/lib/grafana/dashboards
-
-      [metrics]
-      ;enabled           = true
-      ;interval_seconds  = 10
-
-      ; [metrics.graphite]
-      ; address = localhost:2003
-      ; prefix = prod.grafana.%(instance_name)s.
-
-      [grafana_net]
-      url =
-
-
-prometheus:
-  enabled: true
-  rbac:
-    create: true
-
   ingress:
-    auth:
-      enabled: false
-
-  alertmanager:
-    enabled: true
-    persistentVolume:
-      enabled: false
-
-    configMapOverrideName: cp-alertmanager
-
-    ingress:
-      enabled: false
-
-    baseURL: /alertmanager
-    prefixURL: /alertmanager
-
-    slack_api_url: ""
-    slack_channel: ""
-
-    smtp_address: ""
-    smtp_username: ""
-    smtp_password: ""
-    smtp_to: ""
-    smtp_from: ""
-
-  nodeExporter:
     enabled: false
-
-
-  server:
-    ingress:
+    annotations: 
+      kubernetes.io/ingress.class: traefik
+      traefik.frontend.rule.type: PathPrefixStrip
+    path: /grafana
+    hosts:
+      - localhost
+  sidecar:
+    dashboards:
       enabled: false
 
     prefixURL: /prometheus
@@ -328,7 +410,6 @@ prometheus:
     enabled: false
 
   serverFiles:
-    prometheus.yml: null
     prometheus.yml:
       global:
         scrape_interval:     10s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
@@ -338,3 +419,50 @@ prometheus:
         # Attach these labels to any time series or alerts when communicating with
         # external systems (federation, remote storage, Alertmanager).
       scrape_configs: []
+      label: pipeline_grafana_dashboard
+    datasources:
+      enabled: true
+      label: pipeline_grafana_datasource
+  dashboardProviders:
+   dashboardproviders.yaml:
+     apiVersion: 1
+     providers:
+     - name: 'default'
+       orgId: 1
+       folder: ''
+       type: file
+       disableDeletion: false
+       editable: true
+       options:
+         path: /var/lib/grafana/dashboards/default
+  dashboards:
+    default:
+      kubernetes:
+#        gnetId: 1621
+#        revision: 1
+        url: https://grafana.com/api/dashboards/1621/revisions/1/download
+        datasource: Prometheus
+      # trafeik:
+      #   gnetId: 2240
+      #   revision: 3
+      #   datasource: Prometheus
+      # node:
+      #   gnetId: 5324
+      #   revision: 1
+      #   datasource: Prometheus
+      # node1:
+      #   gnetId: 5291
+      #   revision: 1
+      #   datasource: Prometheus
+      # node2:
+      #   gnetId: 5288
+      #   revision: 1
+      #   datasource: Prometheus
+      # node3:
+      #   gnetId: 315
+      #   revision: 3
+      #   datasource: Prometheus
+      # node3:
+      #   gnetId: 3119
+      #   revision: 2
+      #   datasource: Prometheus
