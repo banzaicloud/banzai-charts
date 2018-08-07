@@ -42,6 +42,7 @@ auth:
   jwtaudience: "https://pipeline.banzaicloud.com"
   clientid: ""
   clientsecret: ""
+  cookieDomain: ""
 
 helm:
   retryAttempt: "30"
