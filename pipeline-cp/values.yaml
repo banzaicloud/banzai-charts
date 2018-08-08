@@ -28,14 +28,20 @@ pipeline:
   image:
     tag: "0.3.0"
 
+  ingress:
+    enabled: true
+    hosts:
+       - "/pipeline"
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      ingress.kubernetes.io/ssl-redirect: "false"
+
   drone:
     enabled: true
 
   cloud:
     cloudprovider: aws
     keypath: "/opt/pipeline/.ssh"
-
-  IngressUrl: ""
 
   awsSecretAccessKey: ""
   awsAccessKeyId: ""
