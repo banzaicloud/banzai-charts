@@ -24,14 +24,14 @@ traefik:
       prometheus.io/port: "8080"
 
 pipeline:
-  host: ""
   image:
-    tag: "0.3.0"
+    tag: "latest"
+    pullPolicy: Always
 
   ingress:
     enabled: true
     hosts:
-       - "/pipeline"
+       - "/"
     annotations:
       kubernetes.io/ingress.class: traefik
       ingress.kubernetes.io/ssl-redirect: "false"
