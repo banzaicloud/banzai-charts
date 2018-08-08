@@ -1,0 +1,4 @@
+s3output:
+  bucketname: banzailoggingtest
+  region: eu-west-1
+  secretname: my-aws-secret

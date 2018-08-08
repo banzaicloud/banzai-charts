@@ -1,0 +1,25 @@
+apiVersion: "logging.banzaicloud.com/v1alpha1"
+kind: "LoggingOperator"
+metadata:
+  name: "s3-output"
+spec:
+  input:
+    label:
+      app: "*"
+  output:
+  - s3:
+      parameters:
+      - name: aws_key_id
+        valueFrom:
+          secretKeyRef:
+            name: "{{ .Values.s3output.secretname }}"
+            key: AWS_ACCESS_KEY_ID
+      - name: aws_sec_key
+        valueFrom:
+          secretKeyRef:
+            name: "{{ .Values.s3output.secretname }}"
+            key: AWS_SECRET_ACCESS_KEY
+      - name: s3_bucket
+        value: "{{ .Values.s3output.bucketname }}"
+      - name: s3_region
+        value: "{{ .Values.s3output.region }}"
