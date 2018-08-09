@@ -1,7 +1,7 @@
 apiVersion: "logging.banzaicloud.com/v1alpha1"
 kind: "LoggingOperator"
 metadata:
-  name: "s3-output"
+  name: "{{ .Release.Name }}-s3-output"
 spec:
   input:
     label:
