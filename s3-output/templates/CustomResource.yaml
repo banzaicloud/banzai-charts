@@ -7,19 +7,20 @@ spec:
     label:
       app: "*"
   output:
-  - s3:
+    - type: s3
+      name: outputS3
       parameters:
-      - name: aws_key_id
-        valueFrom:
-          secretKeyRef:
-            name: "{{ .Values.s3output.secretname }}"
-            key: AWS_ACCESS_KEY_ID
-      - name: aws_sec_key
-        valueFrom:
-          secretKeyRef:
-            name: "{{ .Values.s3output.secretname }}"
-            key: AWS_SECRET_ACCESS_KEY
-      - name: s3_bucket
-        value: "{{ .Values.s3output.bucketname }}"
-      - name: s3_region
-        value: "{{ .Values.s3output.region }}"
+        - name: aws_key_id
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.secretname }}"
+              key: AWS_ACCESS_KEY_ID
+        - name: aws_sec_key
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.secretname }}"
+              key: AWS_SECRET_ACCESS_KEY
+        - name: s3_bucket
+          value: "{{ .Values.bucketname }}"
+        - name: s3_region
+          value: "{{ .Values.region }}"
