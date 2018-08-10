@@ -13,14 +13,14 @@ spec:
         - name: aws_key_id
           valueFrom:
             secretKeyRef:
-              name: "{{ .Values.secretname }}"
-              key: AWS_ACCESS_KEY_ID
+              name: "{{ .Values.secret.secretName }}"
+              key: "{{ .Values.secret.awsAccessKey }}"
         - name: aws_sec_key
           valueFrom:
             secretKeyRef:
-              name: "{{ .Values.secretname }}"
-              key: AWS_SECRET_ACCESS_KEY
+              name: "{{ .Values.secret.secretName }}"
+              key: "{{ .Values.secret.awsSecretKey }}"
         - name: s3_bucket
-          value: "{{ .Values.bucketname }}"
+          value: "{{ .Values.bucketName }}"
         - name: s3_region
           value: "{{ .Values.region }}"
