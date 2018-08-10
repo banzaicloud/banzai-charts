@@ -1,0 +1,6 @@
+bucketName: banzailoggingtest
+region: eu-west-1
+secret:
+  secretName: my-aws-secret
+  awsSecretKey: AWS_SECRET_ACCESS_KEY
+  awsAccessKey: AWS_ACCESS_KEY_ID
