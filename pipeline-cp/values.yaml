@@ -4,24 +4,24 @@
 
 traefik:
   serviceType: LoadBalancer
+  imageTag: 1.7.0-rc3
   dashboard:
-    enabled: false
-    domain: ""
+    enabled: true
+    ingress:
+      enabled: true
+      hosts:
+        - /dashboard
+    service:
+      port: 8080
   rbac:
     enabled: true
   cpuLimit: 200m
   memoryLimit: 250Mi
-  debug:
-    enabled: false
   ssl:
     insecureSkipVerify: true
   metrics:
     prometheus:
       enabled: true
-  service:
-    annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "8080"
 
 pipeline:
   image:
@@ -386,7 +386,10 @@ prometheus:
               target_label: kubernetes_pod_name
 
 grafana:
-  enabled: true
+  enabled: false
+  grafana.ini:
+    server:
+      root_url: "%(protocol)s://%(domain)s/grafana/"
   ingress:
     enabled: false
     annotations: 
@@ -395,40 +398,15 @@ grafana:
     path: /grafana
     hosts:
       - localhost
+
   sidecar:
     dashboards:
       enabled: false
-
-    prefixURL: /prometheus
-    baseURL: /prometheus
-
-    extraArgs:
-      "query.lookback-delta": "5m"
-#      "config.file": "/etc/config/prometheus-custom.yml"
-
-    extraConfigmapMounts:
-      - name: prometheus-certs
-        mountPath: /etc/prometheus-certs
-        configMap: prometheus-certs
-        readOnly: true
-
-  pushgateway:
-    enabled: false
-
-  serverFiles:
-    prometheus.yml:
-      global:
-        scrape_interval:     10s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-        evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
-        scrape_timeout: 7s # scrape_timeout is set to the global default (10s).
-
-        # Attach these labels to any time series or alerts when communicating with
-        # external systems (federation, remote storage, Alertmanager).
-      scrape_configs: []
       label: pipeline_grafana_dashboard
     datasources:
       enabled: true
       label: pipeline_grafana_datasource
+
   dashboardProviders:
    dashboardproviders.yaml:
      apiVersion: 1
