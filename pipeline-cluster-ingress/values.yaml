@@ -4,13 +4,24 @@
 
 traefik:
   serviceType: LoadBalancer
+  imageTag: 1.7.0-rc3
   dashboard:
     enabled: true
+    ingress:
+      enabled: true
+      hosts:
+        - /dashboard
+    service:
+      port: 8080
+
   rbac:
     enabled: true
+  cpuLimit: 200m
+  memoryLimit: 250Mi
+  debug:
+    enabled: false
   ssl:
     insecureSkipVerify: true
   metrics:
     prometheus:
       enabled: true
-  imageTag: 1.7

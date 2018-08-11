@@ -1,0 +1,26 @@
+{{- if .Values.metrics.prometheus.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "traefik.fullname" . }}-metrics-prometheus
+  labels:
+    app: {{ template "traefik.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: {{ .Values.metrics.prometheus.service.port | quote }}
+    {{- if .Values.metrics.prometheus.service.annotations }}
+    {{ toYaml .Values.metrics.prometheus.service.annotations | indent 4 }}
+    {{- end }}
+spec:
+  selector:
+    app: {{ template "traefik.name" . }}
+    release: {{ .Release.Name }}
+  ports:
+  - port: {{ .Values.metrics.prometheus.service.port }}
+    name: prometheus
+    targetPort: prometheus
+{{- end }}
