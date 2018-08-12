@@ -6,9 +6,9 @@ traefik:
   serviceType: LoadBalancer
   imageTag: 1.7.0-rc3
   dashboard:
-    enabled: true
+    enabled: false
     ingress:
-      enabled: true
+      enabled: false
       hosts:
         - /dashboard
     service:
@@ -21,6 +21,7 @@ traefik:
   debug:
     enabled: false
   ssl:
+    enabled: true
     insecureSkipVerify: true
   metrics:
     prometheus:
