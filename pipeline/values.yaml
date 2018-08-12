@@ -20,6 +20,19 @@ service:
   internalPort: 9090
   externalPort:  9090
 
+ingress:
+  enabled: false
+  annotations:
+    #traefik.frontend.rule.type: PathPrefix
+  hosts:
+    # - "/"
+    # - "domain.com/xyz"
+    # - "domain.com"
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
 logging:
   logformat: text
   loglevel: debug
