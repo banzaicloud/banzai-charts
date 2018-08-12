@@ -1,6 +1,6 @@
 ## Default values for Traefik
 image: traefik
-imageTag: 1.6.5
+imageTag: 1.7.0-rc3
 ## can switch the service type to NodePort if required
 serviceType: LoadBalancer
 loadBalancerIP:
@@ -43,9 +43,9 @@ tolerations: []
   # labelSelector:
   # ingressClass:
 
-## Enable IngressEndpoint configuration.
+## Enable ingressEndpoint configuration.
 ## This will allow Traefik to update the status section of ingress objects, if desired.
-# kubernetesIngressEndpoint:
+# kubernetesingressEndpoint:
   # ip: 127.0.0.1
   # hostname: localhost
   # publishedService: "namespace/servicename"
@@ -183,11 +183,11 @@ acme:
     ##
     # existingClaim:
 dashboard:
-  enabled: true
+  enabled: false
   service:
     annotations: {}
     #   key: value
-    # port: 8080
+    port: 8080
   ingress:
     enabled: false
     annotations: {}
@@ -247,11 +247,9 @@ rbac:
 metrics:
   prometheus:
     service:
-      annotations: 
-        prometheus.io/scrape: "true"
-    #     prometheus.io/path: "/metrics"
-    #     prometheus.io/port: 8080
-    # port: 8080
+      annotations: {}
+      port: 9120
+    
     enabled: false
     # buckets: [0.1,0.3,1.2,5]
   datadog:

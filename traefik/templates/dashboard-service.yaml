@@ -19,6 +19,7 @@ spec:
     app: {{ template "traefik.name" . }}
     release: {{ .Release.Name }}
   ports:
-  - port: {{ .Values.dashboard.service.port | default 8080 }}
-    targetPort: {{ .Values.dashboard.service.targetPort | default 8080 }}
+  - port: {{ .Values.dashboard.service.port }}
+    name: dashboard
+    targetPort: dashboard
 {{- end }}
