@@ -24,9 +24,17 @@ traefik:
       prometheus.io/port: "8080"
 
 pipeline:
-  host: ""
   image:
-    tag: "0.3.0"
+    tag: "latest"
+    pullPolicy: Always
+
+  ingress:
+    enabled: true
+    hosts:
+       - "/"
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      ingress.kubernetes.io/ssl-redirect: "false"
 
   drone:
     enabled: true
@@ -34,8 +42,6 @@ pipeline:
   cloud:
     cloudprovider: aws
     keypath: "/opt/pipeline/.ssh"
-
-  IngressUrl: ""
 
   awsSecretAccessKey: ""
   awsAccessKeyId: ""
@@ -114,7 +120,7 @@ prometheus:
     global:
       scrape_interval: 15s
     configMapOverrideName:
-      asd-pipeline-cp-prometheus-server
+      prometheus-server
   ## Prometheus server ConfigMap entries
   ##
   serverFiles:

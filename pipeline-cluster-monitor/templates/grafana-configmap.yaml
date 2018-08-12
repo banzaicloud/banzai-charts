@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-grafana-datasource
+  labels:
+    pipeline_grafana_datasource: "1"
+data:
+  datasource.yaml: |-
+    apiVersion: 1
+    deleteDatasources:
+      - name: Graphite
+        orgId: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://{{ .Release.Name }}-prometheus-server/
+      access: proxy
+      isDefault: true
