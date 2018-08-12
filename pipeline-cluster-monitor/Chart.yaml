@@ -1,7 +1,7 @@
 apiVersion: v1
 description: A Helm chart for Kubernetes
 name: pipeline-cluster-monitor
-version: 0.0.3
+version: 0.1.0
 keywords:
   - pipeline
   - cluster
