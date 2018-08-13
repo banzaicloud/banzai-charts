@@ -87,8 +87,8 @@ data:
       address = ":81"
     [ping]
     entryPoint = "ping"
-    {{- if .Values.kubernetes}}
     [kubernetes]
+    {{- if .Values.kubernetes}}
       {{- if .Values.kubernetes.endpoint }}
     endpoint = {{ .Values.kubernetes.endpoint | quote }}
       {{- end}}
@@ -106,6 +106,7 @@ data:
       {{- if .Values.kubernetes.ingressClass }}
     ingressClass = {{ .Values.kubernetes.ingressClass | quote }}
       {{- end}}
+    {{- end}}
     {{- if .Values.kubernetes.ingressEndpoint}}
     [kubernetes.ingressEndpoint]
       {{- if .Values.kubernetes.ingressEndpoint.ip }}
@@ -118,8 +119,8 @@ data:
       publishedService = {{ .Values.kubernetes.ingressEndpoint.publishedService | quote }}
       {{- end}}
     {{- else}}
+    [kubernetes.ingressEndpoint]
       publishedService = "{{ .Release.Namespace }}/{{ template "traefik.fullname" . }}"
-    {{- end}}
     {{- end}}
     {{- if .Values.accessLogs.enabled }}
     [accessLog]

@@ -1,4 +1,4 @@
 dependencies:
 - name: traefik
-  version: 1.40.1
+  version: 1.40.2
   repository: alias:banzaicloud-stable
