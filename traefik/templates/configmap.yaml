@@ -87,8 +87,8 @@ data:
       address = ":81"
     [ping]
     entryPoint = "ping"
-    [kubernetes]
     {{- if .Values.kubernetes}}
+    [kubernetes]
       {{- if .Values.kubernetes.endpoint }}
     endpoint = {{ .Values.kubernetes.endpoint | quote }}
       {{- end}}
