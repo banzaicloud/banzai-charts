@@ -320,31 +320,14 @@ grafana:
   dashboards:
     default:
       kubernetes:
-#        gnetId: 1621
-#        revision: 1
         url: https://grafana.com/api/dashboards/1621/revisions/1/download
         datasource: Prometheus
-      # trafeik:
-      #   gnetId: 2240
-      #   revision: 3
-      #   datasource: Prometheus
-      # node:
-      #   gnetId: 5324
-      #   revision: 1
-      #   datasource: Prometheus
-      # node1:
-      #   gnetId: 5291
-      #   revision: 1
-      #   datasource: Prometheus
-      # node2:
-      #   gnetId: 5288
-      #   revision: 1
-      #   datasource: Prometheus
-      # node3:
-      #   gnetId: 315
-      #   revision: 3
-      #   datasource: Prometheus
-      # node3:
-      #   gnetId: 3119
-      #   revision: 2
-      #   datasource: Prometheus
+      pod:
+        url: https://grafana.com/api/dashboards/747/revisions/2/download
+        datasource: Prometheus
+      deployment:
+        url: https://grafana.com/api/dashboards/741/revisions/1/download
+        datasource: Prometheus
+      cluster:
+        url: https://grafana.com/api/dashboards/5312/revisions/1/download
+        datasource: Prometheus
