@@ -19,3 +19,6 @@ resources:
 rbac:
   install: true
   apiVersion: v1beta1
+
+metricsServer:
+  enabled: false
