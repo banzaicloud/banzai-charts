@@ -12,6 +12,7 @@ spec:
       labels:
         name: "{{ .Release.Name }}-logging-operator"
     spec:
+      serviceAccountName: "{{ .Release.Name }}-logging-operator-sa"
       containers:
       - name: "{{ .Release.Name }}-logging-operator"
         image: banzaicloud/logging-operator:latest
