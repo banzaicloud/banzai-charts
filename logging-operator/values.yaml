@@ -11,3 +11,7 @@ fluentd:
   enabled: true
   namespace: default
   tls_enabled: false
+
+rbac:
+  enabled: true
+
