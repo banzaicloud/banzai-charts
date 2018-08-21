@@ -14,6 +14,8 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
+env: {}
+
 service:
   name: pipeline
   type: ClusterIP
