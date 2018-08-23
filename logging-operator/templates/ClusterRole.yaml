@@ -17,6 +17,12 @@ rules:
     - "*"
   - apiGroups:
       - ""
+      - apps
+      - autoscaling
+      - batch
+      - extensions
+      - policy
+      - rbac.authorization.k8s.io
     resources:
       - namespaces
       - nodes
@@ -31,6 +37,9 @@ rules:
       - endpoints
       - secrets
       - configmaps
+      - serviceaccounts
+      - clusterroles
+      - clusterrolebindings
     verbs:
       - "*"
   - apiGroups:
