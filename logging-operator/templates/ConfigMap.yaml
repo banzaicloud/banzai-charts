@@ -15,7 +15,7 @@ data:
     [tls]
     enabled = {{ .Values.tls.enabled }}
     {{- if .Values.tls.enabled }}
-    secretName = {{ .Values.tls.secretName }}
+    secretName = "{{ .Values.tls.secretName }}"
     {{- end }}
 
     [fluent-bit]
