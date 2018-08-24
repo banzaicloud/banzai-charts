@@ -9,15 +9,19 @@ data:
     # This is the example config for the logging operator
 
     [logging-operator]
-    rbac = {{ .Values.loggingoperator.rbac }}
-    namespace = "{{ .Values.loggingoperator.namespace }}"
+    rbac = {{ .Values.rbac.enabled }}
+    namespace = "{{ .Values.operator.namespace }}"
+
+    [tls]
+    enabled = {{ .Values.tls.enabled }}
+    {{- if .Values.tls.enabled }}
+    secretName = "{{ .Values.tls.secretName }}"
+    {{- end }}
 
     [fluent-bit]
     enabled = {{ .Values.fluentbit.enabled }}
     namespace = "{{ .Values.fluentbit.namespace }}"
-    tls_enabled = {{ .Values.fluentbit.tls_enabled }}
 
     [fluentd]
     enabled = {{ .Values.fluentd.enabled }}
     namespace = "{{ .Values.fluentd.namespace }}"
-    tls_enabled = {{ .Values.fluentd.tls_enabled }}

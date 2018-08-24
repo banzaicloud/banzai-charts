@@ -12,12 +12,13 @@ spec:
       labels:
         name: "{{ .Release.Name }}-logging-operator"
     spec:
+      serviceAccountName: "{{ .Release.Name }}-logging-operator-sa"
       containers:
       - name: "{{ .Release.Name }}-logging-operator"
-        image: banzaicloud/logging-operator:latest
+        image: "{{ .Values.operator.image.repository }}:{{ .Values.operator.image.tag }}"
         command:
         - logging-operator
-        imagePullPolicy: Always
+        imagePullPolicy:  {{ .Values.operator.image.pullPolicy }}
         env:
         - name: WATCH_NAMESPACE
           valueFrom:

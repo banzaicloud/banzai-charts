@@ -184,6 +184,11 @@ spec:
         - name: PIPELINE_PIPELINE_KEYFILE
           value: /tls/server.key
 
+        {{ range $key, $value := .Values.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{ end }}
+
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
