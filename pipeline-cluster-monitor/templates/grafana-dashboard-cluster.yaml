@@ -5,5 +5,6 @@ metadata:
   labels:
     pipeline_grafana_dashboard: "1"
 data:
-  kubernetes.json: |-
+  kubernetes.json: |-2
+
 {{.Files.Get "grafana-dashboards/cluster.json"| indent 4}}
