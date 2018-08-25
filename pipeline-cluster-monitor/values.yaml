@@ -299,35 +299,36 @@ grafana:
 
   sidecar:
     dashboards:
-      enabled: false
+      enabled: true
       label: pipeline_grafana_dashboard
     datasources:
       enabled: true
       label: pipeline_grafana_datasource
-
-  dashboardProviders:
-   dashboardproviders.yaml:
-     apiVersion: 1
-     providers:
-     - name: 'default'
-       orgId: 1
-       folder: ''
-       type: file
-       disableDeletion: false
-       editable: true
-       options:
-         path: /var/lib/grafana/dashboards/default
-  dashboards:
-    default:
-      kubernetes:
-        url: https://grafana.com/api/dashboards/1621/revisions/1/download
-        datasource: Prometheus
-      pod:
-        url: https://grafana.com/api/dashboards/747/revisions/2/download
-        datasource: Prometheus
-      deployment:
-        url: https://grafana.com/api/dashboards/741/revisions/1/download
-        datasource: Prometheus
-      cluster:
-        url: https://grafana.com/api/dashboards/5312/revisions/1/download
-        datasource: Prometheus
+#
+#  dashboardProviders:
+#    dashboardproviders.yaml:
+#      apiVersion: 1
+#      providers:
+#      - name: 'default'
+#        orgId: 1
+#        folder: ''
+#        type: file
+#        disableDeletion: false
+#        editable: true
+#        options:
+#          path: /var/lib/grafana/dashboards/default
+#
+#  dashboards:
+#    default:
+#      kubernetes:
+#        url: https://grafana.com/api/dashboards/1621/revisions/1/download
+#        datasource: Prometheus
+#      pod:
+#        url: https://grafana.com/api/dashboards/747/revisions/2/download
+#        datasource: Prometheus
+#      deployment:
+#        url: https://grafana.com/api/dashboards/741/revisions/1/download
+#        datasource: Prometheus
+#      cluster:
+#        url: https://grafana.com/api/dashboards/5312/revisions/1/download
+#        datasource: Prometheus

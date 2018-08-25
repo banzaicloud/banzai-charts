@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-grafana-dashboard-cluster
+  labels:
+    pipeline_grafana_dashboard: "1"
+data:
+  kubernetes.json: |-2
+
+{{.Files.Get "grafana-dashboards/cluster.json"| indent 4}}
