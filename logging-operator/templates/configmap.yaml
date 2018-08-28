@@ -16,8 +16,8 @@ data:
     {{- if .Values.tls.enabled }}
     [tls]
     enabled = {{ .Values.tls.enabled }}
-    secretName = "{{ .Values.tls.secretName }}"
-    sharedKey = {{ derivePassword 1 "long" (.Release.Time | toString) .Release.Name .Chart.Name }}
+    secretName = "{{ .Values.tls.secretName | default (include "logging-operator.fullname" .)  }}"
+    sharedKey = {{ .Values.tls.sharedKey | default (derivePassword 1 "long" (.Release.Time | toString) .Release.Name .Chart.Name ) }}
     {{- end }}
 
     [fluent-bit]

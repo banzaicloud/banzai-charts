@@ -13,8 +13,8 @@ tls:
 
 fluentbit:
   enabled: true
-#  namespace: default
+  namespace: ""
 
 fluentd:
   enabled: true
-#  namespace: default
+  namespace: ""
