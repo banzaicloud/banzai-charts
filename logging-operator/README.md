@@ -1,5 +1,5 @@
 
-# Productinfo Chart
+# Logging Operator Chart
 
 [Logging Operator](https://github.com/banzaicloud/logging-operator) Managed centralized logging component fluentd and fluent-bit instance on cluster.
 ## tl;dr:
@@ -7,7 +7,7 @@
 ```bash
 $ helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
 $ helm repo update
-$ helm install banzaicloud-stable/productinfo
+$ helm install banzaicloud-stable/logging-operator
 ```
 
 ## Introduction
