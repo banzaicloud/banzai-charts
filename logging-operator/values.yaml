@@ -1,21 +1,20 @@
-operator:
-  namespace: default
-  image:
-    repository: banzaicloud/logging-operator
-    tag: latest
-    pullPolicy: Always
+image:
+  repository: banzaicloud/logging-operator
+  tag: latest
+  pullPolicy: Always
 
-fluentbit:
+rbac:
   enabled: true
-  namespace: default
-
-fluentd:
-  enabled: true
-  namespace: default
 
 tls:
   enabled: false
   secretName: ""
+  sharedKey: ""
 
-rbac:
+fluentbit:
   enabled: true
+#  namespace: default
+
+fluentd:
+  enabled: true
+#  namespace: default
