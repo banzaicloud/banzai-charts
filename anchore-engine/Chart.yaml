@@ -13,7 +13,7 @@ home: https://anchore.io
 sources:
  - https://github.com/anchore/anchore-engine
 maintainers:
- - name: zhill
-   email: zach@anchore.com
+- name: Banzai Cloud
+  email: info@banzaicloud.com
 engine: gotpl
 icon: https://anchore.com/wp-content/uploads/2016/08/anchore.png

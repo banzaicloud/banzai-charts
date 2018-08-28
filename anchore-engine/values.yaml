@@ -29,7 +29,7 @@ ingress:
 
 # Dependency on Postgresql, configure here
 postgresql:
-  enabled: false
+  enabled: true
   postgresUser: postgres
   postgresPassword: anchore
   postgresDatabase: anchore
@@ -39,8 +39,8 @@ postgresql:
   externalEndpoint: null
 
 cloudsql:
-  enabled: true
-  instance: "natural-chiller-197420:us-east1:anchore-db"
+  enabled: false
+  instance: ""
   image:
     repository: gcr.io/cloudsql-docker/gce-proxy
     tag: 1.11

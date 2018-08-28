@@ -17,9 +17,6 @@ spec:
         component: core
     spec:
       volumes:
-        - name: cloudsql-instance-credentials
-          secret:
-            secretName: cloudsql-instance-credentials
         - name: config-volume
           configMap:
             name: {{ template "core.fullname" .}}
@@ -33,15 +30,10 @@ spec:
       - name: cloudsql-proxy
         image: {{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}
         command: ["/cloud_sql_proxy",
-                  "-instances={{ .Values.cloudsql.instance }}=tcp:5432",
-                  "-credential_file=/secrets/cloudsql/credentials.json"]
+                  "-instances={{ .Values.cloudsql.instance }}=tcp:5432"]
         securityContext:
           runAsUser: 2  # non-root user
           allowPrivilegeEscalation: false
-        volumeMounts:
-          - name: cloudsql-instance-credentials
-            mountPath: /secrets/cloudsql
-            readOnly: true
       {{- end }}
       - name: {{ .Chart.Name }}-core
         image: {{ .Values.image.tag }}
@@ -61,7 +53,11 @@ spec:
         - name: ANCHORE_DB
           value: {{ .Values.postgresql.postgresDatabase }}
         - name: ANCHORE_DB_HOST
+          {{ if .Values.cloudsql.enabled  }}
+          value: "localhost"
+          {{ else }}
           value: {{ template "postgres.fullname" . }}
+          {{ end }}
         - name: ANCHORE_IO_USER
           valueFrom:
             secretKeyRef:
