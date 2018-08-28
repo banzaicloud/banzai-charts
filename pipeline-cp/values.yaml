@@ -433,3 +433,6 @@ grafana:
       cluster:
         url: https://grafana.com/api/dashboards/5312/revisions/1/download
         datasource: Prometheus
+      cluster:
+        url: https://grafana.com/api/dashboards/7700/revisions/1/download
+        datasource: Prometheus

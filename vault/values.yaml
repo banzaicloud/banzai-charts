@@ -129,7 +129,7 @@ vault:
 unsealer:
   image:
     repository: banzaicloud/bank-vaults
-    tag: "0.2.4"
+    tag: "0.2.17"
     pullPolicy: Always
   args: [
       "--mode",
