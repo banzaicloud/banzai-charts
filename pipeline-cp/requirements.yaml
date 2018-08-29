@@ -1,7 +1,7 @@
 dependencies:
 
 - name: grafana
-  version: 1.13.1
+  version: 1.14.0
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: grafana.enabled
 
@@ -15,7 +15,7 @@ dependencies:
   condition: prometheus.enabled
 
 - name: pipeline
-  version: 0.0.17
+  version: 0.0.18
   repository: alias:banzaicloud-stable
 
 - name: pipeline-ui
