@@ -67,6 +67,7 @@ server:
   env:
     DRONE_DEBUG: "false"
     DRONE_OPEN: "true"
+    DRONE_REPO_CONFIG: ".banzaicloud/pipeline.yaml"
     # DRONE_DATABASE_DRIVER: "sqlite3"
     # DRONE_DATABASE_DATASOURCE: "/var/lib/drone/drone.sqlite"
 
