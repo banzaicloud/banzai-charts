@@ -62,7 +62,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "productinfo.fullname" . }}
                   key: awsSecretAccessKey
-            - name: GKE_API_KEY
+            - name: GCE_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "productinfo.fullname" . }}
