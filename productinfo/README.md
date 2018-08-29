@@ -43,28 +43,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the productinfo chart and their default values.
 
-|          Parameter          |                Description                            |             Default             |
-| --------------------------- | ----------------------------------------------------- | ------------------------------- |
-| `image.repository`          | Container image repository                               | `banzaicloud/productinfo`    |
-| `image.tag       `          | Container image tag                                      | `latest`                     |
-| `image.pullPolicy`          | Container pull policy                                    | `Always`                     |
-| `service.type`              | The kubernetes service type to use                       | `ClusterIP`                  |
-| `service.name`              | The kubernetes service name to use                       | `productinfo`                |
-| `service.port`              | Port to bind to for NodePort service type                | `nil`                        |
-| `service.annotations`       | The kubernetes service annotations                       | `nil`                        |
-| `app.logLevel`              | Log level                                                | `info`                       |
-| `app.basePath`              | Application base path                                    | `/`                          |
-| `auth.awsAccessKeyId`       | Amazon Access Key ID                                     | ""                           |
-| `auth.awsSecretAccessKey`   | Amazon Secret Access Key                                 | ""                           |
-| `auth.gceApiKey`            | GCE API Key                                              | ""                        |
-| `auth.gceCredentials`       | GCE Credential file (encoded by base64)                  | ""                        |
-| `auth.azureSubscriptionId`  | Azure Subscription GUID                                  | ""                        |
-| `auth.azureCredentials`     | Azure Credential file (encoded by base64)                | ""                        |
-| `auth.ociUser`              | The OCID of the user                                     | ""                        |
-| `auth.ociTenancy`           | The OCID of the tenancy                                  | ""                        |
-| `auth.ociRegion`            | Specific region for OCI                                  | ""                        |
-| `auth.ociKey`               | The key pair must be in PEM format. (encode by base64)   | ""                        |
-| `auth.ociFingerprint`       | Fingerprint for the key pair being used                  | ""                        |
+|          Parameter            |                Description                               |             Default          |
+| ----------------------------- | -------------------------------------------------------- | ---------------------------- |
+| `image.repository`            | Container image repository                               | `banzaicloud/productinfo`    |
+| `image.tag       `            | Container image tag                                      | `latest`                     |
+| `image.pullPolicy`            | Container pull policy                                    | `Always`                     |
+| `service.type`                | The kubernetes service type to use                       | `ClusterIP`                  |
+| `service.name`                | The kubernetes service name to use                       | `productinfo`                |
+| `service.port`                | Port to bind to for NodePort service type                | `nil`                        |
+| `service.annotations`         | The kubernetes service annotations                       | `nil`                        |
+| `app.logLevel`                | Log level                                                | `info`                       |
+| `app.basePath`                | Application base path                                    | `/`                          |
+| `auth.awsAccessKeyId`         | Amazon Access Key ID                                     | ""                           |
+| `auth.awsSecretAccessKey`     | Amazon Secret Access Key                                 | ""                           |
+| `auth.gceApiKey`              | GCE API Key                                              | ""                           |
+| `auth.gceCredentials`         | GCE Credential file (encoded by base64)                  | ""                           |
+| `auth.azureSubscriptionId`    | Azure Subscription GUID                                  | ""                           |
+| `auth.azureCredentials`       | Azure Credential file (encoded by base64)                | ""                           |
+| `auth.ociUser`                | The OCID of the user                                     | ""                           |
+| `auth.ociTenancy`             | The OCID of the tenancy                                  | ""                           |
+| `auth.ociRegion`              | Specific region for OCI                                  | ""                           |
+| `auth.ociKey`                 | The key pair must be in PEM format. (encode by base64)   | ""                           |
+| `auth.ociFingerprint`         | Fingerprint for the key pair being used                  | ""                           |
+| `auth.alibabaAccessKeyId`     | Alibaba Access Key ID                                    | ""                           |
+| `auth.alibabaAccessKeySecret` | Alibaba Access Key Secret                                | ""                           |
+| `auth.alibabaRegionId`        | Alibaba Region ID                                        | ""                           |
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 
