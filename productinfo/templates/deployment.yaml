@@ -35,14 +35,14 @@ spec:
             - "-ecx"
             - |
               /bin/productinfo \
-              --gce-api-key=$GKE_API_KEY \
               --azure-subscription-id=$AZURE_SUBSCRIPTION_ID \
               --log-level {{ .Values.app.logLevel }} \
               --listen-address 0.0.0.0:{{ .Values.service.internalPort }} \
               --provider gce \
               --provider ec2 \
               --provider azure \
-              --provider oracle
+              --provider oracle \
+              --provider alibaba
           env:
             - name: PRODUCTINFO_BASEPATH
               value: {{ .Values.app.basePath }}
@@ -72,6 +72,18 @@ spec:
                 secretKeyRef:
                   name: {{ template "productinfo.fullname" . }}
                   key: azureSubscriptionId
+            - name: ALIBABA_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "productinfo.fullname" . }}
+                  key: alibabaAccessKeyId
+            - name: ALIBABA_ACCESS_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "productinfo.fullname" . }}
+                  key: alibabaAccessKeySecret
+            - name: ALIBABA_REGION_ID
+              value: {{ .Values.auth.alibabaRegionId }}
           ports:
             - name: http
               containerPort: {{ .Values.service.internalPort }}
