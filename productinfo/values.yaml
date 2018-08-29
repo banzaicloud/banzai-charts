@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/productinfo
-  tag: 0.1.3
+  tag: 0.2.0
   pullPolicy: IfNotPresent
 
 service:
@@ -19,9 +19,9 @@ ingress:
   annotations: {}
     #kubernetes.io/ingress.class: traefik
     #ingress.kubernetes.io/ssl-redirect: "false"
-    #traefik.frontend.rule.type: PathPrefixStrip
+    #traefik.frontend.rule.type: PathPrefix
   hosts:
-    # - "/"
+    - "/"
     # - "domain.com/xyz"
     # - "domain.com"
   tls: []
@@ -49,7 +49,7 @@ affinity: {}
 
 app:
   logLevel: "info"
-  basePath: ""
+  basePath: "/"
 
 auth:
   awsAccessKeyId: ""
@@ -66,3 +66,7 @@ auth:
   ociRegion: ""
   ociFingerprint: ""
   ociKey: ""
+
+  alibabaAccessKeyId: ""
+  alibabaAccessKeySecret: ""
+  alibabaRegionId: "eu-central-1"
