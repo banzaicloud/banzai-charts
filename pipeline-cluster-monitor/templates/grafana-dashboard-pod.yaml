@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fullname" . }}-grafana-dashboard-pod
+  name: {{ template "pipeline-cluster-monitor.fullname" . }}-grafana-dashboard-pod
   labels:
     pipeline_grafana_dashboard: "1"
 data:

@@ -107,6 +107,8 @@ drone:
 prometheus:
   nodeExporter:
     enabled: true
+  alertmanager:
+    enabled: false
   server:
     baseURL: /prometheus
     prefixURL: /prometheus
@@ -436,3 +438,23 @@ grafana:
       vault:
         url: https://grafana.com/api/dashboards/7700/revisions/1/download
         datasource: Prometheus
+
+anchore-engine:
+  enabled: false
+  ingress:
+    enabled: false
+    hosts:
+       - "/imagecheck"
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      traefik.frontend.rule.type: PathPrefixStrip
+
+  postgresql:
+    enabled: false
+    postgresUser: ""
+    postgresPassword: ""
+    postgresDatabase: ""
+
+  cloudsql:
+    enabled: false
+    instance: ""
