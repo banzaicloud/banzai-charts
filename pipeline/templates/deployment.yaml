@@ -79,15 +79,6 @@ spec:
         - name: PIPELINE_LOGGING_KUBICORNLOGLEVEL
           value: {{ .Values.logging.kubicornloglevel | quote }}
 
-        - name: PIPELINE_CLOUD_CLOUDPROVIDER
-          value: {{ .Values.cloud.cloudprovider | quote }}
-        - name: PIPELINE_CLOUD_CLOUDPROFILE
-          value: {{ .Values.cloud.cloudprofile | quote }}
-        - name: PIPELINE_CLOUD_GKECREDENTIALPATH
-          value: {{ .Values.cloud.gkeCredentialPath | quote }}
-        - name: PIPELINE_CLOUD_KEYPATH
-          value: {{ .Values.cloud.keypath | quote }}
-
         - name: PIPELINE_AUTH_CLIENTID
           valueFrom:
             secretKeyRef:
@@ -149,38 +140,6 @@ spec:
         - name: PIPELINE_HELM_RETRYSLEEPSECONDS
           value: "{{ .Values.Helm.retrySleepSeconds }}"
 
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: awsSecretAccessKey
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: awsAccessKeyId
-
-        - name: AZURE_CLIENT_ID
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: azureClientId
-        - name: AZURE_CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: azureClientSecret
-        - name: AZURE_SUBSCRIPTION_ID
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: azureSubscriptionId
-        - name: AZURE_TENANT_ID
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "fullname" . }}
-              key: azureTenantId
-
         - name: VAULT_ADDR
           value: https://{{ .Release.Name }}-vault:8200
         - name: VAULT_CACERT
@@ -221,9 +180,6 @@ spec:
         - mountPath: /statestore
           name: statestore
 
-        - mountPath: /root/gke
-          name: gke-credential
-
         - name: vault-tls
           mountPath: /vault/tls
 
@@ -231,9 +187,6 @@ spec:
           mountPath: /tls
 
       volumes:
-      - name: gke-credential
-        secret:
-          secretName: "{{ template "fullname" . }}-gke"
       - name: config-volume
         configMap:
           name: "{{ template "fullname" . }}"

@@ -39,18 +39,6 @@
                 "enabled": false
             }
         },
-        "cloud": {
-            "cloudprovider": "aws",
-            "gkeCredentialPath": "",
-            "keypath": ""
- 
-        },
-        "awsSecretAccessKey": "",
-        "awsAccessKeyId": "",
-        "azureClientId": "",
-        "azureClientSecret": "",
-        "azureSubscriptionId": "",
-        "azureTenantId": "",
         "Helm": {
             "retryAttempt": "",
             "retrySleepSeconds": ""

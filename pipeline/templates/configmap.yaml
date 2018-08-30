@@ -16,12 +16,6 @@ data:
     loglevel = "debug"
     kubicornloglevel = "debug"
 
-    [cloud]
-    cloudprovider = "aws"
-    cloudprofile = "default"
-    gkeCredentialPath = ""
-    keypath = "/root/.ssh/id_rsa.pub"
-
     [cors]
 
     [auth]
