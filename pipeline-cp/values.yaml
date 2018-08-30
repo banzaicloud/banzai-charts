@@ -107,6 +107,8 @@ drone:
 prometheus:
   nodeExporter:
     enabled: true
+  alertmanager:
+    enabled: false
   server:
     baseURL: /prometheus
     prefixURL: /prometheus
