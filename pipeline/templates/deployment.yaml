@@ -111,6 +111,11 @@ spec:
           value: {{ .Values.auth.cookieDomain | quote }}
         - name: PIPELINE_AUTH_SECURECOOKIE
           value: "true"
+        - name: PIPELINE_GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: githubToken
 
         - name: PIPELINE_DRONE_URL
           value: http://{{ .Release.Name }}-drone:80
