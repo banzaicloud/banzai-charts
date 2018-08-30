@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fullname" . }}-grafana-datasource
+  name: {{ template "pipeline-cluster-monitor.fullname" . }}-grafana-datasource
   labels:
     pipeline_grafana_datasource: "1"
 data:
