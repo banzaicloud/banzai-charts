@@ -43,18 +43,6 @@ logging:
   loglevel: debug
   kubicornloglevel: debug
 
-cloud:
-  cloudprovider: aws
-  cloudprofile: default
-  gkeCredentialPath: "/root/gke/gke-credential.json"
-  keypath: "/root/.ssh/id_rsa.pub"
-
-gkeCredentials:
-  client_id: ""
-  client_secret: ""
-  refresh_token: ""
-  type: ""
-
 auth:
   jwtissueer: "https://banzaicloud.com/"
   jwtaudience: "https://pipeline.banzaicloud.com"
@@ -192,5 +180,3 @@ resources:
   requests:
     cpu: 250m
     memory: 256Mi
-
-
