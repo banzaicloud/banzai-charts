@@ -2,11 +2,11 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "chart" -}}
+{{- define "anchore-engine.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "name" -}}
+{{- define "anchore-engine.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -14,7 +14,7 @@ Expand the name of the chart.
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "fullname" -}}
+{{- define "anchore-engine.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -23,7 +23,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "worker.fullname" -}}
+{{- define "anchore-engine.worker.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s-%s" .Release.Name $name "worker"| trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -32,7 +32,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "core.fullname" -}}
+{{- define "anchore-engine.core.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s-%s" .Release.Name $name "core"| trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -41,6 +41,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Create a default fully qualified dependency name for the db.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "postgres.fullname" -}}
+{{- define "anchore-engine.postgres.fullname" -}}
 {{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

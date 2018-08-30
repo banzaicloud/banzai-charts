@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "anchore-engine.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "anchore-engine.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -32,5 +32,5 @@ spec:
       targetPort: {{ .Values.service.ports.policy }}
       protocol: TCP
   selector:
-    app: {{ template "fullname" . }}
+    app: {{ template "anchore-engine.fullname" . }}
     component: core

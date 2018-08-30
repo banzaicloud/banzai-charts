@@ -1,9 +1,9 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "worker.fullname" . }}"
+  name: "{{ template "anchore-engine.worker.fullname" . }}"
   labels:
-    app: "{{ template "worker.fullname" . }}"
+    app: "{{ template "anchore-engine.worker.fullname" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -13,13 +13,14 @@ spec:
   template:
     metadata:
       labels:
-        app: "{{ template "worker.fullname" . }}"
+        app: "{{ template "anchore-engine.worker.fullname" . }}"
         component: worker
     spec:
       containers:
       {{- if .Values.cloudsql.enabled  }}
       - name: cloudsql-proxy
         image: {{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}
+        imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy }}
         command: ["/cloud_sql_proxy",
                   "-instances={{ .Values.cloudsql.instance }}=tcp:5432"]
         securityContext:
@@ -27,7 +28,8 @@ spec:
           allowPrivilegeEscalation: false
       {{- end }}
       - name: {{ .Chart.Name }}-worker
-        image: {{ .Values.image.tag }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: ANCHORE_ENGINE_SERVICES
           value: anchore-worker
@@ -37,22 +39,22 @@ spec:
           {{ if .Values.cloudsql.enabled  }}
           value: "localhost:5432"
           {{ else }}
-          value: {{ template "postgres.fullname" . }}
+          value: {{ template "anchore-engine.postgres.fullname" . }}
           {{ end }}
         - name: ANCHORE_DB_USER
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}
               key: dbUser
         - name: ANCHORE_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}
               key: dbPassword
         - name: ANCHORE_ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}
               key: adminPassword
         - name: ANCHORE_POD_NAME
           valueFrom:
@@ -100,7 +102,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ template "worker.fullname" .}}
+            name: {{ template "anchore-engine.worker.fullname" .}}
         {{- if .Values.globalConfig.internalServicesSslEnabled }}
         - name: certs
           secret:

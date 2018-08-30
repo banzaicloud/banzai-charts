@@ -1,9 +1,9 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "core.fullname" . }}"
+  name: "{{ template "anchore-engine.core.fullname" . }}"
   labels:
-    app: "{{ template "fullname" . }}"
+    app: "{{ template "anchore-engine.fullname" . }}"
     component: core
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
@@ -13,13 +13,13 @@ spec:
   template:
     metadata:
       labels:
-        app: "{{ template "fullname" . }}"
+        app: "{{ template "anchore-engine.fullname" . }}"
         component: core
     spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ template "core.fullname" .}}
+            name: {{ template "anchore-engine.core.fullname" .}}
         {{- if .Values.globalConfig.internalServicesSslEnabled }}
         - name: certs
           secret:
@@ -29,6 +29,7 @@ spec:
       {{- if .Values.cloudsql.enabled  }}
       - name: cloudsql-proxy
         image: {{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}
+        imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy }}
         command: ["/cloud_sql_proxy",
                   "-instances={{ .Values.cloudsql.instance }}=tcp:5432"]
         securityContext:
@@ -36,7 +37,7 @@ spec:
           allowPrivilegeEscalation: false
       {{- end }}
       - name: {{ .Chart.Name }}-core
-        image: {{ .Values.image.tag }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.service.ports.api }}
@@ -56,32 +57,32 @@ spec:
           {{ if .Values.cloudsql.enabled  }}
           value: "localhost"
           {{ else }}
-          value: {{ template "postgres.fullname" . }}
+          value: {{ template "anchore-engine.postgres.fullname" . }}
           {{ end }}
         - name: ANCHORE_IO_USER
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}
               key: anchoreIOUser
         - name: ANCHORE_IO_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}
               key: anchoreIOPassword
         - name: ANCHORE_DB_USER
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}
               key: dbUser
         - name: ANCHORE_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}
               key: dbPassword
         - name: ANCHORE_ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}
               key: adminPassword
         - name: ANCHORE_POD_NAME
           valueFrom:

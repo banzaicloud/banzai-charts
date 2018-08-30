@@ -1,9 +1,9 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: "{{ template "core.fullname" . }}"
+  name: "{{ template "anchore-engine.core.fullname" . }}"
   labels:
-    app: "{{ template "fullname" . }}"
+    app: "{{ template "anchore-engine.fullname" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -69,7 +69,7 @@ data:
           auto_policy_sync: {{ .Values.coreConfig.policyBundleSyncEnabled }}
       database:
         {{ if .Values.postgresql.enabled }}
-        db_connect: 'postgresql+pg8000://${ANCHORE_DB_USER}:${ANCHORE_DB_PASSWORD}@{{ template "postgres.fullname" . }}:5432/{{ .Values.postgresql.postgresDatabase }}'
+        db_connect: 'postgresql+pg8000://${ANCHORE_DB_USER}:${ANCHORE_DB_PASSWORD}@{{ template "anchore-engine.postgres.fullname" . }}:5432/{{ .Values.postgresql.postgresDatabase }}'
         {{ else if .Values.cloudsql.enabled }}
         db_connect: 'postgresql+pg8000://${ANCHORE_DB_USER}:${ANCHORE_DB_PASSWORD}@localhost:5432/${ANCHORE_DB}'
         {{ else }}
@@ -84,7 +84,7 @@ data:
       apiext:
         enabled: True
         require_auth: True
-        endpoint_hostname: {{ template "fullname" . }}
+        endpoint_hostname: {{ template "anchore-engine.fullname" . }}
         listen: '0.0.0.0'
         port: {{ .Values.service.ports.api }}
         ssl_enable: {{ .Values.globalConfig.internalServicesSslEnabled }}
@@ -93,7 +93,7 @@ data:
       kubernetes_webhook:
         enabled: True
         require_auth: False
-        endpoint_hostname: {{ template "fullname" . }}
+        endpoint_hostname: {{ template "anchore-engine.fullname" . }}
         listen: '0.0.0.0'
         port: {{ .Values.service.ports.k8sImagePolicyWebhook }}
         ssl_enable: {{ .Values.globalConfig.internalServicesSslEnabled }}
@@ -102,7 +102,7 @@ data:
       catalog:
         enabled: True
         require_auth: True
-        endpoint_hostname: {{ template "fullname" . }}
+        endpoint_hostname: {{ template "anchore-engine.fullname" . }}
         listen: '0.0.0.0'
         port: {{ .Values.service.ports.catalog }}
         use_db: True
@@ -119,7 +119,7 @@ data:
       simplequeue:
         enabled: True
         require_auth: True
-        endpoint_hostname: {{ template "fullname" . }}
+        endpoint_hostname: {{ template "anchore-engine.fullname" . }}
         listen: '0.0.0.0'
         port: {{ .Values.service.ports.queue }}
         ssl_enable: {{ .Values.globalConfig.internalServicesSslEnabled }}
@@ -128,7 +128,7 @@ data:
       policy_engine:
         enabled: True
         require_auth: True
-        endpoint_hostname: {{ template "fullname" . }}
+        endpoint_hostname: {{ template "anchore-engine.fullname" . }}
         listen: '0.0.0.0'
         port: {{ .Values.service.ports.policy }}
         ssl_cert: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretCertName }}
