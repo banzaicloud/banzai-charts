@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Release.Name}}-default-policy
+  labels:
+    app: {{ template "anchore-policy-validator.fullname" . }}
+data:
+  default-policy.json: |-
+    {
+      "id": "0a869a39-1b20-4ce7-bc00-3a7d88271f08",
+      "version": "1_0",
+      "name": "AnchoreUserDefault",
+      "policies": [
+        {
+          "comment": "",
+          "id": "b4b551ce-376e-455d-9c2b-51ff6d0ab07c",
+          "name": "default",
+          "rules": [
+            {
+              "action": "WARN",
+              "gate": "DOCKERFILECHECK",
+              "id": "ce7b8000-829b-4c27-8122-69cd59018400",
+              "params": [
+                {
+                  "name": "DENIEDPORTS",
+                  "value": "22"
+                }
+              ],
+              "trigger": "EXPOSE"
+            },
+            {
+              "action": "WARN",
+              "gate": "DOCKERFILECHECK",
+              "id": "312d9e41-1c05-4e2f-ad89-b7d34b0855bb",
+              "params": [],
+              "trigger": "NOHEALTHCHECK"
+            },
+            {
+              "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "6b5c14e7-a6f7-48cc-99d2-959273a2c6fa",
+              "params": [
+                {
+                  "name": "MAXAGE",
+                  "value": "2"
+                }
+              ],
+              "trigger": "FEEDOUTOFDATE"
+            },
+            {
+              "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "3e79ea94-18c4-4d26-9e29-3b9172a62c2e",
+              "params": [],
+              "trigger": "UNSUPPORTEDDISTRO"
+            },
+            {
+              "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "6063fdde-b1c5-46af-973a-915739451ac4",
+              "params": [],
+              "trigger": "VULNMEDIUM"
+            },
+            {
+              "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "b30e8abc-444f-45b1-8a37-55be1b8c8bb5",
+              "params": [],
+              "trigger": "VULNHIGH"
+            },
+            {
+              "action": "STOP",
+              "gate": "ANCHORESEC",
+              "id": "295adc9f-28b9-4aab-a5d6-833cf7727db7",
+              "params": [],
+              "trigger": "VULNCRITICAL"
+            }
+          ],
+          "version": "1_0"
+        }
+      ],
+      "whitelists": [
+        {
+          "comment": "Default Global Whitelist",
+          "id": "912937b6-05fb-472f-bfbe-834c3562f32d",
+          "items": [],
+          "name": "Global Whitelist",
+          "version": "1_0"
+        }
+      ],
+      "mappings": [
+        {
+          "id": "c4f9bf74-dc38-4ddf-b5cf-00e9c0074611",
+          "image": {
+            "type": "tag",
+            "value": "*"
+          },
+          "name": "default",
+          "policy_id": "b4b551ce-376e-455d-9c2b-51ff6d0ab07c",
+          "registry": "*",
+          "repository": "*",
+          "whitelist_ids": [
+            "912937b6-05fb-472f-bfbe-834c3562f32d"
+          ]
+        }
+      ]
+    }

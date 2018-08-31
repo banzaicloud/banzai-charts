@@ -1,0 +1,45 @@
+{{- $anchoreEngineValues := index .Values "anchore-engine" }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-default-policy"
+  labels:
+    app: {{ template "anchore-policy-validator.fullname" . }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "anchore-policy-validator.fullname" . }}-default-policy
+    spec:
+      restartPolicy: OnFailure
+      volumes:
+      - name: default-policy
+        configMap:
+          name: {{.Release.Name}}-default-policy
+      containers:
+      - name: default-policy
+        image:  "anchore/engine-cli"
+        volumeMounts:
+        - name: default-policy
+          mountPath: /policy
+        env:
+        - name: ANCHORE_CLI_USER
+          value: admin
+        - name: ANCHORE_CLI_PASS
+          value: {{ $anchoreEngineValues.globalConfig.users.admin.password }}
+        - name: ANCHORE_CLI_URL
+          {{ if $anchoreEngineValues.enabled }}
+          value: "http://{{ .Release.Name }}-anchore-engine.{{ .Release.Namespace }}.svc.cluster.local:8228"
+          {{ else }}
+          value: {{ $anchoreEngineValues.external }}
+          {{ end }}        
+        command:
+        - "sh"
+        - "-c"
+        - |
+          set -ex
+          anchore-cli policy add /policy/default-policy.json
+          anchore-cli policy activate 0a869a39-1b20-4ce7-bc00-3a7d88271f08

@@ -1,0 +1,25 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ template "anchore-policy-validator.fullname" . }}.admission.anchore.io
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "1"
+webhooks:
+- name: {{ template "anchore-policy-validator.fullname" . }}.admission.anchore.io
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/admission.anchore.io/v1beta1/imagechecks
+    caBundle: {{ .Values.k8sCAbundle }}
+  rules:
+  - operations:
+    - CREATE
+    apiGroups:
+    - ""
+    apiVersions:
+    - "*"
+    resources:
+    - pods
+  failurePolicy: Fail

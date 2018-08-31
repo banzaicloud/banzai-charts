@@ -1,0 +1,61 @@
+{{- $anchoreEngineValues := index .Values "anchore-engine" }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "anchore-policy-validator.fullname" . }}
+  labels:
+    app: {{ template "anchore-policy-validator.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "anchore-policy-validator.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ template "anchore-policy-validator.fullname" . }}
+      volumes:
+      - name: serving-cert
+        secret:
+          defaultMode: 420
+          secretName: {{ template "anchore-policy-validator.name" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+          - "/anchore-image-admission-server"
+          - "--audit-log-path=-"
+          - "--tls-cert-file=/var/serving-cert/tls.crt"
+          - "--tls-private-key-file=/var/serving-cert/tls.key"
+          - "--v={{ .Values.logVerbosity }}"
+          env:
+          - name: ANCHORE_ENGINE_USERNAME
+            value: admin
+          - name: ANCHORE_ENGINE_PASSWORD
+            value: {{ $anchoreEngineValues.globalConfig.users.admin.password }}
+          - name: ANCHORE_ENGINE_URL
+            {{ if $anchoreEngineValues.enabled }}
+            value: "http://{{ .Release.Name }}-anchore-engine.{{ .Release.Namespace }}.svc.cluster.local:8228"
+            {{ else }}
+            value: {{ $anchoreEngineValues.external }}
+            {{ end }}
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.service.internalPort }}
+              scheme: HTTPS
+          volumeMounts:
+          - mountPath: /var/serving-cert
+            name: serving-cert
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
