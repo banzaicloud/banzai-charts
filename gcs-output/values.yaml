@@ -1,5 +1,3 @@
 bucketName: logging-test
-project: pipeline-196616
 secret:
-  name: gcs-credentials
-  key: gcs-credentials.json
+  name: gcs
