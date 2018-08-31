@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-init-ca"
+  labels:
+    app: {{ template "anchore-policy-validator.fullname" . }}
+    component: admission-server
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "anchore-policy-validator.fullname" . }}
+        component: admission-server
+    spec:
+      serviceAccountName: {{ template "anchore-policy-validator.fullname" . }}-init-ca
+      restartPolicy: OnFailure
+      volumes:
+      - name: init-ca-script
+        configMap:
+          name: {{.Release.Name}}-init-ca
+      containers:
+      - name: create-ca
+        image:  "cfssl/cfssl:latest"
+        command:
+        - bash
+        - -xe
+        - /scripts/init-ca.sh
+        volumeMounts:
+        - name: init-ca-script
+          mountPath: /scripts

@@ -1,0 +1,23 @@
+replicaCount: 1
+logVerbosity: 8
+apiService:
+  group: admission.anchore.io
+  version: v1beta1
+image:
+  repository: viglesiasce/anchore-image-admission-server
+  tag: latest
+  pullPolicy: Always
+service:
+  name: anchoreimagecheck
+  type: ClusterIP
+  externalPort: 443
+  internalPort: 443
+anchore-engine:
+  enabled: false
+  globalConfig:
+    users:
+      admin:
+        password: foobar
+  external: ""
+resources: {}
+k8sCAbubdle: ""

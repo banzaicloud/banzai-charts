@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Release.Name}}-init-ca
+  labels:
+    app: {{ template "anchore-policy-validator.fullname" . }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-5"
+data:
+  init-ca.sh: |-
+    #!/bin/bash -xe
+    # Adapted from https://github.com/openshift/kubernetes-namespace-reservation/blob/master/hack/install-kube.sh
+    apt-get update && apt-get install -y jq
+
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    chmod +x ./kubectl
+    mv ./kubectl /usr/bin
+
+    # creates a client CA, args are sudo, dest-dir, ca-id, purpose
+    # purpose is dropped in after "key encipherment", you usually want
+    # '"client auth"'
+    # '"server auth"'
+    # '"client auth","server auth"'
+    function kube::util::create_signing_certkey {
+        local sudo=$1
+        local dest_dir=$2
+        local id=$3
+        local purpose=$4
+        # Create client ca
+        ${sudo} /bin/bash -e <<EOF
+        rm -f "${dest_dir}/${id}-ca.crt" "${dest_dir}/${id}-ca.key"
+        openssl req -x509 -sha256 -new -nodes -days 365 -newkey rsa:2048 -keyout "${dest_dir}/${id}-ca.key" -out "${dest_dir}/${id}-ca.crt" -subj "/C=xx/ST=x/L=x/O=x/OU=x/CN=ca/emailAddress=x/"
+        echo '{"signing":{"default":{"expiry":"43800h","usages":["signing","key encipherment",${purpose}]}}}' > "${dest_dir}/${id}-ca-config.json"
+    EOF
+    }
+
+    # signs a serving certificate: args are sudo, dest-dir, ca, filename (roughly), subject, hosts...
+    function kube::util::create_serving_certkey {
+        local sudo=$1
+        local dest_dir=$2
+        local ca=$3
+        local id=$4
+        local cn=${5:-$4}
+        local hosts=""
+        local SEP=""
+        shift 5
+        while [ -n "${1:-}" ]; do
+            hosts+="${SEP}\"$1\""
+            SEP=","
+            shift 1
+        done
+        ${sudo} /bin/bash -e <<EOF
+        cd ${dest_dir}
+        echo '{"CN":"${cn}","hosts":[${hosts}],"key":{"algo":"rsa","size":2048}}' | cfssl gencert -ca=${ca}.crt -ca-key=${ca}.key -config=${ca}-config.json - | cfssljson -bare serving-${id}
+        mv "serving-${id}-key.pem" "serving-${id}.key"
+        mv "serving-${id}.pem" "serving-${id}.crt"
+        rm -f "serving-${id}.csr"
+    EOF
+    }
+
+    which jq &>/dev/null || { echo "Please install jq (https://stedolan.github.io/jq/)."; exit 1; }
+    which cfssljson &>/dev/null || { echo "Please install cfssljson (https://github.com/cloudflare/cfssl))."; exit 1; }
+
+    # create necessary TLS certificates:
+    # - a local CA key and cert
+    # - a webhook server key and cert signed by the local CA
+    rm -rf ./_output/
+    CERT_DIR=_output/tmp/certs
+    mkdir -p "${CERT_DIR}"
+    kube::util::create_signing_certkey "" "${CERT_DIR}" serving '"server auth"'
+
+    # create webhook server key and cert
+    kube::util::create_serving_certkey "" "${CERT_DIR}" "serving-ca" {{ template "anchore-policy-validator.fullname" . }}.{{ .Release.Namespace }}.svc "{{ template "anchore-policy-validator.fullname" . }}.{{ .Release.Namespace }}.svc" "{{ template "anchore-policy-validator.fullname" . }}.{{ .Release.Namespace }}.svc"
+
+    cat > secret.yaml <<EOF
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: {{ template "anchore-policy-validator.name" . }}
+    type: kubernetes.io/tls
+    data:
+      tls.crt: TLS_SERVING_CERT
+      tls.key: TLS_SERVING_KEY
+    EOF
+
+    sed "s/TLS_SERVING_CERT/$(base64 ${CERT_DIR}/serving-{{ template "anchore-policy-validator.fullname" . }}.{{ .Release.Namespace }}.svc.crt | tr -d '\n')/g" secret.yaml |
+    sed "s/TLS_SERVING_KEY/$(base64 ${CERT_DIR}/serving-{{ template "anchore-policy-validator.fullname" . }}.{{ .Release.Namespace }}.svc.key | tr -d '\n')/g" | kubectl -n {{ .Release.Namespace }} apply -f -
+
+    cat > api-service.yaml <<EOF
+    apiVersion: apiregistration.k8s.io/v1beta1
+    kind: APIService
+    metadata:
+      name: {{ .Values.apiService.version }}.{{ .Values.apiService.group }}
+    spec:
+      caBundle: SERVICE_SERVING_CERT_CA
+      group: {{ .Values.apiService.group }}
+      groupPriorityMinimum: 1000
+      versionPriority: 15
+      service:
+        name: {{ template "anchore-policy-validator.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+      version: {{ .Values.apiService.version }}
+    EOF
+
+    sed "s/SERVICE_SERVING_CERT_CA/$(base64 ${CERT_DIR}/serving-ca.crt | tr -d '\n')/g" api-service.yaml | kubectl -n {{ .Release.Namespace }} apply -f -

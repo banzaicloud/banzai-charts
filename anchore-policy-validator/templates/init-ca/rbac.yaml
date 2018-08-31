@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-6"
+  name: {{ template "anchore-policy-validator.fullname" . }}-init-ca
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "anchore-policy-validator.fullname" . }}-init-ca
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-6"
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["secrets", "deployments"]
+  verbs: ["get", "patch", "create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-6"
+  namespace: {{ .Release.Namespace }}
+  name: extension-{{ template "anchore-policy-validator.fullname" . }}-init-ca-admin
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: {{ template "anchore-policy-validator.fullname" . }}-init-ca
+subjects:
+- kind: ServiceAccount
+  name: {{ template "anchore-policy-validator.fullname" . }}-init-ca
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "anchore-policy-validator.fullname" . }}-init-ca-cluster
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-6"
+rules:
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources: ["validatingwebhookconfigurations"]
+  verbs: ["get", "watch", "list", "create", "update", "patch"]
+- apiGroups: ["apiregistration.k8s.io"]
+  resources: ["apiservices"]
+  verbs: ["get", "watch", "list", "create", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-6"
+  name: extension-{{ template "anchore-policy-validator.fullname" . }}-init-ca-cluster
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: {{ template "anchore-policy-validator.fullname" . }}-init-ca-cluster
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "anchore-policy-validator.fullname" . }}-init-ca

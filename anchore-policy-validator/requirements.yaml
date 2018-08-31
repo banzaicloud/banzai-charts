@@ -1,0 +1,5 @@
+dependencies:
+- name: anchore-engine
+  version: 0.2.x
+  repository: alias:banzaicloud-anchore
+  condition: anchore-engine.enabled

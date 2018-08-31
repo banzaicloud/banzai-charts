@@ -1,0 +1,1 @@
+validatingwebhookConfigureation created :{{ template "anchore-policy-validator.fullname" . }}.admission.anchore.io
