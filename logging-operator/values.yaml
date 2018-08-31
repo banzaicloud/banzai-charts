@@ -18,3 +18,7 @@ fluentbit:
 fluentd:
   enabled: true
   namespace: ""
+
+grafana:
+  dashboard:
+    enabled: true
