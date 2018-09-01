@@ -23,6 +23,9 @@ spec:
       - name: telescopes
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.imagePullPolicy | quote }}
+        env:
+        - name: TELESCOPES_BASEPATH
+          value: {{ .Values.app.basePath }}
         command:
         - "/bin/sh"
         - "-ecx"
