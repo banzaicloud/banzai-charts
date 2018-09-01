@@ -51,7 +51,7 @@ app:
   logLevel: "info"
   basePath: "/"
 
-modules:
+providers:
   gce:
     enabled: false
     gceApiKey: ""

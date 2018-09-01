@@ -37,7 +37,7 @@ spec:
               /bin/productinfo \
               --log-level {{ .Values.app.logLevel }} \
               --listen-address 0.0.0.0:{{ .Values.service.internalPort }} \
-              {{ range $key, $value := .Values.modules }}
+              {{ range $key, $value := .Values.providers }}
               {{- if $value.enabled }} --provider {{ $key }}{{ end }}
               {{- end }}
 
@@ -50,7 +50,7 @@ spec:
               value: /credentials/azure.json
             - name: ORACLE_CLI_CONFIG_LOCATION
               value: /.oci/oci.properties
-            {{ if .Values.modules.ec2.enabled }}
+            {{ if .Values.providers.ec2.enabled }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -62,21 +62,21 @@ spec:
                   name: {{ template "productinfo.fullname" . }}
                   key: awsSecretAccessKey
             {{ end }}
-            {{ if .Values.modules.gce.enabled }}
+            {{ if .Values.providers.gce.enabled }}
             - name: GCE_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "productinfo.fullname" . }}
                   key: gceApiKey
             {{ end }}
-            {{ if .Values.modules.azure.enabled }}
+            {{ if .Values.providers.azure.enabled }}
             - name: AZURE_SUBSCRIPTION_ID
               valueFrom:
                 secretKeyRef:
                   name: {{ template "productinfo.fullname" . }}
                   key: azureSubscriptionId
             {{ end }}
-            {{ if .Values.modules.alibaba.enabled }}
+            {{ if .Values.providers.alibaba.enabled }}
             - name: ALIBABA_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -88,7 +88,7 @@ spec:
                   name: {{ template "productinfo.fullname" . }}
                   key: alibabaAccessKeySecret
             - name: ALIBABA_REGION_ID
-              value: {{ .Values.modules.alibaba.alibabaRegionId }}
+              value: {{ .Values.providers.alibaba.alibabaRegionId }}
             {{ end }}
           ports:
             - name: http
@@ -109,15 +109,15 @@ spec:
           secret:
             secretName: {{ template "productinfo.fullname" . }}
             items:
-            {{ if .Values.modules.gce.enabled }}
+            {{ if .Values.providers.gce.enabled }}
             - key: gceCredentials
               path: google.json
             {{ end }}
-            {{ if .Values.modules.azure.enabled }}
+            {{ if .Values.providers.azure.enabled }}
             - key: azureCredentials
               path: azure.json
             {{ end }}
-            {{ if .Values.modules.oracle.enabled }}
+            {{ if .Values.providers.oracle.enabled }}
             - key: ociKey
               path: oci_key.pem
             {{ end }}

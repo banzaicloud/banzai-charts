@@ -13,8 +13,8 @@ metadata:
 data:
   oci.properties: |-
     [DEFAULT]
-    user={{ .Values.modules.oracle.ociUser }}
-    tenancy={{ .Values.modules.oracle.ociTenancy }}
-    region={{ .Values.modules.oracle.ociRegion }}
-    fingerprint={{ .Values.modules.oracle.ociFingerprint }}
+    user={{ .Values.providers.oracle.ociUser }}
+    tenancy={{ .Values.providers.oracle.ociTenancy }}
+    region={{ .Values.providers.oracle.ociRegion }}
+    fingerprint={{ .Values.providers.oracle.ociFingerprint }}
     key_file=/credentials/oci_key.pem
