@@ -25,4 +25,4 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - /metrics-server
-            - --source=kubernetes.summary_api:''
+            - --kubelet-insecure-tls
