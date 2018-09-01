@@ -49,6 +49,7 @@ auth:
   clientid: ""
   clientsecret: ""
   cookieDomain: ""
+  secureCookie: true
 
 helm:
   retryAttempt: "30"
