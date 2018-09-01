@@ -1,5 +1,5 @@
 dependencies:
 - name: metrics-server
-  version: 0.0.2
+  version: 0.0.3
   repository: alias:banzaicloud-stable
   condition: metricsServer.enabled
