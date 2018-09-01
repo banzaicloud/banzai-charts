@@ -51,22 +51,32 @@ app:
   logLevel: "info"
   basePath: "/"
 
-auth:
-  awsAccessKeyId: ""
-  awsSecretAccessKey: ""
+providers:
+  gce:
+    enabled: false
+    gceApiKey: ""
+    gceCredentials: ""
+  ec2:
+    enabled: false
+    awsAccessKeyId: ""
+    awsSecretAccessKey: ""
+  azure:
+    enabled: false
+    azureSubscriptionId: ""
+    azureCredentials: ""
+  oracle:
+    enabled: false
+    ociUser: ""
+    ociTenancy: ""
+    ociRegion: ""
+    ociFingerprint: ""
+    ociKey: ""
+  alibaba:
+    enabled: false
+    alibabaAccessKeyId: ""
+    alibabaAccessKeySecret: ""
+    alibabaRegionId: "eu-central-1"
 
-  gceApiKey: ""
-  gceCredentials: ""
 
-  azureSubscriptionId: ""
-  azureCredentials: ""
 
-  ociUser: ""
-  ociTenancy: ""
-  ociRegion: ""
-  ociFingerprint: ""
-  ociKey: ""
 
-  alibabaAccessKeyId: ""
-  alibabaAccessKeySecret: ""
-  alibabaRegionId: "eu-central-1"

@@ -35,14 +35,12 @@ spec:
             - "-ecx"
             - |
               /bin/productinfo \
-              --azure-subscription-id=$AZURE_SUBSCRIPTION_ID \
               --log-level {{ .Values.app.logLevel }} \
               --listen-address 0.0.0.0:{{ .Values.service.internalPort }} \
-              --provider gce \
-              --provider ec2 \
-              --provider azure \
-              --provider oracle \
-              --provider alibaba
+              {{ range $key, $value := .Values.providers }}
+              {{- if $value.enabled }} --provider {{ $key }}{{ end }}
+              {{- end }}
+
           env:
             - name: PRODUCTINFO_BASEPATH
               value: {{ .Values.app.basePath }}
@@ -52,6 +50,7 @@ spec:
               value: /credentials/azure.json
             - name: ORACLE_CLI_CONFIG_LOCATION
               value: /.oci/oci.properties
+            {{ if .Values.providers.ec2.enabled }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -62,16 +61,22 @@ spec:
                 secretKeyRef:
                   name: {{ template "productinfo.fullname" . }}
                   key: awsSecretAccessKey
+            {{ end }}
+            {{ if .Values.providers.gce.enabled }}
             - name: GCE_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "productinfo.fullname" . }}
                   key: gceApiKey
+            {{ end }}
+            {{ if .Values.providers.azure.enabled }}
             - name: AZURE_SUBSCRIPTION_ID
               valueFrom:
                 secretKeyRef:
                   name: {{ template "productinfo.fullname" . }}
                   key: azureSubscriptionId
+            {{ end }}
+            {{ if .Values.providers.alibaba.enabled }}
             - name: ALIBABA_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -83,7 +88,8 @@ spec:
                   name: {{ template "productinfo.fullname" . }}
                   key: alibabaAccessKeySecret
             - name: ALIBABA_REGION_ID
-              value: {{ .Values.auth.alibabaRegionId }}
+              value: {{ .Values.providers.alibaba.alibabaRegionId }}
+            {{ end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.internalPort }}
@@ -103,12 +109,18 @@ spec:
           secret:
             secretName: {{ template "productinfo.fullname" . }}
             items:
+            {{ if .Values.providers.gce.enabled }}
             - key: gceCredentials
               path: google.json
+            {{ end }}
+            {{ if .Values.providers.azure.enabled }}
             - key: azureCredentials
               path: azure.json
+            {{ end }}
+            {{ if .Values.providers.oracle.enabled }}
             - key: ociKey
               path: oci_key.pem
+            {{ end }}
         - name: {{ template "productinfo.fullname" . }}-oci
           configMap:
             name: "{{ template "productinfo.fullname" . }}"
