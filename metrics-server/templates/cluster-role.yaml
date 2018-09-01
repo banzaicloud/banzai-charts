@@ -12,11 +12,20 @@ rules:
   - apiGroups:
     - ""
     resources:
-      - pods
-      - nodes
-      - namespaces
+    - pods
+    - nodes
+    - nodes/stats
+    - namespaces
     verbs:
-      - get
-      - list
-      - watch
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - "extensions"
+    resources:
+    - deployments
+    verbs:
+    - get
+    - list
+    - watch
 {{- end -}}
