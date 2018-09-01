@@ -66,5 +66,6 @@ app:
   productInfoAddress: http://localhost:9090/api/v1/
   logLevel: info
   devMode: true
+  basePath: "/"
 #  vaultAddress: 
 #  tokenSigningKey: 
