@@ -19,10 +19,17 @@ spec:
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ template "metrics-server.serviceAccountName" . }}
+      volumes:
+      # mount in tmp so we can safely use from-scratch images and/or read-only containers
+      - name: tmp-dir
+        emptyDir: {}
       containers:
-        - name: metrics-server
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command:
-            - /metrics-server
-            - --kubelet-insecure-tls
+      - name: metrics-server
+        command:
+        - /metrics-server
+        - --kubelet-insecure-tls
+        image: k8s.gcr.io/metrics-server-amd64:v0.3.0
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: tmp-dir
+          mountPath: /tmp
