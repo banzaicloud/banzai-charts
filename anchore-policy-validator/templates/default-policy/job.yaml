@@ -27,15 +27,23 @@ spec:
           mountPath: /policy
         env:
         - name: ANCHORE_CLI_USER
+          {{- if .Values.externalAnchore.enabled }}
+          value: {{ .Values.externalAnchore.anchoreUser }}
+          {{- else }}
           value: admin
+          {{- end }}
         - name: ANCHORE_CLI_PASS
+          {{- if .Values.externalAnchore.enabled }}
+          value: {{ .Values.externalAnchore.anchorePass }}
+          {{- else }}
           value: {{ $anchoreEngineValues.globalConfig.users.admin.password }}
+          {{- end }}
         - name: ANCHORE_CLI_URL
-          {{ if $anchoreEngineValues.enabled }}
+          {{- if .Values.externalAnchore.enabled }}
+          value: {{ .Values.externalAnchore.anchoreHost }}
+          {{- else }}
           value: "http://{{ .Release.Name }}-anchore-engine.{{ .Release.Namespace }}.svc.cluster.local:8228"
-          {{ else }}
-          value: {{ $anchoreEngineValues.external }}
-          {{ end }}        
+          {{- end }}  
         command:
         - "sh"
         - "-c"

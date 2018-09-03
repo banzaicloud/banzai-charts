@@ -34,15 +34,23 @@ spec:
           - "--v={{ .Values.logVerbosity }}"
           env:
           - name: ANCHORE_ENGINE_USERNAME
+            {{- if .Values.externalAnchore.enabled }}
+            value: {{ .Values.externalAnchore.anchoreUser }}
+            {{- else }}
             value: admin
+            {{- end }}
           - name: ANCHORE_ENGINE_PASSWORD
+            {{- if .Values.externalAnchore.enabled }}
+            value: {{ .Values.externalAnchore.anchorePass }}
+            {{- else }}
             value: {{ $anchoreEngineValues.globalConfig.users.admin.password }}
+            {{- end }}
           - name: ANCHORE_ENGINE_URL
-            {{ if $anchoreEngineValues.enabled }}
+            {{- if .Values.externalAnchore.enabled }}
+            value: {{ .Values.externalAnchore.anchoreHost }}
+            {{- else }}
             value: "http://{{ .Release.Name }}-anchore-engine.{{ .Release.Namespace }}.svc.cluster.local:8228"
-            {{ else }}
-            value: {{ $anchoreEngineValues.external }}
-            {{ end }}
+            {{- end }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
           readinessProbe:
