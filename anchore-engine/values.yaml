@@ -45,6 +45,9 @@ postgresql:
 cloudsql:
   enabled: false
   instance: ""
+  dbName: ""
+  dbUserName: ""
+  dbUserPass: ""
   image:
     repository: gcr.io/cloudsql-docker/gce-proxy
     tag: 1.11
