@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-create-validatingwebhook"
+  labels:
+    app: {{ template "anchore-policy-validator.fullname" . }}
+    component: validating-webhook
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "1"
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "anchore-policy-validator.fullname" . }}
+        component: validating-webhook
+    spec:
+      serviceAccountName: {{ template "anchore-policy-validator.fullname" . }}-validator
+      restartPolicy: OnFailure
+      volumes:
+      - name: create-validatingwebhook
+        configMap:
+          name: {{ .Release.Name }}-validatingwebhook
+      containers:
+      - name: create-validatingwebhook
+        image: "ubuntu"
+        command:
+        - bash
+        - -xe
+        - /scripts/create-validatingwebhook.sh
+        volumeMounts:
+        - name: create-validatingwebhook
+          mountPath: /scripts
