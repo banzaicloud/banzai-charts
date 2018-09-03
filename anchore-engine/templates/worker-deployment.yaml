@@ -34,7 +34,11 @@ spec:
         - name: ANCHORE_ENGINE_SERVICES
           value: anchore-worker
         - name: ANCHORE_DB
+          {{- if .Values.cloudsql.enabled }}
+          value: {{ .Values.cloudsql.dbName }}
+          {{- else }}
           value: {{ .Values.postgresql.postgresDatabase }}
+          {{- end }}
         - name: ANCHORE_DB_HOST
           {{ if .Values.cloudsql.enabled  }}
           value: "localhost:5432"
@@ -42,15 +46,23 @@ spec:
           value: {{ template "anchore-engine.postgres.fullname" . }}
           {{ end }}
         - name: ANCHORE_DB_USER
+          {{- if .Values.cloudsql.enabled }}
           valueFrom:
             secretKeyRef:
               name: {{ template "anchore-engine.fullname" . }}
               key: dbUser
+          {{- else }}
+          value: {{ .Values.postgresql.postgresUser }}
+          {{- end }}
         - name: ANCHORE_DB_PASSWORD
+          {{- if .Values.cloudsql.enabled }}
           valueFrom:
             secretKeyRef:
               name: {{ template "anchore-engine.fullname" . }}
               key: dbPassword
+          {{- else }}
+          value: {{ .Values.postgresql.postgresPassword }}
+          {{- end }}
         - name: ANCHORE_ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:

@@ -52,7 +52,11 @@ spec:
           name: policy-engine
         env:
         - name: ANCHORE_DB
+          {{- if .Values.cloudsql.enabled }}
+          value: {{ .Values.cloudsql.dbName }}
+          {{- else }}
           value: {{ .Values.postgresql.postgresDatabase }}
+          {{- end }}
         - name: ANCHORE_DB_HOST
           {{ if .Values.cloudsql.enabled  }}
           value: "localhost"
@@ -70,15 +74,23 @@ spec:
               name: {{ template "anchore-engine.fullname" . }}
               key: anchoreIOPassword
         - name: ANCHORE_DB_USER
+          {{- if .Values.cloudsql.enabled }}
           valueFrom:
             secretKeyRef:
               name: {{ template "anchore-engine.fullname" . }}
               key: dbUser
+          {{- else }}
+          value: {{ .Values.postgresql.postgresUser }}
+          {{- end }}
         - name: ANCHORE_DB_PASSWORD
+          {{- if .Values.cloudsql.enabled }}
           valueFrom:
             secretKeyRef:
               name: {{ template "anchore-engine.fullname" . }}
               key: dbPassword
+          {{- else }}
+          value: {{ .Values.postgresql.postgresPassword }}
+          {{- end }}
         - name: ANCHORE_ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
