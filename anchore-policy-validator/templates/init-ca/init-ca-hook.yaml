@@ -20,7 +20,7 @@ spec:
       volumes:
       - name: init-ca-script
         configMap:
-          name: {{.Release.Name}}-init-ca
+          name: {{ .Release.Name }}-init-ca
       containers:
       - name: create-ca
         image:  "cfssl/cfssl:latest"
