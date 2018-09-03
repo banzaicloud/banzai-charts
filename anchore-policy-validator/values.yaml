@@ -18,6 +18,10 @@ anchore-engine:
     users:
       admin:
         password: foobar
-  external: ""
+externalAnchore:
+  enabled: true
+  anchoreHost: "http://anchore-anchore-engine:8228"
+  anchoreUser: "poke232"
+  anchorePass: "password"
 resources: {}
-k8sCAbubdle: ""
+k8sCAbundle: ""
