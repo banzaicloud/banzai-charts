@@ -1,0 +1,24 @@
+apiVersion: "logging.banzaicloud.com/v1alpha1"
+kind: "LoggingOperator"
+metadata:
+  name: "{{ .Release.Name }}-gcs-output"
+spec:
+  input:
+    label:
+      app: "*"
+  output:
+    - type: azure
+      name: outputAzure
+      parameters:
+        - name: storageAccountName
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.secret.name }}"
+              key: "storageAccountName"
+        - name: storageAccountName
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.secret.name }}"
+              key: "storageAccountKey"
+        - name: bucket
+          value: "{{ .Values.bucketName }}"
