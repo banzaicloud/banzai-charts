@@ -15,7 +15,7 @@ spec:
             secretKeyRef:
               name: "{{ .Values.secret.name }}"
               key: "storageAccountName"
-        - name: storageAccountName
+        - name: storageAccountKey
           valueFrom:
             secretKeyRef:
               name: "{{ .Values.secret.name }}"
