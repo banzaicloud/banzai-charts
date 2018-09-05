@@ -1,4 +1,4 @@
-# anchore-policy-validator
+# Anchore policy validator
 
 This chart deploy an admission-server that is used as a ValidatingWebhook in a k8s cluster. If it's working, kubernetes will send requst to admission server when a Pod creation is initiated. The server check image, which is defined in PodSpec, against configured Anchore-engine API. If API response that image not valid according to defined policy, k8s will reject Pod creation request.
 
@@ -9,17 +9,10 @@ $ helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/bran
 $ helm repo update
 ```
 
-Deploying Anchore-engine as a dependency managed in the chart:
+Deploying anchore-policy-validator using external Anchore-engine service:
 
 ```bash
-$ helm install --name <name> stable/anchore-policy-validator
-```
-
-
-Using external Anchore-engine service:
-
-```bash
-$ helm install --name <name> --set externalAnchore.enabled=True --set externalAnchore.anchoreHost=<my.anchore.host>  --set externalAnchore.anchoreUser=<username> -set externalAnchore.anchorePass=<password> stable/anchore-policy-validator
+$ helm install --name <name> --set externalAnchore.anchoreHost=<my.anchore.host>  --set externalAnchore.anchoreUser=<username> -set externalAnchore.anchorePass=<password> stable/anchore-policy-validator
 ```
 
 ## Configuration
@@ -39,12 +32,11 @@ The following tables lists configurable parameters of the anchore-policy-validat
 |service.type                         |validation service type                      |ClusterIP                                 |
 |service.externalPort                 |validation service external port             |443                                       |
 |service.internalPort                 |validation service external port             |443                                       |
-|anchore-engine.enabled               |enable anchore-engine deploy                 |true                                      |
-|externalAnchore.enabled              |enable external anchore-engine usage         |false                                     |
 |externalAnchore.anchoreHost          |external anchore-engine host                 |""                                        |
 |externalAnchore.anchoreUser          |external anchore-engine username             |""                                        |
 |externalAnchore.anchorePass          |external anchore-engine password             |""                                        |
 
+[Due to some resource create with jobs, these resources has to be deleted by manually.](README-dev.md)
 
 This chart based on:
 [Vic Iglesias' kubernetes-anchore-image-validator](https://github.com/viglesiasce/kubernetes-anchore-image-validator)

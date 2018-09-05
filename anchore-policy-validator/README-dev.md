@@ -1,7 +1,9 @@
-#!/bin/zsh
+# Dev helper
 
-RELEASE_NAME=$1
-
+Due to some resource create with specific deployment method (eg.: create via k8s job), resources has to be deleted by manually.
+ 
+```bash
+export RELEASE_NAME=<my-release-name>
 helm delete --purge ${RELEASE_NAME}
 kubectl delete role ${RELEASE_NAME}-anchore-policy-validator-init-ca
 kubectl delete rolebinding extension-${RELEASE_NAME}-anchore-policy-validator-init-ca-admin
@@ -14,3 +16,4 @@ kubectl delete serviceaccount ${RELEASE_NAME}-anchore-policy-validator-init-ca
 kubectl delete apiservice v1beta1.admission.example.com
 kubectl delete clusterrolebinding ${RELEASE_NAME}-anchore-policy-validator-validator-binding
 kubectl delete serviceaccount ${RELEASE_NAME}-anchore-policy-validator-validator
+```
