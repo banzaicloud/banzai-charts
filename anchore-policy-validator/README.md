@@ -1,6 +1,6 @@
 # anchore-policy-validator
 
-This chart deploy an admission-server that is used as a ValidatingWebhook in a k8s cluster. If it's working, kubernetes will send requst to admission server when a Pod creations is initiated. The server check image, which is defined in PodSpec, against configured Anchore-engine API. If API response that image not valid according to defined policy, k8s will reject Pod creation request.
+This chart deploy an admission-server that is used as a ValidatingWebhook in a k8s cluster. If it's working, kubernetes will send requst to admission server when a Pod creation is initiated. The server check image, which is defined in PodSpec, against configured Anchore-engine API. If API response that image not valid according to defined policy, k8s will reject Pod creation request.
 
 ## Installing the Chart
 
