@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "anchore-policy-validator.fullname" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: auth-delegator-{{ template "anchore-policy-validator.fullname" . }}-default
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: system:auth-delegator
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "anchore-policy-validator.fullname" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: auth-delegator-{{ template "anchore-policy-validator.fullname" . }}-admin
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "anchore-policy-validator.fullname" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+  name: {{ template "anchore-policy-validator.fullname" . }}
+rules:
+- apiGroups:
+  - admission.vicnastea.io
+  resources:
+  - {{ template "anchore-policy-validator.fullname" . }}
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "anchore-policy-validator.fullname" . }}-default
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: namespace-reservation-{{ template "anchore-policy-validator.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "anchore-policy-validator.fullname" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: kube-system
+  name: extension-{{ template "anchore-policy-validator.fullname" . }}-authentication-reader-default
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: extension-api{{ template "anchore-policy-validator.fullname" . }}-authentication-reader
+subjects:
+- kind: ServiceAccount
+  name: {{ template "anchore-policy-validator.fullname" . }}

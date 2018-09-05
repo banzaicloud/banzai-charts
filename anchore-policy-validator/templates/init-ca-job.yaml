@@ -4,6 +4,9 @@ metadata:
   name: "{{ .Release.Name }}-init-ca"
   labels:
     app: {{ template "anchore-policy-validator.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
     component: admission-server
   annotations:
     "helm.sh/hook": pre-install

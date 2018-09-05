@@ -4,6 +4,10 @@ metadata:
   name: {{.Release.Name}}-default-policy
   labels:
     app: {{ template "anchore-policy-validator.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: default-policy
 data:
   default-policy.json: |-
     {

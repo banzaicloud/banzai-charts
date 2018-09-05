@@ -16,7 +16,7 @@ metadata:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-6"
 rules:
-- apiGroups: [""] # "" indicates the core API group
+- apiGroups: [""]
   resources: ["secrets", "deployments"]
   verbs: ["get", "patch", "create"]
 ---

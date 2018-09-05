@@ -12,14 +12,7 @@ service:
   type: ClusterIP
   externalPort: 443
   internalPort: 443
-anchore-engine:
-  enabled: true
-  globalConfig:
-    users:
-      admin:
-        password: foobar
 externalAnchore:
-  enabled: false
   anchoreHost: ""
   anchoreUser: ""
   anchorePass: ""
