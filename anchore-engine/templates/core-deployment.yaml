@@ -77,7 +77,7 @@ spec:
           {{- if .Values.cloudsql.enabled }}
           valueFrom:
             secretKeyRef:
-              name: {{ template "anchore-engine.fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}-cloudsql
               key: dbUser
           {{- else }}
           value: {{ .Values.postgresql.postgresUser }}
@@ -86,7 +86,7 @@ spec:
           {{- if .Values.cloudsql.enabled }}
           valueFrom:
             secretKeyRef:
-              name: {{ template "anchore-engine.fullname" . }}
+              name: {{ template "anchore-engine.fullname" . }}-cloudsql
               key: dbPassword
           {{- else }}
           value: {{ .Values.postgresql.postgresPassword }}
