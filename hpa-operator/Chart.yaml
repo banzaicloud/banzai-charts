@@ -1,5 +1,5 @@
 name: hpa-operator
-version: 0.0.3
+version: 0.0.4
 description: A Helm chart for Kubernetes
 home: https://banzaicloud.com
 sources:
