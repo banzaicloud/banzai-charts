@@ -1,6 +1,6 @@
 # Dev helper
 
-Due to some resource create with specific deployment method (eg.: create via k8s job), resources has to be deleted by manually.
+Due to some resources create with specific deployment method (eg.: create via k8s job), resources has to be deleted manually.
  
 ```bash
 export RELEASE_NAME=<my-release-name>
