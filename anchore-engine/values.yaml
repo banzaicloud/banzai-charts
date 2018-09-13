@@ -74,7 +74,7 @@ globalConfig:
   # User configuration. Add more users here if needed.
   users:
     admin:
-      password: foobar
+      password: ""
       email: admin@myemail.com
       policyBundleSyncEnabled: false
 
