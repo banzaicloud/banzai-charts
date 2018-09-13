@@ -31,9 +31,19 @@ spec:
         volumeMounts:
         - mountPath: /etc/spark-resource-staging-server
           name: resource-staging-server-properties
+        {{- if .Values.tls.enabled }}
+        - mountPath: /mnt/secrets/resource-staging-server
+          name: spark-rss-tls
+          readOnly: true
+        {{- end }}
 
       volumes:
       - configMap:
           name: {{ template "fullname" . }}
         name: resource-staging-server-properties
+       {{- if .Values.tls.enabled }}
+       - secret:
+           secretName: {{ .Values.tls.name }}
+       name: spark-rss-tls
+       {{- end }}
 
