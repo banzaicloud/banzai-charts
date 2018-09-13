@@ -42,8 +42,8 @@ spec:
           name: {{ template "fullname" . }}
         name: resource-staging-server-properties
        {{- if .Values.tls.enabled }}
-       - secret:
-           secretName: {{ .Values.tls.name }}
-       name: spark-rss-tls
+      - secret:
+          secretName: {{ .Values.tls.name }}
+        name: spark-rss-tls
        {{- end }}
 
