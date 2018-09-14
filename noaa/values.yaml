@@ -3,5 +3,5 @@
 # Declare variables to be passed into your templates.
 image:
   repository: banzaicloud/noaa
-  tag: dev
+  tag: 0.0.2
   pullPolicy: IfNotPresent
