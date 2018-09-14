@@ -1,0 +1,14 @@
+# Default values
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+image:
+  repository: banzaicloud/pvc-operator
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+
+operator:
+  watchedNamespace: ""
+
+## Install Default RBAC roles and bindings
+rbac:
+  install: true
