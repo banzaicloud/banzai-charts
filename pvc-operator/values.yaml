@@ -6,6 +6,9 @@ image:
   tag: 0.0.1
   pullPolicy: IfNotPresent
 
+operator:
+  watchedNamespace: ""
+
 ## Install Default RBAC roles and bindings
 rbac:
   install: true
