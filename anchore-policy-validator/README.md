@@ -12,7 +12,7 @@ $ helm repo update
 Deploying anchore-policy-validator using external Anchore-engine service:
 
 ```bash
-$ helm install --name <name> --set externalAnchore.anchoreHost=<my.anchore.host>  --set externalAnchore.anchoreUser=<username> -set externalAnchore.anchorePass=<password> stable/anchore-policy-validator
+$ helm install --name <name> --set externalAnchore.anchoreHost=<my.anchore.host>  --set externalAnchore.anchoreUser=<username> -set externalAnchore.anchorePass=<password> banzaicloud-stable/anchore-policy-validator
 ```
 
 ## Configuration
