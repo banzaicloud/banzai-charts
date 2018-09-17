@@ -43,6 +43,11 @@ data:
         resources:
         - pods
       failurePolicy: Fail
+      namespaceSelector:
+        matchExpressions:
+          - key: scan
+            operator: NotIn
+            values: [noscan]
     EOF
 
     sed "s/CA_BUNDLE/$(base64 /var/run/secrets/kubernetes.io/serviceaccount/ca.crt | tr -d '\n')/g" validatingwebhook.yaml | kubectl -n {{ .Release.Namespace }} apply -f -
