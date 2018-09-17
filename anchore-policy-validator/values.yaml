@@ -4,9 +4,9 @@ apiService:
   group: admission.anchore.io
   version: v1beta1
 image:
-  repository: viglesiasce/anchore-image-admission-server
-  tag: latest
-  pullPolicy: IfNotPresent
+  repository: banzaicloud/anchore-image-validator
+  tag: 0.0.2
+  pullPolicy: Always
 service:
   name: anchoreimagecheck
   type: ClusterIP
