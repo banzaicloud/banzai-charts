@@ -70,8 +70,10 @@ spec:
             value: https://{{ index .Values.ingress.hosts 0 }}
         {{- end }}
 
-          - name: PIPELINE_BASE_URL
+          - name: PIPELINE_BASEPATH
             value: https://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090{{ .Values.global.pipelineBasepath }}
+          - name: PIPELINE_EXTERNAL_BASEPATH
+            value: https://{{ .Values.global.pipelineHost }}{{ .Values.global.pipelineBasepath }}
 
         volumeMounts:
         - mountPath: /var/lib/drone
