@@ -1,38 +1,81 @@
+{{- $schema := first (splitList ":" .Values.app.logDirectory) }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "spark-hs.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "spark-hs.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.app.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
-
+        app: {{ template "spark-hs.fullname" . }}
     spec:
+      initContainers:
+      {{- if eq $schema "wasb" }}
+      - name: {{ .Chart.Name }}-init-config
+        image: alpine
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+          - secretRef:
+              name: {{ template "spark-hs.fullname" . }}
+        command:
+          - '/bin/sh'
+          - '-c'
+          - >
+            echo -n -Dspark.hadoop.fs.azure.account.key.$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net=$AZURE_STORAGE_ACCESS_KEY > /opt/spark/conf/spark-defaults.conf
+        volumeMounts:
+          - name: config-volume
+            mountPath: /opt/spark/conf/
+      {{- end }}
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
-        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+        command:
+          - '/bin/bash'
+          - '-c'
+          - 'sleep 1000000'
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if eq $schema "gs" }}
         env:
-        - name: SPARK_NO_DAEMONIZE
-          value: "true"
-        - name: SPARK_HISTORY_OPTS
-          value: >-
-            -Dspark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
-            -Dspark.history.fs.logDirectory={{ .Values.app.logDirectory }}
-            {{- if .Values.app.azureStorageAccessKey }}
-            -Dspark.hadoop.fs.azure.account.key.{{ .Values.app.azureStorageAccountName }}.blob.core.windows.net={{ .Values.app.azureStorageAccessKey }}
-            {{- end }}
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /google.json
+        {{- else }}
+        envFrom:
+          - secretRef:
+              name: {{ template "spark-hs.fullname" . }}
+        {{- end }}
+        volumeMounts:
+        {{- if eq $schema "wasb" }}
+          - name: config-volume
+            mountPath: /opt/spark/conf/spark-defaults.conf
+            subPath: spark-defaults.conf
+        {{- else if eq $schema "gs" }}
+          - name: {{ template "spark-hs.fullname" . }}
+            mountPath: /google.json
+            subPath: google.json
+        {{- end }}
         ports:
-           - containerPort: {{ .Values.app.service.internalPort }}
+          - name: http
+            containerPort: {{ .Values.service.internalPort }}
+            protocol: TCP
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
-
         resources:
-{{ toYaml .Values.app.resources | indent 12 }}
+{{ toYaml .Values.resources | indent 12 }}
+
+      volumes:
+        - name: config-volume
+          emptyDir: {}
+        {{- if eq $schema "gs" }}
+        - name: {{ template "spark-hs.fullname" . }}
+          secret:
+            secretName: {{ template "spark-hs.fullname" . }}
+            items:
+            - key: GOOGLE_APPLICATION_CREDENTIALS
+              path: google.json
+        {{- end }}

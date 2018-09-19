@@ -1,44 +1,63 @@
-# Default values for spark-rss
+# Default values for spark-hs
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+replicaCount: 1
+
+image:
+  repository: banzaicloud/spark-history-server
+  tag: v2.2.1-k8s-1.0.30
+  pullPolicy: IfNotPresent
+
+service:
+  externalPort: 80
+  internalPort: 18080
+  type: ClusterIP
+
+resources: 
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 500m
+    memory: 1024Mi
+
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+ingress:
+  enabled: false
+  annotations: {}
+    #kubernetes.io/ingress.class: traefik
+    #ingress.kubernetes.io/ssl-redirect: "false"
+    #traefik.frontend.rule.type: PathPrefix
+  hosts:
+    - "/"
+    # - "domain.com/xyz"
+    # - "domain.com"
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
 app:
-  replicaCount: 1
-
-  image:
-    repository: banzaicloud/spark-history-server
-    tag: v2.2.1-k8s-1.0.30
-    pullPolicy: IfNotPresent
-
-  service:
-    externalPort: 80
-    internalPort: 18080
-    type: ClusterIP
-
   logDirectory: ""
+
+credentials:
+  secretNameOverride: ""
+
+  awsAccessKeyId: ""
+  awsSecretAccessKey: ""
+
   azureStorageAccessKey: ""
   azureStorageAccountName: ""
 
-  resources:
-    requests:
-      cpu: 500m
-      memory: 512Mi
-
-    limits:
-      cpu: 500m
-      memory: 1024Mi
-
-ingresspasswordgenerator:
-  image:
-    repository: banzaicloud/htpasswd-gen
-    tag: "0.1"
-    pullPolicy: IfNotPresent
-
-pipelineIngress:
-  enabled: true
-  ingressURL:
-  baseURL: /
-  auth:
-    enabled: false
-    username: ""
-    password: ""
+  gceCredentials: ""
