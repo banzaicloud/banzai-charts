@@ -2,33 +2,82 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-app:
-  replicaCount: 1
+replicaCount: 1
 
-  image:
-    repository: banzaicloud/spark-resource-staging-server
-    tag: v2.2.1-k8s-1.0.30
-    pullPolicy: IfNotPresent
+image:
+  repository: banzaicloud/spark-resource-staging-server
+  tag: v2.2.1-k8s-1.0.30
+  pullPolicy: IfNotPresent
 
-  service:
-    name: spark-rss
-    externalPort: 10000
-    internalPort: 10000
-    type: ClusterIP
+service:
+  name: spark-rss
+  port: 80
+  internalPort: 8080
+  type: ClusterIP
 
-  resources:
-    requests:
-      cpu: 500m
-      memory: 512Mi
+ingress:
+  enabled: false
+  annotations: {}
+    #kubernetes.io/ingress.class: traefik
+    #ingress.kubernetes.io/ssl-redirect: "false"
+  #traefik.frontend.rule.type: PathPrefix
+  hosts:
+  - "/"
+  # - "domain.com/xyz"
+  # - "domain.com"
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
 
-    limits:
-      cpu: 500m
-      memory: 512Mi
+
+## Spark RSS resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+  limits:
+    cpu: 500m
+    memory: 512Mi
     
 tls:
   enabled: false
   name: spark-rss-tls-secret
 
-pipelineIngress:
-  enabled: false
-  baseURL: /
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+rbac:
+  ## Specifies whether RBAC resources should be created
+  ##
+  create: true
+
+  role:
+    rules: #[]
+    - apiGroups:
+      - "extensions"
+      resources:
+      - "podsecuritypolicies"
+      resourceNames:
+      - "spark-shuffle-service-pod-security-policy"
+      verbs:
+      - "use"
+    - apiGroups:
+      - "" # "" indicates the core API group
+      resources:
+      - "pods"
+      verbs:
+      - "get"
+      - "list"
+      - "watch"
+
+podSecurityPolicy:
+  create: true
+

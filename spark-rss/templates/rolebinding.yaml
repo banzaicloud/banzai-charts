@@ -1,0 +1,18 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: {{ template "rss.fullname" . }}
+  labels:
+    app: {{ template "rss.name" . }}
+    chart: {{ template "rss.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "rss.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "rss.serviceAccountName" . }}
+{{- end -}}

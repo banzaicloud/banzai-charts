@@ -2,8 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
 image:
   repository: banzaicloud/spark-shuffle
   tag: v2.2.1-k8s-1.0.30
@@ -12,7 +10,7 @@ image:
 spark:
   version: 2.2.0
 
-resources: {}
+resources: #{}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -20,9 +18,9 @@ resources: {}
   # limits:
   #  cpu: 500m
   #  memory: 1024Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+   requests:
+    cpu: 200m
+    memory: 200Mi
 
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/

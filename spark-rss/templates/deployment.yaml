@@ -1,24 +1,29 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "rss.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app: {{ template "rss.fullname" . }}
+    chart: {{ template "rss.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.app.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "rss.name" . }}
+      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "rss.name" . }}
+        release: {{ .Release.Name }}
 
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
-        imagePullPolicy: {{ .Values.app.image.pullPolicy }}        
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
         - /etc/spark-resource-staging-server/resource-staging-server.properties
 
@@ -26,8 +31,7 @@ spec:
         terminationMessagePolicy: File
 
         resources:
-{{ toYaml .Values.app.resources | indent 12 }}
-
+{{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
         - mountPath: /etc/spark-resource-staging-server
           name: resource-staging-server-properties
@@ -39,7 +43,7 @@ spec:
 
       volumes:
       - configMap:
-          name: {{ template "fullname" . }}
+          name: {{ template "rss.fullname" . }}
         name: resource-staging-server-properties
        {{- if .Values.tls.enabled }}
       - secret:
