@@ -7,6 +7,15 @@ prometheus:
     enabled: true
   alertmanager:
     enabled: false
+  pushgateway:
+    enabled: true
+    image:
+      repository: banzaicloud/pushgateway
+      tag: v0.5.2-banzaicloud-0.0.1
+      pullPolicy: IfNotPresent
+    extraArgs:
+      push.accept-timestamp: "true"
+
   server:
     baseURL: /prometheus
     prefixURL: /prometheus
