@@ -1,0 +1,4 @@
+1. mysql-operator deployed.
+  Check the mysql-operator logs
+    export POD=$(kubectl get pods -l app={{ template "mysql-operator.fullname" . }} --namespace {{ default .Release.Namespace .Values.operator.namespace }} --output name)
+    kubectl logs $POD --namespace={{ default .Release.Namespace .Values.operator.namespace }}

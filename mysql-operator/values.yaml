@@ -1,0 +1,16 @@
+rbac:
+  enabled: true
+operator:
+  global: true
+#  namespace: default
+  register_crd: true
+image:
+  tag: 0.2.0
+  repository: iad.ocir.io/oracle/mysql-operator
+  pullPolicy: IfNotPresent
+
+mysql:
+  server:
+    image: mysql/mysql-server
+  agent:
+    image: iad.ocir.io/oracle/mysql-agent

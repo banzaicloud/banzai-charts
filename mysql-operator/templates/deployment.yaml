@@ -1,0 +1,39 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mysql-operator
+  namespace: {{ default .Release.Namespace .Values.operator.namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: mysql-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mysql-operator
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mysql-operator
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      serviceAccountName: mysql-operator
+      containers:
+      - name: mysql-operator-controller
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        args:
+          - --v=4
+          - --logtostderr=false
+{{- if .Values.mysql.server.image }}
+          - --mysql-server-image={{ .Values.mysql.server.image }}
+{{- end }}
+{{- if .Values.mysql.agent.image }}
+          - --mysql-agent-image={{ .Values.mysql.agent.image }}
+{{- end }}
+{{- if not .Values.operator.global }}
+          - --namespace={{- .Values.operator.namespace }}
+{{- end }}
