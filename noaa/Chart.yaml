@@ -1,9 +1,0 @@
-name: noaa
-version: 0.0.1
-description: A Helm chart for noaa
-home: https://banzaicloud.com
-sources:
-  - https://github.com/banzaicloud/noaa
-keywords:
-- cloud
-- provider

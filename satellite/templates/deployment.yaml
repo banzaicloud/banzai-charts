@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ template "noaa.fullname" . }}"
+  name: "{{ template "satellite.fullname" . }}"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "noaa.fullname" . }}"
+    app: "{{ template "satellite.fullname" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "{{ template "noaa.fullname" . }}"
+      app: "{{ template "satellite.fullname" . }}"
   template:
     metadata:
       labels:
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        app: "{{ template "noaa.fullname" . }}"
+        app: "{{ template "satellite.fullname" . }}"
         heritage: "{{ .Release.Service }}"
         release: "{{ .Release.Name }}"
     spec:
@@ -25,4 +25,4 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
           command:
-          - noaa
+          - satellite

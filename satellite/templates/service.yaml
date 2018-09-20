@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "noaa.fullname" . }}
+  name: {{ template "satellite.fullname" . }}
   labels:
-    app: {{ template "noaa.fullname" . }}
+    app: {{ template "satellite.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -14,4 +14,4 @@ spec:
     port: 8888
     targetPort: 8888
   selector:
-    app: "{{ template "noaa.fullname" . }}"
+    app: "{{ template "satellite.fullname" . }}"
