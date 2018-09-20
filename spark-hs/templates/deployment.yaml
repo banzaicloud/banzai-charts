@@ -22,7 +22,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         envFrom:
           - secretRef:
-              name: {{ template "spark-hs.fullname" . }}
+              name: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretNameOverride }}
         command:
           - '/bin/sh'
           - '-c'
@@ -48,7 +48,7 @@ spec:
         {{- else }}
         envFrom:
           - secretRef:
-              name: {{ template "spark-hs.fullname" . }}
+              name: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretNameOverride }}
         {{- end }}
         volumeMounts:
         {{- if eq $schema "wasb" }}
@@ -68,14 +68,13 @@ spec:
         terminationMessagePolicy: File
         resources:
 {{ toYaml .Values.resources | indent 12 }}
-
       volumes:
         - name: config-volume
           emptyDir: {}
         {{- if eq $schema "gs" }}
         - name: {{ template "spark-hs.fullname" . }}
           secret:
-            secretName: {{ template "spark-hs.fullname" . }}
+            secretName: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretNameOverride }}
             items:
             - key: GOOGLE_APPLICATION_CREDENTIALS
               path: google.json
