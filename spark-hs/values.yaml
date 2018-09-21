@@ -51,13 +51,14 @@ ingress:
 app:
   logDirectory: ""
 
-credentials:
-  secretNameOverride: ""
-
   awsAccessKeyId: ""
   awsSecretAccessKey: ""
 
   azureStorageAccessKey: ""
   azureStorageAccountName: ""
 
-  gceCredentials: ""
+  googleJson: ""
+
+secretName: ""
+
+

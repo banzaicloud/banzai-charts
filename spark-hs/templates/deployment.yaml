@@ -31,6 +31,21 @@ spec:
         volumeMounts:
           - name: config-volume
             mountPath: /opt/spark/conf/
+      {{- else if and (eq $schema "gs") .Values.secretName }}
+      - name: {{ .Chart.Name }}-init-config
+        image: jiapantw/jq-alpine:latest
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+          - '/bin/sh'
+          - '-c'
+          - >
+            find /google-secret-path/ -type f -exec jq --slurp --raw-input '{key: input_filename|split("/")|last, value: .|rtrimstr("\n")}' {} \; | jq --slurp from_entries > /opt/spark/conf/google.json
+        volumeMounts:
+          - name: config-volume
+            mountPath: /opt/spark/conf/
+          - name: google-secrets
+            mountPath: /google-secret-path/
+            readOnly: true
       {{- end }}
       containers:
       - name: {{ .Chart.Name }}
@@ -44,11 +59,11 @@ spec:
               -Dspark.history.fs.logDirectory={{ .Values.app.logDirectory }}
         {{- if eq $schema "gs" }}
           - name: GOOGLE_APPLICATION_CREDENTIALS
-            value: /google.json
+            value: /opt/spark/conf/google.json
         {{- else }}
         envFrom:
           - secretRef:
-              name: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretNameOverride }}
+              name: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretName }}
         {{- end }}
         volumeMounts:
         {{- if eq $schema "wasb" }}
@@ -56,8 +71,8 @@ spec:
             mountPath: /opt/spark/conf/spark-defaults.conf
             subPath: spark-defaults.conf
         {{- else if eq $schema "gs" }}
-          - name: {{ template "spark-hs.fullname" . }}
-            mountPath: /google.json
+          - name: config-volume
+            mountPath: /opt/spark/conf/google.json
             subPath: google.json
         {{- end }}
         ports:
@@ -71,11 +86,8 @@ spec:
       volumes:
         - name: config-volume
           emptyDir: {}
-        {{- if eq $schema "gs" }}
-        - name: {{ template "spark-hs.fullname" . }}
+      {{- if eq $schema "gs" }}
+        - name: google-secrets
           secret:
-            secretName: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretNameOverride }}
-            items:
-            - key: GOOGLE_APPLICATION_CREDENTIALS
-              path: google.json
-        {{- end }}
+            secretName: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretName }}
+      {{- end }}
