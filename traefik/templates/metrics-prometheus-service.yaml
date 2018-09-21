@@ -12,7 +12,9 @@ metadata:
     prometheus.io/scrape: "true"
     prometheus.io/path: "/metrics"
     prometheus.io/port: {{ .Values.metrics.prometheus.service.port | quote }}
-{{ toYaml .Values.metrics.prometheus.service.annotations | indent 4 }}
+    {{- if .Values.metrics.prometheus.service.annotations }}
+    {{ toYaml .Values.metrics.prometheus.service.annotations | indent 4 }}
+    {{- end }}
 spec:
   selector:
     app: {{ template "traefik.name" . }}
