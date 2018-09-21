@@ -11,8 +11,8 @@ image:
 
 service:
   name: spark-rss
-  port: 80
-  internalPort: 8080
+  port: 10000
+  internalPort: 10000
   type: ClusterIP
 
 ingress:
