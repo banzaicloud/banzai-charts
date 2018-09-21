@@ -27,21 +27,22 @@ spec:
           - '/bin/sh'
           - '-c'
           - >
-            echo -n -Dspark.hadoop.fs.azure.account.key.$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net=$AZURE_STORAGE_ACCESS_KEY > /opt/spark/conf/spark-defaults.conf
+            echo -n spark.hadoop.fs.azure.account.key.$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net=$AZURE_STORAGE_ACCESS_KEY > /opt/spark/conf/spark-defaults.conf
         volumeMounts:
           - name: config-volume
             mountPath: /opt/spark/conf/
       {{- end }}
       containers:
       - name: {{ .Chart.Name }}
-        command:
-          - '/bin/bash'
-          - '-c'
-          - 'sleep 1000000'
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- if eq $schema "gs" }}
         env:
+          - name: SPARK_NO_DAEMONIZE
+            value: "false"
+          - name: SPARK_HISTORY_OPTS
+            value: >-
+              -Dspark.history.fs.logDirectory={{ .Values.app.logDirectory }}
+        {{- if eq $schema "gs" }}
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /google.json
         {{- else }}
