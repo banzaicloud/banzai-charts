@@ -148,6 +148,7 @@ acme:
   delayBeforeCheck: 0
   dnsProvider:
     name: nil
+    secretName: ""
     auroradns:
       AURORA_USER_ID: ""
       AURORA_KEY: ""
