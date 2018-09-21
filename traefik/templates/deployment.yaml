@@ -85,7 +85,7 @@ spec:
           - name: {{ $k }}
             valueFrom:
               secretKeyRef:
-                name: {{ template "traefik.fullname" $ }}-dnsprovider-config
+                name: {{ default (printf "%s-dnsprovider-config" (include "traefik.fullname" .)) .Values.acme.dnsProvider.secretName }}
                 key: {{ $k }}
         {{- end }}
         {{- end }}

@@ -6,7 +6,7 @@ dependencies:
   condition: grafana.enabled
 
 - name: traefik
-  version: 1.44.2
+  version: 1.44.3
   repository: alias:banzaicloud-stable
 
 - name: prometheus
