@@ -22,7 +22,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         envFrom:
           - secretRef:
-              name: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretNameOverride }}
+              name: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretName }}
         command:
           - '/bin/sh'
           - '-c'
