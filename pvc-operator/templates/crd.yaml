@@ -4,9 +4,9 @@ metadata:
   name: objectstores.banzaicloud.com
   labels:
     app: {{ template "pvc-operator.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    heritage: {{ .Release.Service }}
+    chart: {{ template "pvc-operator.chart" . }}
     release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   group: banzaicloud.com
   names:

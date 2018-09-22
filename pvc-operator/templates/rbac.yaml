@@ -1,14 +1,13 @@
-{{ if .Values.rbac.install }}
-{{- $serviceName := include "pvc-operator.fullname" . -}}
+{{- if .Values.rbac.enabled }}
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: {{ $serviceName }}
+  name: {{ template "pvc-operator.fullname" . }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "pvc-operator.fullname" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+      app: {{ template "pvc-operator.name" . }}
+      chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
 rules:
 - apiGroups:
   - banzaicloud.com
@@ -39,21 +38,32 @@ rules:
   - "*"
 
 ---
-
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: {{ $serviceName }}
+  name: {{ template "pvc-operator.fullname" . }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "pvc-operator.fullname" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    app: {{ template "pvc-operator.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
 subjects:
 - kind: ServiceAccount
-  name: {{ $serviceName }}
+  name: {{ template "pvc-operator.fullname" . }}
 roleRef:
   kind: Role
-  name: {{ $serviceName }}
+  name: {{ template "pvc-operator.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
-{{ end }}
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "pvc-operator.fullname" . }}
+  labels:
+    app: {{ template "pvc-operator.name" . }}
+    chart: {{ template "pvc-operator.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+
+{{- end }}
