@@ -276,36 +276,6 @@ data:
         pushinterval = {{ .Values.metrics.statsd.pushinterval | quote }}
         {{- end }}
     {{- end }}
-      {{- if .Values.metrics.prometheus.enabled }}
-      [metrics.prometheus]
-        entryPoint = "traefik"
-        {{- if .Values.metrics.prometheus.buckets }}
-        buckets = [
-          {{- range $idx, $element := .Values.metrics.prometheus.buckets }}
-              {{- if $idx }},{{ end }}
-              {{- printf "%.1f" $element }}
-          {{- end -}}
-          ]
-        {{- end -}}
-      {{- end }}
-      {{- if .Values.metrics.datadog.enabled }}
-      [metrics.datadog]
-        {{- if .Values.metrics.datadog.address }}
-        address = {{ .Values.metrics.datadog.address | quote }}
-        {{- end }}
-        {{- if .Values.metrics.datadog.pushinterval }}
-        pushinterval = {{ .Values.metrics.datadog.pushinterval | quote }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.metrics.statsd.enabled }}
-      [metrics.statsd]
-        {{- if .Values.metrics.statsd.address }}
-        address = {{ .Values.metrics.statsd.address | quote }}
-        {{- end }}
-        {{- if .Values.metrics.statsd.pushinterval }}
-        pushinterval = {{ .Values.metrics.statsd.pushinterval | quote }}
-        {{- end }}
-      {{- end }}
     {{- if .Values.tracing.enabled }}
     [tracing]
       backend = {{ .Values.tracing.backend | quote }}
