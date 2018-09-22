@@ -10,8 +10,8 @@ operator:
   watchedNamespace: ""
 
 nfs:
-  namespace: "pipeline-infra"
+  namespace: ""
 
 ## Install Default RBAC roles and bindings
 rbac:
-  install: true
+  enabled: true
