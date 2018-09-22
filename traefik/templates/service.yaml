@@ -52,10 +52,5 @@ spec:
     nodePort: {{ .Values.service.nodePorts.https }}
     {{- end }}
     {{- if not .Values.ssl.enabled }}
-    targetPort: httpn
+    targetPort: https
     {{- end }}
-  {{- if .Values.metrics.prometheus.enabled }}
-  - port: 8080
-    name: metrics
-    targetPort: dash
-  {{- end }}
