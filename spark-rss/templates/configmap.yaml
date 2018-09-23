@@ -16,5 +16,6 @@ data:
     {{- if .Values.tls.enabled }}
     spark.ssl.kubernetes.resourceStagingServer.keyPem=/mnt/secrets/resource-staging-server/serverKey
     spark.ssl.kubernetes.resourceStagingServer.serverCertPem=/mnt/secrets/resource-staging-server/serverCert
+    spark.ssl.kubernetes.resourceStagingServer.clientCertPem=/mnt/secrets/resource-staging-server/clientCert
     {{- end }}
 
