@@ -21,7 +21,7 @@ spec:
             - result
             - action
           properties:
-            relaseName:
+            releaseName:
               type: string
             resource:
               type: string
