@@ -4,7 +4,7 @@
 
 image:
   repository: banzaicloud/spark-shuffle
-  tag: v2.2.1-k8s-1.0.34
+  tag: v2.2.1-k8s-1.0.35
   pullPolicy: IfNotPresent
 
 spark:

@@ -74,10 +74,10 @@ sparkSubmitOptions:
   dynamicAllocation: true
   shuffleService: true
   shuffleNameSpace: default
-  shuffleLabels: app=spark-shuffle-service,spark-version=2.2.0
-  DriverImage: banzaicloud/spark-driver-py:v2.2.1-k8s-1.0.34
-  ExecutorImage: banzaicloud/spark-executor-py:v2.2.1-k8s-1.0.34
-  initContainerImage: banzaicloud/spark-init:v2.2.1-k8s-1.0.34
+  shuffleLabels: app=spark-shuffle,spark-version=2.2.0,release="{{ .Release.Name }}"
+  DriverImage: banzaicloud/spark-driver-py:v2.2.1-k8s-1.0.35
+  ExecutorImage: banzaicloud/spark-executor-py:v2.2.1-k8s-1.0.35
+  initContainerImage: banzaicloud/spark-init:v2.2.1-k8s-1.0.35
   resourceStagingServerInt: http://spark-rss:10000
   resourceStagingServerExt: http://spark-rss:10000
   sparkLocalDir: /tmp/spark-local
