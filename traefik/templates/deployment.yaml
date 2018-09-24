@@ -81,11 +81,13 @@ spec:
           timeoutSeconds: 2
         {{- if and .Values.acme.enabled (eq .Values.acme.challengeType "dns-01") .Values.acme.dnsProvider.name }}
         env:
+        {{- $dnsProviderSecretName := .Values.acme.dnsProvider.secretName }}
+        {{- $fullName := printf "%s-dnsprovider-config" (include "traefik.fullname" . ) }}
         {{- range $k, $_ := (index .Values.acme.dnsProvider .Values.acme.dnsProvider.name) }}
           - name: {{ $k }}
             valueFrom:
               secretKeyRef:
-                name: {{ default (printf "%s-dnsprovider-config" (include "traefik.fullname" .)) .Values.acme.dnsProvider.secretName }}
+                name: {{ default $fullName $dnsProviderSecretName }}
                 key: {{ $k }}
         {{- end }}
         {{- end }}
