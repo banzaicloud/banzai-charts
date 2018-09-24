@@ -26,6 +26,7 @@ prometheus:
       annotations:
         kubernetes.io/ingress.class: traefik
         traefik.frontend.rule.type: PathPrefix
+        traefik.ingress.kubernetes.io/ssl-redirect: "true"
     global:
       scrape_interval: 15s
     configMapOverrideName:
@@ -304,6 +305,7 @@ grafana:
     annotations: 
       kubernetes.io/ingress.class: traefik
       traefik.frontend.rule.type: PathPrefixStrip
+      traefik.ingress.kubernetes.io/ssl-redirect: "true"
     path: /grafana
     hosts:
       - localhost
