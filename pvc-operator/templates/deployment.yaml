@@ -33,7 +33,9 @@ spec:
           env:
             - name: WATCH_NAMESPACE
               value: {{ .Values.operator.watchedNamespace }}
-            - name : OPERATOR_NAMESPACE
+            - name: OPERATOR_NAMESPACE
               value: {{ .Release.Namespace }}
-            - name : NFS_NAMESPACE
+            - name: NFS_NAMESPACE
               value: {{ default .Release.Namespace .Values.nfs.namespace }}
+            - name: OWNER_REFERENCE_NAME
+              value: {{ default (include "pvc-operator.fullname" . ) .Values.operator.ownerReferenceName }}
