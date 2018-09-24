@@ -6,7 +6,7 @@ apiService:
 image:
   repository: banzaicloud/anchore-image-validator
   tag: 0.0.2
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 service:
   name: anchoreimagecheck
   type: ClusterIP
