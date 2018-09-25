@@ -41,14 +41,14 @@ $ helm repo update
 Deploying PostgreSQL as a dependency managed in the chart:
 
 ```bash
-$ helm install --name <name> stable/anchore-engine
+$ helm install --name <name> banzaicloud-stable/anchore-engine
 ```
 
 
 Using GKE Cloudsql (PostgreSQL) service:
 
 ```bash
-$ helm install --name <name> --set postgresql.enabled=False --set cloudsql.enabled=True stable/anchore-engine
+$ helm install --name <name> --set postgresql.enabled=False --set cloudsql.enabled=True banzaicloud-stable/anchore-engine
 ```
 
 
@@ -86,13 +86,13 @@ The following tables lists the main configurable parameters of the anchore-engin
 To set a specific number of core service containers:
 
 ```bash
-$ helm install stable/anchore-engine --set coreConfig.replicaCount=2
+$ helm install banzaicloud-stable/anchore-engine --set coreConfig.replicaCount=2
 ```
 
 To update the number in a running configuration:
 
 ```bash
-$ helm upgrade --set coreConfig.replicaCount=2 <releasename> stable/anchore-engine <-f values.yaml>
+$ helm upgrade --set coreConfig.replicaCount=2 <releasename> banzaicloud-stable/anchore-engine <-f values.yaml>
 ```
 
 ## Adding Workers
@@ -102,7 +102,7 @@ To set a specific number of workers once the service is running:
 If using defaults from the chart:
 
 ```bash
-$ helm upgrade --set workerConfig.replicaCount=2 <releasename> stable/anchore-engine
+$ helm upgrade --set workerConfig.replicaCount=2 <releasename> banzaicloud-stable/anchore-engine
 ```
 
 If customized values, use the local directory for the chart values:
@@ -114,5 +114,5 @@ $ helm upgrade --set workerConfig.replicaCount=2 <releasename> ./anchore-engine
 To launch with more than one worker you can either modify values.yaml or run with:
 
 ```bash
-$ helm install --set workerConfig.replicaCount=2 stable/anchore-engine
+$ helm install --set workerConfig.replicaCount=2 banzaicloud-stable/anchore-engine
 ```
