@@ -1,0 +1,24 @@
+{{- if .Values.podSecurityPolicy.create -}}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ template "rss.fullname" . }}
+  labels:
+    app: {{ template "rss.name" . }}
+    chart: {{ template "rss.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  privileged: false
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  runAsUser:
+    rule: RunAsAny
+  volumes:
+  - "hostPath"
+  - "secret"
+  {{- end -}}

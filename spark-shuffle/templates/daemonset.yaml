@@ -1,15 +1,23 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
+  name: {{ template "shuffle.fullname" . }}
   labels:
-    app: spark-shuffle-service
+    app: {{ template "shuffle.name" . }}
+    chart: {{ template "shuffle.chart" . }}
+    release: {{ .Release.Name }}
     spark-version: {{ .Values.spark.version }}
-  name: shuffle
 spec:
+  selector:
+    matchLabels:
+      name: {{ template "shuffle.fullname" . }}
   template:
     metadata:
       labels:
-        app: spark-shuffle-service
+        name: {{ template "shuffle.fullname" . }}
+        app: {{ template "shuffle.name" . }}
+        chart: {{ template "shuffle.chart" . }}
+        release: {{ .Release.Name }}
         spark-version: {{ .Values.spark.version }}
     spec:
       volumes:
@@ -25,7 +33,4 @@ spec:
               name: temp-volume
 
           resources:
-             requests:
-               cpu: "200m"
-             limits:
-               cpu: "200m"
+{{ toYaml .Values.resources | indent 12 }}

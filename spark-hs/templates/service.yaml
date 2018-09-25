@@ -1,18 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "spark-hs.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "spark-hs.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  type: {{ .Values.app.service.type }}
+  type: {{ .Values.service.type }}
   ports:
-  - port: {{ .Values.app.service.externalPort }}
-    targetPort: {{ .Values.app.service.internalPort }}
+  - port: {{ .Values.service.externalPort }}
+    targetPort: {{ .Values.service.internalPort }}
     protocol: TCP
     name: {{ .Chart.Name }}
   selector:
-    app: {{ template "fullname" . }}
+    app: {{ template "spark-hs.fullname" . }}
