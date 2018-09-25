@@ -9,21 +9,35 @@ metadata:
     heritage: {{ .Release.Service }}
     component: default-policy
 data:
-  default-policy.json: |-
+  allow-all.json: |-
     {
-      "id": "0a869a39-1b20-4ce7-bc00-3a7d88271f08",
+      "id": "97b33e2c-3b57-4a3f-a12b-a8c0daa472a0",
       "version": "1_0",
-      "name": "AnchoreUserDefault",
+      "name": "AllowAll",
       "policies": [
         {
           "comment": "",
-          "id": "b4b551ce-376e-455d-9c2b-51ff6d0ab07c",
-          "name": "default",
+          "id": "b83f90b3-24b7-4c51-858e-035f85156f00",
+          "name": "allow-all",
           "rules": [
             {
               "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "eaef9298-9be9-4cc3-92d8-1b69968e175a",
+              "params": [],
+              "trigger": "VULNHIGH"
+            },
+            {
+              "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "f2d9e08e-b09c-4f8d-972c-de84223783f9",
+              "params": [],
+              "trigger": "VULNCRITICAL"
+            },
+            {
+              "action": "WARN",
               "gate": "DOCKERFILECHECK",
-              "id": "ce7b8000-829b-4c27-8122-69cd59018400",
+              "id": "f47bf985-fbd5-4afa-bdcc-658ecc9e424e",
               "params": [
                 {
                   "name": "DENIEDPORTS",
@@ -31,51 +45,241 @@ data:
                 }
               ],
               "trigger": "EXPOSE"
-            },
+            }
+          ],
+          "version": "1_0"
+        }
+      ],
+      "whitelists": [],
+      "mappings": [
+        {
+          "id": "df21279e-57f3-4ca2-a57a-ae23cb071d6b",
+          "image": {
+            "type": "tag",
+            "value": "*"
+          },
+          "name": "allow-all",
+          "policy_id": "b83f90b3-24b7-4c51-858e-035f85156f00",
+          "registry": "*",
+          "repository": "*",
+          "whitelist_ids": []
+        }
+      ]
+    }
+  deny-all.json: |-
+    {
+      "id": "a81d4e45-6021-4b42-a217-a6554015d431",
+      "version": "1_0",
+      "name": "DenyAll",
+      "policies": [
+        {
+          "comment": "",
+          "id": "9943a629-c3d9-47ce-8235-7142e54bb682",
+          "name": "deny-all",
+          "rules": [
             {
-              "action": "WARN",
-              "gate": "DOCKERFILECHECK",
-              "id": "312d9e41-1c05-4e2f-ad89-b7d34b0855bb",
-              "params": [],
-              "trigger": "NOHEALTHCHECK"
-            },
-            {
-              "action": "WARN",
-              "gate": "ANCHORESEC",
-              "id": "6b5c14e7-a6f7-48cc-99d2-959273a2c6fa",
+              "action": "STOP",
+              "gate": "FILECHECK",
+              "id": "cbb8b7e5-f8b8-4bb9-905e-1be7f45ac39d",
               "params": [
                 {
-                  "name": "MAXAGE",
-                  "value": "2"
+                  "name": "FILECHECK_NAMEREGEXP",
+                  "value": ".*"
                 }
               ],
-              "trigger": "FEEDOUTOFDATE"
-            },
+              "trigger": "FILENAMEMATCH"
+            }
+          ],
+          "version": "1_0"
+        }
+      ],
+      "whitelists": [],
+      "mappings": [
+        {
+          "id": "2c0ac021-94f4-4366-a818-78fe1fb493d9",
+          "image": {
+            "type": "tag",
+            "value": "*"
+          },
+          "name": "deny-all",
+          "policy_id": "9943a629-c3d9-47ce-8235-7142e54bb682",
+          "registry": "*",
+          "repository": "*",
+          "whitelist_ids": []
+        }
+      ]
+    }
+  reject-high.json: |-
+    {
+      "id": "0cd4785e-71fa-4273-8ea5-3b15f515cca4",
+      "version": "1_0",
+      "name": "RejectHigh",
+      "policies": [
+        {
+          "comment": "",
+          "id": "d8acc789-181a-4b14-b569-4e5b292c8653",
+          "name": "reject-high",
+          "rules": [
             {
               "action": "WARN",
               "gate": "ANCHORESEC",
-              "id": "3e79ea94-18c4-4d26-9e29-3b9172a62c2e",
+              "id": "1516498a-4e4e-4085-9e24-fdd878834235",
               "params": [],
               "trigger": "UNSUPPORTEDDISTRO"
             },
             {
               "action": "WARN",
               "gate": "ANCHORESEC",
-              "id": "6063fdde-b1c5-46af-973a-915739451ac4",
+              "id": "3750deb2-d7aa-4e72-8a09-88207e5c364f",
+              "params": [],
+              "trigger": "VULNMEDIUM"
+            },
+            {
+              "action": "STOP",
+              "gate": "ANCHORESEC",
+              "id": "dbea7de9-a398-4306-8326-b3377a483ebd",
+              "params": [],
+              "trigger": "VULNCRITICAL"
+            },
+            {
+              "action": "STOP",
+              "gate": "ANCHORESEC",
+              "id": "92c4fd9b-df7d-40ad-91b0-717271122e72",
+              "params": [],
+              "trigger": "VULNHIGH"
+            }
+          ],
+          "version": "1_0"
+        }
+      ],
+      "whitelists": [],
+      "mappings": [
+        {
+          "id": "7bf9ee85-f5fe-4f39-9777-0d687dfd2dcc",
+          "image": {
+            "type": "tag",
+            "value": "*"
+          },
+          "name": "reject-high",
+          "policy_id": "d8acc789-181a-4b14-b569-4e5b292c8653",
+          "registry": "*",
+          "repository": "*",
+          "whitelist_ids": []
+        }
+      ]
+    }
+  reject-critical.json: |-
+    {
+      "id": "bdb91dcc-62ca-49a2-a497-ee8a3bb7ec9f",
+      "version": "1_0",
+      "name": "RejectCritical",
+      "policies": [
+        {
+          "comment": "",
+          "id": "2335c373-6182-4e1b-9e1f-dae4b47eb9f8",
+          "name": "reject-critical",
+          "rules": [
+            {
+              "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "f8d4743b-4d19-4e37-a606-bdc886e04e26",
+              "params": [],
+              "trigger": "UNSUPPORTEDDISTRO"
+            },
+            {
+              "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "d995f2d4-576c-4ea3-83cb-e171371d2740",
               "params": [],
               "trigger": "VULNMEDIUM"
             },
             {
               "action": "WARN",
               "gate": "ANCHORESEC",
-              "id": "b30e8abc-444f-45b1-8a37-55be1b8c8bb5",
+              "id": "d4d216ba-a56d-42a5-a3fc-80fd2a354f5b",
               "params": [],
               "trigger": "VULNHIGH"
             },
             {
+              "action": "WARN",
+              "gate": "DOCKERFILECHECK",
+              "id": "f3e4c04e-ccbe-4933-9768-ab9d722c9675",
+              "params": [],
+              "trigger": "NOHEALTHCHECK"
+            },
+            {
               "action": "STOP",
               "gate": "ANCHORESEC",
-              "id": "295adc9f-28b9-4aab-a5d6-833cf7727db7",
+              "id": "bc24976e-eb4f-4162-a0aa-7e820ec61c94",
+              "params": [],
+              "trigger": "VULNCRITICAL"
+            },
+            {
+              "action": "STOP",
+              "gate": "DOCKERFILECHECK",
+              "id": "a703788b-c9ad-4ad5-859a-36a1c7f4f8aa",
+              "params": [
+                {
+                  "name": "DENIEDPORTS",
+                  "value": "22"
+                }
+              ],
+              "trigger": "EXPOSE"
+            }
+          ],
+          "version": "1_0"
+        }
+      ],
+      "whitelists": [],
+      "mappings": [
+        {
+          "id": "cb60bd5e-3ac4-4bf0-8d37-16c83d3f7f07",
+          "image": {
+            "type": "tag",
+            "value": "*"
+          },
+          "name": "reject-critical",
+          "policy_id": "2335c373-6182-4e1b-9e1f-dae4b47eb9f8",
+          "registry": "*",
+          "repository": "*",
+          "whitelist_ids": []
+        }
+      ]
+    }
+  block-root.json: |-
+    {
+      "id": "377c130d-0af7-45d4-adf9-cd72878993e2",
+      "version": "1_0",
+      "name": "BlockRoot",
+      "policies": [
+        {
+          "comment": "",
+          "id": "374c81e5-1f63-41c8-ad86-c76a51db4d80",
+          "name": "block-root",
+          "rules": [
+            {
+              "action": "STOP",
+              "gate": "DOCKERFILECHECK",
+              "id": "3b1c20f5-6a38-423d-9e35-7facdc6aca1c",
+              "params": [
+                {
+                  "name": "DENIED",
+                  "value": "root"
+                }
+              ],
+              "trigger": "EFFECTIVEUSER"
+            },
+            {
+              "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "eab521ac-ca56-4840-b463-11c427ffa7ab",
+              "params": [],
+              "trigger": "VULNHIGH"
+            },
+            {
+              "action": "WARN",
+              "gate": "ANCHORESEC",
+              "id": "66218daa-2ee7-48e9-b73e-506378a59b2e",
               "params": [],
               "trigger": "VULNCRITICAL"
             }
@@ -83,29 +287,19 @@ data:
           "version": "1_0"
         }
       ],
-      "whitelists": [
-        {
-          "comment": "Default Global Whitelist",
-          "id": "912937b6-05fb-472f-bfbe-834c3562f32d",
-          "items": [],
-          "name": "Global Whitelist",
-          "version": "1_0"
-        }
-      ],
+      "whitelists": [],
       "mappings": [
         {
-          "id": "c4f9bf74-dc38-4ddf-b5cf-00e9c0074611",
+          "id": "c42e0769-5bb9-4e99-94d6-5c009e228439",
           "image": {
             "type": "tag",
             "value": "*"
           },
-          "name": "default",
-          "policy_id": "b4b551ce-376e-455d-9c2b-51ff6d0ab07c",
+          "name": "block-root",
+          "policy_id": "374c81e5-1f63-41c8-ad86-c76a51db4d80",
           "registry": "*",
           "repository": "*",
-          "whitelist_ids": [
-            "912937b6-05fb-472f-bfbe-834c3562f32d"
-          ]
+          "whitelist_ids": []
         }
       ]
     }

@@ -15,6 +15,20 @@ Deploying anchore-policy-validator using external Anchore-engine service:
 $ helm install --name <name> --set externalAnchore.anchoreHost=<my.anchore.host>  --set externalAnchore.anchoreUser=<username> -set externalAnchore.anchorePass=<password> banzaicloud-stable/anchore-policy-validator
 ```
 
+
+During deploying this chart, it's creating predefined policy bundles and activates `AllowAll` by default.
+
+## Policy bundles
+
+|  PolicyName   |                         Description                         |
+|---------------|-------------------------------------------------------------|
+|AllowAll       |Allow all images to deploy                                   |
+|RejectCritical |Reject deploying images that contain `critical` vulnerabiliy |
+|RejectHigh     |Reject deploying images that contain `high` vulnerabiliy     |
+|BlockRoot      |Block deploying images that using `root` as effective user   |
+|DenyAll        |Deny all imagest to deploy                                   |
+
+
 ## Configuration
 
 The following tables lists configurable parameters of the anchore-policy-validator chart and their default values.

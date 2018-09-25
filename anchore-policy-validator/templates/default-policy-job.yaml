@@ -41,5 +41,9 @@ spec:
         - "-c"
         - |
           set -ex
-          anchore-cli policy add /policy/default-policy.json
-          anchore-cli policy activate 0a869a39-1b20-4ce7-bc00-3a7d88271f08
+          anchore-cli policy add /policy/allow-all.json
+          anchore-cli policy add /policy/deny-all.json
+          anchore-cli policy add /policy/reject-high.json
+          anchore-cli policy add /policy/reject-critical.json
+          anchore-cli policy add /policy/block-root.json
+          anchore-cli policy activate 97b33e2c-3b57-4a3f-a12b-a8c0daa472a0
