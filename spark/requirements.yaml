@@ -1,13 +1,13 @@
 dependencies:
 - name: spark-shuffle
-  version: 0.0.2
-  repository: alias:banzaicloud-stable
-
-- name: spark-rss
   version: 0.0.3
   repository: alias:banzaicloud-stable
 
+- name: spark-rss
+  version: 0.0.4
+  repository: alias:banzaicloud-stable
+
 - name: spark-hs
-  version: 0.0.2
+  version: 0.1.0
   repository: alias:banzaicloud-stable
   condition: historyServer.enabled
