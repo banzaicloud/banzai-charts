@@ -1,5 +1,5 @@
 {{- if .Values.rbac.enabled }}
-kind: Role
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: {{ template "pvc-operator.fullname" . }}
@@ -9,36 +9,21 @@ metadata:
       heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
 rules:
-- apiGroups:
-  - banzaicloud.com
-  resources:
-  - "*"
-  verbs:
-  - "*"
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  - services
-  - endpoints
-  - persistentvolumeclaims
-  - events
-  - configmaps
-  - secrets
-  verbs:
-  - "*"
-- apiGroups:
-  - apps
-  resources:
-  - deployments
-  - daemonsets
-  - replicasets
-  - statefulsets
-  verbs:
-  - "*"
+- apiGroups: ["banzaicloud.com"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims", "services", "pods"]
+  verbs: ["get", "list", "watch", "update", "create"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get", "list", "watch", "create"]
+- apiGroups: ["extensions"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create"]
 
 ---
-kind: RoleBinding
+kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: {{ template "pvc-operator.fullname" . }}
@@ -50,8 +35,9 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: {{ template "pvc-operator.fullname" . }}
+  namespace: {{ .Release.Namespace}}
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: {{ template "pvc-operator.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 
@@ -62,6 +48,60 @@ metadata:
   name: {{ template "pvc-operator.fullname" . }}
   labels:
     app: {{ template "pvc-operator.name" . }}
+    chart: {{ template "pvc-operator.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: "nfs-provisioner-cluster-role"
+  labels:
+      chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+rules:
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get", "list", "watch", "create"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["get", "list", "watch", "update", "create"]
+- apiGroups: [""]
+  resources: ["persistentvolumes"]
+  verbs: ["get", "list", "watch", "create", "delete"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["list", "create", "update", "patch"]
+- apiGroups: [""]
+  resources: ["services", "endpoints"]
+  verbs: ["get"]
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: "nfs-provisioner-cluster-rolebinding"
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+subjects:
+- kind: ServiceAccount
+  name: "{{ .Values.rbac.nfs_serviceaccount_name }}"
+  namespace: {{ .Release.Namespace}}
+roleRef:
+  kind: ClusterRole
+  name: "nfs-provisioner-cluster-role"
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "{{ .Values.rbac.nfs_serviceaccount_name }}"
+  labels:
     chart: {{ template "pvc-operator.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

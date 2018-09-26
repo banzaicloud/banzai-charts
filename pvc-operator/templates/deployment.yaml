@@ -39,3 +39,7 @@ spec:
               value: {{ default .Release.Namespace .Values.nfs.namespace }}
             - name: OWNER_REFERENCE_NAME
               value: {{ default (include "pvc-operator.fullname" . ) .Values.operator.ownerReferenceName }}
+            - name: RBAC_ENABLED
+              value: "{{ .Values.rbac.enabled }}"
+            - name: NFS_SERVICE_ACCOUNT_NAME
+              value: "{{ .Values.rbac.nfs_serviceaccount_name }}"
