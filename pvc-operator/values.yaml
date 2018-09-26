@@ -16,4 +16,4 @@ nfs:
 ## Install Default RBAC roles and bindings
 rbac:
   enabled: true
-  nfs_serviceaccount_name : "nfs-provisioner"
+  nfsServiceaccountName : "nfs-provisioner"

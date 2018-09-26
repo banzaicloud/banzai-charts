@@ -42,4 +42,4 @@ spec:
             - name: RBAC_ENABLED
               value: "{{ .Values.rbac.enabled }}"
             - name: NFS_SERVICE_ACCOUNT_NAME
-              value: "{{ .Values.rbac.nfs_serviceaccount_name }}"
+              value: "{{ .Values.rbac.nfsServiceaccountName }}"
