@@ -42,4 +42,4 @@ spec:
             - name: RBAC_ENABLED
               value: "{{ .Values.rbac.enabled }}"
             - name: NFS_SERVICE_ACCOUNT_NAME
-              value: "{{ .Values.rbac.nfsServiceaccountName }}"
+              value: "{{ default (printf "%s-nfs" (include "pvc-operator.fullname" . )) .Values.nfs.serviceAccount.name  }}"

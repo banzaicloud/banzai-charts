@@ -89,7 +89,7 @@ metadata:
     release: {{ .Release.Name }}
 subjects:
 - kind: ServiceAccount
-  name: "{{ .Values.rbac.nfs_serviceaccount_name }}"
+  name: "{{ default (printf "%s-nfs" (include "pvc-operator.fullname" . )) .Values.nfs.serviceAccount.name  }}"
   namespace: {{ .Release.Namespace}}
 roleRef:
   kind: ClusterRole
@@ -97,13 +97,15 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 
 ---
+{{- if .Values.nfs.serviceAccount.create }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: "{{ .Values.rbac.nfs_serviceaccount_name }}"
+  name: "{{ default (printf "%s-nfs" (include "pvc-operator.fullname" . )) .Values.nfs.serviceAccount.name  }}"
   labels:
     chart: {{ template "pvc-operator.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+{{- end }}
 
 {{- end }}

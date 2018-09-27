@@ -12,8 +12,10 @@ operator:
 
 nfs:
   namespace: ""
+  serviceAccount:
+    name: ""
+    create: true
 
 ## Install Default RBAC roles and bindings
 rbac:
   enabled: true
-  nfsServiceaccountName : "nfs-provisioner"
