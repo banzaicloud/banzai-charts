@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 image:
   repository: banzaicloud/pvc-operator
-  tag: 0.0.3
+  tag: 0.0.4
   pullPolicy: IfNotPresent
 
 operator:
@@ -12,6 +12,9 @@ operator:
 
 nfs:
   namespace: ""
+  serviceAccount:
+    name: ""
+    create: true
 
 ## Install Default RBAC roles and bindings
 rbac:
