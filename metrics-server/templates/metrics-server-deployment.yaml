@@ -28,8 +28,8 @@ spec:
         command:
         - /metrics-server
         - --kubelet-insecure-tls
-        image: k8s.gcr.io/metrics-server-amd64:v0.3.0
-        imagePullPolicy: Always
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         volumeMounts:
         - name: tmp-dir
           mountPath: /tmp
