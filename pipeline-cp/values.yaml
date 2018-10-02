@@ -458,3 +458,6 @@ anchore-engine:
   cloudsql:
     enabled: false
     instance: ""
+
+spot-price-exporter:
+  enabled: false
