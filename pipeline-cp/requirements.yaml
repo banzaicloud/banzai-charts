@@ -44,6 +44,6 @@ dependencies:
   condition: anchore-engine.enabled
 
 - name: spot-price-exporter
-  version: 0.0.1
+  version: 0.1.0
   repository: alias:banzaicloud-stable
   condition: spot-price-exporter.enabled
