@@ -1,14 +1,14 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: whitelists.security.banzaicloud.com
+  name: whitelistitems.security.banzaicloud.com
 spec:
   group: security.banzaicloud.com
   version: v1alpha1
   names:
-    kind: WhiteList
-    plural: whitelists
-    singular: whitelist
+    kind: WhiteListItem
+    plural: whitelistitems
+    singular: whitelistitem
     shortnames:
       - wl
   scope: Cluster
