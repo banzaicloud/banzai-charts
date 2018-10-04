@@ -12,7 +12,7 @@ $ helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/bran
 
 ## Introduction
 
-This chart bootstraps an [AWS Spot price exporter](https://github.com/banzaicloud/banzai-charts/spot-price-exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [AWS Spot price exporter](https://github.com/banzaicloud/spot-price-exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
