@@ -23,6 +23,6 @@ spec:
           - path: /{{ rest $url | join "/" }}
             backend:
               serviceName: {{ $serviceName }}
-              servicePort: 443
+              servicePort: {{ .Values.service.externalPort }}
   {{- end}}
 {{- end }}

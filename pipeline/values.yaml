@@ -24,6 +24,7 @@ service:
   type: ClusterIP
   internalPort: 9090
   externalPort:  9090
+  tls: true
 
 ingress:
   enabled: false
