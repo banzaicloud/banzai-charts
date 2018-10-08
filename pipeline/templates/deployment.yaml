@@ -188,10 +188,10 @@ spec:
 
         - name: vault-tls
           mountPath: /vault/tls
-
+      {{- if .Values.service.tls  }}
         - name: pipeline-tls
           mountPath: /tls
-
+      {{ end }}
       volumes:
       - name: config-volume
         configMap:
@@ -207,8 +207,9 @@ spec:
       - name: vault-tls
         secret:
           secretName: "{{ .Release.Name }}-vault-tls"
+      {{- if .Values.service.tls  }}
       - name: pipeline-tls
         secret:
           secretName: "{{ template "fullname" . }}-tls"
-
+      {{ end }}
       serviceAccountName: pipeline
