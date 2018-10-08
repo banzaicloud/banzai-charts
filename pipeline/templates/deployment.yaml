@@ -145,10 +145,12 @@ spec:
         - name: VAULT_CACERT
           value: /vault/tls/ca.crt
 
+        {{- if .Values.service.tls  }}
         - name: PIPELINE_PIPELINE_CERTFILE
           value: /tls/server.crt
         - name: PIPELINE_PIPELINE_KEYFILE
           value: /tls/server.key
+        {{ end }}
 
         {{ range $key, $value := .Values.env }}
         - name: {{ $key }}
@@ -161,13 +163,17 @@ spec:
           httpGet:
             path: {{ .Values.global.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
+          {{- if .Values.service.tls  }}
             scheme: HTTPS
+          {{ end }}
           initialDelaySeconds: 15
         readinessProbe:
           httpGet:
             path: {{ .Values.global.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
+          {{- if .Values.service.tls  }}
             scheme: HTTPS
+          {{ end }}
           initialDelaySeconds: 10
 
         resources:
