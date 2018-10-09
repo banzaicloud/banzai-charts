@@ -13,3 +13,9 @@ pipelineIngress:
 
 historyServer:
   enabled: false
+
+resourceStagingServer:
+  enabled: false
+
+sparkShuffle:
+  enabled: false
