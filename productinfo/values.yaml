@@ -52,11 +52,11 @@ app:
   basePath: "/"
 
 providers:
-  gce:
+  google:
     enabled: false
     gceApiKey: ""
     gceCredentials: ""
-  ec2:
+  amazon:
     enabled: false
     awsAccessKeyId: ""
     awsSecretAccessKey: ""

@@ -50,7 +50,7 @@ spec:
               value: /credentials/azure.json
             - name: ORACLE_CLI_CONFIG_LOCATION
               value: /.oci/oci.properties
-            {{ if .Values.providers.ec2.enabled }}
+            {{ if .Values.providers.amazon.enabled }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -62,7 +62,7 @@ spec:
                   name: {{ template "productinfo.fullname" . }}
                   key: awsSecretAccessKey
             {{ end }}
-            {{ if .Values.providers.gce.enabled }}
+            {{ if .Values.providers.google.enabled }}
             - name: GCE_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -109,7 +109,7 @@ spec:
           secret:
             secretName: {{ template "productinfo.fullname" . }}
             items:
-            {{ if .Values.providers.gce.enabled }}
+            {{ if .Values.providers.google.enabled }}
             - key: gceCredentials
               path: google.json
             {{ end }}
