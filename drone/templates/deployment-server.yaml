@@ -70,6 +70,8 @@ spec:
             value: https://{{ index .Values.ingress.hosts 0 }}
         {{- end }}
 
+          - name: DRONE_BUILD_URL
+            value: https://{{ .Values.global.pipelineHost }}/ui
           - name: PIPELINE_BASEPATH
             value: https://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090{{ .Values.global.pipelineBasepath }}
           - name: PIPELINE_EXTERNAL_BASEPATH
