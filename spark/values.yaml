@@ -22,5 +22,19 @@ sparkShuffle:
 
 monitoring:
   enabled: false
-  jmxCollector:
-  metricsProperties:
+  jmxCollector: |
+    lowercaseOutputName: false
+    lowercaseOutputLabelNames: false
+    whitelistObjectNames: ["*:*"]
+  metricsProperties: |
+    # Enable Prometheus for all instances by class name
+    *.sink.prometheus.class=org.apache.spark.metrics.sink.PrometheusSink
+    # Prometheus pushgateway address
+    *.sink.prometheus.pushgateway-address=prometheus-pushgateway:9091
+    *.sink.prometheus.pushgateway-enable-timestamp=true
+    *.sink.prometheus.enable-dropwizard-collector=false
+    *.sink.prometheus.enable-jmx-collector=true
+    *.sink.prometheus.jmx-collector-config=/opt/spark/conf/jmx_collector.yaml
+    *.sink.jmx.class=org.apache.spark.metrics.sink.JmxSink
+    # Enable JVM metrics source for all instances by class name
+    *.source.jvm.class=org.apache.spark.metrics.source.JvmSource
