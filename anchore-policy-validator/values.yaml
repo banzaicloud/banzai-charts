@@ -5,7 +5,7 @@ apiService:
   version: v1beta1
 image:
   repository: banzaicloud/anchore-image-validator
-  tag: 0.0.2
+  tag: 0.0.3
   pullPolicy: IfNotPresent
 service:
   name: anchoreimagecheck
