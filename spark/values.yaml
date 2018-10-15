@@ -19,3 +19,8 @@ resourceStagingServer:
 
 sparkShuffle:
   enabled: false
+
+monitoring:
+  enabled: false
+  jmxCollector:
+  metricsProperties:
