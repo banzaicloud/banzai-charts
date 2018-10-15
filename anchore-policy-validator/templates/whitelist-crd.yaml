@@ -17,13 +17,19 @@ spec:
       properties:
         spec:
           required:
-            - releaseName
             - reason
             - creator
           properties:
-            relaseName:
-              type: string
             reason:
               type: string
             creator:
               type: string
+  additionalPrinterColumns:
+  - name: Reason
+    type: string
+    JSONPath: .spec.readson
+    priority: 1
+  - name: Creator
+    type: string
+    JSONPath: .spec.creator
+    priority: 2

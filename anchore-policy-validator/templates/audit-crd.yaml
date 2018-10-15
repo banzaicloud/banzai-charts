@@ -39,3 +39,20 @@ spec:
           properties:
             state:
               type: string
+  additionalPrinterColumns:
+  - name: ReleaseName
+    type: string
+    JSONPath: .spec.releaseName
+    priority: 1
+  - name: Image
+    type: string
+    JSONPath: .spec.image
+    priority: 2
+  - name: result
+    type: string
+    JSONPath: .spec.result
+    priority: 3
+  - name: action
+    type: string
+    JSONPath: .spec.action
+    priority: 4
