@@ -49,6 +49,7 @@ ingress:
   #      - chart-example.local
 
 app:
+  cloudProvider: ""
   logDirectory: ""
 
   awsAccessKeyId: ""
