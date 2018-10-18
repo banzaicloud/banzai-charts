@@ -127,6 +127,9 @@ spec:
         - name: PIPELINE_HELM_BANZAIREPOSITORYURL
           value: {{ .Values.helm.banzaiRepositoryURL | quote }}
 
+        - name: "PIPELINE_DNS_DOMAIN"
+          value: {{ .Values.dns.domain | quote }}
+
         - name: PIPELINE_EKS_TEMPLATELOCATION
           value: {{ .Values.eks.templateLocation | quote }}  
 
@@ -186,6 +189,9 @@ spec:
         - mountPath: /statestore
           name: statestore
 
+        - mountPath: /cache
+          name: cache
+
         - name: vault-tls
           mountPath: /vault/tls
       {{- if .Values.service.tls  }}
@@ -196,10 +202,20 @@ spec:
       - name: config-volume
         configMap:
           name: "{{ template "fullname" . }}"
-      - name: statestore
-        {{- if and .Values.statestore.persistence.enabled (not .Values.statestore.persistence.existingClaim) }}
+
+      - name: cache
+        {{- if .Values.cache.persistence.enabled }}
         persistentVolumeClaim:
-                claimName: {{ template "fullname" . }}-statestore
+          claimName: {{ default (printf "%s-cache" (include "fullname" .)) .Values.cache.persistence.existingClaim }}
+        {{- else }}
+        hostPath:
+          path: /opt/pipeline/statestore/cache
+        {{- end }}
+
+      - name: statestore
+        {{- if .Values.statestore.persistence.enabled }}
+        persistentVolumeClaim:
+           claimName: {{ default (printf "%s-statestore" (include "fullname" .)) .Values.statestore.persistence.existingClaim }}
         {{- else }}
         hostPath:
           path: /opt/pipeline/statestore/
