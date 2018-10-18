@@ -96,8 +96,8 @@ spec:
               --conf spark.kubernetes.shuffle.namespace={{ .Values.sparkSubmitOptions.shuffleNameSpace }}
               --conf spark.kubernetes.shuffle.labels={{ .Values.sparkSubmitOptions.shuffleLabels }}
               --conf spark.metrics.conf={{ .Values.sparkSubmitOptions.sparkMetricsConf }}
-              --conf spark.kubernetes.resourceStagingServer.uri={{ .Values.sparkSubmitOptions.resourceStagingServerExt }}
-              --conf spark.kubernetes.resourceStagingServer.internal.uri={{ .Values.sparkSubmitOptions.resourceStagingServerInt }}
+              --conf spark.kubernetes.resourceStagingServer.uri=http://{{ .Release.Name }}-{{ .Values.sparkSubmitOptions.resourceStagingServerExt }}
+              --conf spark.kubernetes.resourceStagingServer.internal.uri=http://{{ .Release.Name }}-{{ .Values.sparkSubmitOptions.resourceStagingServerInt }}
               --conf spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
               --conf spark.executor.extraJavaOptions="-Dlog4j.configuration={{ .Values.sparkSubmitOptions.log4jConfigPath }}"
               --conf spark.kubernetes.authenticate.driver.serviceAccountName={{ .Values.sparkSubmitOptions.driverServiceAccountName }}
