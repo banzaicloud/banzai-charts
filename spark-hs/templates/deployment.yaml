@@ -1,10 +1,10 @@
 {{- define "logDirectoryTag" }}
   {{- if eq .Values.app.cloudProvider "amazon"}}
-    {{ printf "s3a://%s" .Values.app.logDirectory }}
+    {{- printf "s3a://%s" .Values.app.logDirectory }}
   {{- else if eq .Values.app.cloudProvider "azure"}}
-    {{ printf "wasb://%s@%s.blob.core.windows.net" .Values.app.logDirectory .Values.app.azureStorageAccountName }}
+    {{- printf "wasb://%s@%s.blob.core.windows.net" .Values.app.logDirectory .Values.app.azureStorageAccountName }}
   {{- else if eq .Values.app.cloudProvider "google"}}
-    {{ printf "gs://%s" .Values.app.logDirectory }}
+    {{- printf "gs://%s" .Values.app.logDirectory }}
   {{- end }}
 {{- end }}
 {{- $schema := .Values.app.cloudProvider }}
@@ -64,8 +64,7 @@ spec:
           - name: SPARK_NO_DAEMONIZE
             value: "false"
           - name: SPARK_HISTORY_OPTS
-            value: >-
-              {{ printf "-Dspark.history.fs.logDirectory=%s" (include "logDirectoryTag" . )}}
+            value: {{ printf "-Dspark.history.fs.logDirectory=%s" (include "logDirectoryTag" . )}}
         {{- if eq $schema "google" }}
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /opt/spark/conf/google.json
