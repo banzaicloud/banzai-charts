@@ -15,7 +15,7 @@ dependencies:
   condition: prometheus.enabled
 
 - name: pipeline
-  version: 0.0.28
+  version: 0.0.29
   repository: alias:banzaicloud-stable
 
 - name: pipeline-ui

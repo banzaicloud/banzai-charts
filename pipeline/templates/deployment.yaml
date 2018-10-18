@@ -133,15 +133,10 @@ spec:
         - name: PIPELINE_EKS_TEMPLATELOCATION
           value: {{ .Values.eks.templateLocation | quote }}  
 
-        - name: SLACK_WEBHOOK_URL
-          value: "{{ .Values.Slack.WebhookUrl }}"
-        - name: SLACK_CHANNEL
-          value: "{{ .Values.Slack.Channel }}"
-
         - name: PIPELINE_HELM_RETRYATTEMPT
-          value: "{{ .Values.Helm.retryAttempt }}"
+          value: "{{ .Values.helm.retryAttempt }}"
         - name: PIPELINE_HELM_RETRYSLEEPSECONDS
-          value: "{{ .Values.Helm.retrySleepSeconds }}"
+          value: "{{ .Values.helm.retrySleepSeconds }}"
 
         - name: VAULT_ADDR
           value: https://{{ .Release.Name }}-vault:8200
