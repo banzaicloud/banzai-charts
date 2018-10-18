@@ -39,9 +39,14 @@ spec:
         env:
         - name: KUBERNETES_RELEASE_NAME
           value: "{{ .Release.Name }}"
+        - name: KUBERNETES_NAMESPACE
+          value: "{{ .Release.Namespace }}"
 
         - name: PIPELINE_PIPELINE_BASEPATH
           value: {{ .Values.global.pipelineBasepath | quote }}
+
+        - name: PIPELINE_DATABASE_AUTOMIGRATEENABLED
+          value: {{ .Values.database.autoMigrateEnabled | quote }}
 
         {{- if .Values.mysql.enabled  }}
         - name: PIPELINE_DATABASE_HOST
@@ -114,9 +119,11 @@ spec:
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
         - name: PIPELINE_MONITOR_CONFIGMAP
-          value: {{ default "" .Values.monitor.configMap | quote }}
+          value: "{{ .Release.Name }}-{{ .Values.monitor.configMap }}"
         - name: PIPELINE_MONITOR_MOUNTPATH
-          value: {{ default "" .Values.monitor.mountPath | quote }}
+          value: {{ default "/etc/prometheus/secrets" .Values.monitor.mountPath | quote }}
+        - name: PIPELINE_MONITOR_CERTSECRET
+          value: {{ default "prometheus-federation-secrets" .Values.monitor.certSecret | quote }}
 
         - name: PIPELINE_HELM_RETRYATTEMPT
           value: {{ .Values.helm.retryAttempt | quote }}
