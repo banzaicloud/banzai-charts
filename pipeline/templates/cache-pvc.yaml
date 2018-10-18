@@ -1,0 +1,24 @@
+{{- if and .Values.cache.persistence.enabled (not .Values.cache.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-cache
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  accessModes:
+    - {{ .Values.cache.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.cache.persistence.size | quote }}
+{{- if .Values.cache.persistence.storageClass }}
+{{- if (eq "-" .Values.cache.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.cache.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end }}
