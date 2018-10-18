@@ -90,7 +90,7 @@ cache:
     ##
     # storageClass: "-"
     accessMode: ReadWriteOnce
-    size: 128Mi
+    size: 1Gi
 
 statestore:
   persistence:
