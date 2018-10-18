@@ -46,10 +46,6 @@ pipeline:
   awsSecretAccessKey: ""
   awsAccessKeyId: ""
 
-  Slack:
-    WebhookUrl: ""
-    Channel: ""
-
 pipeline-ui:
   enabled: false
   ingress:
