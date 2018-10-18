@@ -78,8 +78,8 @@ sparkSubmitOptions:
   DriverImage: banzaicloud/spark-driver-py:v2.2.1-k8s-1.0.35
   ExecutorImage: banzaicloud/spark-executor-py:v2.2.1-k8s-1.0.35
   initContainerImage: banzaicloud/spark-init:v2.2.1-k8s-1.0.35
-  resourceStagingServerInt: http://spark-rss:10000
-  resourceStagingServerExt: http://spark-rss:10000
+  resourceStagingServerInt: spark-rss:10000
+  resourceStagingServerExt: spark-rss:10000
   sparkLocalDir: /tmp/spark-local
   eventLogDirectory: ""
   driverServiceAccountName: "spark"
