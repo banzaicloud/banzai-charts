@@ -121,7 +121,7 @@ spec:
         - name: PIPELINE_HELM_RETRYATTEMPT
           value: {{ .Values.helm.retryAttempt | quote }}
         - name: PIPELINE_HELM_RETRYSLEEPSECONDS
-          value: {{ .Values.helm.enabled | quote }}
+          value: {{ .Values.helm.retrySleepSeconds | quote }}
         - name: PIPELINE_HELM_STABLEREPOSITORYURL
           value: {{ .Values.helm.stableRepositoryURL | quote }}
         - name: PIPELINE_HELM_BANZAIREPOSITORYURL
