@@ -459,3 +459,8 @@ anchore-engine:
 
 spot-price-exporter:
   enabled: false
+
+prometheus-mysql-exporter:
+  enabled: false
+  cloudsqlproxy:
+    enabled: false
