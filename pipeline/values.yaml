@@ -66,8 +66,9 @@ eks:
 
 monitor:
   enabled: true
-  configMap: prometheus-certs
-  mountPath: /etc/prometheus-certs
+  configMap: prometheus-server
+  certSecret: prometheus-federation-secrets
+  mountPath: /etc/prometheus/secrets
 
 dns:
   domain: "example.org"
@@ -111,6 +112,9 @@ statestore:
     # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 128Mi
+
+database:
+  autoMigrateEnabled: false
 
 ## mysql image version
 ## ref: https://hub.docker.com/r/library/mysql/tags/

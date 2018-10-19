@@ -121,6 +121,12 @@ prometheus:
       scrape_interval: 15s
     configMapOverrideName:
       prometheus-server
+    extraSecretMounts:
+      - name: secret-files
+        mountPath: /etc/prometheus/secrets
+        subPath: ""
+        secretName: prometheus-federation-secrets
+        readOnly: true
   ## Prometheus server ConfigMap entries
   ##
   serverFiles:
