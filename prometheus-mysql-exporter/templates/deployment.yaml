@@ -34,7 +34,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: DATA_SOURCE_NAME
-              value: {{ .Values.datasource }}
+              value: "{{ .Values.mysql.user }}:{{ .Values.mysql.pass }}@{{ if .Values.mysql.protocol }}{{ .Values.mysql.protocol }}{{ end }}({{ .Values.mysql.host }}:{{ .Values.mysql.port }})/{{ if .Values.mysql.db }}{{ .Values.mysql.db }}{{ end }}{{ if .Values.mysql.param }}?{{ .Values.mysql.param }}{{ end }}"
           ports:
             - containerPort: {{ .Values.service.internalPort }}
           livenessProbe:
@@ -49,16 +49,22 @@ spec:
         - name: cloudsql-proxy
           image: "{{ .Values.cloudsqlproxy.image.repo }}:{{ .Values.cloudsqlproxy.image.tag }}"
           imagePullPolicy: "{{ .Values.cloudsqlproxy.image.PullPolicy  }}"
-          command: ["/cloud_sql_proxy",
-                    "-instances={{ .Values.cloudsqlproxy.instanceConnectionName }}=tcp:{{ .Values.cloudsqlproxy.port }}",
-                    "-credential_file=/secrets/cloudsql/credentials.json"]
+          command:
+            - /cloud_sql_proxy
+            - --dir=/cloudsql
+            - -instances={{ .Values.cloudsqlproxy.instanceConnectionName }}=tcp:{{ .Values.cloudsqlproxy.port }}
+            {{ if or .Values.cloudsqlproxy.credentials .Values.cloudsqlproxy.existingSecret -}}
+            - -credential_file=/secrets/cloudsql/{{- if .Values.cloudsqlproxy.existingSecret -}} {{ .Values.cloudsqlproxy.existingSecretKey }} {{- else -}} credentials.json {{- end }}
+            {{ end -}}
           livenessProbe:
             exec:
               command: ["nc", "-z", "127.0.0.1", "3306"]
           volumeMounts:
+            {{ if or .Values.cloudsqlproxy.credentials .Values.cloudsqlproxy.existingSecret -}}
             - name: cloudsql-proxy-sa-credentials
               mountPath: /secrets/cloudsql
               readOnly: true
+            {{ end -}}
         {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
@@ -74,9 +80,9 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- if .Values.cloudsqlproxy.enabled }}
       volumes:
-        - name: cloudsql-proxy-sa-credentials
-          secret:
-            secretName: {{ template "prometheus-mysql-exporter.cloudsqlsecret" . }}
-    {{- end }}
+      {{ if or .Values.cloudsqlproxy.credentials .Values.cloudsqlproxy.existingSecret -}}
+      - name: cloudsql-proxy-sa-credentials
+        secret:
+          secretName: {{ default (include "prometheus-mysql-exporter.fullname" .) .Values.cloudsqlproxy.existingSecret }}
+      {{ end -}}
