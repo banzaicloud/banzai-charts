@@ -102,6 +102,8 @@ spec:
           value: {{ .Values.auth.cookieDomain | quote }}
         - name: PIPELINE_AUTH_SECURECOOKIE
           value: "{{ .Values.auth.secureCookie }}"
+        - name: PIPELINE_AUTH_WHITELISTENABLED
+          value: {{ default "false" .Values.auth.whitelistEnabled | quote}}
         - name: PIPELINE_GITHUB_TOKEN
           valueFrom:
             secretKeyRef:
