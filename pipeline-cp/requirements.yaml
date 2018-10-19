@@ -49,6 +49,6 @@ dependencies:
   condition: spot-price-exporter.enabled
 
 - name: prometheus-mysql-exporter
-  version: 0.2.0
-  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 0.2.1
+  repository: alias:banzaicloud-stable
   condition: prometheus-mysql-exporter.enabled
