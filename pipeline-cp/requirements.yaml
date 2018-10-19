@@ -15,7 +15,7 @@ dependencies:
   condition: prometheus.enabled
 
 - name: pipeline
-  version: 0.0.27
+  version: 0.0.31
   repository: alias:banzaicloud-stable
 
 - name: pipeline-ui
@@ -47,3 +47,8 @@ dependencies:
   version: 0.1.0
   repository: alias:banzaicloud-stable
   condition: spot-price-exporter.enabled
+
+- name: prometheus-mysql-exporter
+  version: 0.2.0
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: prometheus-mysql-exporter.enabled
