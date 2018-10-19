@@ -133,11 +133,6 @@ spec:
         - name: PIPELINE_EKS_TEMPLATELOCATION
           value: {{ .Values.eks.templateLocation | quote }}  
 
-        - name: PIPELINE_HELM_RETRYATTEMPT
-          value: "{{ .Values.helm.retryAttempt }}"
-        - name: PIPELINE_HELM_RETRYSLEEPSECONDS
-          value: "{{ .Values.helm.retrySleepSeconds }}"
-
         - name: VAULT_ADDR
           value: https://{{ .Release.Name }}-vault:8200
         - name: VAULT_CACERT
