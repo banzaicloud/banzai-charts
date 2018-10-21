@@ -3,6 +3,9 @@ image:
   tag: latest
   pullPolicy: Always
 
+# Namespace to watch fot LoggingOperator CRD
+watchNamespace: ""
+
 rbac:
   enabled: true
 
