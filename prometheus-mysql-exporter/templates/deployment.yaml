@@ -55,7 +55,7 @@ spec:
             - -instances={{ .Values.cloudsqlproxy.instanceConnectionName }}=tcp:{{ .Values.cloudsqlproxy.port }}
             {{ if or .Values.cloudsqlproxy.credentials .Values.cloudsqlproxy.existingSecret -}}
             - -credential_file=/secrets/cloudsql/{{- if .Values.cloudsqlproxy.existingSecret -}} {{ .Values.cloudsqlproxy.existingSecretKey }} {{- else -}} credentials.json {{- end }}
-            {{ end -}}
+            {{ end }}
           livenessProbe:
             exec:
               command: ["nc", "-z", "127.0.0.1", "3306"]
