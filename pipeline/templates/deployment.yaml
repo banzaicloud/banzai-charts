@@ -114,9 +114,34 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}
               key: githubToken
-
         - name: PIPELINE_DRONE_URL
           value: http://{{ .Release.Name }}-drone:80
+
+        - name: PIPELINE_ARK_NAME
+          value: "{{ .Values.ark.name }}"
+        - name: PIPELINE_ARK_NAMESPACE
+          value: "{{ .Values.ark.namespace }}"
+        - name: PIPELINE_ARK_CHART
+          value: "{{ .Values.ark.chart }}"
+        - name: PIPELINE_ARK_CHARTVERSION
+          value: "{{ .Values.ark.chartVersion }}"
+        - name: PIPELINE_ARK_IMAGE
+          value: "{{ .Values.ark.image }}"
+        - name: PIPELINE_ARK_IMAGETAG
+          value: "{{ .Values.ark.imageTag }}"
+        - name: PIPELINE_ARK_PULLPOLICY
+          value: "{{ .Values.ark.pullPolicy }}"
+
+        - name: PIPELINE_ARK_SYNCENABLED
+          value: "{{ .Values.ark.syncEnabled }}"
+        - name: PIPELINE_ARK_LOGLEVEL
+          value: "{{ .Values.ark.logLevel }}"
+        - name: PIPELINE_ARK_BUCKETSYNCINTERVAL
+          value: "{{ .Values.ark.bucketSyncInterval }}"
+        - name: PIPELINE_ARK_RESTORESYNCINTERVAL
+          value: "{{ .Values.ark.restoreSyncInterval }}"
+        - name: PIPELINE_ARK_BACKUPSYNCINTERVAL
+          value: "{{ .Values.ark.backupSyncInterval }}"
 
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
