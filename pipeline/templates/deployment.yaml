@@ -39,9 +39,14 @@ spec:
         env:
         - name: KUBERNETES_RELEASE_NAME
           value: "{{ .Release.Name }}"
+        - name: KUBERNETES_NAMESPACE
+          value: "{{ .Release.Namespace }}"
 
         - name: PIPELINE_PIPELINE_BASEPATH
           value: {{ .Values.global.pipelineBasepath | quote }}
+
+        - name: PIPELINE_DATABASE_AUTOMIGRATEENABLED
+          value: {{ .Values.database.autoMigrateEnabled | quote }}
 
         {{- if .Values.mysql.enabled  }}
         - name: PIPELINE_DATABASE_HOST
@@ -102,6 +107,8 @@ spec:
           value: {{ .Values.auth.cookieDomain | quote }}
         - name: PIPELINE_AUTH_SECURECOOKIE
           value: "{{ .Values.auth.secureCookie }}"
+        - name: PIPELINE_AUTH_WHITELISTENABLED
+          value: {{ default "false" .Values.auth.whitelistEnabled | quote}}
         - name: PIPELINE_GITHUB_TOKEN
           valueFrom:
             secretKeyRef:
@@ -114,31 +121,26 @@ spec:
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
         - name: PIPELINE_MONITOR_CONFIGMAP
-          value: {{ default "" .Values.monitor.configMap | quote }}
+          value: "{{ .Release.Name }}-{{ .Values.monitor.configMap }}"
         - name: PIPELINE_MONITOR_MOUNTPATH
-          value: {{ default "" .Values.monitor.mountPath | quote }}
+          value: {{ default "/etc/prometheus/secrets" .Values.monitor.mountPath | quote }}
+        - name: PIPELINE_MONITOR_CERTSECRET
+          value: {{ default "prometheus-federation-secrets" .Values.monitor.certSecret | quote }}
 
         - name: PIPELINE_HELM_RETRYATTEMPT
           value: {{ .Values.helm.retryAttempt | quote }}
         - name: PIPELINE_HELM_RETRYSLEEPSECONDS
-          value: {{ .Values.helm.enabled | quote }}
+          value: {{ .Values.helm.retrySleepSeconds | quote }}
         - name: PIPELINE_HELM_STABLEREPOSITORYURL
           value: {{ .Values.helm.stableRepositoryURL | quote }}
         - name: PIPELINE_HELM_BANZAIREPOSITORYURL
           value: {{ .Values.helm.banzaiRepositoryURL | quote }}
 
+        - name: "PIPELINE_DNS_DOMAIN"
+          value: {{ .Values.dns.domain | quote }}
+
         - name: PIPELINE_EKS_TEMPLATELOCATION
           value: {{ .Values.eks.templateLocation | quote }}  
-
-        - name: SLACK_WEBHOOK_URL
-          value: "{{ .Values.Slack.WebhookUrl }}"
-        - name: SLACK_CHANNEL
-          value: "{{ .Values.Slack.Channel }}"
-
-        - name: PIPELINE_HELM_RETRYATTEMPT
-          value: "{{ .Values.Helm.retryAttempt }}"
-        - name: PIPELINE_HELM_RETRYSLEEPSECONDS
-          value: "{{ .Values.Helm.retrySleepSeconds }}"
 
         - name: VAULT_ADDR
           value: https://{{ .Release.Name }}-vault:8200
@@ -186,6 +188,9 @@ spec:
         - mountPath: /statestore
           name: statestore
 
+        - mountPath: /cache
+          name: cache
+
         - name: vault-tls
           mountPath: /vault/tls
       {{- if .Values.service.tls  }}
@@ -196,10 +201,20 @@ spec:
       - name: config-volume
         configMap:
           name: "{{ template "fullname" . }}"
-      - name: statestore
-        {{- if and .Values.statestore.persistence.enabled (not .Values.statestore.persistence.existingClaim) }}
+
+      - name: cache
+        {{- if .Values.cache.persistence.enabled }}
         persistentVolumeClaim:
-                claimName: {{ template "fullname" . }}-statestore
+          claimName: {{ default (printf "%s-cache" (include "fullname" .)) .Values.cache.persistence.existingClaim }}
+        {{- else }}
+        hostPath:
+          path: /opt/pipeline/statestore/cache
+        {{- end }}
+
+      - name: statestore
+        {{- if .Values.statestore.persistence.enabled }}
+        persistentVolumeClaim:
+           claimName: {{ default (printf "%s-statestore" (include "fullname" .)) .Values.statestore.persistence.existingClaim }}
         {{- else }}
         hostPath:
           path: /opt/pipeline/statestore/

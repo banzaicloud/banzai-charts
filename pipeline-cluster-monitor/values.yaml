@@ -305,7 +305,9 @@ grafana:
     annotations: 
       kubernetes.io/ingress.class: traefik
       traefik.frontend.rule.type: PathPrefixStrip
-      traefik.ingress.kubernetes.io/ssl-redirect: "true"
+      traefik.ingress.kubernetes.io/redirect-permanent: "true"
+      traefik.ingress.kubernetes.io/redirect-regex: ^http://(.*)
+      traefik.ingress.kubernetes.io/redirect-replacement: https://$1
     path: /grafana
     hosts:
       - localhost
