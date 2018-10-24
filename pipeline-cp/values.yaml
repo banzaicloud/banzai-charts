@@ -440,7 +440,10 @@ grafana:
         url: https://grafana.com/api/dashboards/5312/revisions/1/download
         datasource: Prometheus
       vault:
-        url: https://grafana.com/api/dashboards/7700/revisions/1/download
+        url: https://grafana.com/api/dashboards/7700/revisions/3/download
+        datasource: Prometheus
+      mysql:
+        url: https://grafana.com/api/dashboards/6239/revisions/1/download
         datasource: Prometheus
 
 anchore-engine:
