@@ -1,7 +1,7 @@
 dependencies:
 
 - name: grafana
-  version: 1.14.3
+  version: 1.17.2
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: grafana.enabled
 
@@ -10,7 +10,7 @@ dependencies:
   repository: alias:banzaicloud-stable
 
 - name: prometheus
-  version: 6.10.0
+  version: 7.3.3
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: prometheus.enabled
 
