@@ -60,6 +60,8 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+          - '/opt/spark/sbin/start-history-server.sh'
         env:
           - name: SPARK_NO_DAEMONIZE
             value: "false"

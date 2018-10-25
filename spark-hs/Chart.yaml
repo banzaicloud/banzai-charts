@@ -1,5 +1,5 @@
 name: spark-hs
-version: 0.1.3
+version: 0.1.4
 description: A Helm chart for Kubernetes
 home: https://banzaicloud.com
 sources:
