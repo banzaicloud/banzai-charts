@@ -31,6 +31,10 @@ tolerations: []
 
 nodeSelector: {}
 
+## Affinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+
 ## Parameters for the ' default' Config resource
 ## See https://heptio.github.io/ark/v0.9.0/config-definition
 configuration:
