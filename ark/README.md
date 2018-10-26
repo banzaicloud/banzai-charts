@@ -64,6 +64,7 @@ Parameter | Description | Default
 `resources` | Resource requests and limits | `{}`
 `tolerations` | List of node taints to tolerate | `[]`
 `nodeSelector` | Node labels for pod assignment | `{}`
+`affinity` | Affinity for pod assignment | `[]`
 `configuration.persistentVolumeProvider.name` | The name of the cloud provider the cluster is using for persistent volumes, if any | `{}`
 `configuration.persistentVolumeProvider.config.region` | The cloud provider region (AWS only) | ``
 `configuration.persistentVolumeProvider.config.apiTimeout` | The API timeout (Azure only) |
