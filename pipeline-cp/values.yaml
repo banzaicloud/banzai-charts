@@ -27,7 +27,7 @@ traefik:
     existingClaim: acme-pv-claim
 
 acmeStorageClaim:
-  volumeName: acme-cert
+  volumeName: ""
 
 pipeline:
   image:
