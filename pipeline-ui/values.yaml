@@ -2,6 +2,9 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+apiUrl: http://localhost
+tag: local
+
 replicaCount: 1
 
 image:
