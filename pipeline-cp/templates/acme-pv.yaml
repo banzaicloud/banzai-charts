@@ -1,4 +1,4 @@
-{{ if and .Values.traefik.persistence.enabled .Values.traefik.persistence.existingClaim }}
+{{ if and .Values.traefik.acme.persistence.enabled .Values.traefik.acme.persistence.existingClaim }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -22,7 +22,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.traefik.persistence.existingClaim }}
+  name: {{ .Values.traefik.acme.persistence.existingClaim }}
 spec:
   selector:
     matchLabels:
