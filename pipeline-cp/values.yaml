@@ -22,6 +22,12 @@ traefik:
   metrics:
     prometheus:
       enabled: true
+  persistence:
+    enabled: false
+    existingClaim: ""
+
+acmeStorageClaim:
+  volumeName: ""
 
 pipeline:
   image:

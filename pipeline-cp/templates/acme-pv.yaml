@@ -1,0 +1,35 @@
+{{ if and .Values.traefik.persistence.enabled .Values.traefik.persistence.existingClaim }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: acme-pv
+  labels:
+    persistentDisk: acme
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  gcePersistentDisk:
+    pdName: {{ .Values.acmeStorageClaim.volumeName }}
+    fsType: ext4
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.traefik.persistence.existingClaim }}
+spec:
+  selector:
+    matchLabels:
+      persistentDisk: "acme"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+{{ end }}
