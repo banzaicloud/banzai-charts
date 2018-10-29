@@ -7,7 +7,9 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+    {{- if .Values.deploymentLabels }}
 {{ toYaml .Values.deploymentLabels | indent 4 }}
+    {{- end }}
   annotations:
 {{ toYaml .Values.deploymentAnnotations | indent 4 }}
 spec:
