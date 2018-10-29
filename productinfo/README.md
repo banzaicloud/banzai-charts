@@ -71,7 +71,7 @@ The following tables lists the configurable parameters of the productinfo chart 
 | `deploymentLabels`            | Additional deployment labels                             | `{}`                         |
 | `deploymentAnnotations`       | Additional deployment annotations                        | `{}`                         |
 
-Alternatively, a YAML file that sp****ecifies the values for the parameters can be provided while installing the chart. For example:
+Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 
 ```bash
 $ helm install --name my-release -f values.yaml banzaicloud-stable/productinfo
