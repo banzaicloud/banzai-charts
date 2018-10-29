@@ -10,7 +10,6 @@ metadata:
 {{ toYaml .Values.deploymentLabels | indent 4 }}
   annotations:
 {{ toYaml .Values.deploymentAnnotations | indent 4 }}
-
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
