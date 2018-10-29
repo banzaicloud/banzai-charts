@@ -25,6 +25,9 @@ traefik:
   persistence:
     enabled: false
     existingClaim: ""
+  acme:
+    persistence:
+      existingClaim: ""
 
 acmeStorageClaim:
   volumeName: ""
