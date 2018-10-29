@@ -78,5 +78,8 @@ providers:
     alibabaRegionId: "eu-central-1"
 
 
-
+## Additional deployment labels and annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+deploymentLabels: {}
+deploymentAnnotations: {}
 

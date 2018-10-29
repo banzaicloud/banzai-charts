@@ -7,6 +7,11 @@ metadata:
     chart: {{ template "productinfo.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    {{- if .Values.deploymentLabels }}
+{{ toYaml .Values.deploymentLabels | indent 4 }}
+    {{- end }}
+  annotations:
+{{ toYaml .Values.deploymentAnnotations | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

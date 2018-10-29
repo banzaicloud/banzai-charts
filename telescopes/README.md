@@ -56,6 +56,8 @@ The following tables lists the configurable parameters of the telescopes chart a
 | `app.devMode`               | Developer mode                                        | `false`                         |
 | `app.vaultAddress`          | The vault address for authentication token management | `nil`                           |
 | `app.tokenSigningKey`       | The token signing key for the authentication process  | `nil`                           |
+| `deploymentLabels`          | Additional deployment labels                          | `{}`                            |
+| `deploymentAnnotations`     | Additional deployment annotations                     | `{}`                            |
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 
