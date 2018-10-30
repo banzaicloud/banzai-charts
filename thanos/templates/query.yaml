@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "thanos.fullname" . }}-query
+  labels:
+    app: {{ include "thanos.name" . }}
+    chart: {{ include "thanos.chart" . }}
+    release: {{ .thanos.Name }}
+    heritage: {{ .thanos.Service }}
+spec:
+  replicas: {{ .Values.query.replicaCount}}
+  selector:
+    matchLabels:
+      app: {{ include "thanos.name" . }}-query
+      chart: {{ include "thanos.chart" . }}
+      release: {{ .thanos.Name }}
+      heritage: {{ .thanos.Service }}
+      thanos-peer: "true"
+  template:
+    metadata:
+      labels:
+        app: {{ include "thanos.name" . }}
+        chart: {{ include "thanos.chart" . }}
+        release: {{ .thanos.Name }}
+        heritage: {{ .thanos.Service }}
+        thanos-peer: "true"
+      annotations:
+      {{- if .Values.store.monitoring.enabled  }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.query.monitoring.port}}"
+      {{ end }}
+    spec:
+      containers:
+      - name: thanos-query
+        image: improbable/thanos:master
+        args:
+        - "query"
+        - "--log.level=debug"
+        - "--grpc-address=0.0.0.0:"{{ .Values.query.grpcPort }}
+        - "--cluster.peers="{{ include "thanos.fullname" . }}"."{{ .Release.Namespace }}".svc.cluster.local:{{ .Values.global.cluster.port }}"
+        - "--query.replica-label={{ .Values.global.replicaLabel }}"
+        ports:
+        - name: metrics
+          containerPort: "{{ .Values.query.monitoring.port}}"
+        - name: grpc
+          containerPort: "{{ .Values.query.grpcPort }}"
+        - name: cluster
+          containerPort: "{{ .Values.global.cluster.port }}"

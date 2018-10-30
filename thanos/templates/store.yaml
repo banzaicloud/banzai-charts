@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "thanos.fullname" . }}
+  labels:
+    app: {{ include "thanos.name" . }}
+    chart: {{ include "thanos.chart" . }}
+    release: {{ .thanos.Name }}
+    heritage: {{ .thanos.Service }}
+spec:
+  serviceName: {{ include "thanos.name" . }}-store
+  replicas: {{ .Values.store.replicaCount}}
+  selector:
+    matchLabels:
+      app: {{ include "thanos.name" . }}
+      chart: {{ include "thanos.chart" . }}
+      release: {{ .thanos.Name }}
+      heritage: {{ .thanos.Service }}
+      thanos-peer: "true"
+  template:
+    metadata:
+      labels:
+        app: {{ include "thanos.name" . }}-store
+        chart: {{ include "thanos.chart" . }}
+        release: {{ .thanos.Name }}
+        heritage: {{ .thanos.Service }}
+        thanos-peer: "true"
+      annotations:
+      {{- if .Values.store.monitoring.enabled  }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.store.monitoring.port}}"
+      {{ end }}
+    spec:
+      containers:
+      - name: thanos-store
+        image: "{{ .Values.store.image.repository }}:{{ .Values.store.image.tag }}"
+        imagePullPolicy: {{ .Values.store.image.pullPolicy }}
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /creds/gcs-credentials.json
+        args:
+        - "store"
+        - "--log.level={{ .Values.store.logLevel }}"
+        - "--tsdb.path=/var/thanos/store"
+        - "--grpc-address=0.0.0.0:"{{ .Values.store.grpcPort }}
+        - "--cluster.peers="{{ include "thanos.fullname" . }}"."{{ .Release.Namespace }}".svc.cluster.local:{{ .Values.global.cluster.port }}"
+        - "--objstore.config-file={{ .Values.gcs.bucket }}"
+        ports:
+        - name: monitoring
+          containerPort: {{ .Values.store.monitoring.port }}
+        - name: grpc
+          containerPort: {{ .Values.store.grpcPort }}
+        - name: cluster
+          containerPort: {{ .Values.global.cluster.port }}
+        volumeMounts:
+        - mountPath: /creds/
+          name: gcs-credentials
+          readOnly: true
+        - name: data
+          mountPath: /var/thanos/store
+      volumes:
+      - name: data
+        emptyDir: {}
+      - name: gcs-credentials
+        secret:
+          defaultMode: 420
+          secretName: gcs-credentials

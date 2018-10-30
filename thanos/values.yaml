@@ -1,0 +1,30 @@
+gcs:
+  bucket: pipeline-thanos
+
+store:
+  image:
+    repository: improbable/thanos
+    tag: v0.1.0
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  monitoring:
+    enabled: true
+    port: 10902
+  grpcPort: 10901
+  logLevel: debug
+
+query:
+  replicaCount: 1
+  service:
+    port: 9090
+  grpcPort: 10901
+  monitoring:
+    enabled: true
+    port: 10902
+
+global:
+  objstore:
+    configFile: bucket.yml
+  cluster:
+    port: 10900
+  replicaLabel: replica
