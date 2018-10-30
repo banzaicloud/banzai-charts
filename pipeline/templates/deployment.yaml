@@ -40,7 +40,7 @@ spec:
 
       - name: pipeline
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}        
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: KUBERNETES_RELEASE_NAME
           value: "{{ .Release.Name }}"
@@ -171,6 +171,9 @@ spec:
 
         - name: PIPELINE_EKS_TEMPLATELOCATION
           value: {{ .Values.eks.templateLocation | quote }}  
+
+        - name: PIPELINE_INFRA_HEADNODEPOOLNAME
+          value: {{ .Values.infra.headNodePoolName | quote }}
 
         - name: VAULT_ADDR
           value: https://{{ .Release.Name }}-vault:8200

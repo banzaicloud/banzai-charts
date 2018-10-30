@@ -87,6 +87,9 @@ monitor:
 dns:
   domain: "example.org"
 
+infra:
+  headNodePoolName:
+
 cache:
   persistence:
     enabled: true
