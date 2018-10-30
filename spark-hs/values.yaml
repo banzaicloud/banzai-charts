@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: banzaicloud/spark-history-server
-  tag: v2.2.1-k8s-1.0.35
+  repository: banzaicloud/spark
+  tag: v2.3.2.97
   pullPolicy: IfNotPresent
 
 service:
