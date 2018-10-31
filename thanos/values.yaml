@@ -46,3 +46,8 @@ objstore:
   gcsCredentials: ""
 
 replicaLabelName: replica
+
+prometheus:
+  enabled: false
+  thanosSidecar:
+    enabled: true
