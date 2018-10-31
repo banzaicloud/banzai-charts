@@ -148,6 +148,9 @@ spec:
         - name: PIPELINE_ARK_BACKUPSYNCINTERVAL
           value: "{{ .Values.ark.backupSyncInterval }}"
 
+        - name: PIPELINE_SPOTGUIDE_ALLOWPRERELEASES
+          value: "{{ .Values.spotguide.allowPrereleases }}"
+
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
         - name: PIPELINE_MONITOR_CONFIGMAP
