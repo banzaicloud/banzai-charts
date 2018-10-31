@@ -5,10 +5,10 @@ metadata:
   labels:
     app: {{ include "thanos.name" . }}
     chart: {{ include "thanos.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 data:
-  {{ .Values.global.objstore.configFile }}:
+  {{ .Values.objstore.configFile }}: |
     type: GCS
     config:
-      bucket: {{ .Values.gcs.bucket }}
+      bucket: {{ .Values.objstore.bucketName }}

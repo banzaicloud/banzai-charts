@@ -1,18 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thanos.fullname" . }}
+  name: {{ include "thanos.fullname" . }}-query
   labels:
     app: {{ include "thanos.name" . }}
     chart: {{ include "thanos.chart" . }}
-    release: {{ .thanos.Name }}
-    heritage: {{ .thanos.Service }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
-  externalTrafficPolicy: Cluster
   ports:
-  - port: {{ .Values.query.service.port }}
+  - port: {{ .Values.query.http.port }}
     protocol: TCP
     targetPort: http
-    name: http-query
+    name: http
   selector:
     app: {{ include "thanos.name" . }}-query
+    release: {{ .Release.Name }}

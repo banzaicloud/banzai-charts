@@ -3,46 +3,49 @@ kind: Deployment
 metadata:
   name: {{ include "thanos.fullname" . }}-query
   labels:
-    app: {{ include "thanos.name" . }}
+    app: {{ include "thanos.name" . }}-query
     chart: {{ include "thanos.chart" . }}
-    release: {{ .thanos.Name }}
-    heritage: {{ .thanos.Service }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   replicas: {{ .Values.query.replicaCount}}
   selector:
     matchLabels:
       app: {{ include "thanos.name" . }}-query
       chart: {{ include "thanos.chart" . }}
-      release: {{ .thanos.Name }}
-      heritage: {{ .thanos.Service }}
+      release: "{{ .Release.Name }}"
+      heritage: "{{ .Release.Service }}"
       thanos-peer: "true"
   template:
     metadata:
       labels:
-        app: {{ include "thanos.name" . }}
+        app: {{ include "thanos.name" . }}-query
         chart: {{ include "thanos.chart" . }}
-        release: {{ .thanos.Name }}
-        heritage: {{ .thanos.Service }}
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
         thanos-peer: "true"
       annotations:
-      {{- if .Values.store.monitoring.enabled  }}
+      {{- if .Values.query.monitoring.enabled  }}
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.query.monitoring.port}}"
+        prometheus.io/port: "{{ .Values.query.http.port}}"
       {{ end }}
     spec:
       containers:
       - name: thanos-query
-        image: improbable/thanos:master
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
         - "query"
-        - "--log.level=debug"
-        - "--grpc-address=0.0.0.0:"{{ .Values.query.grpcPort }}
-        - "--cluster.peers="{{ include "thanos.fullname" . }}"."{{ .Release.Namespace }}".svc.cluster.local:{{ .Values.global.cluster.port }}"
-        - "--query.replica-label={{ .Values.global.replicaLabel }}"
+        - "--log.level={{ .Values.query.logLevel }}"
+        - "--grpc-address=0.0.0.0:{{ .Values.query.grpc.port }}"
+        - "--cluster.address={{ .Values.cluster.address }}:{{ .Values.cluster.port}}"
+        - "--cluster.peers={{ include "thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.cluster.port }}"
+        - "--query.replica-label={{ .Values.replicaLabelName }}"
+        - "--http-address=0.0.0.0:{{ .Values.query.http.port }}"
         ports:
-        - name: metrics
-          containerPort: "{{ .Values.query.monitoring.port}}"
+        - name: http
+          containerPort: {{ .Values.query.http.port}}
         - name: grpc
-          containerPort: "{{ .Values.query.grpcPort }}"
+          containerPort: {{ .Values.query.grpc.port }}
         - name: cluster
-          containerPort: "{{ .Values.global.cluster.port }}"
+          containerPort: {{ .Values.cluster.port }}
