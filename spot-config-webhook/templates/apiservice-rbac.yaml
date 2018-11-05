@@ -45,7 +45,7 @@ metadata:
     "helm.sh/hook-weight": "-6"
 rules:
 - apiGroups: ["admissionregistration.k8s.io"]
-  resources: ["validatingwebhookconfigurations"]
+  resources: ["mutatingwebhookconfigurations"]
   verbs: ["get", "watch", "list", "create", "update", "patch"]
 - apiGroups: ["apiregistration.k8s.io"]
   resources: ["apiservices"]

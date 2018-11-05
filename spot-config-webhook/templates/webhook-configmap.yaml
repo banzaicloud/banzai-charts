@@ -18,7 +18,7 @@ data:
     curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
     chmod +x ./kubectl
     mv ./kubectl /usr/bin
-    cat > validatingwebhook.yaml <<EOF
+    cat > mutatingwebhook.yaml <<EOF
     apiVersion: admissionregistration.k8s.io/v1beta1
     kind: MutatingWebhookConfiguration
     metadata:

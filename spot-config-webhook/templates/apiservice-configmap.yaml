@@ -15,7 +15,7 @@ data:
   init-apiservice.sh: |-
     #!/bin/bash -xe
     # Adapted from https://github.com/openshift/kubernetes-namespace-reservation/blob/master/hack/install-kube.sh
-    apt-get update && apt-get install -y jq
+    apt-get update && apt-get install -y --allow-unauthenticated jq
 
     curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
     chmod +x ./kubectl
