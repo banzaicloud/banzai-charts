@@ -10,7 +10,7 @@ apiService:
   version: v1beta1
 
 image:
-  repository: martonsereg/spot-config-webhook
+  repository: banzaicloud/spot-config-webhook
   tag: 0.1.0
   pullPolicy: IfNotPresent
 

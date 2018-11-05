@@ -35,7 +35,7 @@ data:
       - operations:
         - CREATE
         apiGroups:
-        - ""
+        - "*"
         apiVersions:
         - "*"
         resources:
