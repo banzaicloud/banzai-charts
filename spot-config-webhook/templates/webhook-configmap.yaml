@@ -39,7 +39,7 @@ data:
         apiVersions:
         - "*"
         resources:
-        - pods
+        - deployments
       failurePolicy: Fail
     EOF
     sed "s/CA_BUNDLE/$(base64 /var/run/secrets/kubernetes.io/serviceaccount/ca.crt | tr -d '\n')/g" mutatingwebhook.yaml | kubectl -n {{ .Release.Namespace }} apply -f -
