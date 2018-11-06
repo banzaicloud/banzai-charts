@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: martonsereg/spot-scheduler
+  repository: banzaicloud/spot-scheduler
   tag: 1.10.3
   pullPolicy: IfNotPresent
 
