@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: banzaicloud/docs
   tag: master
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""
@@ -47,3 +47,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+## Additional deployment labels and annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+deploymentLabels: {}
+deploymentAnnotations: {}

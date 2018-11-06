@@ -7,6 +7,11 @@ metadata:
     helm.sh/chart: {{ include "banzaicloud-docs.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- if .Values.deploymentLabels }}
+{{ toYaml .Values.deploymentLabels | indent 4 }}
+    {{- end }}
+  annotations:
+{{ toYaml .Values.deploymentAnnotations | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
