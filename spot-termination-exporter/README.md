@@ -5,9 +5,9 @@
 ## tl;dr:
 
 ```bash
-$ helm repo add banzaicloud-incubator http://kubernetes-charts-incubator.banzaicloud.com
+$ helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
 $ helm repo update
-$ helm install banzaicloud-incubator/spot-termination-exporter
+$ helm install banzaicloud-stable/spot-termination-exporter
 ```
 
 ## Introduction
@@ -23,7 +23,7 @@ This chart bootstraps a Banzai Cloud  [Hollowtrees Spot Termination exporter](ht
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release banzaicloud-incubator/spot-termination-exporter
+$ helm install --name my-release banzaicloud-stable/spot-termination-exporter
 ```
 
 The command deploys Hollowtrees Spot Termination exporter on the Kubernetes cluster with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
