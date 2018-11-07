@@ -36,3 +36,26 @@ The following tables lists configurable parameters of the anchore-policy-validat
 |nodeSelector                         |node selector to use                         |{}                                        |
 |tolerations                          |tolerations to add                           |[]                                        |
 |affinity                             |affinities to use                            |{}                                        |
+
+## Deleting the chart
+
+Due to some resources are created via Kubernetes jobs, these resources need to be deleted manually.
+To remove every resource created by this chart, run these commands:
+
+```
+export RELEASE_NAME=<my-release-name>
+export RELEASE_NS=<my-namespace>
+helm delete --purge ${RELEASE_NAME}
+
+kubectl delete configmap ${RELEASE_NAME}-webhook ${RELEASE_NAME}-apiservice -n ${RELEASE_NS}
+kubectl delete jobs ${RELEASE_NAME}-apiservice ${RELEASE_NAME}-create-mutatingwebhook -n ${RELEASE_NS}
+
+kubectl delete mutatingwebhookconfiguration ${RELEASE_NAME}-spot-config-webhook -n ${RELEASE_NS}
+kubectl delete apiservice v1beta1.admission.banzaicloud.com
+
+kubectl delete clusterrolebinding ${RELEASE_NAME}-spot-config-webhook extension-${RELEASE_NAME}-spot-config-webhook-apiservice-cluster -n ${RELEASE_NS}
+kubectl delete rolebinding extension-${RELEASE_NAME}-spot-config-webhook-apiservice-admin -n ${RELEASE_NS}
+kubectl delete serviceaccount ${RELEASE_NAME}-spot-config-webhook ${RELEASE_NAME}-spot-config-webhook-apiservice  -n ${RELEASE_NS}
+kubectl delete clusterroles ${RELEASE_NAME}-spot-config-webhook-apiservice-cluster -n ${RELEASE_NS}
+kubectl delete role ${RELEASE_NAME}-spot-config-webhook-apiservice -n ${RELEASE_NS}
+```
