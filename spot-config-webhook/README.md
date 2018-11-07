@@ -43,8 +43,8 @@ Due to some resources are created via Kubernetes jobs, these resources need to b
 To remove every resource created by this chart, run these commands:
 
 ```
-export RELEASE_NAME=<my-release-name>
-export RELEASE_NS=<my-namespace>
+RELEASE_NAME=<my-release-name>
+RELEASE_NS=<my-namespace>
 helm delete --purge ${RELEASE_NAME}
 
 kubectl delete configmap ${RELEASE_NAME}-webhook ${RELEASE_NAME}-apiservice -n ${RELEASE_NS}
