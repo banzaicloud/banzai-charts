@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-post-delete"
+  labels:
+    app: {{ template "spot-config-webhook.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: mutating-webhook
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "spot-config-webhook.fullname" . }}
+        component: mutating-webhook
+    spec:
+      serviceAccountName: {{ template "spot-config-webhook.fullname" . }}
+      restartPolicy: OnFailure
+      containers:
+      - name: delete-clusterrolebinding-apiservice
+        image: "lachlanevenson/k8s-kubectl"
+        command:
+        - kubectl
+        - delete
+        - clusterrolebinding.rbac.authorization.k8s.io
+        - extension-{{ template "spot-config-webhook.fullname" . }}-apiservice-cluster
+      - name: delete-clusterrole-apiservice
+        image: "lachlanevenson/k8s-kubectl"
+        command:
+        - kubectl
+        - delete
+        - clusterrole.rbac.authorization.k8s.io
+        - {{ template "spot-config-webhook.fullname" . }}-apiservice-cluster
+      - name: delete-rolebinding-apiservice
+        image: "lachlanevenson/k8s-kubectl"
+        command:
+        - kubectl
+        - delete
+        - rolebindings.rbac.authorization.k8s.io
+        - extension-{{ template "spot-config-webhook.fullname" . }}-apiservice-admin
+        - -n
+        - {{ .Release.Namespace }}
+      - name: delete-role-apiservice
+        image: "lachlanevenson/k8s-kubectl"
+        command:
+        - kubectl
+        - delete
+        - role
+        - {{ template "spot-config-webhook.fullname" . }}-apiservice
+        - -n
+        - {{ .Release.Namespace }}
+      - name: delete-serviceaccount-apiservice
+        image: "lachlanevenson/k8s-kubectl"
+        command:
+        - kubectl
+        - delete
+        - serviceaccount
+        - {{ template "spot-config-webhook.fullname" . }}-apiservice
+        - -n
+        - {{ .Release.Namespace }}
