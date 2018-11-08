@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/zeppelin-server
-  tag: v0.9.0-k8s-1.0.48
+  tag: v0.9.0-k8s-1.0.60
   pullPolicy: IfNotPresent
 
 resources:
@@ -64,23 +64,38 @@ azureStorageAccountName: ""
 azureStorageAccessKey: ""
 
 sparkSubmitOptions:
+  sparkImage: banzaicloud/zeppelin-spark:v0.9.0-k8s-1.0.60
   k8sNameSpace: default
   sparkDriverCores: 1
   sparkDriverLimitCores: 2
   sparkExecutorCores: 1
   sparkDriverMemory: 4G
-  sparkExcutorMemory: 2G
-  sparkMetricsConf: /opt/spark/conf/metrics.properties
-  dynamicAllocation: true
-  shuffleService: true
-  shuffleNameSpace: default
-  shuffleLabels: app=spark-shuffle,spark-version=2.2.0,release="{{ .Release.Name }}"
-  DriverImage: banzaicloud/spark-driver-py:v2.2.1-k8s-1.0.35
-  ExecutorImage: banzaicloud/spark-executor-py:v2.2.1-k8s-1.0.35
-  initContainerImage: banzaicloud/spark-init:v2.2.1-k8s-1.0.35
-  resourceStagingServerInt: spark-rss:10000
-  resourceStagingServerExt: spark-rss:10000
-  sparkLocalDir: /tmp/spark-local
-  eventLogDirectory: ""
+  sparkExecutorMemory: 2G
+  dynamicAllocation: false
+  shuffleService: false
   driverServiceAccountName: "spark"
-  log4jConfigPath: "file:///var/spark-data/spark-files/log4j_k8s_cluster.properties"
+  sparkLocalDir: /tmp/spark-local
+
+sparkEventLogStorage:
+  cloudProvider: ""
+  logDirectory: ""
+  secretName: ""
+
+  awsAccessKeyId: ""
+  awsSecretAccessKey: ""
+
+  aliOssEndpoint: ""
+  aliOssRegion: ""
+  aliAccessKeyId: ""
+  aliSecretAccessKey: ""
+
+  azureStorageAccessKey: ""
+  azureStorageAccountName: ""
+
+  googleJson: ""
+
+  oracleRegion: ""
+  oracleHost: ""
+  oracleTenancyId: ""
+  oracleUserId: ""
+  oracleApiKeyFingerprint: ""
