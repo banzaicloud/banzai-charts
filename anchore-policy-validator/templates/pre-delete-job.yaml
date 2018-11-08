@@ -29,6 +29,8 @@ spec:
         - delete
         - validatingwebhookconfigurations.admissionregistration.k8s.io
         - {{ template "anchore-policy-validator.fullname" . }}.admission.anchore.io
+        - -n
+        - {{ .Release.Namespace }}
       - name: delete-init-ca-configmap
         image: "lachlanevenson/k8s-kubectl"
         command:
@@ -36,6 +38,8 @@ spec:
         - delete
         - configmap
         - {{ .Release.Name }}-init-ca
+        - -n
+        - {{ .Release.Namespace }}
       - name: delete-validatingwebhook-configmap
         image: "lachlanevenson/k8s-kubectl"
         command:
@@ -43,4 +47,6 @@ spec:
         - delete
         - configmap
         - {{ .Release.Name }}-validatingwebhook
+        - -n
+        - {{ .Release.Namespace }}
 

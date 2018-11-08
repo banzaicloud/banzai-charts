@@ -28,6 +28,8 @@ spec:
         - delete
         - clusterrolebinding.rbac.authorization.k8s.io
         - extension-{{ template "anchore-policy-validator.fullname" . }}-init-ca-cluster
+        - -n
+        - {{ .Release.Namespace }}
       - name: delete-clusterrole
         image: "lachlanevenson/k8s-kubectl"
         command:
@@ -35,6 +37,8 @@ spec:
         - delete
         - clusterrole.rbac.authorization.k8s.io
         - {{ template "anchore-policy-validator.fullname" . }}-init-ca-cluster
+        - -n
+        - {{ .Release.Namespace }}
       - name: delete-clusterrolebinding-validator
         image: "lachlanevenson/k8s-kubectl"
         command:
@@ -42,6 +46,8 @@ spec:
         - delete
         - clusterrolebinding.rbac.authorization.k8s.io
         - {{ template "anchore-policy-validator.fullname" . }}-validator-binding
+        - -n
+        - {{ .Release.Namespace }}
       - name: delete-rolebinding-init-ca
         image: "lachlanevenson/k8s-kubectl"
         command:
@@ -49,6 +55,8 @@ spec:
         - delete
         - rolebindings.rbac.authorization.k8s.io
         - extension-{{ template "anchore-policy-validator.fullname" . }}-init-ca-admin
+        - -n
+        - {{ .Release.Namespace }}
       - name: delete-role-init-ca
         image: "lachlanevenson/k8s-kubectl"
         command:
@@ -56,6 +64,8 @@ spec:
         - delete
         - role
         - {{ template "anchore-policy-validator.fullname" . }}-init-ca
+        - -n
+        - {{ .Release.Namespace }}
       - name: delete-serviceaccount-init-ca
         image: "lachlanevenson/k8s-kubectl"
         command:
@@ -63,6 +73,8 @@ spec:
         - delete
         - serviceaccount
         - {{ template "anchore-policy-validator.fullname" . }}-init-ca
+        - -n
+        - {{ .Release.Namespace }}
       - name: delete-serviceaccount-validator
         image: "lachlanevenson/k8s-kubectl"
         command:
@@ -70,3 +82,6 @@ spec:
         - delete
         - serviceaccount
         - {{ template "anchore-policy-validator.fullname" . }}-validator
+        - -n
+        - {{ .Release.Namespace }}
+
