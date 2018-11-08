@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/spark
-  tag: v2.3.2.97
+  tag: v2.3.2.111
   pullPolicy: IfNotPresent
 
 service:
@@ -48,18 +48,28 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-app:
+sparkEventLogStorage:
   cloudProvider: ""
   logDirectory: ""
+  secretName: ""
 
   awsAccessKeyId: ""
   awsSecretAccessKey: ""
+
+  aliAccessKeyId: ""
+  aliSecretAccessKey: ""
+
+  aliOssEndpoint: ""
+  aliOssRegion: ""
 
   azureStorageAccessKey: ""
   azureStorageAccountName: ""
 
   googleJson: ""
 
-secretName: ""
-
-
+  oracleRegion: ""
+  oracleHost: ""
+  apiKey: ""
+  oracleTenancyId: ""
+  oracleUserId: ""
+  oracleApiKeyFingerprint: ""
