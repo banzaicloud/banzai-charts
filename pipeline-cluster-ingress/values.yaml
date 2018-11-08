@@ -13,6 +13,10 @@ traefik:
         - /dashboard
     service:
       port: 8080
+  acme:
+    persistence:
+    # This size is required because specific cloud provider requires at least 20Gi for storage
+      size: 20Gi
 
   rbac:
     enabled: true

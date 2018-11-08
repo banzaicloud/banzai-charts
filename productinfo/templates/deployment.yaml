@@ -39,13 +39,12 @@ spec:
             - "/bin/sh"
             - "-ecx"
             - |
-              /bin/productinfo \
+              /entrypoint.sh \
               --log-level {{ .Values.app.logLevel }} \
               --listen-address 0.0.0.0:{{ .Values.service.internalPort }} \
               {{ range $key, $value := .Values.providers }}
               {{- if $value.enabled }} --provider {{ $key }}{{ end }}
               {{- end }}
-
           env:
             - name: PRODUCTINFO_BASEPATH
               value: {{ .Values.app.basePath }}
