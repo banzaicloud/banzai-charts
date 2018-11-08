@@ -37,7 +37,15 @@ spec:
             items:
             - key: interpreter.json
               path: interpreter.json
+        - name: spark-config-init-volume
+          configMap:
+            name: {{ template "fullname" . }}-spark-config
+            items:
+            - key: spark-defaults.conf
+              path: spark-defaults.conf
         - name: config-volume
+          emptyDir: {}
+        - name: spark-config-volume
           emptyDir: {}
       initContainers:
       - name: {{ .Chart.Name }}-init-config
@@ -49,14 +57,17 @@ spec:
               secretKeyRef:
                 name: {{ template "fullname" . }}-password
                 key: password
+        envFrom:
+          - secretRef:
+              name: {{ default (printf "%s-spark-eventlog-storage" (include "fullname" .)) .Values.sparkEventLogStorage.secretName }}
         command:
           - '/bin/sh'
           - '-c'
           - >
             cp conf/* prepared_conf;
             export NEW_PWD=$(java -jar /opt/zeppelin/bin/shiro-tools-hasher-1.3.2-cli.jar -gs -i 500000 -f shiro1 -a SHA-256 $ZEPPELIN_PASSWORD);
-            echo $NEW_PWD;
             sed 's|ADMIN_PASSWORD|'$NEW_PWD'|g' /opt/zeppelin/prepared_conf/shiro.ini.template > /opt/zeppelin/prepared_conf/shiro.ini;
+            envsubst < /opt/spark/prepared_conf/spark-defaults.conf > /opt/spark/conf/spark-defaults.conf;
         volumeMounts:
           - name: config-init-volume
             mountPath: /opt/zeppelin/conf/log4j.properties
@@ -67,6 +78,8 @@ spec:
           - name: config-init-volume
             mountPath: /opt/zeppelin/conf/shiro.ini.template
             subPath: shiro.ini.template
+          - name: spark-config-volume
+            mountPath: /opt/spark/conf
           - name: zeppelin-site-config-volume
             mountPath: /opt/zeppelin/conf/zeppelin-site.xml
             subPath: zeppelin-site.xml
@@ -75,39 +88,13 @@ spec:
             subPath: interpreter.json
           - name: config-volume
             mountPath: /opt/zeppelin/prepared_conf
+          - name: spark-config-init-volume
+            mountPath: /opt/spark/prepared_conf
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
-          - name: SPARK_SUBMIT_OPTIONS
-            value: >-
-              --kubernetes-namespace {{ .Values.sparkSubmitOptions.k8sNameSpace }}
-              --conf spark.driver.cores={{ .Values.sparkSubmitOptions.sparkDriverCores }}
-              --conf spark.kubernetes.driver.limit.cores={{ .Values.sparkSubmitOptions.sparkDriverLimitCores }}
-              --conf spark.executor.cores={{ .Values.sparkSubmitOptions.sparkExecutorCores }}
-              --conf spark.driver.memory={{ .Values.sparkSubmitOptions.sparkDriverMemory }}
-              --conf spark.executor.memory={{ .Values.sparkSubmitOptions.sparkExecutorMemory }}
-              --conf spark.kubernetes.driver.docker.image={{ .Values.sparkSubmitOptions.DriverImage }}
-              --conf spark.kubernetes.executor.docker.image={{ .Values.sparkSubmitOptions.ExecutorImage }}
-              --conf spark.kubernetes.initcontainer.docker.image={{ .Values.sparkSubmitOptions.initContainerImage }}
-              --conf spark.dynamicAllocation.enabled={{ .Values.sparkSubmitOptions.dynamicAllocation }}
-              --conf spark.shuffle.service.enabled={{ .Values.sparkSubmitOptions.shuffleService }}
-              --conf spark.kubernetes.shuffle.namespace={{ .Values.sparkSubmitOptions.shuffleNameSpace }}
-              --conf spark.kubernetes.shuffle.labels={{ .Values.sparkSubmitOptions.shuffleLabels }}
-              --conf spark.metrics.conf={{ .Values.sparkSubmitOptions.sparkMetricsConf }}
-              --conf spark.kubernetes.resourceStagingServer.uri=http://{{ .Release.Name }}-{{ .Values.sparkSubmitOptions.resourceStagingServerExt }}
-              --conf spark.kubernetes.resourceStagingServer.internal.uri=http://{{ .Release.Name }}-{{ .Values.sparkSubmitOptions.resourceStagingServerInt }}
-              --conf spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
-              --conf spark.executor.extraJavaOptions="-Dlog4j.configuration={{ .Values.sparkSubmitOptions.log4jConfigPath }}"
-              --conf spark.kubernetes.authenticate.driver.serviceAccountName={{ .Values.sparkSubmitOptions.driverServiceAccountName }}
-              {{- if .Values.sparkSubmitOptions.eventLogDirectory }}
-              --conf spark.eventLog.dir={{ .Values.sparkSubmitOptions.eventLogDirectory }}
-              --conf spark.eventLog.enabled=true
-              {{- end }}
-              {{- if .Values.sparkSubmitOptions.azureStorageAccessKey }}
-              --conf spark.hadoop.fs.azure.account.key.{{ .Values.azureStorageAccountName }}.blob.core.windows.net={{ .Values.azureStorageAccessKey }}
-              {{- end }}
           - name: ZEPPELIN_MEM
             value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Xms{{ .Values.resources.requests.memory }}M
         ports:
@@ -127,6 +114,8 @@ spec:
         volumeMounts:
           - name: config-volume
             mountPath: /opt/zeppelin/conf
+          - name: spark-config-volume
+            mountPath: /opt/spark/conf
         resources:
           limits:
             cpu: {{ .Values.resources.limits.cpu }}
