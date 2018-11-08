@@ -8,9 +8,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     component: mutating-webhook
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-5"
 data:
   create-mutatingwebhook.sh: |-
     #!/bin/bash -xe
