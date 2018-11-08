@@ -53,6 +53,17 @@ spec:
           initialDelaySeconds: 30
           timeoutSeconds: 3
           periodSeconds: 5
-
         resources:
-{{ toYaml .Values.spotTerminationexporter.resources | indent 10 }}
+{{ toYaml .Values.resources | indent 10 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

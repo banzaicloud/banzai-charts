@@ -1,13 +1,17 @@
 {{- define "logDirectoryTag" }}
-  {{- if eq .Values.app.cloudProvider "amazon"}}
-    {{- printf "s3a://%s" .Values.app.logDirectory }}
-  {{- else if eq .Values.app.cloudProvider "azure"}}
-    {{- printf "wasb://%s@%s.blob.core.windows.net" .Values.app.logDirectory .Values.app.azureStorageAccountName }}
-  {{- else if eq .Values.app.cloudProvider "google"}}
-    {{- printf "gs://%s" .Values.app.logDirectory }}
+  {{- if eq .Values.sparkEventLogStorage.cloudProvider "amazon"}}
+    {{- printf "s3a://%s" .Values.sparkEventLogStorage.logDirectory }}
+  {{- else if eq .Values.sparkEventLogStorage.cloudProvider "alibaba"}}
+    {{- printf "oss://%s" .Values.sparkEventLogStorage.logDirectory }}
+  {{- else if eq .Values.sparkEventLogStorage.cloudProvider "azure"}}
+    {{- printf "wasb://%s@%s.blob.core.windows.net" .Values.sparkEventLogStorage.logDirectory .Values.sparkEventLogStorage.azureStorageAccountName }}
+  {{- else if eq .Values.sparkEventLogStorage.cloudProvider "google"}}
+    {{- printf "gs://%s" .Values.sparkEventLogStorage.logDirectory }}
+  {{- else if eq .Values.sparkEventLogStorage.cloudProvider "oracle"}}
+    {{- printf "oci://%s" .Values.sparkEventLogStorage.logDirectory }}
   {{- end }}
 {{- end }}
-{{- $schema := .Values.app.cloudProvider }}
+{{- $schema := .Values.sparkEventLogStorage.cloudProvider }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -25,37 +29,23 @@ spec:
         app: {{ template "spark-hs.fullname" . }}
     spec:
       initContainers:
-      {{- if eq $schema "azure" }}
       - name: {{ .Chart.Name }}-init-config
-        image: alpine
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         envFrom:
           - secretRef:
-              name: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretName }}
+              name: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.sparkEventLogStorage.secretName }}
         command:
           - '/bin/sh'
           - '-c'
           - >
-            echo -n spark.hadoop.fs.azure.account.key.$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net=$AZURE_STORAGE_ACCESS_KEY > /opt/spark/conf/spark-defaults.conf
+            envsubst < /opt/spark/prepared_conf/spark-defaults.conf > /opt/spark/conf/spark-defaults.conf;
         volumeMounts:
           - name: config-volume
             mountPath: /opt/spark/conf/
-      {{- else if and (eq $schema "google") .Values.secretName }}
-      - name: {{ .Chart.Name }}-init-config
-        image: jiapantw/jq-alpine:latest
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command:
-          - '/bin/sh'
-          - '-c'
-          - >
-            find /google-secret-path/ -type f -exec jq --slurp --raw-input '{key: input_filename|split("/")|last, value: .|rtrimstr("\n")}' {} \; | jq --slurp from_entries > /opt/spark/conf/google.json
-        volumeMounts:
-          - name: config-volume
-            mountPath: /opt/spark/conf/
-          - name: google-secrets
-            mountPath: /google-secret-path/
-            readOnly: true
-      {{- end }}
+          - name: config-init-volume
+            mountPath: /opt/spark/prepared_conf/spark-defaults.conf
+            subPath: spark-defaults.conf
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -67,23 +57,18 @@ spec:
             value: "false"
           - name: SPARK_HISTORY_OPTS
             value: {{ printf "-Dspark.history.fs.logDirectory=%s" (include "logDirectoryTag" . )}}
-        {{- if eq $schema "google" }}
-          - name: GOOGLE_APPLICATION_CREDENTIALS
-            value: /opt/spark/conf/google.json
-        {{- else }}
-        envFrom:
-          - secretRef:
-              name: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretName }}
-        {{- end }}
         volumeMounts:
-        {{- if eq $schema "azure" }}
           - name: config-volume
             mountPath: /opt/spark/conf/spark-defaults.conf
             subPath: spark-defaults.conf
-        {{- else if eq $schema "google" }}
-          - name: config-volume
-            mountPath: /opt/spark/conf/google.json
+        {{- if eq $schema "google" }}
+          - name: secret-volume
+            mountPath: /opt/spark/conf/secret/google.json
             subPath: google.json
+        {{- else if eq $schema "oracle" }}
+          - name: secret-volume
+            mountPath: /opt/spark/conf/secret/api_key
+            subPath: api_key
         {{- end }}
         ports:
           - name: http
@@ -96,8 +81,11 @@ spec:
       volumes:
         - name: config-volume
           emptyDir: {}
-      {{- if eq $schema "google" }}
-        - name: google-secrets
+        - name: config-init-volume
+          configMap:
+            name: {{ template "spark-hs.fullname" . }}-spark-hs-config
+      {{- if or (eq $schema "google") ((eq $schema "oracle")) }}
+        - name: secret-volume
           secret:
-            secretName: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.secretName }}
+            secretName: {{ default (printf "%s" (include "spark-hs.fullname" .)) .Values.sparkEventLogStorage.secretName }}
       {{- end }}

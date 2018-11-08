@@ -1,0 +1,29 @@
+# Default values for spot-config-webhook.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+logVerbosity: 8
+
+apiService:
+  group: admission.banzaicloud.com
+  version: v1beta1
+
+image:
+  repository: banzaicloud/spot-config-webhook
+  tag: 0.1.0
+  pullPolicy: IfNotPresent
+
+service:
+  name: spotwebhook
+  type: ClusterIP
+  externalPort: 443
+  internalPort: 443
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

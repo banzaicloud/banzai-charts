@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "spot-scheduler.fullname" . }}
+  labels:
+    app: {{ template "spot-scheduler.name" . }}
+    chart: {{ template "spot-scheduler.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: scheduler
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "spot-scheduler.name" . }}
+      release: {{ .Release.Name }}
+      component: scheduler
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "spot-scheduler.name" . }}
+        release: {{ .Release.Name }}
+        component: scheduler
+    spec:
+      serviceAccountName: {{ template "spot-scheduler.fullname" . }}
+      containers:
+      - name: {{ .Chart.Name }}
+        command:
+        - /usr/local/bin/kube-scheduler
+        - --address=0.0.0.0
+        - --leader-elect=false
+        - --scheduler-name=spot-scheduler
+        {{- range $key, $value := .Values.extraArgs }}
+        - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+        {{- end }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 10251
+          initialDelaySeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 10251
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
