@@ -316,6 +316,7 @@ grafana:
       - localhost
 
   sidecar:
+    image: banzaicloud/k8s-sidecar:0.0.7
     dashboards:
       enabled: true
       label: pipeline_grafana_dashboard
