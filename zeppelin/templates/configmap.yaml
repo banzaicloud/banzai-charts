@@ -47,7 +47,7 @@ data:
 
   shiro.ini.template: |-
     [users]
-    {{ .Values.username }} = ADMIN_PASSWORD, admin
+    ADMIN_USER_NAME = ADMIN_PASSWORD, admin
 
     [main]
     sessionManager = org.apache.shiro.web.session.mgt.DefaultWebSessionManager

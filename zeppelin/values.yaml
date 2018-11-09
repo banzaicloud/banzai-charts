@@ -24,6 +24,7 @@ service:
   externalPort:  8080
   rpcPort: 38853
 
+userCredentialSecretName: ""
 username: "admin"
 password: "zeppelin"
 
