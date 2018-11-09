@@ -1,6 +1,1 @@
-Zeppelin URL: http://{{- default  "<PUBLIC IP>" .Values.ingress.hostname -}}{{- default "/" .Values.pipelineIngress.baseURL -}}
-
-{{- if .Values.pipelineIngress.auth.enabled }}
-    Username: {{- .Values.pipelineIngress.auth.username }}
-    Password: {{- .Values.pipelineIngress.auth.password }}
-{{- end }}
+Zeppelin URL: http://{{- default  "<PUBLIC IP>" .Values.ingress.hostname -}}{{- default "/" .Values.ingress.baseURL -}}
