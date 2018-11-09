@@ -18,7 +18,7 @@ data:
     spark.hadoop.fs.oss.endpoint={{ default (printf "oss-%s.aliyuncs.com" .Values.sparkEventLogStorage.aliOssRegion) .Values.sparkEventLogStorage.aliOssEndpoint }}
 
     {{- else if eq $schema "azure" }}
-    spark.hadoop.fs.azure.account.key.$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net=$AZURE_STORAGE_ACCESS_KEY
+    spark.hadoop.fs.azure.account.key.$storageAccount.blob.core.windows.net=$accessKey
 
     {{- else if eq $schema "google" }}
     spark.hadoop.google.cloud.auth.service.account.enable=true
