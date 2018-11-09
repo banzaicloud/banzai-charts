@@ -58,7 +58,7 @@ data:
 
     <property>
       <name>zeppelin.server.context.path</name>
-      <value>{{- if .Values.pipelineIngress.enabled }}{{ .Values.pipelineIngress.baseURL }}{{- end }}</value>
+      <value>{{- if .Values.ingress.enabled }}{{ .Values.ingress.baseUrl }}{{- end }}</value>
       <description>Context Path of the Web Application</description>
     </property>
 
