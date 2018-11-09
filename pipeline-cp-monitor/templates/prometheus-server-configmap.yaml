@@ -8,7 +8,7 @@ metadata:
     component: prometheus
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ .Release.Name }}-prometheus-federation
+  name: {{ .Release.Name }}-prometheus-server
 data:
 {{- range $key, $value := $root.serverFiles }}
   {{ $key }}: |
