@@ -18,14 +18,37 @@ resources:
 
 additionalOptions:
 
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
 service:
   type: ClusterIP
   internalPort: 8080
   externalPort:  8080
   rpcPort: 38853
 
+userCredentialSecretName: ""
 username: "admin"
 password: "zeppelin"
+
+ingress:
+  baseUrl: "/zeppelin"
+  enabled: false
+  annotations: {}
+    #kubernetes.io/ingress.class: traefik
+    #ingress.kubernetes.io/ssl-redirect: "false"
+    #traefik.frontend.rule.type: PathPrefix
+  hosts:
+    - "/"
+    # - "domain.com/xyz"
+    # - "domain.com"
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
 
 logService:
   zeppelinLogLevel: DEBUG
@@ -38,24 +61,6 @@ logService:
   applicationLogLevel: INFO
   applicationFacility: LOCAL4
   applicationLogPattern: "[%p] XXX %c:%L - %m%n"
-
-ingress:
-  enabled: false
-
-ingresspasswordgenerator:
-  image:
-    repository: banzaicloud/htpasswd-gen
-    tag: "0.1"
-    pullPolicy: IfNotPresent
-
-pipelineIngress:
-  enabled: true
-  ingressURL:
-  baseURL: /zeppelin
-  auth:
-    enabled: false
-    username: ""
-    password: ""
 
 notebookStorage:
   type: ""
