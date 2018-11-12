@@ -292,13 +292,14 @@ prometheus:
               target_label: kubernetes_pod_name
 
 grafana:
-  enabled: false
+  enabled: true
+
   grafana.ini:
     server:
       root_url: "%(protocol)s://%(domain)s/grafana/"
   ingress:
     enabled: false
-    annotations: 
+    annotations:
       kubernetes.io/ingress.class: traefik
       traefik.frontend.rule.type: PathPrefixStrip
     path: /grafana
@@ -307,7 +308,7 @@ grafana:
 
   sidecar:
     dashboards:
-      enabled: false
+      enabled: true
       label: pipeline_grafana_dashboard
     datasources:
       enabled: true
