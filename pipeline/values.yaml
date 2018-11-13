@@ -90,6 +90,7 @@ monitor:
 metrics:
   enabled: true
   port: 9900
+  debug: true
 
 dns:
   domain: "example.org"

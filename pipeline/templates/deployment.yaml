@@ -166,6 +166,8 @@ spec:
           value: {{ default "prometheus-federation-secrets" .Values.monitor.certSecret | quote }}
         - name: PIPELINE_METRICS_ENABLED
           value: "{{ .Values.metrics.enabled }}"
+        - name: PIPELINE_METRICS_DEBUG
+          value: "{{ .Values.metrics.debug }}"
         - name: PIPELINE_METRICS_PORT
           value: ":{{ .Values.metrics.port }}"
         - name: PIPELINE_HELM_RETRYATTEMPT
