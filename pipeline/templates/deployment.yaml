@@ -48,9 +48,9 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: KUBERNETES_RELEASE_NAME
-          value: {{ .Release.Name | quote }}
+          value: {{ .Release.Name | quote }}
         - name: KUBERNETES_NAMESPACE
-          value: {{ .Release.Namespace | quote}}
+          value: {{ .Release.Namespace | quote }}
 
         - name: PIPELINE_PIPELINE_BASEPATH
           value: {{ .Values.global.pipelineBasepath | quote }}
@@ -116,7 +116,7 @@ spec:
         - name: PIPELINE_AUTH_COOKIEDOMAIN
           value: {{ .Values.auth.cookieDomain | quote }}
         - name: PIPELINE_AUTH_SECURECOOKIE
-          value: {{ .Values.auth.secureCookie }}
+          value: {{ .Values.auth.secureCookie | quote }}
         - name: PIPELINE_AUTH_WHITELISTENABLED
           value: {{ default "false" .Values.auth.whitelistEnabled | quote}}
         - name: PIPELINE_GITHUB_TOKEN
@@ -143,7 +143,7 @@ spec:
           value: {{ .Values.ark.pullPolicy }}
 
         - name: PIPELINE_ARK_SYNCENABLED
-          value: {{ .Values.ark.syncEnabled }}
+          value: {{ .Values.ark.syncEnabled | quote }}
         - name: PIPELINE_ARK_LOGLEVEL
           value: {{ .Values.ark.logLevel }}
         - name: PIPELINE_ARK_BUCKETSYNCINTERVAL
@@ -154,7 +154,7 @@ spec:
           value: {{ .Values.ark.backupSyncInterval }}
 
         - name: PIPELINE_SPOTGUIDE_ALLOWPRERELEASES
-          value: {{ .Values.spotguide.allowPrereleases }}
+          value: {{ .Values.spotguide.allowPrereleases | quote }}
 
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
@@ -165,9 +165,9 @@ spec:
         - name: PIPELINE_MONITOR_CERTSECRET
           value: {{ default "prometheus-federation-secrets" .Values.monitor.certSecret | quote }}
         - name: PIPELINE_METRICS_ENABLED
-          value: {{ .Values.metrics.enabled }}
+          value: {{ .Values.metrics.enabled | quote }}
         - name: PIPELINE_METRICS_DEBUG
-          value: {{ .Values.metrics.debug }}
+          value: {{ .Values.metrics.debug | quote }}
         - name: PIPELINE_METRICS_PORT
           value: :{{ .Values.metrics.port }}
         - name: PIPELINE_HELM_RETRYATTEMPT
@@ -193,7 +193,7 @@ spec:
         - name: VAULT_CACERT
           value: /vault/tls/ca.crt
 
-        {{- if .Values.service.tls  }}
+        {{- if .Values.service.tls }}
         - name: PIPELINE_PIPELINE_CERTFILE
           value: /tls/server.crt
         - name: PIPELINE_PIPELINE_KEYFILE
@@ -206,26 +206,26 @@ spec:
         {{ end }}
 
         ports:
+        {{- if .Values.metrics.enabled }}
+        - containerPort: {{ .Values.metrics.port }}
+        {{- end }}
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           httpGet:
             path: {{ .Values.global.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
-          {{- if .Values.service.tls  }}
+          {{- if .Values.service.tls }}
             scheme: HTTPS
-          {{ end }}
+          {{- end }}
           initialDelaySeconds: 15
         readinessProbe:
           httpGet:
             path: {{ .Values.global.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
-          {{- if .Values.service.tls  }}
+          {{- if .Values.service.tls }}
             scheme: HTTPS
-          {{ end }}
+          {{- end }}
           initialDelaySeconds: 10
-        {{- if .Values.metrics.enabled  }}
-        - containerPort: {{ .Values.metrics.port }}
-        {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 12 }}
 
