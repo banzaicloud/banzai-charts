@@ -25,6 +25,7 @@ The following tables lists configurable parameters of the spot-config-webhook ch
 |logVerbosity                         |log verbosity level                          |8                                         |
 |apiService.group                     |group of registered api service              |admission.banzaicloud.com                 |
 |apiService.version                   |version of registered api service            |v1beta1                                   |
+|apiService.resource                  |api service endpoint where hook is available |spotscheduling                            |
 |image.repository                     |image repo that contains the admission server|banzaicloud/spot-config-webhook           |
 |image.tag                            |image tag                                    |0.1.0                                     |
 |image.pullPolicy                     |image pull policy                            |IfNotPresent                              |
@@ -32,6 +33,10 @@ The following tables lists configurable parameters of the spot-config-webhook ch
 |service.type                         |spot config webhook service type             |ClusterIP                                 |
 |service.externalPort                 |spot config webhook service external port    |443                                       |
 |service.internalPort                 |spot config webhook service external port    |443                                       |
+|webhook.spotAnnotationKey            |annotation key of on-demand percentage       |app.banzaicloud.io/odPercentage           |
+|webhook.configMapNamespace           |namespace of configMap that holds spot info  |pipeline-system                           |
+|webhook.configMapName                |name of configMap that holds spot info       |spot-deploy-config                        |
+|webhook.schedulerName                |name of spot-affinity scheduler              |spot-scheduler                            |
 |resources                            |resources to request                         |{}                                        |
 |nodeSelector                         |node selector to use                         |{}                                        |
 |tolerations                          |tolerations to add                           |[]                                        |
