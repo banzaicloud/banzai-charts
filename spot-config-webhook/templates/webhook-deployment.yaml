@@ -34,6 +34,21 @@ spec:
           - "--tls-cert-file=/var/serving-cert/tls.crt"
           - "--tls-private-key-file=/var/serving-cert/tls.key"
           - "--v={{ .Values.logVerbosity }}"
+          env:
+          - name: SPOT_ANNOTATION_KEY
+            value: {{ .Values.webhook.spotAnnotationKey }}
+          - name: SPOT_API_RESOURCE_GROUP
+            value: {{ .Values.apiService.group }}
+          - name: SPOT_API_RESOURCE_VERSION
+            value: {{ .Values.apiService.version }}
+          - name: SPOT_API_RESOURCE_NAME
+            value: {{ .Values.apiService.resource }}
+          - name: SPOT_CONFIGMAP_NAMESPACE
+            value: {{ .Values.webhook.configMapNamespace }}
+          - name: SPOT_CONFIGMAP_NAME
+            value: {{ .Values.webhook.configMapName }}
+          - name: SPOT_SCHEDULER_NAME
+            value: {{ .Values.webhook.schedulerName }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
