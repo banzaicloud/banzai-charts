@@ -87,6 +87,11 @@ monitor:
   certSecret: prometheus-federation-secrets
   mountPath: /etc/prometheus/secrets
 
+metrics:
+  enabled: true
+  port: 9900
+  debug: true
+
 dns:
   domain: "example.org"
 

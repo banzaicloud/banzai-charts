@@ -18,7 +18,12 @@ spec:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-
+    annotations:
+    {{- if .Values.metrics.enabled  }}
+      prometheus.io/scrape: "true"
+      prometheus.io/path: "/metrics"
+      prometheus.io/port: "{{ .Values.metrics.port }}"
+    {{- end }}
     spec:
       initContainers:
       {{- if .Values.mysql.enabled  }}
@@ -159,7 +164,12 @@ spec:
           value: {{ default "/etc/prometheus/secrets" .Values.monitor.mountPath | quote }}
         - name: PIPELINE_MONITOR_CERTSECRET
           value: {{ default "prometheus-federation-secrets" .Values.monitor.certSecret | quote }}
-
+        - name: PIPELINE_METRICS_ENABLED
+          value: "{{ .Values.metrics.enabled }}"
+        - name: PIPELINE_METRICS_DEBUG
+          value: "{{ .Values.metrics.debug }}"
+        - name: PIPELINE_METRICS_PORT
+          value: ":{{ .Values.metrics.port }}"
         - name: PIPELINE_HELM_RETRYATTEMPT
           value: {{ .Values.helm.retryAttempt | quote }}
         - name: PIPELINE_HELM_RETRYSLEEPSECONDS
@@ -213,7 +223,9 @@ spec:
             scheme: HTTPS
           {{ end }}
           initialDelaySeconds: 10
-
+        {{- if .Values.metrics.enabled  }}
+        - containerPort: {{ .Values.metrics.port }}
+        {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 12 }}
 
