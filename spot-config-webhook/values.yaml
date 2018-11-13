@@ -8,6 +8,7 @@ logVerbosity: 8
 apiService:
   group: admission.banzaicloud.com
   version: v1beta1
+  resource: spotscheduling
 
 image:
   repository: banzaicloud/spot-config-webhook
@@ -19,6 +20,12 @@ service:
   type: ClusterIP
   externalPort: 443
   internalPort: 443
+
+webhook:
+  spotAnnotationKey: "app.banzaicloud.io/odPercentage"
+  configMapNamespace: "pipeline-system"
+  configMapName: "spot-deploy-config"
+  schedulerName: "spot-scheduler"
 
 resources: {}
 
