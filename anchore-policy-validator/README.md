@@ -49,8 +49,3 @@ The following tables lists configurable parameters of the anchore-policy-validat
 |externalAnchore.anchoreHost          |external anchore-engine host                 |""                                        |
 |externalAnchore.anchoreUser          |external anchore-engine username             |""                                        |
 |externalAnchore.anchorePass          |external anchore-engine password             |""                                        |
-
-[Due to some resource create with jobs, these resources has to be deleted by manually.](README-dev.md)
-
-This chart based on:
-[Vic Iglesias' kubernetes-anchore-image-validator](https://github.com/viglesiasce/kubernetes-anchore-image-validator)

@@ -1,23 +1,39 @@
-{{- if .Values.pipelineIngress.enabled }}
+{{- if .Values.ingress.enabled -}}
+{{- $serviceName := include "fullname" . -}}
+{{- $servicePort := .Values.service.externalPort -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- with .Values.ingress.annotations }}
   annotations:
-    kubernetes.io/ingress.class: traefik
-    ingress.kubernetes.io/ssl-redirect: "false"
-    traefik.frontend.rule.type: PathPrefix
-    {{- if .Values.pipelineIngress.auth.enabled }}
-    ingress.kubernetes.io/auth-type: "basic"
-    ingress.kubernetes.io/auth-secret: "{{ .Release.Name }}-zeppelin-ingress"
-    {{- end }}
-
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
+{{- if .Values.ingress.tls }}
+  tls:
+  {{- range .Values.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . }}
+      {{- end }}
+      secretName: {{ .secretName }}
+  {{- end }}
+{{- end }}
   rules:
-  - http:
-      paths:
-        - path: "{{ .Values.pipelineIngress.baseURL }}"
-          backend:
-            serviceName: {{ template "fullname" . }}
-            servicePort: {{ .Values.service.externalPort }}
+  {{- range .Values.ingress.hosts }}
+  {{- $url := splitList "/" . }}
+    - host: {{ first $url }}
+      http:
+        paths:
+          - path: /{{ rest $url | join "/" }}
+            backend:
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
+  {{- end}}
 {{- end }}

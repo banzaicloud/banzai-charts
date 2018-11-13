@@ -38,8 +38,8 @@ data:
 
     {{- else if eq $schema "azure" }}
 
-    spark.eventLog.dir={{- printf "wasb://%s@$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net" .Values.sparkEventLogStorage.logDirectory }}
-    spark.hadoop.fs.azure.account.key.$AZURE_STORAGE_ACCOUNT_NAME.blob.core.windows.net=$AZURE_STORAGE_ACCESS_KEY
+    spark.eventLog.dir={{- printf "wasb://%s@$storageAccount.blob.core.windows.net" .Values.sparkEventLogStorage.logDirectory }}
+    spark.hadoop.fs.azure.account.key.$storageAccount.blob.core.windows.net=$accessKey
 
     {{- else if eq $schema "google" }}
 
