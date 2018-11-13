@@ -22,7 +22,7 @@ spec:
     {{- if .Values.metrics.enabled  }}
       prometheus.io/scrape: "true"
       prometheus.io/path: "/metrics"
-      prometheus.io/port: "{{ .Values.metrics.port }}"
+      prometheus.io/port: {{ .Values.metrics.port | quote }}
     {{- end }}
     spec:
       initContainers:
@@ -44,13 +44,13 @@ spec:
       {{- end }}
 
       - name: pipeline
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: KUBERNETES_RELEASE_NAME
-          value: "{{ .Release.Name }}"
+          value: {{ .Release.Name | quote }}
         - name: KUBERNETES_NAMESPACE
-          value: "{{ .Release.Namespace }}"
+          value: {{ .Release.Namespace | quote}}
 
         - name: PIPELINE_PIPELINE_BASEPATH
           value: {{ .Values.global.pipelineBasepath | quote }}
@@ -60,7 +60,7 @@ spec:
 
         {{- if .Values.mysql.enabled  }}
         - name: PIPELINE_DATABASE_HOST
-          value: "{{ .Release.Name }}-pipeline-db"
+          value: {{ .Release.Name }}-pipeline-db
         - name: PIPELINE_DATABASE_DBNAME
           value: {{ default "" .Values.mysql.mysqlDatabase | quote }}
         - name: PIPELINE_DATABASE_USER
@@ -68,7 +68,7 @@ spec:
         - name: PIPELINE_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name:  "{{ .Release.Name }}-pipeline-db"
+              name:  {{ .Release.Name }}-pipeline-db
               key: mysql-password
         {{- else if .Values.cloudsql.enabled }}
         - name: PIPELINE_DATABASE_HOST
@@ -78,12 +78,12 @@ spec:
         - name: PIPELINE_DATABASE_USER
           valueFrom:
             secretKeyRef:
-              name:  "{{ template "fullname" . }}-cloudsql"
+              name:  {{ template "fullname" . }}-cloudsql
               key: dbUserName
         - name: PIPELINE_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name:  "{{ template "fullname" . }}-cloudsql"
+              name:  {{ template "fullname" . }}-cloudsql
               key: dbUserPass
         {{- end }}
 
@@ -116,7 +116,7 @@ spec:
         - name: PIPELINE_AUTH_COOKIEDOMAIN
           value: {{ .Values.auth.cookieDomain | quote }}
         - name: PIPELINE_AUTH_SECURECOOKIE
-          value: "{{ .Values.auth.secureCookie }}"
+          value: {{ .Values.auth.secureCookie }}
         - name: PIPELINE_AUTH_WHITELISTENABLED
           value: {{ default "false" .Values.auth.whitelistEnabled | quote}}
         - name: PIPELINE_GITHUB_TOKEN
@@ -128,48 +128,48 @@ spec:
           value: http://{{ .Release.Name }}-drone:80
 
         - name: PIPELINE_ARK_NAME
-          value: "{{ .Values.ark.name }}"
+          value: {{ .Values.ark.name }}
         - name: PIPELINE_ARK_NAMESPACE
-          value: "{{ .Values.ark.namespace }}"
+          value: {{ .Values.ark.namespace }}
         - name: PIPELINE_ARK_CHART
-          value: "{{ .Values.ark.chart }}"
+          value: {{ .Values.ark.chart }}
         - name: PIPELINE_ARK_CHARTVERSION
-          value: "{{ .Values.ark.chartVersion }}"
+          value: {{ .Values.ark.chartVersion }}
         - name: PIPELINE_ARK_IMAGE
-          value: "{{ .Values.ark.image }}"
+          value: {{ .Values.ark.image }}
         - name: PIPELINE_ARK_IMAGETAG
-          value: "{{ .Values.ark.imageTag }}"
+          value: {{ .Values.ark.imageTag }}
         - name: PIPELINE_ARK_PULLPOLICY
-          value: "{{ .Values.ark.pullPolicy }}"
+          value: {{ .Values.ark.pullPolicy }}
 
         - name: PIPELINE_ARK_SYNCENABLED
-          value: "{{ .Values.ark.syncEnabled }}"
+          value: {{ .Values.ark.syncEnabled }}
         - name: PIPELINE_ARK_LOGLEVEL
-          value: "{{ .Values.ark.logLevel }}"
+          value: {{ .Values.ark.logLevel }}
         - name: PIPELINE_ARK_BUCKETSYNCINTERVAL
-          value: "{{ .Values.ark.bucketSyncInterval }}"
+          value: {{ .Values.ark.bucketSyncInterval }}
         - name: PIPELINE_ARK_RESTORESYNCINTERVAL
-          value: "{{ .Values.ark.restoreSyncInterval }}"
+          value: {{ .Values.ark.restoreSyncInterval }}
         - name: PIPELINE_ARK_BACKUPSYNCINTERVAL
-          value: "{{ .Values.ark.backupSyncInterval }}"
+          value: {{ .Values.ark.backupSyncInterval }}
 
         - name: PIPELINE_SPOTGUIDE_ALLOWPRERELEASES
-          value: "{{ .Values.spotguide.allowPrereleases }}"
+          value: {{ .Values.spotguide.allowPrereleases }}
 
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
         - name: PIPELINE_MONITOR_CONFIGMAP
-          value: "{{ .Release.Name }}-{{ .Values.monitor.configMap }}"
+          value: {{ .Release.Name }}-{{ .Values.monitor.configMap }}
         - name: PIPELINE_MONITOR_MOUNTPATH
           value: {{ default "/etc/prometheus/secrets" .Values.monitor.mountPath | quote }}
         - name: PIPELINE_MONITOR_CERTSECRET
           value: {{ default "prometheus-federation-secrets" .Values.monitor.certSecret | quote }}
         - name: PIPELINE_METRICS_ENABLED
-          value: "{{ .Values.metrics.enabled }}"
+          value: {{ .Values.metrics.enabled }}
         - name: PIPELINE_METRICS_DEBUG
-          value: "{{ .Values.metrics.debug }}"
+          value: {{ .Values.metrics.debug }}
         - name: PIPELINE_METRICS_PORT
-          value: ":{{ .Values.metrics.port }}"
+          value: :{{ .Values.metrics.port }}
         - name: PIPELINE_HELM_RETRYATTEMPT
           value: {{ .Values.helm.retryAttempt | quote }}
         - name: PIPELINE_HELM_RETRYSLEEPSECONDS
@@ -179,7 +179,7 @@ spec:
         - name: PIPELINE_HELM_BANZAIREPOSITORYURL
           value: {{ .Values.helm.banzaiRepositoryURL | quote }}
 
-        - name: "PIPELINE_DNS_DOMAIN"
+        - name: PIPELINE_DNS_DOMAIN
           value: {{ .Values.dns.domain | quote }}
 
         - name: PIPELINE_EKS_TEMPLATELOCATION
@@ -248,7 +248,7 @@ spec:
       volumes:
       - name: config-volume
         configMap:
-          name: "{{ template "fullname" . }}"
+          name: {{ template "fullname" . }}
 
       - name: cache
         {{- if .Values.cache.persistence.enabled }}
@@ -269,10 +269,10 @@ spec:
         {{- end }}
       - name: vault-tls
         secret:
-          secretName: "{{ .Release.Name }}-vault-tls"
+          secretName: {{ .Release.Name }}-vault-tls
       {{- if .Values.service.tls  }}
       - name: pipeline-tls
         secret:
-          secretName: "{{ template "fullname" . }}-tls"
+          secretName: {{ template "fullname" . }}-tls
       {{ end }}
       serviceAccountName: pipeline
