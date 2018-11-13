@@ -40,7 +40,6 @@ cluster:
 objstore:
   provider: gcs
   secretName: ""
-  configMapName: ""
   configFile: "bucket.yaml"
   bucketName: ""
   gcsCredentials: ""
