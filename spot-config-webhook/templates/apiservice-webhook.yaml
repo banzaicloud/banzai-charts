@@ -1,0 +1,89 @@
+{{ $ca := genCA "svc-cat-ca" 3650 }}
+{{ $cn := printf "%s-%s.%s.svc" .Release.Name .Chart.Name .Release.Namespace }}
+{{ $server := genSignedCert $cn nil nil 365 $ca }}
+
+apiVersion: v1
+kind: List
+metadata:
+items:
+
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: {{ template "spot-config-webhook.fullname" . }}
+    type: kubernetes.io/tls
+  data:
+    servingCert: {{ b64enc $server.Cert }}
+    servingKey: {{ b64enc $server.Key }}
+    caCert: {{ b64enc $ca.Cert }}
+
+- apiVersion: apiregistration.k8s.io/v1beta1
+  kind: APIService
+  metadata:
+    name: {{ .Values.apiService.version }}.{{ .Values.apiService.group }}
+  spec:
+    caBundle: {{ b64enc $ca.Cert }}
+    group: {{ .Values.apiService.group }}
+    groupPriorityMinimum: 1000
+    versionPriority: 15
+    service:
+      name: {{ template "spot-config-webhook.fullname" . }}
+      namespace: {{ .Release.Namespace }}
+    version: {{ .Values.apiService.version }}
+
+- apiVersion: admissionregistration.k8s.io/v1beta1
+  kind: MutatingWebhookConfiguration
+  metadata:
+    name: {{ template "spot-config-webhook.fullname" . }}
+  webhooks:
+  - name: deployments.{{ template "spot-config-webhook.name" . }}.admission.banzaicloud.com
+    clientConfig:
+      service:
+        namespace: default
+        name: kubernetes
+        path: /apis/{{ .Values.apiService.group }}/{{ .Values.apiService.version }}/{{ .Values.apiService.resource }}s
+      caBundle: {{ b64enc $ca.Cert }}
+    rules:
+    - operations:
+      - CREATE
+      apiGroups:
+      - "*"
+      apiVersions:
+      - "*"
+      resources:
+      - deployments
+    failurePolicy: Fail
+  - name: replicasets.{{ template "spot-config-webhook.name" . }}.admission.banzaicloud.com
+    clientConfig:
+      service:
+        namespace: default
+        name: kubernetes
+        path: /apis/{{ .Values.apiService.group }}/{{ .Values.apiService.version }}/{{ .Values.apiService.resource }}s
+      caBundle: {{ b64enc $ca.Cert }}
+    rules:
+    - operations:
+      - CREATE
+      apiGroups:
+      - "*"
+      apiVersions:
+      - "*"
+      resources:
+      - replicasets
+    failurePolicy: Fail
+  - name: statefulsets.{{ template "spot-config-webhook.name" . }}.{{ .Values.apiService.group }}
+    clientConfig:
+      service:
+        namespace: default
+        name: kubernetes
+        path: /apis/{{ .Values.apiService.group }}/{{ .Values.apiService.version }}/{{ .Values.apiService.resource }}s
+      caBundle: {{ b64enc $ca.Cert }}
+    rules:
+    - operations:
+      - CREATE
+      apiGroups:
+      - "*"
+      apiVersions:
+      - "*"
+      resources:
+      - statefulsets
+    failurePolicy: Fail

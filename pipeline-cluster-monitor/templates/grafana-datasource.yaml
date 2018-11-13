@@ -13,6 +13,6 @@ data:
     datasources:
     - name: Prometheus
       type: prometheus
-      url: http://{{ .Release.Name }}-prometheus-server/prometheus
+      url: http://{{ .Release.Name }}-prometheus-server.{{ .Release.Namespace }}.svc.cluster.local/prometheus
       access: proxy
       isDefault: true
