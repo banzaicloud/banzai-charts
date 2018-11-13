@@ -25,14 +25,14 @@ spec:
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: {{ template "spot-config-webhook.name" . }}
+          secretName: {{ template "spot-config-webhook.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           command:
           - "/usr/local/bin/spot-config-webhook"
-          - "--tls-cert-file=/var/serving-cert/tls.crt"
-          - "--tls-private-key-file=/var/serving-cert/tls.key"
+          - "--tls-cert-file=/var/serving-cert/servingCert"
+          - "--tls-private-key-file=/var/serving-cert/servingKey"
           - "--v={{ .Values.logVerbosity }}"
           env:
           - name: SPOT_ANNOTATION_KEY
