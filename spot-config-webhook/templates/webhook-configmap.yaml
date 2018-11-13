@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-webhook
+  labels:
+    app: {{ template "spot-config-webhook.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: mutating-webhook
+data:
+  create-mutatingwebhook.sh: |-
+    #!/bin/bash -xe
+    apt-get update && apt-get install -y jq curl
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    chmod +x ./kubectl
+    mv ./kubectl /usr/bin
+    cat > mutatingwebhook.yaml <<EOF
+    apiVersion: admissionregistration.k8s.io/v1beta1
+    kind: MutatingWebhookConfiguration
+    metadata:
+      name: {{ template "spot-config-webhook.fullname" . }}
+    webhooks:
+    - name: {{ template "spot-config-webhook.fullname" . }}.admission.banzaicloud.com
+      clientConfig:
+        service:
+          namespace: default
+          name: kubernetes
+          path: /apis/admission.banzaicloud.com/v1beta1/spotschedulings
+        caBundle: CA_BUNDLE
+      rules:
+      - operations:
+        - CREATE
+        apiGroups:
+        - "*"
+        apiVersions:
+        - "*"
+        resources:
+        - deployments
+      failurePolicy: Fail
+    EOF
+    sed "s/CA_BUNDLE/$(base64 /var/run/secrets/kubernetes.io/serviceaccount/ca.crt | tr -d '\n')/g" mutatingwebhook.yaml | kubectl -n {{ .Release.Namespace }} apply -f -

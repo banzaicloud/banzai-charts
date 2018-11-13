@@ -1,0 +1,36 @@
+{{- $schema := .Values.sparkEventLogStorage.cloudProvider }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "spark-hs.fullname" . }}-spark-hs-config
+data:
+  spark-defaults.conf: |-
+    {{- if .Values.sparkEventLogStorage.logDirectory }}
+
+    {{- if eq $schema "amazon" }}
+    spark.hadoop.fs.s3a.access.key=$AWS_ACCESS_KEY_ID
+    spark.hadoop.fs.s3a.secret.key=$AWS_SECRET_ACCESS_KEY
+
+    {{- else if eq $schema "alibaba" }}
+    spark.hadoop.fs.oss.accessKeyId=$ALIBABA_ACCESS_KEY_ID
+    spark.hadoop.fs.oss.accessKeySecret=$ALIBABA_ACCESS_KEY_SECRET
+    spark.hadoop.fs.oss.impl=org.apache.hadoop.fs.aliyun.oss.AliyunOSSFileSystem
+    spark.hadoop.fs.oss.endpoint={{ default (printf "oss-%s.aliyuncs.com" .Values.sparkEventLogStorage.aliOssRegion) .Values.sparkEventLogStorage.aliOssEndpoint }}
+
+    {{- else if eq $schema "azure" }}
+    spark.hadoop.fs.azure.account.key.$storageAccount.blob.core.windows.net=$accessKey
+
+    {{- else if eq $schema "google" }}
+    spark.hadoop.google.cloud.auth.service.account.enable=true
+    spark.hadoop.google.cloud.auth.service.account.json.keyfile=/opt/spark/conf/secret/google.json
+
+    {{- else if eq $schema "oracle" }}
+    spark.hadoop.fs.oci.client.hostname={{ default (printf "https://objectstorage.%s.oraclecloud.com" .Values.sparkEventLogStorage.oracleRegion) .Values.sparkEventLogStorage.oracleHost }}
+    spark.hadoop.fs.oci.client.auth.tenantId=$tenancy_ocid
+    spark.hadoop.fs.oci.client.auth.userId=$user_ocid
+    spark.hadoop.fs.oci.client.auth.fingerprint=$api_key_fingerprint
+    spark.hadoop.fs.oci.client.auth.pemfilepath=/opt/spark/conf/secret/api_key
+
+    {{- end }}
+
+    {{- end }}

@@ -36,7 +36,7 @@ metadata:
   name: {{ template "anchore-policy-validator.fullname" . }}
 rules:
 - apiGroups:
-  - admission.vicnastea.io
+  - {{ .Values.apiService.group }}
   resources:
   - {{ template "anchore-policy-validator.fullname" . }}
   verbs:

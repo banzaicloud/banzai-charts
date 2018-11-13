@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-create-mutatingwebhook"
+  labels:
+    app: {{ template "spot-config-webhook.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: mutating-webhook
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "spot-config-webhook.fullname" . }}
+        component: mutating-webhook
+    spec:
+      serviceAccountName: {{ template "spot-config-webhook.fullname" . }}
+      restartPolicy: OnFailure
+      volumes:
+      - name: create-mutatingwebhook
+        configMap:
+          name: {{ .Release.Name }}-webhook
+      containers:
+      - name: create-mutatingwebhook
+        image: "ubuntu"
+        command:
+        - bash
+        - -xe
+        - /scripts/create-mutatingwebhook.sh
+        volumeMounts:
+        - name: create-mutatingwebhook
+          mountPath: /scripts

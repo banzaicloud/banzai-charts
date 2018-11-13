@@ -66,6 +66,9 @@ ark:
   restoreSyncInterval: "20s"
   backupSyncInterval: "20s"
 
+spotguide:
+  allowPrereleases: false
+
 helm:
   retryAttempt: "30"
   retrySleepSeconds: "15"
@@ -84,8 +87,16 @@ monitor:
   certSecret: prometheus-federation-secrets
   mountPath: /etc/prometheus/secrets
 
+metrics:
+  enabled: true
+  port: 9900
+  debug: true
+
 dns:
   domain: "example.org"
+
+infra:
+  headNodePoolName:
 
 cache:
   persistence:

@@ -28,7 +28,16 @@ spec:
             image:
               type: array
               items:
-                type: string
+                type: object
+                properties:
+                  imageName:
+                    type: string
+                  imageTag:
+                    type: string
+                  imageDigest:
+                    type: string
+                  lastUpdated:
+                    type: string
             result:
               type: array
               items:
@@ -46,7 +55,7 @@ spec:
     priority: 1
   - name: Image
     type: string
-    JSONPath: .spec.image
+    JSONPath: .spec.image[*].imageName
     priority: 2
   - name: result
     type: string

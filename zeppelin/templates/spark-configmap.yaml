@@ -1,0 +1,65 @@
+{{- $schema := .Values.sparkEventLogStorage.cloudProvider }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-spark-config
+data:
+  spark-defaults.conf: |-
+    spark.kubernetes.namespace={{ .Values.sparkSubmitOptions.k8sNameSpace }}
+    spark.driver.cores={{ .Values.sparkSubmitOptions.sparkDriverCores }}
+    spark.kubernetes.driver.limit.cores={{ .Values.sparkSubmitOptions.sparkDriverLimitCores }}
+    spark.executor.cores={{ .Values.sparkSubmitOptions.sparkExecutorCores }}
+    spark.driver.memory={{ .Values.sparkSubmitOptions.sparkDriverMemory }}
+    spark.executor.memory={{ .Values.sparkSubmitOptions.sparkExecutorMemory }}
+    spark.kubernetes.container.image={{ .Values.sparkSubmitOptions.sparkImage }}
+    spark.metrics.conf=/opt/spark/conf/monitoring/metrics.properties
+    spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
+    spark.kubernetes.authenticate.driver.serviceAccountName={{ .Values.sparkSubmitOptions.driverServiceAccountName }}
+    spark.kubernetes.driver.secrets.spark-{{ .Release.Name }}=/opt/spark/conf/monitoring
+    spark.kubernetes.executor.secrets.spark-{{ .Release.Name }}=/opt/spark/conf/monitoring
+
+    {{- if .Values.sparkEventLogStorage.logDirectory }}
+
+    spark.eventLog.enabled=true
+
+    {{- if eq $schema "amazon" }}
+
+    spark.eventLog.dir={{- printf "s3a://%s" .Values.sparkEventLogStorage.logDirectory }}
+    spark.hadoop.fs.s3a.access.key=$AWS_ACCESS_KEY_ID
+    spark.hadoop.fs.s3a.secret.key=$AWS_SECRET_ACCESS_KEY
+
+    {{- else if eq $schema "alibaba" }}
+
+    spark.eventLog.dir={{- printf "oss://%s" .Values.sparkEventLogStorage.logDirectory }}
+    spark.hadoop.fs.oss.accessKeyId=$ALIBABA_ACCESS_KEY_ID
+    spark.hadoop.fs.oss.accessKeySecret=$ALIBABA_ACCESS_KEY_SECRET
+    spark.hadoop.fs.oss.impl=org.apache.hadoop.fs.aliyun.oss.AliyunOSSFileSystem
+    spark.hadoop.fs.oss.endpoint={{ default (printf "oss-%s.aliyuncs.com" .Values.sparkEventLogStorage.aliOssRegion) .Values.sparkEventLogStorage.aliOssEndpoint }}
+
+    {{- else if eq $schema "azure" }}
+
+    spark.eventLog.dir={{- printf "wasb://%s@$storageAccount.blob.core.windows.net" .Values.sparkEventLogStorage.logDirectory }}
+    spark.hadoop.fs.azure.account.key.$storageAccount.blob.core.windows.net=$accessKey
+
+    {{- else if eq $schema "google" }}
+
+    spark.eventLog.dir={{- printf "gs://%s" .Values.sparkEventLogStorage.logDirectory }}
+    spark.kubernetes.driver.secrets.{{ default (printf "%s" (include "fullname" .)) .Values.sparkEventLogStorage.secretName }}=/opt/spark/conf/secret
+    spark.kubernetes.executor.secrets.{{ default (printf "%s" (include "fullname" .)) .Values.sparkEventLogStorage.secretName }}=/opt/spark/conf/secret
+    spark.hadoop.google.cloud.auth.service.account.enable=true
+    spark.hadoop.google.cloud.auth.service.account.json.keyfile=/opt/spark/conf/secret/google.json
+
+    {{- else if eq $schema "oracle" }}
+
+    spark.eventLog.dir={{- printf "oci://%s" .Values.sparkEventLogStorage.logDirectory }}
+    spark.hadoop.fs.oci.client.hostname={{ default (printf "https://objectstorage.%s.oraclecloud.com" .Values.sparkEventLogStorage.oracleRegion) .Values.sparkEventLogStorage.oracleHost }}
+    spark.hadoop.fs.oci.client.auth.tenantId=$tenancy_ocid
+    spark.hadoop.fs.oci.client.auth.userId=$user_ocid
+    spark.hadoop.fs.oci.client.auth.fingerprint=$api_key_fingerprint
+    spark.hadoop.fs.oci.client.auth.pemfilepath=/opt/spark/conf/secret/api_key
+    spark.kubernetes.driver.secrets.{{ default (printf "%s-spark-eventlog-storage" (include "fullname" .)) .Values.sparkEventLogStorage.secretName }}=/opt/spark/conf/secret
+    spark.kubernetes.executor.secrets.{{ default (printf "%s-spark-eventlog-storage" (include "fullname" .)) .Values.sparkEventLogStorage.secretName }}=/opt/spark/conf/secret
+
+    {{- end }}
+
+    {{- end }}

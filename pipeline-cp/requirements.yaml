@@ -15,7 +15,7 @@ dependencies:
   condition: prometheus.enabled
 
 - name: pipeline
-  version: 0.0.33
+  version: 0.0.36
   repository: alias:banzaicloud-stable
 
 - name: pipeline-ui
@@ -34,7 +34,7 @@ dependencies:
   condition: telescopes.enabled
 
 - name: productinfo
-  version: 0.4.5
+  version: 0.4.6
   repository: alias:banzaicloud-stable
   condition: productinfo.enabled
 

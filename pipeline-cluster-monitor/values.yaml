@@ -31,6 +31,9 @@ prometheus:
       scrape_interval: 15s
     configMapOverrideName:
       prometheus-server
+  persistentVolume:
+    # This size is required because specific cloud provider requires at least 20Gi for storage
+    size: 20Gi
   ## Prometheus server ConfigMap entries
   ##
   serverFiles:
@@ -313,6 +316,7 @@ grafana:
       - localhost
 
   sidecar:
+    image: banzaicloud/k8s-sidecar:0.0.7
     dashboards:
       enabled: true
       label: pipeline_grafana_dashboard
