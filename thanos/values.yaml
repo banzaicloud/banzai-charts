@@ -1,0 +1,51 @@
+image:
+  repository: improbable/thanos
+  tag: master-2018-10-29-8f247d6
+  pullPolicy: IfNotPresent
+  
+gcs:
+  bucket: pipeline-thanos
+
+store:
+  replicaCount: 1
+  monitoring:
+    enabled: true
+  http:
+    port: 10902
+  grpc:
+    port: 10901
+  logLevel: debug
+
+query:
+  replicaCount: 1
+  monitoring:
+    enabled: true
+  grpc:
+    port: 10901
+  http:
+    port: 10902
+  logLevel: debug
+
+compact:
+  monitoring:
+    enabled: true
+  http:
+    port: 10902
+  logLevel: debug
+
+cluster:
+  address: 0.0.0.0
+  port: 10900
+
+objstore:
+  provider: gcs
+  configFile: "bucket.yaml"
+  bucketName: ""
+  gcsCredentials: ""
+
+replicaLabelName: replica
+
+prometheus:
+  enabled: false
+  thanosSidecar:
+    enabled: true

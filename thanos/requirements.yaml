@@ -1,0 +1,5 @@
+dependencies:
+- name: prometheus
+  version: 7.3.4-thanos.1
+  repository: alias:banzaicloud-stable
+  condition: prometheus.enabled
