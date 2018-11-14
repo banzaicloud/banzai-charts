@@ -17,6 +17,10 @@ spec:
         app: {{ template "drone.name" . }}
         release: "{{ .Release.Name }}"
         component: server
+{{- with .Values.annotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       containers:
       {{- if .Values.cloudsql.enabled  }}
