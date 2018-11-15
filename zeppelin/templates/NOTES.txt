@@ -1,1 +1,0 @@
-Zeppelin URL: http://{{- default  "<PUBLIC IP>" .Values.ingress.hostname -}}{{- default "/" .Values.ingress.baseURL -}}
