@@ -4,7 +4,10 @@
 
 traefik:
   serviceType: LoadBalancer
-  imageTag: 1.7.0-rc3
+  imageTag: 1.7.4
+  kubernetes:
+    ingressEndpoint:
+      useDefaultPublishedService: true
   dashboard:
     enabled: false
     ingress:
