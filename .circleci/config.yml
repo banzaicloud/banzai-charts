@@ -4,7 +4,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: banzaicloud/helm
+      - image: banzaicloud/helm:0.0.2
         environment:
           AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
           AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
@@ -34,6 +34,8 @@ jobs:
             helm repo remove local
 
             echo "REPO -> STABLE"
+
+            find -H . -maxdepth 1 -type d -empty -delete
 
             #TODO: Dirty hack to solve multi level dependency, the current dependency depth is 4
             for i in $(seq 1 4);

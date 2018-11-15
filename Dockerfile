@@ -1,6 +1,6 @@
 FROM alpine:3.7
 
-RUN apk add --update ca-certificates git openssl py-pip
+RUN apk add --update ca-certificates git openssl py-pip findutils
 
 RUN pip install --upgrade pip && pip install s3cmd
 
