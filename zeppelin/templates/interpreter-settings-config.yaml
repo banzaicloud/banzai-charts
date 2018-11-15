@@ -99,6 +99,11 @@ data:
               "value": "cluster",
               "type": "string"
             },
+            "spark.executor.instances": {
+              "name": "spark.executor.instances",
+              "value": "2",
+              "type": "number"
+            },
             "zeppelin.spark.importImplicit": {
               "name": "zeppelin.spark.importImplicit",
               "value": true,
