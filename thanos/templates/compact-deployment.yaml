@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "thanos.fullname" . }}-compact
+  labels:
+    app: {{ include "thanos.name" . }}-compact
+    chart: {{ include "thanos.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "thanos.name" . }}-compact
+      chart: {{ include "thanos.chart" . }}
+      release: "{{ .Release.Name }}"
+      heritage: "{{ .Release.Service }}"
+  template:
+    metadata:
+      labels:
+        app: {{ include "thanos.name" . }}-compact
+        chart: {{ include "thanos.chart" . }}
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+      annotations:
+      {{- if .Values.compact.monitoring.enabled  }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.compact.http.port }}"
+      {{ end }}
+    spec:
+      containers:
+      - name: thanos-compact
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /credentials/google.json
+        args:
+        - "compact"
+        - "--log.level={{ .Values.compact.logLevel }}"
+        - "--objstore.config-file=/etc/config/{{ .Values.objstore.configFile }}"
+        - "--retention.resolution-raw=30d"
+        - "--retention.resolution-5m=120d"
+        - "--retention.resolution-1h=10y"
+        - "--sync-delay=30m"
+        - "--data-dir=/var/thanos/store"
+        - "--wait"
+        ports:
+        - name: monitoring
+          containerPort: {{ .Values.compact.http.port }}
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+          readOnly: true
+        {{ if eq .Values.objstore.provider "gcs" }}
+        - name: {{ .Values.objstore.provider }}
+          mountPath: /credentials
+        {{- end }}
+        - name: data
+          mountPath: /var/thanos/store
+      volumes:
+      - name: data
+        emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: {{ include "thanos.fullname" . }}
+    {{- if eq .Values.objstore.provider "gcs" }}
+      - name: {{ .Values.objstore.provider }}
+        secret:
+          defaultMode: 420
+          secretName: {{ include "thanos.fullname" . }}
+          items:
+            - key: google.json
+              path: google.json
+    {{- end }}

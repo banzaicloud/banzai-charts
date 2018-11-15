@@ -1,4 +1,4 @@
 dependencies:
 - name: traefik
-  version: 1.44.5
-  repository: alias:banzaicloud-stable
+  version: 1.52.6
+  repository: https://kubernetes-charts.storage.googleapis.com/

@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "thanos.fullname" . }}-store
+  labels:
+    app: {{ include "thanos.name" . }}-store
+    chart: {{ include "thanos.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  serviceName: {{ include "thanos.name" . }}-store
+  replicas: {{ .Values.store.replicaCount}}
+  selector:
+    matchLabels:
+      app: {{ include "thanos.name" . }}-store
+      chart: {{ include "thanos.chart" . }}
+      release: "{{ .Release.Name }}"
+      heritage: "{{ .Release.Service }}"
+      thanos-peer: "true"
+  template:
+    metadata:
+      labels:
+        app: {{ include "thanos.name" . }}-store
+        chart: {{ include "thanos.chart" . }}
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+        thanos-peer: "true"
+      annotations:
+      {{- if .Values.store.monitoring.enabled  }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.store.http.port }}"
+      {{ end }}
+    spec:
+      containers:
+      - name: thanos-store
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /credentials/google.json
+        args:
+        - "store"
+        - "--log.level={{ .Values.store.logLevel }}"
+        - "--grpc-address=0.0.0.0:{{ .Values.store.grpc.port }}"
+        - "--cluster.address={{ .Values.cluster.address }}:{{ .Values.cluster.port}}"
+        - "--cluster.peers={{ include "thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.cluster.port }}"
+        - "--objstore.config-file=/etc/config/{{ .Values.objstore.configFile }}"
+        ports:
+        - name: monitoring
+          containerPort: {{ .Values.store.http.port }}
+        - name: grpc
+          containerPort: {{ .Values.store.grpc.port }}
+        - name: cluster
+          containerPort: {{ .Values.cluster.port }}
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+          readOnly: true
+        {{ if eq .Values.objstore.provider "gcs" }}
+        - name: {{ .Values.objstore.provider }}
+          mountPath: /credentials
+        {{- end }}
+        - name: data
+          mountPath: /var/thanos/store
+      volumes:
+      - name: data
+        emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: {{ include "thanos.fullname" . }}
+    {{- if eq .Values.objstore.provider "gcs" }}
+      - name: {{ .Values.objstore.provider }}
+        secret:
+          defaultMode: 420
+          secretName: {{ include "thanos.fullname" . }}
+          items:
+            - key: google.json
+              path: google.json
+    {{- end }}
