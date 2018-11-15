@@ -16,6 +16,10 @@ spec:
         app: {{ template "drone.name" . }}
         release: "{{ .Release.Name }}"
         component: agent
+{{- with .Values.annotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       serviceAccount: {{ template "drone.fullname" . }}-agent
       containers:
