@@ -7,11 +7,11 @@ data:
     log4j.rootLogger = INFO, stdout, {{- if .Values.logService.host }}, syslog{{- end }}
 
     log4j.appender.stdout = org.apache.log4j.ConsoleAppender
-    log4j.appender.stdout.Threshold = DEBUG
+    log4j.appender.stdout.Threshold = {{ .Values.logService.zeppelinLogLevel }}
     log4j.appender.stdout.layout = org.apache.log4j.PatternLayout
     log4j.appender.stdout.layout.ConversionPattern=%5p [%d] ({%t} %F[%M]:%L) - %m%n
 
-    log4j.logger.org.apache.zeppelin.interpreter = DEBUG
+    log4j.logger.org.apache.zeppelin.interpreter = {{ .Values.logService.zeppelinLogLevel }}
 
     {{- if .Values.logService.host }}
     log4j.appender.syslog=org.apache.log4j.net.SyslogAppender

@@ -4,9 +4,9 @@ This is a composite chart deploying the following sub-charts:
 
 - [Zeppelin](https://github.com/banzaicloud/banzai-charts/tree/master/stable/zeppelin)
 - [Spark](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark) this is again a composite charts deploying the following sub-charts:
-  - [Spark History Server](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark-hs) only if enabled (*historyServer.enabled=true*)
-  - [Spark Resource Staging Server](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark-rss)
-  - [Spark Shuffle Service](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark-shuffle)
+  - [Spark History Server](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark-hs) only if enabled (default *historyServer.enabled=true*)
+  - [Spark Resource Staging Server](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark-rss) only if enabled (default *resourceStagingServer.enabled=false*)
+  - [Spark Shuffle Service](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark-shuffle) only if enabled (default *sparkShuffle.enabled=false*)
 
 ## Chart Details
 
@@ -24,19 +24,60 @@ Helm let's you override all parameters in `values.yaml` of every chart and sub-c
 
 | Parameter                            | Required | Description                                                       |Example                           |
 | ------------------------------------ | ---------|----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| username                     | no      | Admin username, by default is `admin` | |
-| password                     | no      | Salted password of admin user, by default is `zeppelin` | You can salt your own password using [shiro cli tool](http://shiro.apache.org/command-line-hasher.html) ```java -jar ~/dev/tools/shiro-tools-hasher-1.3.2-cli.jar -p``` |
-| zeppelin.sparkSubmitOptions.eventLogDirectory                     | yes      |the URL to the directory for event logs | s3a://yourBucketName/eventLogFoloder<br>wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog<br>gs://yourBucketName/eventLogFoloder|  
-| zeppelin.azureStorageAccountName          | only in case of using Azure Storage| Name of your Azure storage account        | see Notes |
-| zeppelin.azureStorageAccessKey            | only in case of using Azure Storage| Access key for your Azure storage account | see Notes |
+| zeppelin.username                     | no      | Admin username, by default is `admin` | |
+| zeppelin.password                     | no      | Salted password of admin user, by default is `zeppelin` | You can salt your own password using [shiro cli tool](http://shiro.apache.org/command-line-hasher.html) ```java -jar ~/dev/tools/shiro-tools-hasher-1.3.2-cli.jar -p``` |
+| zeppelin.userCredentialSecretName     | no      | Credentials above are set in a K8s secret. Instead of specifying username & password directly you can provide the name of this K8s secret containing these fields | |
+| zeppelin.sparkEventLogStorage.logDirectory                     | yes      |the URL to the directory containing application event logs to load|yourBucketName/eventLogFoloder |
+| zeppelin.sparkEventLogStorage.cloudProvider                    | yes      |the cloud provider where the objectstore/bucket located| amazon<br>google<br>azure<br>oracle<br>alibaba |
+| zeppelin.sparkEventLogStorage.secretName          | no | the name of K8s secret containing credentials for selected cloud provider. If no secretName is passed then there will be a secret created with the same structure populated from values. Checkout the required secret properties for each provider in next section below. | see below |
 | historyServer.enabled           | false by default| Enable deploying Spark History Server | true / false |
-| spark.spark-hs.app.logDirectory                     | yes      |the URL to the directory containing application event logs to load| s3a://yourBucketName/eventLogFoloder<br>wasb://your_blob_container_name@you_storage_account_name.blob.core.windows.net/eventLog<br>gs://yourBucketName/eventLogFoloder|  
-| spark.spark-hs.app.azureStorageAccountName          | in case of WASB| Name of your Azure storage account        | see Notes |
-| spark.spark-hs.app.azureStorageAccessKey            | in case of WASB| Access key for your Azure storage account | see Notes |
+| spark.spark-hs.sparkEventLogStorage.logDirectory                     | yes      |the URL to the directory containing application event logs to load|yourBucketName/eventLogFoloder |
+| spark.spark-hs.sparkEventLogStorage.cloudProvider                    | yes      |the cloud provider where the objectstore/bucket located| amazon<br>google<br>azure<br>oracle<br>alibaba |
+| spark.spark-hs.sparkEventLogStorage.secretName          | no | the name of K8s secret containing credentials for selected cloud provider. If no secretName is passed then there will be a secret created with the same structure populated from values. Checkout the required secret properties for each provider in next section below. | see below |
 
-In case you want to use [Pipeline](https://github.com/banzaicloud/pipeline) to deploy this chart, you can checkout [Postman example Deployment requests](https://github.com/banzaicloud/pipeline/blob/master/docs/postman/deploy_examples.postman_collection.json).
+## Structure of credential secret for each supported cloud provider
 
-## Notes
+### Amazon
 
-* in case of using S3 and Google Storage, we don't pass credentials and access keys we're using IAM roles and policies on Amazon and Service Account based access on Google Cloud
-* in case of Azure the storage account name would be the dns prefix it's created (e.g. **mystorage.blob.core.windows.net** - the name would be mystorage), and you can you either the `primary` or `secondary` keys
+```
+AWS_ACCESS_KEY_ID: {{ .Values.sparkEventLogStorage.awsAccessKeyId | b64enc | quote }}
+AWS_SECRET_ACCESS_KEY: {{ .Values.sparkEventLogStorage.awsSecretAccessKey | b64enc | quote }}
+```
+
+### Azure
+
+```
+storageAccount: {{ .Values.sparkEventLogStorage.azureStorageAccountName | b64enc | quote }}
+accessKey: {{ .Values.sparkEventLogStorage.azureStorageAccessKey | b64enc | quote }}
+```
+
+### Alibaba
+
+```
+ALIBABA_ACCESS_KEY_ID: {{ .Values.sparkEventLogStorage.aliAccessKeyId | b64enc | quote }}
+ALIBABA_ACCESS_KEY_SECRET: {{ .Values.sparkEventLogStorage.aliSecretAccessKey | b64enc | quote }}
+```
+
+### Google
+
+```
+google.json: {{ .Values.sparkEventLogStorage.googleJson | quote }}
+```
+
+### Oracle
+
+```
+api_key: {{ .Values.sparkEventLogStorage.apiKey | b64enc | quote }}
+tenancy_ocid: {{ .Values.sparkEventLogStorage.oracleTenancyId | b64enc | quote }}
+user_ocid:  {{ .Values.sparkEventLogStorage.oracleUserId | b64enc | quote }}
+api_key_fingerprint:  {{ .Values.sparkEventLogStorage.oracleApiKeyFingerprint | b64enc | quote }}
+```
+
+NOTE: values must be prefixed with subchart name, see the example below how to specify AWS credential properties for zepplin and spark-hs chart sparkEventLogStorage:
+
+```
+zeppelin.sparkEventLogStorage.awsAccessKeyId=XXXXXXXXX
+zeppelin.sparkEventLogStorage.awsSecretAccessKey=XXXXXXXXXXXXXXXX
+spark.spark-hs.sparkEventLogStorage.awsAccessKeyId=XXXXXXXXX
+spark.spark-hs.sparkEventLogStorage.awsSecretAccessKey=XXXXXXXXXXXXXXXX
+```
