@@ -1,7 +1,7 @@
 name: drone
 home: https://drone.io/
-version: 0.2.6
-appVersion: 0.8.5
+version: 0.2.7
+appVersion: 0.6.0
 description: Drone CI
 keywords:
 - continuous-delivery
