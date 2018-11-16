@@ -24,13 +24,13 @@ data:
 
     {{- if eq $schema "amazon" }}
 
-    spark.eventLog.dir={{- printf "s3a://%s" .Values.sparkEventLogStorage.logDirectory }}
+    spark.eventLog.dir={{- printf "s3a://%s//" .Values.sparkEventLogStorage.logDirectory }}
     spark.hadoop.fs.s3a.access.key=$AWS_ACCESS_KEY_ID
     spark.hadoop.fs.s3a.secret.key=$AWS_SECRET_ACCESS_KEY
 
     {{- else if eq $schema "alibaba" }}
 
-    spark.eventLog.dir={{- printf "oss://%s" .Values.sparkEventLogStorage.logDirectory }}
+    spark.eventLog.dir={{- printf "oss://%s//" .Values.sparkEventLogStorage.logDirectory }}
     spark.hadoop.fs.oss.accessKeyId=$ALIBABA_ACCESS_KEY_ID
     spark.hadoop.fs.oss.accessKeySecret=$ALIBABA_ACCESS_KEY_SECRET
     spark.hadoop.fs.oss.impl=org.apache.hadoop.fs.aliyun.oss.AliyunOSSFileSystem
