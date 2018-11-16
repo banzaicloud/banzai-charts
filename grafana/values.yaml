@@ -269,9 +269,9 @@ sidecar:
     label: grafana_dashboard
     # folder in the pod that should hold the collected dashboards
     folder: /tmp/dashboards
-    namespace: all
+    namespace: ALL
   datasources:
     enabled: false
     # label that the configmaps with datasources are marked with
     label: grafana_datasource
-    namespace: all
+    namespace: ALL
