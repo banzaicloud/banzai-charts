@@ -38,6 +38,9 @@ spec:
         ports:
         - name: http
           containerPort: {{ .Values.spotTerminationexporter.bindAddr }}
+        {{- if .Values.spotTerminationexporter.hostPort }}
+          hostPort: {{ .Values.spotTerminationexporter.hostPort }}
+        {{- end }}
         livenessProbe:
           httpGet:
             path: /
