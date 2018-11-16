@@ -29,12 +29,12 @@ dependencies:
   condition: drone.enabled
 
 - name: telescopes
-  version: 0.1.5
+  version: 0.1.6
   repository: alias:banzaicloud-stable
   condition: telescopes.enabled
 
 - name: productinfo
-  version: 0.4.7
+  version: 0.4.8
   repository: alias:banzaicloud-stable
   condition: productinfo.enabled
 
