@@ -54,6 +54,14 @@ rules:
   verbs:
   - "*"
 - apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  - deployments
+  - replicasets
+  verbs:
+  - "*"
+- apiGroups:
   - extensions
   resources:
   - daemonsets

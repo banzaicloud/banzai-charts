@@ -111,25 +111,37 @@ drone:
     dbUserName: ""
     dbUserPass: ""
 
+thanos:
+  enabled: false
+
 prometheus:
   nodeExporter:
-    enabled: true
+    enabled: false
   alertmanager:
     enabled: false
+  thanosSidecar:
+    enabled: false
+    objstore:
+      secretName: prometheus-federation
+
   server:
-    baseURL: /prometheus
-    prefixURL: /prometheus
+    baseURL: /prometheus-federation
+    prefixURL: /prometheus-federation
     ingress:
       enabled: false
       hosts:
-         - "/prometheus"
+         - "/prometheus-federation"
       annotations:
         kubernetes.io/ingress.class: traefik
         traefik.frontend.rule.type: PathPrefix
     global:
       scrape_interval: 15s
+      external_labels:
+        monitor: prometheus
+        replica: 'prometheus-federation'
+
     configMapOverrideName:
-      prometheus-server
+      prometheus-federation
     extraSecretMounts:
       - name: secret-files
         mountPath: /etc/prometheus/secrets
@@ -400,60 +412,6 @@ prometheus:
               action: replace
               target_label: kubernetes_pod_name
 
-grafana:
-  enabled: false
-  grafana.ini:
-    server:
-      root_url: "%(protocol)s://%(domain)s/grafana/"
-  ingress:
-    enabled: false
-    annotations: 
-      kubernetes.io/ingress.class: traefik
-      traefik.frontend.rule.type: PathPrefixStrip
-    path: /grafana
-    hosts:
-      - localhost
-
-  sidecar:
-    dashboards:
-      enabled: false
-      label: pipeline_grafana_dashboard
-    datasources:
-      enabled: true
-      label: pipeline_grafana_datasource
-
-  dashboardProviders:
-   dashboardproviders.yaml:
-     apiVersion: 1
-     providers:
-     - name: 'default'
-       orgId: 1
-       folder: ''
-       type: file
-       disableDeletion: false
-       editable: true
-       options:
-         path: /var/lib/grafana/dashboards/default
-  dashboards:
-    default:
-      kubernetes:
-        url: https://grafana.com/api/dashboards/1621/revisions/1/download
-        datasource: Prometheus
-      pod:
-        url: https://grafana.com/api/dashboards/747/revisions/2/download
-        datasource: Prometheus
-      deployment:
-        url: https://grafana.com/api/dashboards/741/revisions/1/download
-        datasource: Prometheus
-      cluster:
-        url: https://grafana.com/api/dashboards/5312/revisions/1/download
-        datasource: Prometheus
-      vault:
-        url: https://grafana.com/api/dashboards/7700/revisions/3/download
-        datasource: Prometheus
-      mysql:
-        url: https://s3-eu-west-1.amazonaws.com/banzai-grafana/Mysql.json
-        datasource: Prometheus
 
 anchore-engine:
   enabled: false

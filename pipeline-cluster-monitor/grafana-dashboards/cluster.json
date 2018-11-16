@@ -136,7 +136,7 @@
           "value": ""
         }
       ],
-      "valueName": "avg"
+      "valueName": "current"
     },
     {
       "cacheTimeout": null,
@@ -213,7 +213,7 @@
       "title": "Alerts Firing",
       "transparent": false,
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "100%",
       "valueMaps": [
         {
           "op": "=",
@@ -298,7 +298,7 @@
       "title": "Alerts Pending",
       "transparent": false,
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "100%",
       "valueMaps": [
         {
           "op": "=",
@@ -383,7 +383,7 @@
       "title": "Crashlooping Pods",
       "transparent": false,
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "100%",
       "valueMaps": [
         {
           "op": "=",
@@ -468,7 +468,7 @@
       "title": "Node Not Ready",
       "transparent": false,
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "100%",
       "valueMaps": [
         {
           "op": "=",
@@ -553,7 +553,7 @@
       "title": "Node Disk Pressure",
       "transparent": false,
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "100%",
       "valueMaps": [
         {
           "op": "=",
@@ -638,7 +638,7 @@
       "title": "Node Memory Pressure",
       "transparent": false,
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "100%",
       "valueMaps": [
         {
           "op": "=",
@@ -723,7 +723,7 @@
       "title": "Nodes Unschedulable",
       "transparent": false,
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "100%",
       "valueMaps": [
         {
           "op": "=",
@@ -773,6 +773,5 @@
   "timezone": "browser",
   "title": "Kubernetes Cluster Health (Prometheus)",
   "uid": "NEYiLUzik",
-  "version": 1,
-  "description": "Kubernetes Cluster Health (Prometheus)"
+  "version": 1
 }
