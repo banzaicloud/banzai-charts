@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/spark
-  tag: v2.3.2.111
+  tag: v2.3.2.146
   pullPolicy: IfNotPresent
 
 service:
