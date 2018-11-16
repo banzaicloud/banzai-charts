@@ -55,6 +55,7 @@ The following tables lists the configurable parameters of the Hollowtrees spot i
 | `spotTerminationexporter.metadataEndpoint`      | Metadata Endpoint                           | `http://169.254.169.254/latest/meta-data/`        |
 | `spotTerminationexporter.metricsPath`           | Metrics Path                                | `/metrics`                                        |
 | `spotTerminationexporter.bindAddr`              | Port to bind to for service                 | `9189`                                            |
+| `spotTerminationexporter.hostPort`              | Host Port to bind to for service            | `9189`                                            |
 | `spotTerminationexporter.resources`             | CPU/Memory resource requests/limits         | Memory: `256Mi`, CPU: `100m`                      |
           
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. 

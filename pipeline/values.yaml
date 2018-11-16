@@ -83,7 +83,7 @@ eks:
 
 monitor:
   enabled: true
-  configMap: prometheus-server
+  configMap: prometheus-federation
   certSecret: prometheus-federation-secrets
   mountPath: /etc/prometheus/secrets
 

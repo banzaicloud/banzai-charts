@@ -35,7 +35,7 @@ jobs:
 
             echo "REPO -> STABLE"
 
-            find -H . -maxdepth 1 -type d -empty -delete
+            find -H . -type d -empty -delete
 
             #TODO: Dirty hack to solve multi level dependency, the current dependency depth is 4
             for i in $(seq 1 4);
