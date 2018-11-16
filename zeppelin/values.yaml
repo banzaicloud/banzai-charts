@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/zeppelin-server
-  tag: v0.9.0-k8s-1.0.68
+  tag: v0.9.0-k8s-1.0.71
   pullPolicy: IfNotPresent
 
 resources:
@@ -69,7 +69,7 @@ azureStorageAccountName: ""
 azureStorageAccessKey: ""
 
 sparkSubmitOptions:
-  sparkImage: banzaicloud/zeppelin-spark:v0.9.0-k8s-1.0.68
+  sparkImage: banzaicloud/zeppelin-spark:v0.9.0-k8s-1.0.71
   k8sNameSpace: default
   sparkDriverCores: 1
   sparkDriverLimitCores: 1
