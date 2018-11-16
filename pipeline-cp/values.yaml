@@ -116,6 +116,9 @@ prometheus:
     enabled: false
   alertmanager:
     enabled: false
+  thanosSidecar:
+    enabled: false
+
   server:
     baseURL: /prometheus-federation
     prefixURL: /prometheus-federation
@@ -128,6 +131,10 @@ prometheus:
         traefik.frontend.rule.type: PathPrefix
     global:
       scrape_interval: 15s
+      external_labels:
+        monitor: prometheus
+        replica: 'prometheus-federation'
+
     configMapOverrideName:
       prometheus-federation
     extraSecretMounts:

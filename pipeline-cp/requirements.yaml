@@ -5,8 +5,8 @@ dependencies:
   repository: https://kubernetes-charts.storage.googleapis.com/
 
 - name: prometheus
-  version: 7.3.3
-  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 7.3.4-thanos.1
+  repository: alias:banzaicloud-stable
   condition: prometheus.enabled
 
 - name: pipeline
