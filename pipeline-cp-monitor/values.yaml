@@ -1,0 +1,123 @@
+# Default values for pipeline-cp-monitor
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+prometheus:
+  nodeExporter:
+    enabled: true
+  alertmanager:
+    enabled: false
+  server:
+    baseURL: /prometheus
+    prefixURL: /prometheus
+    ingress:
+      enabled: false
+      hosts:
+         - "/prometheus"
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        traefik.frontend.rule.type: PathPrefix
+    global:
+      scrape_interval: 15s
+    configMapOverrideName:
+      prometheus-server
+    extraSecretMounts:
+      - name: secret-files
+        mountPath: /etc/prometheus/secrets
+        subPath: ""
+        secretName: prometheus-federation-secrets
+        readOnly: true
+  ## Prometheus server ConfigMap entries
+  ##
+  serverFiles:
+    alerts: {}
+    rules: {}
+
+    prometheus.yml:
+      rule_files:
+        - /etc/config/rules
+        - /etc/config/alerts
+
+prometheus-operator:
+  alertmanager:
+    enabled: true
+
+#    config:
+#      global:
+#        resolve_timeout: 5m
+#      receivers:
+#      - name: 'slack-snab'
+#        slack_configs:
+#        - api_url: 'xxxxx'
+#          icon_url: https://avatars3.githubusercontent.com/u/3380462
+#          text: "{{ range .Alerts }}{{ .Annotations.summary }} {{ .Annotations.description }}\n{{ end }}"
+#          channel: '#snab-support-staging'
+#      route:
+#        group_by:
+#        - job
+#        group_interval: 5m
+#        group_wait: 30s
+#        receiver: "slack-snab"
+#        repeat_interval: 12h
+#        routes:
+#        - match:
+#            alertname: DeadMansSwitch
+#          receiver: "slack-snab"
+#
+
+  grafana:
+    enabled: true
+
+    grafana.ini:
+      server:
+        root_url: "%(protocol)s://%(domain)s/grafana"
+    ingress:
+      enabled: false
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        traefik.frontend.rule.type: PathPrefixStrip
+      path: /grafana
+      hosts:
+        - localhost
+
+    sidecar:
+      dashboards:
+        enabled: true
+        label: pipeline_grafana_dashboard
+      datasources:
+        enabled: true
+        label: pipeline_grafana_datasource
+
+    dashboardProviders:
+     dashboardproviders.yaml:
+       apiVersion: 1
+       providers:
+       - name: 'default'
+         orgId: 1
+         folder: ''
+         type: file
+         disableDeletion: false
+         editable: true
+         options:
+           path: /var/lib/grafana/dashboards/default
+    dashboards:
+      default:
+        kubernetes:
+          url: https://grafana.com/api/dashboards/1621/revisions/1/download
+          datasource: Prometheus
+        pod:
+          url: https://grafana.com/api/dashboards/747/revisions/2/download
+          datasource: Prometheus
+        deployment:
+          url: https://grafana.com/api/dashboards/741/revisions/1/download
+          datasource: Prometheus
+        cluster:
+          url: https://grafana.com/api/dashboards/5312/revisions/1/download
+          datasource: Prometheus
+        vault:
+          url: https://grafana.com/api/dashboards/7700/revisions/3/download
+          datasource: Prometheus
+        mysql:
+          url: https://s3-eu-west-1.amazonaws.com/banzai-grafana/Mysql.json
+          datasource: Prometheus
+

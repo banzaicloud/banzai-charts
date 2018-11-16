@@ -1,18 +1,18 @@
 dependencies:
 
-- name: grafana
-  version: 1.17.2
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  condition: grafana.enabled
-
 - name: traefik
   version: 1.52.6
   repository: https://kubernetes-charts.storage.googleapis.com/
 
 - name: prometheus
-  version: 7.3.3
-  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 7.3.4-thanos.1
+  repository: alias:banzaicloud-stable
   condition: prometheus.enabled
+
+- name: thanos
+  version: 0.1.0
+  repository: alias:banzaicloud-stable
+  condition: thanos.enabled
 
 - name: pipeline
   version: 0.0.38
