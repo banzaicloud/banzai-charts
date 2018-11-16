@@ -111,6 +111,9 @@ drone:
     dbUserName: ""
     dbUserPass: ""
 
+thanos:
+  enabled: false
+
 prometheus:
   nodeExporter:
     enabled: false
@@ -118,6 +121,8 @@ prometheus:
     enabled: false
   thanosSidecar:
     enabled: false
+    objstore:
+      secretName: prometheus-federation
 
   server:
     baseURL: /prometheus-federation

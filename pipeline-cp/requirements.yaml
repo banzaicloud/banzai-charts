@@ -9,6 +9,11 @@ dependencies:
   repository: alias:banzaicloud-stable
   condition: prometheus.enabled
 
+- name: thanos
+  version: 0.1.0
+  repository: alias:banzaicloud-stable
+  condition: thanos.enabled
+
 - name: pipeline
   version: 0.0.38
   repository: alias:banzaicloud-stable
