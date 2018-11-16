@@ -18,12 +18,44 @@ The following tables lists the configurable parameters of the Spark History Seve
 
 | Parameter                            | Required | Description                                                       |Example                           |
 | ------------------------------------ | ---------|----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| app.logDirectory                     | yes      |the URL to the directory containing application event logs to load|yourBucketName/eventLogFoloder |
-| app.cloudProvider                    | yes      |the cloud provider where the objectstore/bucket located| amazon<br>google<br>azure |}
-| app.azureStorageAccountName          | in case of WASB| Name of your Azure storage account        | see Notes |
-| app.azureStorageAccessKey            | in case of WASB| Access key for your Azure storage account | see Notes |
+| sparkEventLogStorage.logDirectory                     | yes      |the URL to the directory containing application event logs to load|yourBucketName/eventLogFoloder |
+| sparkEventLogStorage.cloudProvider                    | yes      |the cloud provider where the objectstore/bucket located| amazon<br>google<br>azure<br>oracle<br>alibaba |
+| sparkEventLogStorage.secretName          | no | the name of K8s secret containing credentials for selected cloud provider. If no secretName is passed then there will be a secret created with the same structure populated from values. Checkout the required secret properties for each provider in next section below. | see below |
 
-## Notes
+## Structure of credential secret for each supported cloud provider
 
-* in case of using S3 and Google Storage, we don't pass credentials and access keys we're using IAM roles and policies on Amazon and Service Account based access on Google Cloud
-* in case of Azure the storage account name would be the dns prefix it's created (e.g. **mystorage.blob.core.windows.net** - the name would be mystorage), and you can you either the `primary` or `secondary` keys
+### Amazon
+
+```
+AWS_ACCESS_KEY_ID: {{ .Values.sparkEventLogStorage.awsAccessKeyId | b64enc | quote }}
+AWS_SECRET_ACCESS_KEY: {{ .Values.sparkEventLogStorage.awsSecretAccessKey | b64enc | quote }}
+```
+
+### Azure
+
+```
+storageAccount: {{ .Values.sparkEventLogStorage.azureStorageAccountName | b64enc | quote }}
+accessKey: {{ .Values.sparkEventLogStorage.azureStorageAccessKey | b64enc | quote }}
+```
+
+### Alibaba
+
+```
+ALIBABA_ACCESS_KEY_ID: {{ .Values.sparkEventLogStorage.aliAccessKeyId | b64enc | quote }}
+ALIBABA_ACCESS_KEY_SECRET: {{ .Values.sparkEventLogStorage.aliSecretAccessKey | b64enc | quote }}
+```
+
+### Google
+
+```
+google.json: {{ .Values.sparkEventLogStorage.googleJson | quote }}
+```
+
+### Oracle
+
+```
+api_key: {{ .Values.sparkEventLogStorage.apiKey | b64enc | quote }}
+tenancy_ocid: {{ .Values.sparkEventLogStorage.oracleTenancyId | b64enc | quote }}
+user_ocid:  {{ .Values.sparkEventLogStorage.oracleUserId | b64enc | quote }}
+api_key_fingerprint:  {{ .Values.sparkEventLogStorage.oracleApiKeyFingerprint | b64enc | quote }}
+```

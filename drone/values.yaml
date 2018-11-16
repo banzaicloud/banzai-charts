@@ -4,6 +4,10 @@ appVersion: "0.8.1"
 ##
 annotations: {}
 
+## Drone server and agent Deplyoment labels
+##
+labels: {}
+
 ## The official drone image, change tag to use a different version.
 ## https://hub.docker.com/r/drone/drone/tags/
 ##

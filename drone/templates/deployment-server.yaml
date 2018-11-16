@@ -9,6 +9,13 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     component: server
+{{- with .Values.labels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   replicas: 1
   template:
@@ -17,10 +24,6 @@ spec:
         app: {{ template "drone.name" . }}
         release: "{{ .Release.Name }}"
         component: server
-{{- with .Values.annotations }}
-      annotations:
-{{ toYaml . | indent 8 }}
-{{- end }}
     spec:
       containers:
       {{- if .Values.cloudsql.enabled  }}
