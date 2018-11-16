@@ -45,7 +45,7 @@ objstore:
 
 replicaLabelName: replica
 
-prometheus:
-  enabled: false
-  thanosSidecar:
-    enabled: true
+#prometheus:
+#  enabled: false
+#  thanosSidecar:
+#    enabled: true

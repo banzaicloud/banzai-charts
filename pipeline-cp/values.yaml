@@ -121,8 +121,6 @@ prometheus:
     enabled: false
   thanosSidecar:
     enabled: false
-    objstore:
-      secretName: prometheus-federation
 
   server:
     baseURL: /prometheus-federation
