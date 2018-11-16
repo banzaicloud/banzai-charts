@@ -49,7 +49,7 @@ affinity: {}
 
 app:
   logLevel: "info"
-  basePath: "/"
+  basePath: ""
 
 providers:
   google:

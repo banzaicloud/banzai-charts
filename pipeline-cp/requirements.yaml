@@ -24,7 +24,7 @@ dependencies:
   condition: pipeline-ui.enabled
 
 - name: drone
-  version: 0.2.5
+  version: 0.2.6
   repository: alias:banzaicloud-stable
   condition: drone.enabled
 
@@ -34,7 +34,7 @@ dependencies:
   condition: telescopes.enabled
 
 - name: productinfo
-  version: 0.4.6
+  version: 0.4.7
   repository: alias:banzaicloud-stable
   condition: productinfo.enabled
 

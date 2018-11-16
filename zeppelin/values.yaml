@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/zeppelin-server
-  tag: v0.9.0-k8s-1.0.60
+  tag: v0.9.0-k8s-1.0.68
   pullPolicy: IfNotPresent
 
 resources:
@@ -69,13 +69,13 @@ azureStorageAccountName: ""
 azureStorageAccessKey: ""
 
 sparkSubmitOptions:
-  sparkImage: banzaicloud/zeppelin-spark:v0.9.0-k8s-1.0.60
+  sparkImage: banzaicloud/zeppelin-spark:v0.9.0-k8s-1.0.68
   k8sNameSpace: default
   sparkDriverCores: 1
-  sparkDriverLimitCores: 2
+  sparkDriverLimitCores: 1
   sparkExecutorCores: 1
-  sparkDriverMemory: 4G
-  sparkExecutorMemory: 2G
+  sparkDriverMemory: 1G
+  sparkExecutorMemory: 1G
   dynamicAllocation: false
   shuffleService: false
   driverServiceAccountName: "spark"
