@@ -224,6 +224,9 @@ vault:
           description: General secrets.
           options:
             version: 2
+acme:
+  useStaging: true
+  
 resources:
   requests:
     cpu: 250m

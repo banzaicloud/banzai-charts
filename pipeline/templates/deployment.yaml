@@ -193,6 +193,9 @@ spec:
         - name: PIPELINE_ISSUE_GITHUBREPOSITORY
           value: {{ .Values.issue.githubRepository | quote }}
 
+        - name: PIPELINE_ACME_USESTAGING
+          value: {{ .Values.acme.useStaging | quote }}  
+
         - name: VAULT_ADDR
           value: https://{{ .Release.Name }}-vault:8200
         - name: VAULT_CACERT
