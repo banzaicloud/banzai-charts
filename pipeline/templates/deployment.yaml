@@ -205,6 +205,31 @@ spec:
           value: /tls/server.key
         {{ end }}
 
+        {{- if and .Values.global.anchore.dbService }}
+        - name: ANCHORE_ENABLED
+          value: true
+        - name: ANCHORE_DIALECT
+          value: "postgres"
+        - name: ANCHORE_HOST
+          value: {{ .Release.Name }}-anchore-engine
+        - name: ANCHORE_PORT
+          value: {{ .Values.global.anchore.dbServicePort | quote }}
+        - name: ANCHORE_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-anchore-engine-cloudsql
+              key: dbUser
+        - name: ANCHORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-anchore-engine-cloudsql
+              key: dbPassword
+        - name: ANCHORE_DBNAME
+          value: "anchore"
+        - name: ANCHORE_ENDPOINT
+          value: {{ .Values.global.anchore.serviceEndPoint | quote }}
+        {{ end }}
+
         {{ range $key, $value := .Values.env }}
         - name: {{ $key }}
           value: {{ $value | quote }}

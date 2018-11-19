@@ -2,6 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  anchore:
+    dbService: false
+    dbServicePort: 5432
+    serviceEndPoint: ""
+
 traefik:
   serviceType: LoadBalancer
   imageTag: 1.7.0-rc3

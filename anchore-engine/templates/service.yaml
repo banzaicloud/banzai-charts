@@ -31,10 +31,10 @@ spec:
       port: {{ .Values.service.ports.policy }}
       targetPort: {{ .Values.service.ports.policy }}
       protocol: TCP
-    {{- if and .Values.cloudsql.enabled .Values.cloudsql.dbService }}
+    {{- if .Values.global.anchore.dbService }}
     - name: anchore-db
-      port: {{ .Values.cloudsql.dbServicePort }}
-      targetPort: {{ .Values.cloudsql.dbServicePort }}
+      port: {{ .Values.global.anchore.dbServicePort }}
+      targetPort: {{ .Values.global.anchore.dbServicePort }}
       protocol: TCP
     {{- end }}
   selector:

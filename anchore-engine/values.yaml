@@ -1,6 +1,11 @@
 # Default values for anchore_engine chart.
 
 # The configuration for the API service, which must be reachable inside the cluster by other workers and users
+global:
+  anchore:
+    dbService: false
+    dbServicePort: 5432
+
 service:
   type: ClusterIP
   ports:
@@ -52,8 +57,6 @@ cloudsql:
     repository: gcr.io/cloudsql-docker/gce-proxy
     tag: 1.11
     pullPolicy: IfNotPresent
-  dbService: false
-  dbServicePort: 5432
 
 # Global configuration shared by both core and worker
 globalConfig:

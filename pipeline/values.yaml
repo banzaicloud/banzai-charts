@@ -6,6 +6,10 @@ global:
   auth:
     clientid: ""
     clientsecret: ""
+  anchore:
+    dbService: false
+    dbServicePort: 5432
+    serviceEndPoint: ""
 
 github:
   token: ""
@@ -181,6 +185,9 @@ cloudsql:
     tag: 1.11
     pullPolicy: IfNotPresent
 
+issue:
+  githubOwner: ""
+  githubRepository: ""
 
 vault:
   vault:
