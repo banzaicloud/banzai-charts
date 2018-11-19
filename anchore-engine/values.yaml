@@ -52,6 +52,8 @@ cloudsql:
     repository: gcr.io/cloudsql-docker/gce-proxy
     tag: 1.11
     pullPolicy: IfNotPresent
+  dbService: false
+  dbServicePort: 5432
 
 # Global configuration shared by both core and worker
 globalConfig:

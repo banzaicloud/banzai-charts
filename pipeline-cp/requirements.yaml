@@ -39,7 +39,7 @@ dependencies:
   condition: productinfo.enabled
 
 - name: anchore-engine
-  version: 0.2.4
+  version: 0.2.5
   repository: alias:banzaicloud-stable
   condition: anchore-engine.enabled
 

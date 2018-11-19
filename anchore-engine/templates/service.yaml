@@ -31,6 +31,12 @@ spec:
       port: {{ .Values.service.ports.policy }}
       targetPort: {{ .Values.service.ports.policy }}
       protocol: TCP
+    {{- if or .Values.cloudsql.enabled .Values.cloudsql.dbService }}
+    - name: anchore-db
+      port: {{ .Values.cloudsql.dbServicePort }}
+      targetPort: {{ .Values.cloudsql.dbServicePort }}
+      protocol: TCP
+    {{- end }}
   selector:
     app: {{ template "anchore-engine.fullname" . }}
     component: core
