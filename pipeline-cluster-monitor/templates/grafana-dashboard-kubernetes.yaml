@@ -7,4 +7,4 @@ metadata:
 data:
   kubernetes.json: |-2
 
-{{.Files.Get "grafana-dashboards/kuberntes.json"| indent 4}}
+{{.Files.Get "grafana-dashboards/kubernetes.json"| indent 4}}
