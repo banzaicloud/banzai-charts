@@ -184,6 +184,11 @@ spec:
         - name: PIPELINE_LOGGINGOPERATOR_CHARTVERSION
           value: {{ .Values.loggingOperator.chartVersion | quote }}
 
+        - name: PIPELINE_SPOTMETRICS_ENABLED
+          value: {{ .Values.spotmetrics.enabled | quote }}
+        - name: PIPELINE_SPOTMETRICS_COLLECTIONINTERVAL
+          value: {{ .Values.spotmetrics.collectionInterval | quote }}
+
         - name: PIPELINE_DNS_DOMAIN
           value: {{ .Values.dns.domain | quote }}
 
