@@ -97,6 +97,10 @@ metrics:
   port: 9900
   debug: true
 
+spotmetrics:
+  enabled: true
+  collectionInterval: "30s"
+
 dns:
   domain: "example.org"
 
