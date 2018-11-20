@@ -179,6 +179,11 @@ spec:
         - name: PIPELINE_HELM_BANZAIREPOSITORYURL
           value: {{ .Values.helm.banzaiRepositoryURL | quote }}
 
+        - name: PIPELINE_LOGGINGOPERATOR_IMAGETAG
+          value: {{ .Values.loggingOperator.image.tag | quote }}
+        - name: PIPELINE_LOGGINGOPERATOR_CHARTVERSION
+          value: {{ .Values.loggingOperator.chartVersion | quote }}
+
         - name: PIPELINE_DNS_DOMAIN
           value: {{ .Values.dns.domain | quote }}
 

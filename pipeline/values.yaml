@@ -87,6 +87,11 @@ monitor:
   certSecret: prometheus-federation-secrets
   mountPath: /etc/prometheus/secrets
 
+loggingOperator:
+  chartVersion: ""
+  image:
+    tag: "0.0.4"
+
 metrics:
   enabled: true
   port: 9900
