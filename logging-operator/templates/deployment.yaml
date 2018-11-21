@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       annotations:
-        scheduler.alpha.kubernetes.io/tolerations: '{{ toJson .Values.tolerations }}'
+        scheduler.alpha.kubernetes.io/tolerations: {{ toJson .Values.tolerations | quote }}
       labels:
         name: {{ template "logging-operator.fullname" . }}
     spec:
