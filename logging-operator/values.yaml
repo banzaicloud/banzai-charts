@@ -6,6 +6,14 @@ image:
 # Namespace to watch fot LoggingOperator CRD
 watchNamespace: ""
 
+affinity: {}
+  # key: value
+tolerations: []
+# - key: "key"
+#   operator: "Equal|Exists"
+#   value: "value"
+#   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
 rbac:
   enabled: true
 
