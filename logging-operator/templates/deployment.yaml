@@ -15,9 +15,7 @@ spec:
   template:
     metadata:
       annotations:
-      {{- if and (.Values.tolerations) (semverCompare "<1.6-0" .Capabilities.KubeVersion.GitVersion) }}
         scheduler.alpha.kubernetes.io/tolerations: '{{ toJson .Values.tolerations }}'
-      {{- end }}
       labels:
         name: {{ template "logging-operator.fullname" . }}
     spec:
@@ -50,7 +48,5 @@ spec:
       - configMap:
           name: {{ template "logging-operator.fullname" . }}
         name: config
-        {{- if and (.Values.tolerations) (semverCompare "^1.6-0" .Capabilities.KubeVersion.GitVersion) }}
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
-        {{- end }}
