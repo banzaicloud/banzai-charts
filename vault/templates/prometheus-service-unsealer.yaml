@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "vault.fullname" . }}
+  name: {{ include "vault.fullname" . }}-unsealer
   labels:
     app: {{ include "vault.name" . }}
     chart: {{ template "vault.chart" . }}
@@ -15,9 +15,9 @@ spec:
   endpoints:
   - interval: 30s
     port: metrics
-    {{- if .Values.metrics.serviceMonitor.relabellings }}
+    {{- if .Values.unsealer.metrics.serviceMonitor.relabellings }}
     metricRelabelings:
-{{ toYaml .Values.metrics.serviceMonitor.relabellings | indent 4 }}
+{{ toYaml .Values.unsealer.metrics.serviceMonitor.relabellings | indent 4 }}
     {{- end }}
   jobLabel: {{ include "vault.name" . }}
   namespaceSelector:
