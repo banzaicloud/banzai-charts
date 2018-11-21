@@ -1,0 +1,26 @@
+{{- .Values.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "prometheus-mysql-exporter.fullname" . }}
+  labels:
+    app: {{ template "prometheus-mysql-exporter.name" . }}
+    chart: {{ template "prometheus-mysql-exporter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    {{- if .Values.metrics.serviceMonitor.additionalLabels }}
+{{ toYaml .Values.metrics.serviceMonitor.additionalLabels | indent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+  - interval: 30s
+    port: {{ .Values.service.name }}
+  jobLabel: {{ include "prometheus-mysql-exporter.name" . }}
+  namespaceSelector:
+    matchNames:
+    - "{{ $.Release.Namespace }}"
+  selector:
+    matchLabels:
+      app: {{ include "prometheus-mysql-exporter.name" . }}
+      release: {{ .Release.Name }}
+{{ end }}
