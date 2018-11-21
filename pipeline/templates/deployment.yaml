@@ -215,6 +215,11 @@ spec:
           value: /tls/server.key
         {{ end }}
 
+        - name: PIPELINE_CERT_SOURCE
+          value: {{ .Values.cert.source }}
+        - name: PIPELINE_CERT_PATH
+          value: {{ .Values.cert.path }}
+
         {{ range $key, $value := .Values.env }}
         - name: {{ $key }}
           value: {{ $value | quote }}
@@ -260,6 +265,10 @@ spec:
         - name: pipeline-tls
           mountPath: /tls
       {{ end }}
+      {{- if -eq .Values.cert.source "file" }}
+        - name: sign-ca
+          mountPath: {{ .Values.cert.path }}
+      {{ end }}
       volumes:
       - name: config-volume
         configMap:
@@ -289,5 +298,10 @@ spec:
       - name: pipeline-tls
         secret:
           secretName: {{ template "fullname" . }}-tls
+      {{ end }}
+      {{- if -eq .Values.cert.source "file" }}
+      - name: sign-ca
+        secret:
+          secretName: {{ template "fullname" . }}-sign-ca
       {{ end }}
       serviceAccountName: pipeline
