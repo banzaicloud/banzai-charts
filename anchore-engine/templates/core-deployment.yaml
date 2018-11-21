@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: "{{ template "anchore-engine.core.fullname" . }}"
   labels:
-    app: "{{ template "anchore-engine.fullname" . }}"
+    app: "{{ template "anchore-engine.name" . }}"
     component: "anchore-core"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app: "{{ template "anchore-engine.fullname" . }}"
+        app: "{{ template "anchore-engine.name" . }}"
         component: "anchore-core"
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
