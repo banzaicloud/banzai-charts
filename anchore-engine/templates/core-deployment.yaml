@@ -4,7 +4,7 @@ metadata:
   name: "{{ template "anchore-engine.core.fullname" . }}"
   labels:
     app: "{{ template "anchore-engine.fullname" . }}"
-    component: core
+    component: "anchore-core"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -14,7 +14,10 @@ spec:
     metadata:
       labels:
         app: "{{ template "anchore-engine.fullname" . }}"
-        component: core
+        component: "anchore-core"
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       volumes:
         - name: config-volume

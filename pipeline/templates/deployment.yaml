@@ -220,6 +220,20 @@ spec:
         - name: PIPELINE_CERT_PATH
           value: {{ .Values.cert.path }}
 
+        {{- if .Values.anchore.enabled }}
+        - name: ANCHORE_ENABLED
+          value: true
+        - name: ANCHORE_ENDPOINT
+          value: {{ .Values.anchore.serviceEndpoint | quote }}
+        - name: ANCHORE_ADMINUSER
+          value: "admin"
+        - name: ANCHORE_ADMINPASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-anchore-engine
+              key: adminPassword
+        {{ end }}
+
         {{ range $key, $value := .Values.env }}
         - name: {{ $key }}
           value: {{ $value | quote }}

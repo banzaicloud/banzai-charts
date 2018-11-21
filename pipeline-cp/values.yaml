@@ -55,6 +55,10 @@ pipeline:
   awsSecretAccessKey: ""
   awsAccessKeyId: ""
 
+  anchore:
+    enabled: false
+    serviceEndpoint: ""
+
 pipeline-ui:
   enabled: false
   ingress:
