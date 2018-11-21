@@ -291,12 +291,12 @@ spec:
       volumes:
       - name: config-volume
         configMap:
-          name: {{ template "fullname" . }}
+          name: {{ include "pipeline.fullname" . }}
 
       - name: cache
         {{- if .Values.cache.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ default (printf "%s-cache" (include "fullname" .)) .Values.cache.persistence.existingClaim }}
+          claimName: {{ default (printf "%s-cache" (include "pipeline.fullname" .)) .Values.cache.persistence.existingClaim }}
         {{- else }}
         hostPath:
           path: /opt/pipeline/statestore/cache
@@ -305,7 +305,7 @@ spec:
       - name: statestore
         {{- if .Values.statestore.persistence.enabled }}
         persistentVolumeClaim:
-           claimName: {{ default (printf "%s-statestore" (include "fullname" .)) .Values.statestore.persistence.existingClaim }}
+           claimName: {{ default (printf "%s-statestore" (include "pipeline.fullname" .)) .Values.statestore.persistence.existingClaim }}
         {{- else }}
         hostPath:
           path: /opt/pipeline/statestore/
@@ -316,11 +316,11 @@ spec:
       {{- if .Values.service.tls  }}
       - name: pipeline-tls
         secret:
-          secretName: {{ template "fullname" . }}-tls
+          secretName: {{ include "pipeline.fullname" . }}-tls
       {{ end }}
       {{- if eq .Values.cert.source "file" }}
       - name: sign-ca
         secret:
-          secretName: {{ template "fullname" . }}-sign-ca
+          secretName: {{ include "pipeline.fullname" . }}-sign-ca
       {{ end }}
       serviceAccountName: pipeline
