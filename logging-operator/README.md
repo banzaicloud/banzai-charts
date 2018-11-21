@@ -54,6 +54,8 @@ The following tables lists the configurable parameters of the logging-operator c
 | `fluentbit.namespace`       | Specified fluentbit installation namespace               | same as operator namespace     |
 | `fluentd.enabled`           | Install fluentd                                          | true                           |
 | `fluentd.namespace`         | Specified fluentd installation namespace                 | same as operator namespace     |
+| `affinity`                  | Node Affinity                                            | none provided                  |
+| `tolerations`               | Node Tolerations                                         | none provided                  |
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 
