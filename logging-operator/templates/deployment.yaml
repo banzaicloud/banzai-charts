@@ -14,10 +14,16 @@ spec:
       name: {{ template "logging-operator.fullname" . }}
   template:
     metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/tolerations: {{ toJson .Values.tolerations | quote }}
       labels:
         name: {{ template "logging-operator.fullname" . }}
     spec:
       serviceAccountName: {{ template "logging-operator.fullname" . }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
       containers:
       - name: {{ template "logging-operator.name" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -42,3 +48,5 @@ spec:
       - configMap:
           name: {{ template "logging-operator.fullname" . }}
         name: config
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
