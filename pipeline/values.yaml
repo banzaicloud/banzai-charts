@@ -43,6 +43,9 @@ ingress:
 cert:
   source: file
   path: /sign-ca
+  ca:
+    key: ""
+    cert: ""
 
 issue:
   githubOwner: ""
