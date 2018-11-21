@@ -4,7 +4,7 @@ metadata:
   name: {{ include "pipeline.fullname" . }}
   labels:
     app: {{ include "pipeline.name" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: {{ include "pipeline.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     {{- if .Values.deploymentLabels }}
@@ -14,10 +14,15 @@ metadata:
 {{ toYaml .Values.deploymentAnnotations | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "pipeline.name" . }}
+      release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ include "pipeline.name" . }}
+        release: "{{ .Release.Name }}"
     annotations:
     {{- if .Values.metrics.enabled  }}
       prometheus.io/scrape: "true"
@@ -78,12 +83,12 @@ spec:
         - name: PIPELINE_DATABASE_USER
           valueFrom:
             secretKeyRef:
-              name:  {{ template "fullname" . }}-cloudsql
+              name:  {{ include "pipeline.fullname" . }}-cloudsql
               key: dbUserName
         - name: PIPELINE_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name:  {{ template "fullname" . }}-cloudsql
+              name:  {{ include "pipeline.fullname" . }}-cloudsql
               key: dbUserPass
         {{- end }}
 
@@ -97,17 +102,17 @@ spec:
         - name: PIPELINE_AUTH_CLIENTID
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ include "pipeline.fullname" . }}
               key: githubClientId
         - name: PIPELINE_AUTH_CLIENTSECRET
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ include "pipeline.fullname" . }}
               key: githubClientSecret
         - name: PIPELINE_AUTH_TOKENSIGNINGKEY
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ include "pipeline.fullname" . }}
               key: tokenSigningKey
         - name: PIPELINE_AUTH_JWTISSUEER
           value: {{ .Values.auth.jwtissueer | quote }}
@@ -122,7 +127,7 @@ spec:
         - name: PIPELINE_GITHUB_TOKEN
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ include "pipeline.fullname" . }}
               key: githubToken
         - name: PIPELINE_DRONE_URL
           value: http://{{ .Release.Name }}-drone:80

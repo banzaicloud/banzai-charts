@@ -1,7 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ include "pipeline.fullname" . }}
+  labels:
+    app: {{ include "pipeline.name" . }}
+    chart: {{ include "pipeline.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 data:
   config.toml: |-
     #environment
