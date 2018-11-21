@@ -44,6 +44,10 @@ cert:
   source: file
   path: /sign-ca
 
+issue:
+  githubOwner: ""
+  githubRepository: ""
+
 logging:
   logformat: text
   loglevel: debug

@@ -265,7 +265,7 @@ spec:
         - name: pipeline-tls
           mountPath: /tls
       {{ end }}
-      {{- if -eq .Values.cert.source "file" }}
+      {{- if eq .Values.cert.source "file" }}
         - name: sign-ca
           mountPath: {{ .Values.cert.path }}
       {{ end }}
@@ -299,7 +299,7 @@ spec:
         secret:
           secretName: {{ template "fullname" . }}-tls
       {{ end }}
-      {{- if -eq .Values.cert.source "file" }}
+      {{- if eq .Values.cert.source "file" }}
       - name: sign-ca
         secret:
           secretName: {{ template "fullname" . }}-sign-ca
