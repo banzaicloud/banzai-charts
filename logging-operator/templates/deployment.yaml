@@ -52,5 +52,5 @@ spec:
         name: config
         {{- if and (.Values.tolerations) (semverCompare "^1.6-0" .Capabilities.KubeVersion.GitVersion) }}
       tolerations:
-{{ toYaml .Values.tolerations | indent 6 }}
+{{ toYaml .Values.tolerations | indent 8 }}
         {{- end }}
