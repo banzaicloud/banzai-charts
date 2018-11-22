@@ -202,6 +202,13 @@ cloudsql:
     tag: 1.11
     pullPolicy: IfNotPresent
 
+anchore:
+  enabled: false
+  serviceEndpoint: ""
+
+issue:
+  githubOwner: ""
+  githubRepository: ""
 
 vault:
   vault:

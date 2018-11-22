@@ -3,18 +3,21 @@ kind: Deployment
 metadata:
   name: "{{ template "anchore-engine.worker.fullname" . }}"
   labels:
-    app: "{{ template "anchore-engine.worker.fullname" . }}"
+    app: "{{ template "anchore-engine.name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    component: worker
+    component: "anchore-worker"
 spec:
   replicas: {{ .Values.workerConfig.replicaCount }}
   template:
     metadata:
       labels:
-        app: "{{ template "anchore-engine.worker.fullname" . }}"
-        component: worker
+        app: "{{ template "anchore-engine.name" . }}"
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+        component: "anchore-worker"
     spec:
       containers:
       {{- if .Values.cloudsql.enabled  }}

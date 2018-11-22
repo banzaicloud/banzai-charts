@@ -15,7 +15,7 @@ dependencies:
   condition: thanos.enabled
 
 - name: pipeline
-  version: 0.0.42
+  version: 0.0.43
   repository: alias:banzaicloud-stable
 
 - name: pipeline-ui
@@ -39,7 +39,7 @@ dependencies:
   condition: productinfo.enabled
 
 - name: anchore-engine
-  version: 0.2.4
+  version: 0.2.5
   repository: alias:banzaicloud-stable
   condition: anchore-engine.enabled
 

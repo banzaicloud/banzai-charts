@@ -3,8 +3,8 @@ kind: Deployment
 metadata:
   name: "{{ template "anchore-engine.core.fullname" . }}"
   labels:
-    app: "{{ template "anchore-engine.fullname" . }}"
-    component: core
+    app: "{{ template "anchore-engine.name" . }}"
+    component: "anchore-core"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -13,8 +13,11 @@ spec:
   template:
     metadata:
       labels:
-        app: "{{ template "anchore-engine.fullname" . }}"
-        component: core
+        app: "{{ template "anchore-engine.name" . }}"
+        component: "anchore-core"
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       volumes:
         - name: config-volume
