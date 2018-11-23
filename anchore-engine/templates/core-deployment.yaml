@@ -10,6 +10,9 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   replicas: {{ .Values.coreConfig.replicaCount }}
+  selector:
+    matchLabels:
+      component: "anchore-core"
   template:
     metadata:
       labels:
