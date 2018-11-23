@@ -44,7 +44,7 @@ metadata:
 spec:
   clusterIP: None
   ports:
-  - name: unsealer
+  - name: metrics
     port: {{ .Values.unsealer.metrics.port }}
     protocol: TCP
     targetPort: {{ .Values.unsealer.metrics.port }}

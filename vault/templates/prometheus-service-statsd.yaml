@@ -44,7 +44,7 @@ metadata:
 spec:
   clusterIP: None
   ports:
-  - name: statsd
+  - name: metrics
     port: {{ .Values.statsd.metrics.port }}
     protocol: TCP
     targetPort: {{ .Values.statsd.metrics.port }}

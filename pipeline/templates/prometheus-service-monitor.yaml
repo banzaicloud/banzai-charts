@@ -44,7 +44,7 @@ metadata:
 spec:
   clusterIP: None
   ports:
-  - name: monitor
+  - name: metrics
     port: {{ .Values.metrics.port }}
     protocol: TCP
     targetPort: {{ .Values.metrics.port }}
