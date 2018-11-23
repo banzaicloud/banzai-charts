@@ -224,13 +224,13 @@ spec:
           value: {{ .Values.cert.path }}
 
         {{- if .Values.anchore.enabled }}
-        - name: ANCHORE_ENABLED
+        - name: PIPELINE_ANCHORE_ENABLED
           value: true
-        - name: ANCHORE_ENDPOINT
+        - name: PIPELINE_ANCHORE_ENDPOINT
           value: {{ default (printf "http://%s-anchore-engine.%s.svc.cluster.local:8228" .Release.Name .Release.Namespace) .Values.anchore.serviceEndpoint | quote }}
-        - name: ANCHORE_ADMINUSER
+        - name: PIPELINE_ANCHORE_ADMINUSER
           value: "admin"
-        - name: ANCHORE_ADMINPASS
+        - name: PIPELINE_ANCHORE_ADMINPASS
           valueFrom:
             secretKeyRef:
               name: {{ .Release.Name }}-anchore-engine
