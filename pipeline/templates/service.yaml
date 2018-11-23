@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ include "pipeline.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ include "pipeline.name" . }}
+    chart: {{ template "pipeline.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
@@ -20,4 +20,4 @@ spec:
     name: "{{ .Values.service.name }}"
   {{ end }}
   selector:
-    app: {{ template "fullname" . }}
+    app: {{ include "pipeline.name" . }}

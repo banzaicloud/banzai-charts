@@ -15,7 +15,7 @@ dependencies:
   condition: thanos.enabled
 
 - name: pipeline
-  version: 0.0.44
+  version: 0.0.45
   repository: alias:banzaicloud-stable
 
 - name: pipeline-ui
@@ -24,7 +24,7 @@ dependencies:
   condition: pipeline-ui.enabled
 
 - name: drone
-  version: 0.2.7
+  version: 0.2.8
   repository: alias:banzaicloud-stable
   condition: drone.enabled
 
@@ -49,6 +49,6 @@ dependencies:
   condition: spot-price-exporter.enabled
 
 - name: prometheus-mysql-exporter
-  version: 0.2.2
+  version: 0.2.3
   repository: alias:banzaicloud-stable
   condition: prometheus-mysql-exporter.enabled

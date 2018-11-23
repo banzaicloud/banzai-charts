@@ -10,6 +10,9 @@ global:
 github:
   token: ""
 
+issues:
+  
+
 replicaCount: 1
 
 image:
@@ -108,6 +111,9 @@ metrics:
   enabled: true
   port: 9900
   debug: true
+  serviceMonitor:
+    enabled: true
+    additionalLabels: {}
 
 spotmetrics:
   enabled: true

@@ -1,10 +1,10 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ include "pipeline.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ include "pipeline.name" . }}
+    chart: {{ include "pipeline.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     {{- if .Values.deploymentLabels }}
@@ -14,10 +14,15 @@ metadata:
 {{ toYaml .Values.deploymentAnnotations | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "pipeline.name" . }}
+      release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ include "pipeline.name" . }}
+        release: "{{ .Release.Name }}"
     annotations:
     {{- if .Values.metrics.enabled  }}
       prometheus.io/scrape: "true"
@@ -78,12 +83,12 @@ spec:
         - name: PIPELINE_DATABASE_USER
           valueFrom:
             secretKeyRef:
-              name:  {{ template "fullname" . }}-cloudsql
+              name:  {{ include "pipeline.fullname" . }}-cloudsql
               key: dbUserName
         - name: PIPELINE_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name:  {{ template "fullname" . }}-cloudsql
+              name:  {{ include "pipeline.fullname" . }}-cloudsql
               key: dbUserPass
         {{- end }}
 
@@ -97,17 +102,17 @@ spec:
         - name: PIPELINE_AUTH_CLIENTID
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ include "pipeline.fullname" . }}
               key: githubClientId
         - name: PIPELINE_AUTH_CLIENTSECRET
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ include "pipeline.fullname" . }}
               key: githubClientSecret
         - name: PIPELINE_AUTH_TOKENSIGNINGKEY
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ include "pipeline.fullname" . }}
               key: tokenSigningKey
         - name: PIPELINE_AUTH_JWTISSUEER
           value: {{ .Values.auth.jwtissueer | quote }}
@@ -122,7 +127,7 @@ spec:
         - name: PIPELINE_GITHUB_TOKEN
           valueFrom:
             secretKeyRef:
-              name: {{ template "fullname" . }}
+              name: {{ include "pipeline.fullname" . }}
               key: githubToken
         - name: PIPELINE_DRONE_URL
           value: http://{{ .Release.Name }}-drone:80
@@ -152,10 +157,8 @@ spec:
           value: {{ .Values.ark.restoreSyncInterval }}
         - name: PIPELINE_ARK_BACKUPSYNCINTERVAL
           value: {{ .Values.ark.backupSyncInterval }}
-
         - name: PIPELINE_SPOTGUIDE_ALLOWPRERELEASES
           value: {{ .Values.spotguide.allowPrereleases | quote }}
-
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
         - name: PIPELINE_MONITOR_CONFIGMAP
@@ -286,12 +289,12 @@ spec:
       volumes:
       - name: config-volume
         configMap:
-          name: {{ template "fullname" . }}
+          name: {{ include "pipeline.fullname" . }}
 
       - name: cache
         {{- if .Values.cache.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ default (printf "%s-cache" (include "fullname" .)) .Values.cache.persistence.existingClaim }}
+          claimName: {{ default (printf "%s-cache" (include "pipeline.fullname" .)) .Values.cache.persistence.existingClaim }}
         {{- else }}
         hostPath:
           path: /opt/pipeline/statestore/cache
@@ -300,7 +303,7 @@ spec:
       - name: statestore
         {{- if .Values.statestore.persistence.enabled }}
         persistentVolumeClaim:
-           claimName: {{ default (printf "%s-statestore" (include "fullname" .)) .Values.statestore.persistence.existingClaim }}
+           claimName: {{ default (printf "%s-statestore" (include "pipeline.fullname" .)) .Values.statestore.persistence.existingClaim }}
         {{- else }}
         hostPath:
           path: /opt/pipeline/statestore/
@@ -311,11 +314,11 @@ spec:
       {{- if .Values.service.tls  }}
       - name: pipeline-tls
         secret:
-          secretName: {{ template "fullname" . }}-tls
+          secretName: {{ include "pipeline.fullname" . }}-tls
       {{ end }}
       {{- if eq .Values.cert.source "file" }}
       - name: sign-ca
         secret:
-          secretName: {{ template "fullname" . }}-sign-ca
+          secretName: {{ include "pipeline.fullname" . }}-sign-ca
       {{ end }}
       serviceAccountName: pipeline
