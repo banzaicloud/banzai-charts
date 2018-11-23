@@ -1,6 +1,6 @@
 name: drone
 home: https://drone.io/
-version: 0.2.7
+version: 0.2.8
 appVersion: 0.6.0
 description: Drone CI
 keywords:

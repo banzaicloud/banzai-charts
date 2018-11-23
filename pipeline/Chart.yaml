@@ -2,7 +2,7 @@ name: pipeline
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/charts/
-version: 0.0.44
+version: 0.0.45
 description: A Helm chart for Kubernetes
 keywords:
   - pipeline
