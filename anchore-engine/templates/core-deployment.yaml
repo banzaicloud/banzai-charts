@@ -12,9 +12,11 @@ spec:
   replicas: {{ .Values.coreConfig.replicaCount }}
   selector:
     matchLabels:
-      component: "anchore-core"
-      release: "{{ .Release.Name }}"
       app: "{{ template "anchore-engine.name" . }}"
+      component: "anchore-core"
+      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+      release: "{{ .Release.Name }}"
+      heritage: "{{ .Release.Service }}"
   template:
     metadata:
       labels:
