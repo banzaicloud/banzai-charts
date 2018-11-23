@@ -112,7 +112,7 @@ metrics:
   port: 9900
   debug: true
   serviceMonitor:
-    enabled: false
+    enabled: true
     additionalLabels: {}
 
 spotmetrics:
