@@ -13,6 +13,8 @@ spec:
   selector:
     matchLabels:
       component: "anchore-core"
+      release: "{{ .Release.Name }}"
+      app: "{{ template "anchore-engine.name" . }}"
   template:
     metadata:
       labels:
