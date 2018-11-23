@@ -224,7 +224,7 @@ spec:
         - name: ANCHORE_ENABLED
           value: true
         - name: ANCHORE_ENDPOINT
-          value: {{ .Values.anchore.serviceEndpoint | quote }}
+          value: {{ default (printf "http://%s-anchore-engine.%s.svc.cluster.local:8228" .Release.Name .Release.Namespace) .Values.anchore.serviceEndpoint | quote }}
         - name: ANCHORE_ADMINUSER
           value: "admin"
         - name: ANCHORE_ADMINPASS
