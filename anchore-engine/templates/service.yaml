@@ -32,5 +32,8 @@ spec:
       targetPort: {{ .Values.service.ports.policy }}
       protocol: TCP
   selector:
-    app: {{ template "anchore-engine.fullname" . }}
-    component: core
+      app: "{{ template "anchore-engine.name" . }}"
+      component: "anchore-core"
+      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+      release: "{{ .Release.Name }}"
+      heritage: "{{ .Release.Service }}"
