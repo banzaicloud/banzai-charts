@@ -1,7 +1,7 @@
 apiVersion: v1
 description: A Helm chart for Kubernetes
 name: pipeline-cp
-version: 0.3.7
+version: 0.3.8
 keywords:
     - pipeline
     - controlplane
