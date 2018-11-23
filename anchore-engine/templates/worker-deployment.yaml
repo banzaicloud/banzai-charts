@@ -10,6 +10,9 @@ metadata:
     component: "anchore-worker"
 spec:
   replicas: {{ .Values.workerConfig.replicaCount }}
+  selector:
+    matchLabels:
+      component: "anchore-worker"
   template:
     metadata:
       labels:
