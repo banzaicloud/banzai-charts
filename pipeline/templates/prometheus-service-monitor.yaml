@@ -22,7 +22,7 @@ spec:
   jobLabel: {{ include "pipeline.name" . }}
   namespaceSelector:
     matchNames:
-    - "{{ $.Release.Namespace }}"
+    - "{{ .Release.Namespace }}"
   selector:
     matchLabels:
       app: {{ template "pipeline.name" . }}
