@@ -1,23 +1,23 @@
-{{- if and .Values.statsd.metrics.enabled .Values.statsd.metrics.serviceMonitor.enabled }}
+{{- if and .Values.unsealer.metrics.enabled .Values.unsealer.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "vault.fullname" . }}-statsd
+  name: {{ include "vault.fullname" . }}-unsealer
   labels:
     app: {{ include "vault.name" . }}
     chart: {{ template "vault.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-    {{- if .Values.statsd.metrics.serviceMonitor.additionalLabels }}
-{{ toYaml .Values.statsd.metrics.serviceMonitor.additionalLabels | indent 4 }}
+    {{- if .Values.unsealer.metrics.serviceMonitor.additionalLabels }}
+{{ toYaml .Values.unsealer.metrics.serviceMonitor.additionalLabels | indent 4 }}
     {{- end }}
 spec:
   endpoints:
   - interval: 30s
     port: metrics
-    {{- if .Values.statsd.metrics.serviceMonitor.relabellings }}
+    {{- if .Values.unsealer.metrics.serviceMonitor.relabellings }}
     metricRelabelings:
-{{ toYaml .Values.statsd.metrics.serviceMonitor.relabellings | indent 4 }}
+{{ toYaml .Values.unsealer.metrics.serviceMonitor.relabellings | indent 4 }}
     {{- end }}
   jobLabel: {{ include "vault.name" . }}
   namespaceSelector:
@@ -27,9 +27,9 @@ spec:
     matchLabels:
       app: {{ template "vault.name" . }}
       release: "{{ .Release.Name }}"
-      component: "statsd"
 
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -40,7 +40,6 @@ metadata:
     chart: {{ template "vault.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    component: "statsd"
 spec:
   clusterIP: None
   ports:
@@ -48,6 +47,30 @@ spec:
     port: {{ .Values.statsd.metrics.port }}
     protocol: TCP
     targetPort: {{ .Values.statsd.metrics.port }}
+  selector:
+    app: {{ include "vault.name" . }}
+    release: "{{ .Release.Name }}"
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  name: {{ include "vault.fullname" . }}-unsealer
+  labels:
+    app: {{ include "vault.name" . }}
+    chart: {{ template "vault.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: {{ .Values.unsealer.metrics.port }}
+    protocol: TCP
+    targetPort: {{ .Values.unsealer.metrics.port }}
   selector:
     app: {{ include "vault.name" . }}
     release: "{{ .Release.Name }}"
