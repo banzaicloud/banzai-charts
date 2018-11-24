@@ -69,7 +69,7 @@ spec:
             - --tsdb.path={{ .Values.server.persistentVolume.mountPath }}
             - --grpc-address={{ .Values.thanosSidecar.grpc.address }}:{{ .Values.thanosSidecar.grpc.port }}
             - --cluster.address={{ .Values.thanosSidecar.cluster.address}}:{{ .Values.thanosSidecar.cluster.port }}
-            - --cluster.peers={{ default (printf "%s-thanos.svc.cluster.local:%.0f" .Release.Name .Values.thanosSidecar.cluster.port ) .Values.thanosSidecar.cluster.peers }}
+            - --cluster.peers={{ default (printf "%s-thanos.%s.svc.cluster.local:%.0f" .Release.Name .Release.Namespace .Values.thanosSidecar.cluster.port ) .Values.thanosSidecar.cluster.peers }}
             - --objstore.config-file=/etc/config/{{ .Values.thanosSidecar.objstore.configFile }}
           ports:
             - containerPort: 10902
