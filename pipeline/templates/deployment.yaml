@@ -20,6 +20,7 @@ spec:
       release: "{{ .Release.Name }}"
   template:
     metadata:
+      name: {{ include "pipeline.fullname" . }}
       labels:
         app: {{ include "pipeline.name" . }}
         release: "{{ .Release.Name }}"
