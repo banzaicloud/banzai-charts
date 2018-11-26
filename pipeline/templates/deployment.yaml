@@ -226,7 +226,7 @@ spec:
 
         {{- if .Values.anchore.enabled }}
         - name: PIPELINE_ANCHORE_ENABLED
-          value: true
+          value: "true"
         - name: PIPELINE_ANCHORE_ENDPOINT
           value: {{ default (printf "http://%s-anchore-engine.%s.svc.cluster.local:8228" .Release.Name .Release.Namespace) .Values.anchore.serviceEndpoint | quote }}
         - name: PIPELINE_ANCHORE_ADMINUSER
