@@ -65,6 +65,7 @@ auth:
   clientid: ""
   clientsecret: ""
   cookieDomain: ""
+  setCookieDomain: false
   secureCookie: true
 
 ark:
