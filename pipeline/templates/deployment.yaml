@@ -137,8 +137,11 @@ spec:
             secretKeyRef:
               name: {{ include "pipeline.fullname" . }}
               key: githubToken
+        # TODO: the Drone version has to be removed once Pipeline is changed
         - name: PIPELINE_DRONE_URL
           value: http://{{ .Release.Name }}-drone:80
+        - name: PIPELINE_CICD_URL
+          value: http://{{ .Release.Name }}-pipeline-cicd:80
 
         - name: PIPELINE_ARK_NAME
           value: {{ .Values.ark.name }}
