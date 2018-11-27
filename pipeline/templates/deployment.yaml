@@ -121,6 +121,8 @@ spec:
           value: {{ .Values.auth.jwtaudience | quote }}
         - name: PIPELINE_AUTH_COOKIEDOMAIN
           value: {{ .Values.auth.cookieDomain | quote }}
+        - name: PIPELINE_AUTH_SETCOOKIEDOMAIN
+          value: {{ .Values.auth.setCookieDomain | quote }}
         - name: PIPELINE_AUTH_SECURECOOKIE
           value: {{ .Values.auth.secureCookie | quote }}
         - name: PIPELINE_AUTH_WHITELISTENABLED
