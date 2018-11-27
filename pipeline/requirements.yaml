@@ -5,5 +5,5 @@ dependencies:
   condition: mysql.enabled
 
 - name: vault
-  version: 0.5.17
+  version: 0.5.18
   repository: alias:banzaicloud-stable
