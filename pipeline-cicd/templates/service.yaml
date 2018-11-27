@@ -22,4 +22,4 @@ spec:
   selector:
     app: {{ template "cicd.name" . }}
     release: {{ .Release.Name | quote }}
-    component: server
+    component: cicd
