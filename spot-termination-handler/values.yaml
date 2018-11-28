@@ -14,14 +14,12 @@ image:
   ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
   imagePullPolicy: IfNotPresent
 
-bindAddr: 8081
-
 log:
   format: "logfmt"
   level: "info"
 
 http:
-  listenPort: ":8081"
+  listenPort: 8081
 
 termdetect:
   defaultSecondsUntilTermination: 30

@@ -2,15 +2,15 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "spotTerminationHandler.name" -}}
+{{- define "spot-termination-handler.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified spotTerminationHandler name.
+Create a default fully qualified name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "spotTerminationHandler.fullname" -}}
+{{- define "spot-termination-handler.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

@@ -1,9 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
-  name: "{{ template "spotTerminationHandler.fullname" . }}"
+  name: "{{ template "spot-termination-handler.fullname" . }}"
   labels:
-    app: "{{ template "spotTerminationHandler.fullname" . }}"
+    app: "{{ template "spot-termination-handler.fullname" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -13,19 +13,22 @@ spec:
       labels:
         heritage: "{{ .Release.Service }}"
         release: "{{ .Release.Name }}"
-        app: {{ template "spotTerminationHandler.fullname" . }}
-        component: "{{ template "spotTerminationHandler.fullname" . }}"
+        app: {{ template "spot-termination-handler.fullname" . }}
+        component: "{{ template "spot-termination-handler.fullname" . }}"
       annotations:
+      {{- if .Values.metrics.enabled  }}
         prometheus.io/scrape: "true"
+        prometheus.io/path: {{ .Values.metrics.endpoint | quote }}
+      {{- end }}
     spec:
-      serviceAccountName: {{ template "spotTerminationHandler.fullname" . }}
+      serviceAccountName: {{ template "spot-termination-handler.fullname" . }}
       containers:
       - name: spot-termination-handler
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.imagePullPolicy | quote }}
         env:
           - name: STH_HTTP_LISTENPORT
-            value: {{ .Values.http.listenPort | quote }}
+            value: :{{ .Values.http.listenPort }}
           - name: STH_LOG_FORMAT
             value: {{ .Values.log.format | quote }}
           - name: STH_LOG_LEVEL
@@ -54,7 +57,7 @@ spec:
                 fieldPath: metadata.name
         ports:
         - name: http
-          containerPort: {{ .Values.bindAddr }}
+          containerPort: {{ .Values.http.listenPort }}
         {{- if .Values.hostPort }}
           hostPort: {{ .Values.hostPort }}
         {{- end }}
