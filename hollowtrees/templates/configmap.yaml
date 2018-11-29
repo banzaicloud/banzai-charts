@@ -3,33 +3,33 @@ kind: ConfigMap
 metadata:
   name: "{{ template "hollowtrees.fullname" . }}"
   labels:
-    app: "{{ template "hollowtrees.fullname" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "hollowtrees.name" . }}"
+    chart: "{{ template "hollowtrees.chart" . }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 data:
   config.yaml: |-
     global:
-        bindAddr: ":{{ .Values.hollowtrees.port }}"
-        buffersize: {{ .Values.hollowtrees.buffersize }}
+        bindAddr: ":{{ .Values.port }}"
+        buffersize: {{ .Values.buffersize }}
 
     # logger settings
     log:
-        format: "{{ .Values.hollowtrees.logFormat }}"
-        level: "{{ .Values.hollowtrees.logLevel }}"
+        format: "{{ .Values.logFormat }}"
+        level: "{{ .Values.logLevel }}"
 
     # action plugin settings
     action_plugins:
       {{if .Values.k8splugin.enabled}}
         - name: "ht-k8s-action-plugin"
-          address: "{{ .Release.Name }}-k8splugin:{{ .Values.k8splugin.htActionPlugin.port }}"
+          address: "{{ .Release.Name }}-k8splugin:{{ .Values.k8splugin.port }}"
       {{end}}
 
       {{if .Values.asgplugin.enabled}}
         - name: "ht-aws-asg-action-plugin"
-          address: "{{ .Release.Name }}-asgplugin:{{ .Values.asgplugin.htAsgActionPlugin.port }}"
+          address: "{{ .Release.Name }}-asgplugin:{{ .Values.asgplugin.port }}"
       {{end}}
 
     # action plugin rules
     rules:
-{{ toYaml .Values.hollowtrees.rules | indent 8 }}
+{{ toYaml .Values.rules | indent 8 }}
