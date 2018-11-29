@@ -27,7 +27,7 @@ spec:
   additionalPrinterColumns:
   - name: Reason
     type: string
-    JSONPath: .spec.readson
+    JSONPath: .spec.reason
     priority: 1
   - name: Creator
     type: string
