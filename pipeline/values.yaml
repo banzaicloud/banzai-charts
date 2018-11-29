@@ -10,9 +10,6 @@ global:
 github:
   token: ""
 
-issues:
-  
-
 replicaCount: 1
 
 image:
@@ -31,9 +28,9 @@ service:
 
 ingress:
   enabled: false
-  annotations:
+  annotations: {}
     #traefik.frontend.rule.type: PathPrefix
-  hosts:
+  hosts: []
     # - "/"
     # - "domain.com/xyz"
     # - "domain.com"
@@ -49,10 +46,6 @@ cert:
   ca:
     key: ""
     cert: ""
-
-issue:
-  githubOwner: ""
-  githubRepository: ""
 
 logging:
   logformat: text
@@ -124,7 +117,7 @@ dns:
   domain: "example.org"
 
 infra:
-  headNodePoolName:
+  headNodePoolName: ""
 
 cache:
   persistence:
