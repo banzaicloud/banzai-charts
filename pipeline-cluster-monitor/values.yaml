@@ -31,9 +31,9 @@ prometheus:
       scrape_interval: 15s
     configMapOverrideName:
       prometheus-server
-  persistentVolume:
-    # This size is required because specific cloud provider requires at least 20Gi for storage
-    size: 20Gi
+    persistentVolume:
+      # This size is required because specific cloud provider requires at least 20Gi for storage
+      size: 20Gi
   ## Prometheus server ConfigMap entries
   ##
   serverFiles:
