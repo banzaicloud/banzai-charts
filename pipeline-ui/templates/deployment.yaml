@@ -29,6 +29,8 @@ spec:
           value: "{{ .Values.apiUrl }}"
         - name: TAG
           value: "{{ .Values.tag }}"
+        - name: FORMSPREE_FORM_ID
+          value: "{{ .Values.formspree_form_id }}"
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
