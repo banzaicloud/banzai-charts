@@ -23,3 +23,11 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create a random password for mysql.
+*/}}
+{{- define "mysql.password" -}}
+{{- default (derivePassword 1 "long" (.Release.Time | toString) "bonanzabanzai" (print .Release.Name "-pipeline-db:3306") | b64enc ) .Values.global.mysqlPassword -}}
+{{- end -}}
+
