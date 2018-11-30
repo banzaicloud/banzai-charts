@@ -1,11 +1,19 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: kafka
+  labels:
+    app: {{ template "kafka.name" . }}
+    chart: {{ template "kafka.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
-      app: kafka
+      app: {{ template "kafka.name" . }}
+      chart: {{ template "kafka.chart" . }}
+      release: "{{ .Release.Name }}"
+      heritage: "{{ .Release.Service }}"
   serviceName: "kafka-dns"
   replicas: 3
   updateStrategy:
@@ -17,8 +25,8 @@ spec:
 {{ toYaml .Values.statefullset.annotations | indent 8 }}
 {{- end }}
       labels:
-        app: "kafka"
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        app: {{ template "kafka.name" . }}
+        chart: {{ template "kafka.chart" . }}
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
   {{- if .Values.statefullset.labels }}
@@ -95,7 +103,7 @@ spec:
 {{- if eq (index .Values.statefullset.annotations "prometheus.io/scrape") "true" }}
       - name: jmx-config
         configMap:
-          name: "{{ template "fullname" . }}-jmx-exporter"
+          name: "{{ template "kafka.fullname" . }}-jmx-exporter"
 {{- end }}
   volumeClaimTemplates:
   - metadata:

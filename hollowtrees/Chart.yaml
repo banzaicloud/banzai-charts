@@ -2,7 +2,7 @@ name: hollowtrees
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.1
+version: 0.0.2
 description: Hollowtrees Helm chart for Kubernetes
 keywords:
 - autoscaling

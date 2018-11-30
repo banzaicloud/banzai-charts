@@ -173,3 +173,6 @@ agent:
 ## the agents and servers, otherwise this will be auto-generated.
 ##
 # sharedSecret: supersecret
+
+global:
+  auth: {}
