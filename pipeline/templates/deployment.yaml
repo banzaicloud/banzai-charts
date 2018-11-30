@@ -31,6 +31,11 @@ spec:
       prometheus.io/port: {{ .Values.metrics.port | quote }}
     {{- end }}
     spec:
+      {{- if .Values.strategy }}
+      strategy:
+{{ toYaml .Values.strategy | indent 8 }}
+      {{- end }}
+
       initContainers:
       {{- if .Values.mysql.enabled  }}
       - name: check-db-service
