@@ -5,6 +5,8 @@
 apiUrl: http://localhost
 tag: local
 
+formspree_form_id: ""
+
 replicaCount: 1
 
 image:
