@@ -1,3 +1,4 @@
+{{ if .Values.query.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -49,3 +50,4 @@ spec:
           containerPort: {{ .Values.query.grpc.port }}
         - name: cluster
           containerPort: {{ .Values.cluster.port }}
+{{ end }}
