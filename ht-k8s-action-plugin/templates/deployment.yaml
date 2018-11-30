@@ -1,56 +1,56 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "htActionPlugin.fullname" . }}"
+  name: "{{ template "ht-k8s-action-plugin.fullname" . }}"
   labels:
-    app: "{{ template "htActionPlugin.fullname" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "ht-k8s-action-plugin.name" . }}"
+    chart: "{{ template "ht-k8s-action-plugin.chart" . }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.htActionPlugin.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
 
   template:
     metadata:
       labels:
-        heritage: "{{ .Release.Service }}"
+        app: "{{ template "ht-k8s-action-plugin.name" . }}"
+        chart: "{{ template "ht-k8s-action-plugin.chart" . }}"
         release: "{{ .Release.Name }}"
-        app: {{ template "htActionPlugin.fullname" . }}
-        component: "{{ template "htActionPlugin.fullname" . }}"
+        heritage: "{{ .Release.Service }}"
 
     spec:
       containers:
       - name: ht-k8s-action-plugin
-        image: "{{ .Values.htActionPlugin.image.repository }}:{{ .Values.htActionPlugin.image.tag }}"
-        imagePullPolicy: {{ .Values.htActionPlugin.image.imagePullPolicy | quote }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.imagePullPolicy | quote }}
         command:
         - "/bin/sh"
         - "-ecx"
         - |
           ht-k8s-action-plugin \
-          -bind.address=0.0.0.0:{{ .Values.htActionPlugin.port }} \
-          -log.level={{ .Values.htActionPlugin.logLevel }} \
-          -cluster.config.root={{ .Values.htActionPlugin.clusterConfigRoot }}
+          -bind.address=0.0.0.0:{{ .Values.port }} \
+          -log.level={{ .Values.logLevel }} \
+          -cluster.config.root={{ .Values.clusterConfigRoot }}
 
 
         ports:
         - name: grpc
-          containerPort: {{ .Values.htActionPlugin.port }}
+          containerPort: {{ .Values.port }}
         livenessProbe:
           tcpSocket:
-            port: {{ .Values.htActionPlugin.port }}
+            port: {{ .Values.port }}
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           tcpSocket:
-            port: {{ .Values.htActionPlugin.port }}
+            port: {{ .Values.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 3
           periodSeconds: 5
 
         resources:
-{{ toYaml .Values.htActionPlugin.resources | indent 10 }}
+{{ toYaml .Values.resources | indent 10 }}
 
         volumeMounts:
         - mountPath: /statestore
