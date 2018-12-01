@@ -2,7 +2,7 @@ name: telescopes
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.1.7
+version: 0.1.8
 description: A Telescopes Helm chart for Kubernetes
 keywords:
 - spot
