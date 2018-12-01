@@ -91,6 +91,7 @@ helm:
 
 eks:
   templateLocation: "https://raw.githubusercontent.com/banzaicloud/pipeline/master/templates/eks"
+  asgFulfillmentTimeout: "10m"
 
 monitor:
   enabled: true
