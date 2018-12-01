@@ -72,7 +72,6 @@ The following tables lists the configurable parameters of the productinfo chart 
 | `deploymentAnnotations`       | Additional deployment annotations                        | `{}`                         |
 | `metrics.enabled`             | Enable application metrics                               | `true`                       |
 | `metrics.name`                | Metrics service name                                     | `name`                       |
-| `metrics.type`                | Metrics service type                                     | `ClusterIP`                  |
 | `metrics.port`                | Metrics service type port                                | `9900`                       |
 | `metrics.serviceMonitor.enabled` | Enable serviceMonitor                                 | `true`                       |
 | `metrics.serviceMonitor.additionalLabels` | ServiceMonitor additional labels             | `{}`                         |
