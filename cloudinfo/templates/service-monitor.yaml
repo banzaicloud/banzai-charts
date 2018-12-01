@@ -2,9 +2,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name:  {{ template "productinfo.fullname" . }}
+  name:  {{ template "cloudinfo.fullname" . }}
   labels:
-    app: {{ template "productinfo.name" . }}
+    app: {{ template "cloudinfo.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -15,12 +15,12 @@ spec:
   endpoints:
   - interval: 300s
     port: {{ .Values.metrics.name }}
-  jobLabel: {{ include "productinfo.name" . }}
+  jobLabel: {{ include "cloudinfo.name" . }}
   namespaceSelector:
     matchNames:
     - "{{ $.Release.Namespace }}"
   selector:
     matchLabels:
-      app: {{ include "productinfo.name" . }}
+      app: {{ include "cloudinfo.name" . }}
       release: {{ .Release.Name }}
 {{ end }}

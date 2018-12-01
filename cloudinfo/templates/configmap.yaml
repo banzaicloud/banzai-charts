@@ -3,12 +3,12 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   labels:
-    app: {{ template "productinfo.name" . }}
+    app: {{ template "cloudinfo.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: prometheus-config
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ template "productinfo.fullname" . }}
+  name: {{ template "cloudinfo.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
 data:
   oci.properties: |-

@@ -1,10 +1,10 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: {{ template "productinfo.fullname" . }}
+  name: {{ template "cloudinfo.fullname" . }}
   labels:
-    app: {{ template "productinfo.name" . }}
-    chart: {{ template "productinfo.chart" . }}
+    app: {{ template "cloudinfo.name" . }}
+    chart: {{ template "cloudinfo.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     {{- if .Values.deploymentLabels }}
@@ -16,12 +16,12 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "productinfo.name" . }}
+      app: {{ template "cloudinfo.name" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "productinfo.name" . }}
+        app: {{ template "cloudinfo.name" . }}
         release: {{ .Release.Name }}
     spec:
       containers:
@@ -29,10 +29,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-          - name: {{ template "productinfo.fullname" . }}-credentials
+          - name: {{ template "cloudinfo.fullname" . }}-credentials
             mountPath: /credentials
             readOnly: true
-          - name: {{ template "productinfo.fullname" . }}-oci
+          - name: {{ template "cloudinfo.fullname" . }}-oci
             mountPath: /.oci
             readOnly: true
           command:
@@ -46,7 +46,7 @@ spec:
               {{- if $value.enabled }} --provider {{ $key }}{{ end }}
               {{- end }}
           env:
-            - name: PRODUCTINFO_BASEPATH
+            - name: CLOUDINFO_BASEPATH
               value: {{ .Values.app.basePath }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /credentials/google.json
@@ -58,38 +58,38 @@ spec:
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "productinfo.fullname" . }}
+                  name: {{ template "cloudinfo.fullname" . }}
                   key: awsAccessKeyId
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "productinfo.fullname" . }}
+                  name: {{ template "cloudinfo.fullname" . }}
                   key: awsSecretAccessKey
             {{ end }}
             {{ if .Values.providers.google.enabled }}
             - name: GCE_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "productinfo.fullname" . }}
+                  name: {{ template "cloudinfo.fullname" . }}
                   key: gceApiKey
             {{ end }}
             {{ if .Values.providers.azure.enabled }}
             - name: AZURE_SUBSCRIPTION_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "productinfo.fullname" . }}
+                  name: {{ template "cloudinfo.fullname" . }}
                   key: azureSubscriptionId
             {{ end }}
             {{ if .Values.providers.alibaba.enabled }}
             - name: ALIBABA_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "productinfo.fullname" . }}
+                  name: {{ template "cloudinfo.fullname" . }}
                   key: alibabaAccessKeyId
             - name: ALIBABA_ACCESS_KEY_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "productinfo.fullname" . }}
+                  name: {{ template "cloudinfo.fullname" . }}
                   key: alibabaAccessKeySecret
             - name: ALIBABA_REGION_ID
               value: {{ .Values.providers.alibaba.alibabaRegionId }}
@@ -119,9 +119,9 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
-        - name: {{ template "productinfo.fullname" . }}-credentials
+        - name: {{ template "cloudinfo.fullname" . }}-credentials
           secret:
-            secretName: {{ template "productinfo.fullname" . }}
+            secretName: {{ template "cloudinfo.fullname" . }}
             items:
             {{ if .Values.providers.google.enabled }}
             - key: gceCredentials
@@ -135,9 +135,9 @@ spec:
             - key: ociKey
               path: oci_key.pem
             {{ end }}
-        - name: {{ template "productinfo.fullname" . }}-oci
+        - name: {{ template "cloudinfo.fullname" . }}-oci
           configMap:
-            name: "{{ template "productinfo.fullname" . }}"
+            name: "{{ template "cloudinfo.fullname" . }}"
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
