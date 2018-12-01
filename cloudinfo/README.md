@@ -1,19 +1,19 @@
 
-# Productinfo Chart
+# Cloudinfo Chart
 
-[Productinfo](https://github.com/banzaicloud/productinfo) Provides resource and pricing information about products available on supported cloud providers - it is a building block of the Hollowtrees project. 
+[Cloudinfo](https://github.com/banzaicloud/cloudinfo) Provides resource and pricing information about products available on supported cloud providers - it is a building block of the Hollowtrees project. 
 
 ## tl;dr:
 
 ```bash
 $ helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
 $ helm repo update
-$ helm install banzaicloud-stable/productinfo
+$ helm install banzaicloud-stable/cloudinfo
 ```
 
 ## Introduction
 
-This chart bootstraps an [Productinfo](https://github.com/banzaicloud/banzai-charts/stable/productinfo) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Cloudinfo](https://github.com/banzaicloud/banzai-charts/stable/cloudinfo) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -24,10 +24,10 @@ This chart bootstraps an [Productinfo](https://github.com/banzaicloud/banzai-cha
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release banzaicloud-stable/productinfo
+$ helm install --name my-release banzaicloud-stable/cloudinfo
 ```
 
-The command deploys **productinfo** on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys **cloudinfo** on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 ## Uninstalling the Chart
 
@@ -41,15 +41,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the productinfo chart and their default values.
+The following tables lists the configurable parameters of the cloudinfo chart and their default values.
 
 |          Parameter            |                Description                               |             Default          |
 | ----------------------------- | -------------------------------------------------------- | ---------------------------- |
-| `image.repository`            | Container image repository                               | `banzaicloud/productinfo`    |
+| `image.repository`            | Container image repository                               | `banzaicloud/cloudinfo`    |
 | `image.tag       `            | Container image tag                                      | `latest`                     |
 | `image.pullPolicy`            | Container pull policy                                    | `Always`                     |
 | `service.type`                | The kubernetes service type to use                       | `ClusterIP`                  |
-| `service.name`                | The kubernetes service name to use                       | `productinfo`                |
+| `service.name`                | The kubernetes service name to use                       | `cloudinfo`                |
 | `service.port`                | Port to bind to for NodePort service type                | `nil`                        |
 | `service.annotations`         | The kubernetes service annotations                       | `nil`                        |
 | `app.logLevel`                | Log level                                                | `info`                       |
@@ -79,7 +79,7 @@ The following tables lists the configurable parameters of the productinfo chart 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 
 ```bash
-$ helm install --name my-release -f values.yaml banzaicloud-stable/productinfo
+$ helm install --name my-release -f values.yaml banzaicloud-stable/cloudinfo
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

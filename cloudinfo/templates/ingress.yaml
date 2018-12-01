@@ -1,13 +1,13 @@
 {{- if .Values.ingress.enabled -}}
-{{- $serviceName := include "productinfo.fullname" . -}}
+{{- $serviceName := include "cloudinfo.fullname" . -}}
 {{- $servicePort := .Values.service.port -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "productinfo.fullname" . }}
+  name: {{ template "cloudinfo.fullname" . }}
   labels:
-    app: {{ template "productinfo.name" . }}
-    chart: {{ template "productinfo.chart" . }}
+    app: {{ template "cloudinfo.name" . }}
+    chart: {{ template "cloudinfo.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}

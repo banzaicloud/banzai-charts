@@ -38,7 +38,7 @@ spec:
           /bin/telescopes \
           --listen-address=0.0.0.0:{{ .Values.service.internalPort }} \
           --log-level={{ .Values.app.logLevel }} \
-          --productinfo-address={{ .Values.app.productInfoAddress }} \
+          --cloudinfo-address={{ .Values.app.productInfoAddress }} \
         {{- if .Values.app.vaultAddress }}
           --vault-address={{ .Values.app.vaultAddress }} \
         {{- end }}

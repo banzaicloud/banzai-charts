@@ -81,14 +81,14 @@ telescopes:
       kubernetes.io/ingress.class: traefik
       traefik.frontend.rule.type: PathPrefix
 
-productinfo:
+cloudinfo:
   enabled: false
   app:
-    basePath: /productinfo
+    basePath: /cloudinfo
   ingress:
     enabled: true
     hosts:
-       - "/productinfo"
+       - "/cloudinfo"
     annotations:
       kubernetes.io/ingress.class: traefik
       traefik.frontend.rule.type: PathPrefix
