@@ -94,10 +94,20 @@ spec:
             - name: ALIBABA_REGION_ID
               value: {{ .Values.providers.alibaba.alibabaRegionId }}
             {{ end }}
+            {{ if .Values.metrics.enabled }}
+            - name: METRICS_ENABLED
+              value: "true"
+            - name: METRICS_ADDRESS
+              value: "{{ .Values.metrics.port }}"
+            {{ end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.internalPort }}
               protocol: TCP
+            {{- if .Values.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.metrics.port }}
+            {{- end }}
           livenessProbe:
             httpGet:
               path: {{ .Values.app.basePath }}/status

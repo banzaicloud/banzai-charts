@@ -83,3 +83,11 @@ providers:
 deploymentLabels: {}
 deploymentAnnotations: {}
 
+metrics:
+  enabled: true
+  name: metrics
+  type: ClusterIP
+  port: 9900
+  serviceMonitor:
+    enabled: true
+    additionalLabels: {}
