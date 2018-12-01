@@ -1,0 +1,26 @@
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name:  {{ template "productinfo.fullname" . }}
+  labels:
+    app: {{ template "productinfo.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    {{- if .Values.metrics.serviceMonitor.additionalLabels }}
+{{ toYaml .Values.metrics.serviceMonitor.additionalLabels | indent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+  - interval: 300s
+    port: {{ .Values.metrics.name }}
+  jobLabel: {{ include "productinfo.name" . }}
+  namespaceSelector:
+    matchNames:
+    - "{{ $.Release.Namespace }}"
+  selector:
+    matchLabels:
+      app: {{ include "productinfo.name" . }}
+      release: {{ .Release.Name }}
+{{ end }}
