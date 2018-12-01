@@ -70,6 +70,11 @@ The following tables lists the configurable parameters of the productinfo chart 
 | `auth.alibabaRegionId`        | Alibaba Region ID                                        | ""                           |
 | `deploymentLabels`            | Additional deployment labels                             | `{}`                         |
 | `deploymentAnnotations`       | Additional deployment annotations                        | `{}`                         |
+| `metrics.enabled`             | Enable application metrics                               | `true`                       |
+| `metrics.name`                | Metrics service name                                     | `name`                       |
+| `metrics.port`                | Metrics service type port                                | `9900`                       |
+| `metrics.serviceMonitor.enabled` | Enable serviceMonitor                                 | `true`                       |
+| `metrics.serviceMonitor.additionalLabels` | ServiceMonitor additional labels             | `{}`                         |
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 

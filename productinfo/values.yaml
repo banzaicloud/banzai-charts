@@ -83,3 +83,10 @@ providers:
 deploymentLabels: {}
 deploymentAnnotations: {}
 
+metrics:
+  enabled: true
+  name: metrics
+  port: 9900
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
