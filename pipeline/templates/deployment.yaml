@@ -208,6 +208,8 @@ spec:
 
         - name: PIPELINE_EKS_TEMPLATELOCATION
           value: {{ .Values.eks.templateLocation | quote }}  
+        - name: PIPELINE_EKS_ASGFULFILLMENTTIMEOUT
+          value: {{ .Values.eks.asgFulfillmentTimeout | quote }}
 
         - name: PIPELINE_INFRA_HEADNODEPOOLNAME
           value: {{ .Values.infra.headNodePoolName | quote }}
