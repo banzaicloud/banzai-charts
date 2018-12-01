@@ -30,12 +30,12 @@ spec:
       prometheus.io/path: "/metrics"
       prometheus.io/port: {{ .Values.metrics.port | quote }}
     {{- end }}
-    spec:
-      {{- if .Values.strategy }}
-      strategy:
-{{ toYaml .Values.strategy | indent 8 }}
-      {{- end }}
+    {{- if .Values.strategy }}
+    strategy:
+{{ toYaml .Values.strategy | indent 6 }}
+    {{- end }}
 
+    spec:
       initContainers:
       {{- if .Values.mysql.enabled  }}
       - name: check-db-service
