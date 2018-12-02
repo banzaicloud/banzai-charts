@@ -47,6 +47,10 @@ spec:
             value: {{ .Values.drainer.gracePeriodSeconds | quote }}
           - name: STH_DRAINER_TIMEOUT
             value: {{ .Values.drainer.timeout | quote }}
+          - name: STH_TERMNOTIFIER_TRIGGERENABLED
+            value: {{ .Values.termnotifier.triggerEnabled | quote }}
+          - name: STH_TERMNOTIFIER_TRIGGERENDPOINT
+            value: {{ .Values.termnotifier.triggerEndpoint | quote }}
           - name: MY_NODE_NAME
             valueFrom:
               fieldRef:

@@ -7,7 +7,7 @@
 ##
 image:
   repository: "banzaicloud/spot-termination-handler"
-  tag: "0.0.1"
+  tag: "0.0.2"
 
   ## Specify an imagePullPolicy (Required)
   ## It's recommended to change this to 'Always' if the image tag is 'latest'
@@ -23,6 +23,10 @@ http:
 
 termdetect:
   defaultSecondsUntilTermination: 30
+
+termnotifier:
+  triggerEnabled: true
+  triggerEndpoint: "/terminate"
 
 metrics:
   enabled: true
