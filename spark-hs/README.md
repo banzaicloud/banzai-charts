@@ -21,7 +21,7 @@ The following tables lists the configurable parameters of the Spark History Seve
 | sparkEventLogStorage.logDirectory                     | yes      |the URL to the directory containing application event logs to load|yourBucketName/eventLogFoloder |
 | sparkEventLogStorage.cloudProvider                    | yes      |the cloud provider where the objectstore/bucket located| amazon<br>google<br>azure<br>oracle<br>alibaba |
 | sparkEventLogStorage.secretName          | no | the name of K8s secret containing credentials for selected cloud provider. If no secretName is passed then there will be a secret created with the same structure populated from values. Checkout the required secret properties for each provider in next section below. | see below |
-
+| sparkEventLogStorage.endpoint            | no | the URL to the s3 endpoint you would like to read from (only valid for amazon cloudProvider) | `http://172.1.1.1:9000` |
 ## Structure of credential secret for each supported cloud provider
 
 ### Amazon

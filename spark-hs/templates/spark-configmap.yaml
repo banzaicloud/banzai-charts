@@ -10,7 +10,9 @@ data:
     {{- if eq $schema "amazon" }}
     spark.hadoop.fs.s3a.access.key=$AWS_ACCESS_KEY_ID
     spark.hadoop.fs.s3a.secret.key=$AWS_SECRET_ACCESS_KEY
-
+    {{- if .Values.sparkEventLogStorage.endpoint }}
+    spark.hadoop.fs.s3a.endpoint=$ENDPOINT
+    {{- end}}
     {{- else if eq $schema "alibaba" }}
     spark.hadoop.fs.oss.accessKeyId=$ALIBABA_ACCESS_KEY_ID
     spark.hadoop.fs.oss.accessKeySecret=$ALIBABA_ACCESS_KEY_SECRET
