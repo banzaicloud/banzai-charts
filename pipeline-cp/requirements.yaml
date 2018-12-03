@@ -34,7 +34,7 @@ dependencies:
   condition: telescopes.enabled
 
 - name: cloudinfo
-  version: 0.4.13
+  version: 0.4.14
   repository: alias:banzaicloud-stable
   condition: cloudinfo.enabled
 
