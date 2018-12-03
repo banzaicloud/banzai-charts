@@ -14,7 +14,7 @@ metadata:
 spec:
   endpoints:
   - interval: 300s
-    port: {{ .Values.metrics.name }}
+    port: {{ include "cloudinfo.name" . }}
     path: /metrics/price
   jobLabel: {{ include "cloudinfo.name" . }}-price
   namespaceSelector:
