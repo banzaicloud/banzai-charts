@@ -20,4 +20,4 @@ subjects:
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
-  name: system:kube-scheduler
+  name: cluster-admin
