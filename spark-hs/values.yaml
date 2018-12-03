@@ -55,7 +55,6 @@ sparkEventLogStorage:
 
   awsAccessKeyId: ""
   awsSecretAccessKey: ""
-  endpoint: ""
 
   aliAccessKeyId: ""
   aliSecretAccessKey: ""
