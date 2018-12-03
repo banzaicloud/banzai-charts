@@ -1,0 +1,96 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: "{{ template "spot-termination-handler.fullname" . }}"
+  labels:
+    app: "{{ template "spot-termination-handler.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  template:
+    metadata:
+      labels:
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+        app: {{ template "spot-termination-handler.fullname" . }}
+        component: "{{ template "spot-termination-handler.fullname" . }}"
+      annotations:
+      {{- if .Values.metrics.enabled  }}
+        prometheus.io/scrape: "true"
+        prometheus.io/path: {{ .Values.metrics.endpoint | quote }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ template "spot-termination-handler.fullname" . }}
+      containers:
+      - name: spot-termination-handler
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.imagePullPolicy | quote }}
+        env:
+          - name: STH_HTTP_LISTENPORT
+            value: :{{ .Values.http.listenPort }}
+          - name: STH_LOG_FORMAT
+            value: {{ .Values.log.format | quote }}
+          - name: STH_LOG_LEVEL
+            value: {{ .Values.log.level | quote }}
+          - name: STH_METRICS_ENABLED
+            value: {{ .Values.metrics.enabled | quote }}
+          - name: STH_METRICS_ENDPOINT
+            value: {{ .Values.metrics.endpoint | quote }}
+          - name: STH_TERMDETECT_DEFAULTSECONDSUNTILTERMINATION
+            value: {{ .Values.termdetect.defaultSecondsUntilTermination | quote }}
+          - name: STH_DRAINER_ENABLED
+            value: {{ .Values.drainer.enabled | quote }}
+          - name: STH_DRAINER_DRAINWITHTAINT
+            value: {{ .Values.drainer.drainWithTaint | quote }}
+          - name: STH_DRAINER_GRACEPERIODSECONDS
+            value: {{ .Values.drainer.gracePeriodSeconds | quote }}
+          - name: STH_DRAINER_TIMEOUT
+            value: {{ .Values.drainer.timeout | quote }}
+          - name: STH_TERMNOTIFIER_TRIGGERENABLED
+            value: {{ .Values.termnotifier.triggerEnabled | quote }}
+          - name: STH_TERMNOTIFIER_TRIGGERENDPOINT
+            value: {{ .Values.termnotifier.triggerEndpoint | quote }}
+          - name: MY_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+        ports:
+        - name: http
+          containerPort: {{ .Values.http.listenPort }}
+        {{- if .Values.hostPort }}
+          hostPort: {{ .Values.hostPort }}
+        {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            httpHeaders:
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 5
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

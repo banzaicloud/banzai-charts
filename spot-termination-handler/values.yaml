@@ -1,0 +1,51 @@
+# Default values for spot-termination-handler
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## The official Banzai Spot Termination Handler image, change tag to use a different version.
+## https://hub.docker.com/r/banzaicloud/spot-termination-handler/tags/
+##
+image:
+  repository: "banzaicloud/spot-termination-handler"
+  tag: "0.0.2"
+
+  ## Specify an imagePullPolicy (Required)
+  ## It's recommended to change this to 'Always' if the image tag is 'latest'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
+  imagePullPolicy: IfNotPresent
+
+log:
+  format: "logfmt"
+  level: "info"
+
+http:
+  listenPort: 8081
+
+termdetect:
+  defaultSecondsUntilTermination: 30
+
+termnotifier:
+  triggerEnabled: true
+  triggerEndpoint: "/terminate"
+
+metrics:
+  enabled: true
+  endpoint: "/metrics"
+
+drainer:
+  enabled: true
+  drainWithTaint: true
+  gracePeriodSeconds: -1
+  timeout: 0
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 120m
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

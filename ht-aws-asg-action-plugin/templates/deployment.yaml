@@ -1,64 +1,64 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ template "htAsgActionPlugin.fullname" . }}"
+  name: "{{ template "ht-aws-asg-action-plugin.fullname" . }}"
   labels:
-    app: "{{ template "htAsgActionPlugin.fullname" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "ht-aws-asg-action-plugin.name" . }}"
+    chart: "{{ template "ht-aws-asg-action-plugin.chart" . }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.htAsgActionPlugin.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
 
   template:
     metadata:
       labels:
-        heritage: "{{ .Release.Service }}"
+        app: "{{ template "ht-aws-asg-action-plugin.name" . }}"
+        chart: "{{ template "ht-aws-asg-action-plugin.chart" . }}"
         release: "{{ .Release.Name }}"
-        app: {{ template "htAsgActionPlugin.fullname" . }}
-        component: "{{ template "htAsgActionPlugin.fullname" . }}"
+        heritage: "{{ .Release.Service }}"
 
     spec:
       containers:
       - name: ht-aws-asg-action-plugin
-        image: "{{ .Values.htAsgActionPlugin.image.repository }}:{{ .Values.htAsgActionPlugin.image.tag }}"
-        imagePullPolicy: {{ .Values.htAsgActionPlugin.image.imagePullPolicy | quote }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.imagePullPolicy | quote }}
         command:
         - "/bin/sh"
         - "-ecx"
         - |
           ht-aws-asg-action-plugin \
-          -bind.address=0.0.0.0:{{ .Values.htAsgActionPlugin.port }} \
-          -log.level={{ .Values.htAsgActionPlugin.logLevel }} \
-          -aws.region={{ .Values.htAsgActionPlugin.region }} \
-          -recommender.url={{ .Values.htAsgActionPlugin.recommenderUrl }}
+          -bind.address=0.0.0.0:{{ .Values.port }} \
+          -log.level={{ .Values.logLevel }} \
+          -aws.region={{ .Values.region }} \
+          -recommender.url={{ .Values.recommenderUrl }}
         env:
           - name: AWS_ACCESS_KEY_ID
             valueFrom:
               secretKeyRef:
-                name: {{ template "htAsgActionPlugin.fullname" . }}
+                name: {{ template "ht-aws-asg-action-plugin.fullname" . }}
                 key: awsAccessKeyId
           - name: AWS_SECRET_ACCESS_KEY
             valueFrom:
               secretKeyRef:
-                name: {{ template "htAsgActionPlugin.fullname" . }}
+                name: {{ template "ht-aws-asg-action-plugin.fullname" . }}
                 key: awsSecretAccessKey
 
         ports:
         - name: grpc
-          containerPort: {{ .Values.htAsgActionPlugin.port }}
+          containerPort: {{ .Values.port }}
         livenessProbe:
           tcpSocket:
-            port: {{ .Values.htAsgActionPlugin.port }}
+            port: {{ .Values.port }}
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           tcpSocket:
-            port: {{ .Values.htAsgActionPlugin.port }}
+            port: {{ .Values.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 3
           periodSeconds: 5
 
         resources:
-{{ toYaml .Values.htAsgActionPlugin.resources | indent 10 }}
+{{ toYaml .Values.resources | indent 10 }}

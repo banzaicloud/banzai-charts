@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "cloudinfo.fullname" . }}
+  labels:
+    app: {{ template "cloudinfo.name" . }}
+    chart: {{ template "cloudinfo.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: {{ template "cloudinfo.fullname" . }}
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.internalPort }}
+      protocol: TCP
+  selector:
+    app: {{ template "cloudinfo.name" . }}
+    release: {{ .Release.Name }}

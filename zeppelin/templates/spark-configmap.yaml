@@ -1,4 +1,3 @@
-{{- $schema := .Values.sparkEventLogStorage.cloudProvider }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -11,7 +10,7 @@ data:
     spark.executor.cores={{ .Values.sparkSubmitOptions.sparkExecutorCores }}
     spark.driver.memory={{ .Values.sparkSubmitOptions.sparkDriverMemory }}
     spark.executor.memory={{ .Values.sparkSubmitOptions.sparkExecutorMemory }}
-    spark.kubernetes.container.image={{ .Values.sparkSubmitOptions.sparkImage }}
+    spark.kubernetes.container.image={{- printf "%s:%s" .Values.sparkSubmitOptions.sparkImage.name .Values.sparkSubmitOptions.sparkImage.tag }}
     spark.metrics.conf=/opt/spark/conf/monitoring/metrics.properties
     spark.local.dir={{ .Values.sparkSubmitOptions.sparkLocalDir }}
     spark.kubernetes.authenticate.driver.serviceAccountName={{ .Values.sparkSubmitOptions.driverServiceAccountName }}
@@ -21,6 +20,7 @@ data:
     {{- if .Values.sparkEventLogStorage.logDirectory }}
 
     spark.eventLog.enabled=true
+    {{- $schema := .Values.sparkEventLogStorage.cloudProvider }}
 
     {{- if eq $schema "amazon" }}
 

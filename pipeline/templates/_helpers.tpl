@@ -30,10 +30,3 @@ Create chart name and version as used by the chart label.
 {{- define "pipeline.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
-
-{{/*
-Create a random password for mysql.
-*/}}
-{{- define "mysql.password" -}}
-{{- default (derivePassword 1 "long" (.Release.Time | toString) "bonanzabanzai" (print .Release.Name "-pipeline-db:3306") | b64enc ) .Values.global.mysqlPassword -}}
-{{- end -}}

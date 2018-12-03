@@ -1,0 +1,164 @@
+appVersion: "0.7.0"
+
+## CI/CD server and agent Deplyoment annotations
+##
+annotations: {}
+
+## CI/CD server and agent Deplyoment labels
+##
+labels: {}
+
+## The official CI/CD image, change tag to use a different version.
+## https://hub.docker.com/r/banzaicloud/cicd/tags/
+##
+image:
+  repository: "banzaicloud/cicd"
+  tag: "master"
+  pullPolicy: "Always"
+
+service:
+  httpPort: 80
+
+  ## If service.type is not set to NodePort, the following statement
+  ## will be ignored.
+  ##
+  # nodePort: 32015
+
+  ## Service type can be set to ClusterIP, NodePort or LoadBalancer.
+  ##
+  type: ClusterIP
+
+ingress:
+  ## If true, CI/CD Ingress will be created.
+  ##
+  enabled: false
+
+  ## CI/CD Ingress annotations
+  ##
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: 'true'
+
+  ## CI/CD hostnames must be provided if Ingress is enabled
+  ##
+  # hosts:
+  #   - build.domain.io
+
+  ## CI/CD Ingress TLS configuration secrets
+  ## Must be manually created in the namespace
+  ##
+  # tls:
+  #   - secretName: pipeline-cicd-tls
+  #     hosts:
+  #       - build.domain.io
+
+server:
+  ## If not set, it will be autofilled with the cluster host.
+  ##
+  # host: "https://build.domain.io"
+
+  ## CI/CD server configuration.
+  ## Values in here get injected as environment variables.
+  ## https://beta.banzaicloud.io/docs/cicd/environment/
+  ##
+  env:
+    CICD_DEBUG: "false"
+    CICD_OPEN: "true"
+    CICD_REPO_CONFIG: ".banzaicloud/pipeline.yaml"
+    # CICD_DATABASE_DRIVER: "sqlite3"
+    # CICD_DATABASE_DATASOURCE: "/var/lib/cicd/cicd.sqlite"
+
+    ## CI/CD requires some environment variables to bootstrap the
+    ## git service or it won't start up.
+    ## Uncomment this and add your own custom configuration.
+    ##
+    # CICD_PROVIDER: "github"
+    # CICD_OPEN: "true"
+    # CICD_GITHUB: "true"
+    # CICD_ORGS: "my-github-org,my-other-github-org"
+    # CICD_ADMIN:"admin-1,admin-2"
+    # CICD_GITHUB_CLIENT: "github-oauth2-client-id"
+    # CICD_GITHUB_SECRET: "github-oauth2-client-secret"
+
+  persistentVolume:
+    enabled: true
+
+    ## A manually managed Persistent Volume and Claim
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    # existingClaim:
+
+    ## Pipeline StateStore data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+
+    ## CI/CD server data Persistent Volume existing claim name
+    ## Requires server.persistentVolume.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    existingClaim: ""
+
+    ## CI/CD server data Persistent Volume size
+    ##
+    size: 1Gi
+
+
+    ## CI/CD server data Persistent Volume annotations
+    ##
+    annotations: {}
+  ## CPU and memory limits for CI/CD server
+  ##
+  resources: {}
+  #  requests:
+  #    memory: 32Mi
+  #    cpu: 40m
+  #  limits:
+  #    memory: 2Gi
+  #    cpu: 1
+
+mysql:
+  enabled: true
+
+##
+## CloudSQL configuration
+##
+cloudsql:
+  enabled: false
+  instance: ""
+  dbName: ""
+  dbUserName: ""
+  dbUserPass: ""
+  image:
+    repository: gcr.io/cloudsql-docker/gce-proxy
+    tag: 1.11
+    pullPolicy: IfNotPresent
+
+agent:
+  ## CI/CD  agent configuration.
+  ## Values in here get injected as environment variables.
+  ## https://beta.banzaicloud.io/docs/cicd/environment/
+  ##
+  env:
+    CICD_DEBUG: "false"
+    CICD_MAX_PROCS: "16"
+
+  ## CPU and memory limits for CI/CD agent
+  ##
+  resources: {}
+  #  requests:
+  #    memory: 32Mi
+  #    cpu: 40m
+  #  limits:
+  #    memory: 2Gi
+  #    cpu: 1
+
+## Uncomment this if you want to set a specific shared secret between
+## the agents and servers, otherwise this will be auto-generated.
+##
+# sharedSecret: supersecret

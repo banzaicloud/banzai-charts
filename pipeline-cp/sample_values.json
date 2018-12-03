@@ -20,20 +20,7 @@
             }
         }
     },
-    "drone": {
-        "server": {
-            "env": {
-                "DRONE_ORGS" : ""
-            },
-            "persistentVolume": {
-                "enabled": false
-            }
-        }
-    },
     "pipeline": {
-        "drone": {
-            "enabled": true
-        },
         "statestore": {
             "persistence": {
                 "enabled": false

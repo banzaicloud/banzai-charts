@@ -27,9 +27,6 @@ data:
     jwtissueer = "https://banzaicloud.com/"
     jwtaudience = "https://pipeline.banzaicloud.com"
 
-    [drone]
-    enabled = true
-
     [helm]
     retryAttempt = 30
     retrySleepSeconds = 15

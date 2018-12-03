@@ -15,28 +15,28 @@ dependencies:
   condition: thanos.enabled
 
 - name: pipeline
-  version: 0.0.53
+  version: 0.0.57
   repository: alias:banzaicloud-stable
 
 - name: pipeline-ui
-  version: 0.1.2
+  version: 0.1.4
   repository: alias:banzaicloud-stable
   condition: pipeline-ui.enabled
 
-- name: drone
-  version: 0.2.8
+- name: pipeline-cicd
+  version: 1.0.0
   repository: alias:banzaicloud-stable
-  condition: drone.enabled
+  condition: pipeline-cicd.enabled
 
 - name: telescopes
-  version: 0.1.6
+  version: 0.1.8
   repository: alias:banzaicloud-stable
   condition: telescopes.enabled
 
-- name: productinfo
-  version: 0.4.9
+- name: cloudinfo
+  version: 0.4.15
   repository: alias:banzaicloud-stable
-  condition: productinfo.enabled
+  condition: cloudinfo.enabled
 
 - name: anchore-engine
   version: 0.2.7

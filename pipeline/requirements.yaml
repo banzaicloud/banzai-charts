@@ -1,9 +1,9 @@
 dependencies:
 - name: mysql
-  version: 0.7.1
+  version: 0.7.2
   repository: alias:banzaicloud-stable
   condition: mysql.enabled
 
 - name: vault
-  version: 0.5.18
+  version: 0.5.19
   repository: alias:banzaicloud-stable
