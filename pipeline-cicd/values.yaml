@@ -1,30 +1,19 @@
-appVersion: "0.8.1"
+appVersion: "0.7.0"
 
-## Drone server and agent Deplyoment annotations
+## CI/CD server and agent Deplyoment annotations
 ##
 annotations: {}
 
-## Drone server and agent Deplyoment labels
+## CI/CD server and agent Deplyoment labels
 ##
 labels: {}
 
-## The official drone image, change tag to use a different version.
-## https://hub.docker.com/r/drone/drone/tags/
+## The official CI/CD image, change tag to use a different version.
+## https://hub.docker.com/r/banzaicloud/cicd/tags/
 ##
 image:
-  repository: "banzaicloud/drone"
-  tag: "kubernetes"
-  pullPolicy: "Always"
-
-## Since version 8.x drone splitted agent and server into two
-## different images.
-##
-## NOTE: Older versions of drone are **not** supported.
-## https://hub.docker.com/r/drone/agent/tags/
-##
-agentImage:
-  repository: "banzaicloud/drone"
-  tag: "kubernetes"
+  repository: "banzaicloud/cicd"
+  tag: "master"
   pullPolicy: "Always"
 
 service:
@@ -40,56 +29,56 @@ service:
   type: ClusterIP
 
 ingress:
-  ## If true, Drone Ingress will be created.
+  ## If true, CI/CD Ingress will be created.
   ##
   enabled: false
 
-  ## Drone Ingress annotations
+  ## CI/CD Ingress annotations
   ##
   # annotations:
   #   kubernetes.io/ingress.class: nginx
   #   kubernetes.io/tls-acme: 'true'
 
-  ## Drone hostnames must be provided if Ingress is enabled
+  ## CI/CD hostnames must be provided if Ingress is enabled
   ##
   # hosts:
-  #   - drone.domain.io
+  #   - build.domain.io
 
-  ## Drone Ingress TLS configuration secrets
+  ## CI/CD Ingress TLS configuration secrets
   ## Must be manually created in the namespace
   ##
   # tls:
-  #   - secretName: drone-tls
+  #   - secretName: pipeline-cicd-tls
   #     hosts:
-  #       - drone.domain.io
+  #       - build.domain.io
 
 server:
   ## If not set, it will be autofilled with the cluster host.
   ##
-  # host: "https://drone.domain.io"
+  # host: "https://build.domain.io"
 
-  ## Drone server configuration.
+  ## CI/CD server configuration.
   ## Values in here get injected as environment variables.
-  ## http://readme.drone.io/admin/installation-reference
+  ## https://beta.banzaicloud.io/docs/cicd/environment/
   ##
   env:
-    DRONE_DEBUG: "false"
-    DRONE_OPEN: "true"
-    DRONE_REPO_CONFIG: ".banzaicloud/pipeline.yaml"
-    # DRONE_DATABASE_DRIVER: "sqlite3"
-    # DRONE_DATABASE_DATASOURCE: "/var/lib/drone/drone.sqlite"
+    CICD_DEBUG: "false"
+    CICD_OPEN: "true"
+    CICD_REPO_CONFIG: ".banzaicloud/pipeline.yaml"
+    # CICD_DATABASE_DRIVER: "sqlite3"
+    # CICD_DATABASE_DATASOURCE: "/var/lib/cicd/cicd.sqlite"
 
-    ## Drone requires some environment variables to bootstrap the
+    ## CI/CD requires some environment variables to bootstrap the
     ## git service or it won't start up.
     ## Uncomment this and add your own custom configuration.
     ##
-    # DRONE_PROVIDER: "github"
-    # DRONE_OPEN: "true"
-    # DRONE_GITHUB: "true"
-    # DRONE_ORGS: "my-github-org,my-other-github-org"
-    # DRONE_ADMIN:"admin-1,admin-2"
-    # DRONE_GITHUB_CLIENT: "github-oauth2-client-id"
-    # DRONE_GITHUB_SECRET: "github-oauth2-client-secret"
+    # CICD_PROVIDER: "github"
+    # CICD_OPEN: "true"
+    # CICD_GITHUB: "true"
+    # CICD_ORGS: "my-github-org,my-other-github-org"
+    # CICD_ADMIN:"admin-1,admin-2"
+    # CICD_GITHUB_CLIENT: "github-oauth2-client-id"
+    # CICD_GITHUB_SECRET: "github-oauth2-client-secret"
 
   persistentVolume:
     enabled: true
@@ -110,20 +99,20 @@ server:
     accessModes:
       - ReadWriteOnce
 
-    ## Drone server data Persistent Volume existing claim name
+    ## CI/CD server data Persistent Volume existing claim name
     ## Requires server.persistentVolume.enabled: true
     ## If defined, PVC must be created manually before volume will be bound
     existingClaim: ""
 
-    ## Drone server data Persistent Volume size
+    ## CI/CD server data Persistent Volume size
     ##
     size: 1Gi
 
 
-    ## Drone server data Persistent Volume annotations
+    ## CI/CD server data Persistent Volume annotations
     ##
     annotations: {}
-  ## CPU and memory limits for drone server
+  ## CPU and memory limits for CI/CD server
   ##
   resources: {}
   #  requests:
@@ -151,15 +140,15 @@ cloudsql:
     pullPolicy: IfNotPresent
 
 agent:
-  ## Drone agent configuration.
+  ## CI/CD  agent configuration.
   ## Values in here get injected as environment variables.
-  ## http://readme.drone.io/admin/installation-reference
+  ## https://beta.banzaicloud.io/docs/cicd/environment/
   ##
   env:
-    DRONE_DEBUG: "false"
-    DRONE_MAX_PROCS: "16"
+    CICD_DEBUG: "false"
+    CICD_MAX_PROCS: "16"
 
-  ## CPU and memory limits for drone agent
+  ## CPU and memory limits for CI/CD agent
   ##
   resources: {}
   #  requests:
@@ -173,6 +162,3 @@ agent:
 ## the agents and servers, otherwise this will be auto-generated.
 ##
 # sharedSecret: supersecret
-
-global:
-  auth: {}

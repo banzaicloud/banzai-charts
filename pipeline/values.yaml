@@ -178,7 +178,7 @@ mysql:
   # mysqlPassword:
 
   initializationFiles:
-    drone-db.sql: |-
+    cicd-db.sql: |-
       CREATE DATABASE IF NOT EXISTS drone;
       GRANT ALL PRIVILEGES ON drone.* TO 'bonanzabanzai'@'%';
       FLUSH PRIVILEGES;

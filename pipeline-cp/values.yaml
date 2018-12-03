@@ -45,9 +45,6 @@ pipeline:
       kubernetes.io/ingress.class: traefik
       ingress.kubernetes.io/ssl-redirect: "false"
 
-  drone:
-    enabled: true
-
   cloud:
     cloudprovider: aws
     keypath: "/opt/pipeline/.ssh"
@@ -93,7 +90,7 @@ cloudinfo:
       kubernetes.io/ingress.class: traefik
       traefik.frontend.rule.type: PathPrefix
 
-drone:
+pipeline-cicd:
   enabled: true
   ingress:
     enabled: false
@@ -104,9 +101,9 @@ drone:
       traefik.frontend.rule.type: PathPrefixStrip
   server:
     env:
-      DRONE_DEBUG: "false"
-      DRONE_PROVIDER: "github"
-      DRONE_GITHUB: "true"
+      CICD_DEBUG: "false"
+      CICD_PROVIDER: "github"
+      CICD_GITHUB: "true"
 
   cloudsql:
     enabled: false

@@ -8,11 +8,11 @@ metadata:
 {{ toYaml .Values.server.persistentVolume.annotations | indent 4 }}
   {{- end }}
   labels:
-    app: {{ template "drone.fullname" . }}
+    app: {{ template "cicd.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-  name: {{ template "drone.fullname" . }}-server
+  name: {{ template "cicd.fullname" . }}-server
 spec:
   accessModes:
 {{ toYaml .Values.server.persistentVolume.accessModes | indent 4 }}

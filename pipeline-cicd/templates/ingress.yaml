@@ -1,13 +1,13 @@
 {{- if .Values.ingress.enabled -}}
-{{- $serviceName := include "drone.fullname" . -}}
+{{- $serviceName := include "cicd.fullname" . -}}
 {{- $servicePort := .Values.service.httpPort -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "drone.fullname" . }}
+  name: {{ template "cicd.fullname" . }}
   labels:
-    app: {{ template "drone.name" . }}
-    chart: {{ template "drone.chart" . }}
+    app: {{ template "cicd.name" . }}
+    chart: {{ template "cicd.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}

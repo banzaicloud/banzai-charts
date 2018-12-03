@@ -2,21 +2,21 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app: {{ template "drone.name" . }}
+    app: {{ template "cicd.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ template "drone.fullname" . }}-agent
+  name: {{ template "cicd.fullname" . }}
 
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: "{{ template "drone.fullname" . }}-agent-rbac"
+  name: "{{ template "cicd.fullname" . }}"
 subjects:
   - kind: ServiceAccount
-    name: {{ template "drone.fullname" . }}-agent
+    name: {{ template "cicd.fullname" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole

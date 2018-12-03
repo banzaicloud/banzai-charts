@@ -1,14 +1,13 @@
-{{- if hasKey .Values.server.env "DRONE_PROVIDER" }}
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "drone.fullname" . }}-server
+  name: {{ template "cicd.fullname" . }}
   labels:
-    app: {{ template "drone.name" . }}
+    app: {{ template "cicd.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    component: server
+    component: cicd
 {{- with .Values.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
@@ -18,13 +17,19 @@ metadata:
 {{- end }}
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "cicd.name" . }}
+      release: "{{ .Release.Name }}"
+      component: cicd
   template:
     metadata:
       labels:
-        app: {{ template "drone.name" . }}
+        app: {{ template "cicd.name" . }}
         release: "{{ .Release.Name }}"
-        component: server
+        component: cicd
     spec:
+      serviceAccount: {{ template "cicd.fullname" . }}
       containers:
       {{- if .Values.cloudsql.enabled  }}
       - name: cloudsql-proxy
@@ -32,21 +37,21 @@ spec:
         command: ["/cloud_sql_proxy",
                   "-instances={{ .Values.cloudsql.instance }}=tcp:3306"]
       {{- end }}
-      - name: drone-server
+      - name: cicd-server
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        command: ["/bin/drone-server"]
+        command: ["/bin/cicd-server"]
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
-          - name: DRONE_SECRET
+          - name: CICD_SECRET
             valueFrom:
               secretKeyRef:
-                name: {{ template "drone.fullname" . }}
+                name: {{ template "cicd.fullname" . }}
                 key: secret
-          - name: DRONE_HOST
+          - name: CICD_HOST
           {{- if hasKey .Values.server "host" }}
             value: {{ .Values.server.host }}
           {{- else }}
-            value: {{ template "drone.fullname" . }}
+            value: http://{{ template "cicd.fullname" . }}
           {{- end }}
 
           {{ range $key, $value := .Values.server.env }}
@@ -54,30 +59,35 @@ spec:
             value: {{ $value | quote }}
           {{ end }}
 
-          {{ if not (hasKey .Values.server.env "DRONE_GITHUB_CLIENT") }}
-          - name: DRONE_GITHUB_CLIENT
+          {{ if not (hasKey .Values.server.env "CICD_GITHUB_CLIENT") }}
+          - name: CICD_GITHUB
+            value: "true"
+          {{ end }}
+
+          {{ if not (hasKey .Values.server.env "CICD_GITHUB_CLIENT") }}
+          - name: CICD_GITHUB_CLIENT
             value: {{ .Values.global.auth.clientid | quote }}
           {{ end }}
 
-          {{ if not (hasKey .Values.server.env "DRONE_GITHUB_SECRET") }}
-          - name: DRONE_GITHUB_SECRET
+          {{ if not (hasKey .Values.server.env "CICD_GITHUB_SECRET") }}
+          - name: CICD_GITHUB_SECRET
             value: {{ .Values.global.auth.clientsecret | quote }}
           {{ end }}
 
-          - name: DRONE_DATABASE_DRIVER
+          - name: CICD_DATABASE_DRIVER
             value: "mysql"
-          - name: DRONE_DATABASE_DATASOURCE
+          - name: CICD_DATABASE_DATASOURCE
         {{- if .Values.mysql.enabled  }}
             value: bonanzabanzai:{{ include "mysql.password" . }}@tcp({{ .Release.Name }}-pipeline-db:3306)/drone?parseTime=true
         {{- else if .Values.cloudsql.enabled }}
             value: {{ .Values.cloudsql.dbUserName }}:{{ .Values.cloudsql.dbUserPass }}@tcp(127.0.0.1:3306)/drone?parseTime=true
         {{- end }}
         {{- if hasKey .Values.ingress "hosts" }}
-          - name: DRONE_EXTERNAL_URL
+          - name: CICD_EXTERNAL_URL
             value: https://{{ index .Values.ingress.hosts 0 }}
         {{- end }}
 
-          - name: DRONE_BUILD_URL
+          - name: CICD_BUILD_URL
             value: https://{{ .Values.global.pipelineHost }}/ui
           - name: PIPELINE_BASEPATH
             value: https://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090{{ .Values.global.pipelineBasepath }}
@@ -85,8 +95,8 @@ spec:
             value: https://{{ .Values.global.pipelineHost }}{{ .Values.global.pipelineBasepath }}
 
         volumeMounts:
-        - mountPath: /var/lib/drone
-          name: drone-disk
+        - mountPath: /var/lib/cicd
+          name: cicd-disk
           readOnly: false
 
         ports:
@@ -102,15 +112,30 @@ spec:
             port: http
         resources:
 {{ toYaml .Values.server.resources | indent 10 }}
+
+      - name: cicd-agent
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["/bin/cicd-agent"]
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          - name: CICD_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "cicd.fullname" . }}
+                key: secret
+          {{ range $key, $value := .Values.agent.env }}
+          - name: {{ $key }}
+            value: {{ $value | quote }}
+          {{ end }}
+        resources:
+{{ toYaml .Values.agent.resources | indent 10 }}
+
       volumes:
-      - name: drone-disk
+      - name: cicd-disk
         {{- if and .Values.server.persistentVolume.enabled (not .Values.server.persistentVolume.existingClaim) }}
         persistentVolumeClaim:
-                claimName: {{ template "drone.fullname" . }}-server
+          claimName: {{ template "cicd.fullname" . }}-server
         {{- else }}
         hostPath:
-          path: /opt/drone
+          path: /opt/cicd
         {{- end }}
-
-
-{{ end }}
