@@ -105,7 +105,7 @@ spec:
               containerPort: {{ .Values.service.internalPort }}
               protocol: TCP
             {{- if .Values.metrics.enabled }}
-            - name: metrics
+            - name: {{ template "cloudinfo.fullname" . }}
               containerPort: {{ .Values.metrics.port }}
             {{- end }}
           livenessProbe:
