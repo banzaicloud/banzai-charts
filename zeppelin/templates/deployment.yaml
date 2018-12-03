@@ -72,9 +72,11 @@ spec:
               secretKeyRef:
                 name: {{ default (printf "%s-password" (include "fullname" .)) .Values.userCredentialSecretName }}
                 key: username
+        {{- if .Values.sparkEventLogStorage.logDirectory }}
         envFrom:
           - secretRef:
               name: {{ default (printf "%s-spark-eventlog-storage" (include "fullname" .)) .Values.sparkEventLogStorage.secretName }}
+        {{- end }}
         command:
           - '/bin/sh'
           - '-c'
