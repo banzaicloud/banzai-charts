@@ -49,3 +49,4 @@ The following tables lists configurable parameters of the anchore-policy-validat
 |externalAnchore.anchoreHost          |external anchore-engine host                 |""                                        |
 |externalAnchore.anchoreUser          |external anchore-engine username             |""                                        |
 |externalAnchore.anchorePass          |external anchore-engine password             |""                                        |
+|allowAll                             |install allow-all whitelist                  |""                                        |

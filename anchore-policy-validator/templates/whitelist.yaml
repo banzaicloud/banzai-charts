@@ -1,0 +1,10 @@
+{{if .Values.allowAll}}
+apiVersion: security.banzaicloud.com/v1alpha1
+kind: whitelistitems.security.banzaicloud.com
+metadata:
+  name: allow-all
+spec:
+  reason: "Installed by cluster PostHook"
+  creator: "pipeline"
+  regexp: ".*"
+{{end}}

@@ -18,6 +18,8 @@ externalAnchore:
   anchorePass: ""
 resources: {}
 
+allowAll: ""
+
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelector: {}
