@@ -44,6 +44,7 @@ spec:
           anchore-cli policy add /policy/reject-critical.json
           anchore-cli policy add /policy/block-root.json
           anchore-cli policy activate 97b33e2c-3b57-4a3f-a12b-a8c0daa472a0
+          anchore-cli policy del 2c53a13c-1765-11e8-82ef-23527761d060
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
