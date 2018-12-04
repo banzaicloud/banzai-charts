@@ -61,3 +61,6 @@ items:
         - key: scan
           operator: NotIn
           values: [noscan]
+        - key: name
+          operator: NotIn
+          values: [pipeline-system]
