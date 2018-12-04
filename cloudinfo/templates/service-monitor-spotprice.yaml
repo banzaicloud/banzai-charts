@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name:  {{ template "cloudinfo.fullname" . }}
+  name:  {{ template "cloudinfo.fullname" . }}-spotprice
   labels:
     app: {{ template "cloudinfo.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
@@ -13,10 +13,10 @@ metadata:
     {{- end }}
 spec:
   endpoints:
-  - interval: 30s
+  - interval: 300s
     port: {{ include "cloudinfo.name" . }}-prom
-    path: /metrics
-  jobLabel: {{ include "cloudinfo.name" . }}
+    path: /metrics/spotprice
+  jobLabel: {{ include "cloudinfo.name" . }}-spotprice
   namespaceSelector:
     matchNames:
     - "{{ $.Release.Namespace }}"

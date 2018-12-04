@@ -11,7 +11,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: {{ include "cloudinfo.name" . }}-metrics
+    - name: {{ template "cloudinfo.name" . }}-prom
       port: {{ .Values.metrics.port }}
       targetPort: {{ .Values.metrics.port }}
       protocol: TCP
