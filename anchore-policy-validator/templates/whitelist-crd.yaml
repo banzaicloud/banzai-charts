@@ -24,6 +24,8 @@ spec:
               type: string
             creator:
               type: string
+            regexp:
+              type: string
   additionalPrinterColumns:
   - name: Reason
     type: string
