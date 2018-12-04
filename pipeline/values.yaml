@@ -65,7 +65,7 @@ auth:
 
 ark:
   name: "ark"
-  namespace: "pipeline-infra"
+  namespace: "pipeline-system"
   chart: "banzaicloud-stable/ark"
   chartVersion: "1.2.2"
   image: "banzaicloud/ark"
