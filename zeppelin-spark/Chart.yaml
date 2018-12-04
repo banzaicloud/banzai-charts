@@ -1,5 +1,5 @@
 name: zeppelin-spark
-version: 0.0.19
+version: 0.0.20
 description: A Helm chart for Kubernetes
 home: https://banzaicloud.com
 sources:
