@@ -1,0 +1,57 @@
+# Default values for aws-spot-price-history-poller
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: "banzaicloud/aws-spot-price-history-poller"
+  tag: "0.0.1"
+  imagePullPolicy: IfNotPresent
+
+log:
+  format: "logfmt"
+  level: "info"
+
+awsAccessKeyId: "set-this"
+awsSecretAccessKey: "set-this"
+
+database:
+  image:
+    repository: "mysql"
+    tag: "5.7"
+    imagePullPolicy: IfNotPresent
+  args:
+  - "--character-set-server=utf8mb4"
+  - "--collation-server=utf8mb4_unicode_ci"
+  rootPassword: ""
+  database: "spotprices"
+  username: "spotprices"
+  password: ""
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+
+service:
+  type: ClusterIP
+  port: 3306
+  internalPort: 3306
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 240m
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,0 +1,112 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "aws-spot-price-history-poller.fullname" . }}
+  labels:
+    app: {{ template "aws-spot-price-history-poller.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "aws-spot-price-history-poller.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "aws-spot-price-history-poller.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          env:
+          - name: SPHP_LOG_FORMAT
+            value: {{ .Values.log.format }}
+          - name: SPHP_LOG_LEVEL
+            value: {{ .Values.log.level }}
+          - name: SPHP_DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "aws-spot-price-history-poller.fullname" . }}
+                key: mysqlPassword
+          - name: SPHP_DATABASE_DBNAME
+            value: {{ .Values.database.database }}
+          - name: SPHP_DATABASE_USER
+            value: {{ .Values.database.username }}
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "aws-spot-price-history-poller.fullname" . }}
+                key: awsAccessKeyId
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "aws-spot-price-history-poller.fullname" . }}
+                key: awsSecretAccessKey
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+        - name: database
+          image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.tag }}"
+          {{- if .Values.database.args }}
+          args:
+          {{- range $arg := .Values.database.args }}
+          - {{ $arg | quote }}
+          {{- end }}
+          {{- end }}
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "aws-spot-price-history-poller.fullname" . }}
+                key: mysqlRootPassword
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "aws-spot-price-history-poller.fullname" . }}
+                key: mysqlPassword
+          - name: MYSQL_DATABASE
+            value: {{ .Values.database.database }}
+          - name: MYSQL_USER
+            value: {{ .Values.database.username }}
+          ports:
+          - name: mysql
+            containerPort: 3306
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
+            initialDelaySeconds: {{ .Values.database.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.database.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.database.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.database.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.database.livenessProbe.failureThreshold }}
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
+            initialDelaySeconds: {{ .Values.database.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.database.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.database.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.database.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.database.readinessProbe.failureThreshold }}
+          imagePullPolicy: {{ .Values.database.image.pullPolicy }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
+  {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+  {{- end }}
+  {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+  {{- end }}

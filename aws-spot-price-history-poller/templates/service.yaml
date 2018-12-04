@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "aws-spot-price-history-poller.fullname" . }}
+  labels:
+    app: {{ template "aws-spot-price-history-poller.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: {{ template "aws-spot-price-history-poller.fullname" . }}
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.internalPort }}
+      protocol: TCP
+  selector:
+    app: {{ template "aws-spot-price-history-poller.name" . }}
+    release: {{ .Release.Name }}
