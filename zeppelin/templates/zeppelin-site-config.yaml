@@ -194,7 +194,7 @@ data:
 
     <property>
       <name>zeppelin.interpreter.connect.timeout</name>
-      <value>120000</value>
+      <value>{{ .Values.interpreterConnectTimeout }}</value>
       <description>Interpreter process connect timeout in msec.</description>
     </property>
 

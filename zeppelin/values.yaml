@@ -34,6 +34,8 @@ userCredentialSecretName: ""
 username: "admin"
 password: "zeppelin"
 
+interpreterConnectTimeout: 120000
+
 ingress:
   baseUrl: "/zeppelin"
   enabled: false
