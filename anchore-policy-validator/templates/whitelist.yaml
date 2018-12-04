@@ -1,8 +1,10 @@
 {{if .Values.allowAll}}
 apiVersion: security.banzaicloud.com/v1alpha1
-kind: whitelistitems.security.banzaicloud.com
+kind: WhiteListItem
 metadata:
   name: allow-all
+  annotations:
+    "helm.sh/hook": "post-install"
 spec:
   reason: "Installed by cluster PostHook"
   creator: "pipeline"
