@@ -27,6 +27,9 @@ spec:
     metadata:
       labels:
         app: {{ template "spark-hs.fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
     spec:
       initContainers:
       - name: {{ .Chart.Name }}-init-config
