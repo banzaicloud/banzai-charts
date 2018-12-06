@@ -224,6 +224,9 @@ spec:
         - name: VAULT_CACERT
           value: /vault/tls/ca.crt
 
+        - name: PIPELINE_PIPELINE_BINDADDR
+          value: ":{{ .Values.service.internalPort }}"
+
         {{- if .Values.service.tls }}
         - name: PIPELINE_PIPELINE_CERTFILE
           value: /tls/server.crt
