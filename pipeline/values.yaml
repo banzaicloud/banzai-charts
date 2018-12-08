@@ -76,6 +76,7 @@ ark:
   bucketSyncInterval: "10m"
   restoreSyncInterval: "20s"
   backupSyncInterval: "20s"
+  restoreWaitTimeout: "5m"
 
 spotguide:
   allowPrereleases: false
