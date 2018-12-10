@@ -81,7 +81,7 @@ The following tables lists the configurable parameters of the TiDB chart and the
 | `tikv.service.annotations`       | Additional annotations to add to service   | `nil`                                       |
 | `tidb.service.ClientPort`        | Port to bind to for Client service type    | `20160`                                     |
 | `tikv.imagePullPolicy`           | Image pull policy.                         | `IfNotPresent`                              |
-| `tikv.persistence.enabled        | Use a PVC to persist data                  | `flase`                                     |
+| `tikv.persistence.enabled`        | Use a PVC to persist data                  | `false`                                     |
 | `tikv.persistence.existingClaim` | Use an existing PVC                        | `nil`                                       |
 | `tikv.persistence.storageClass`  | Storage class of backing PVC               | `nil` (uses alpha storage class annotation) |
 | `tikv.persistence.accessMode`    | Use volume as ReadOnly or ReadWrite        | `ReadWriteOnce`                             |
