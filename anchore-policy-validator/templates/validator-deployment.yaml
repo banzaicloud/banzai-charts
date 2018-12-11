@@ -33,6 +33,14 @@ spec:
           - "--tls-private-key-file=/var/serving-cert/servingKey"
           - "--v={{ .Values.logVerbosity }}"
           env:
+          - name: KUBERNETES_NAMESPACE
+            value: {{ .Release.Namespace }}
+          - name: ANCHORE_APISERVICE_GROUP
+            value: {{ .Values.apiService.group }}
+          - name: ANCHORE_APISERVICE_VERSION
+            value: {{ .Values.apiService.version }}
+          - name: ANCHORE_RELEASE_NAME
+            value: {{ template "anchore-policy-validator.name" . }}
           - name: ANCHORE_ENGINE_USERNAME
             value: {{ .Values.externalAnchore.anchoreUser }}
           - name: ANCHORE_ENGINE_PASSWORD
