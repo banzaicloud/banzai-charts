@@ -65,6 +65,8 @@ spec:
 
         - name: PIPELINE_PIPELINE_BASEPATH
           value: {{ .Values.global.pipelineBasepath | quote }}
+        - name: PIPELINE_PIPELINE_SIGNUPREDIRECTPATH
+          value: {{ .Values.signupredirectpath | quote }}
 
         - name: PIPELINE_DATABASE_AUTOMIGRATEENABLED
           value: {{ .Values.database.autoMigrateEnabled | quote }}
@@ -168,6 +170,8 @@ spec:
           value: {{ .Values.ark.restoreSyncInterval }}
         - name: PIPELINE_ARK_BACKUPSYNCINTERVAL
           value: {{ .Values.ark.backupSyncInterval }}
+        - name: PIPELINE_ARK_RESTOREWAITTIMEOUT
+          value: {{ .Values.ark.restoreWaitTimeout }}
         - name: PIPELINE_SPOTGUIDE_ALLOWPRERELEASES
           value: {{ .Values.spotguide.allowPrereleases | quote }}
         - name: PIPELINE_MONITOR_ENABLED
@@ -223,6 +227,9 @@ spec:
           value: https://{{ .Release.Name }}-vault:8200
         - name: VAULT_CACERT
           value: /vault/tls/ca.crt
+
+        - name: PIPELINE_PIPELINE_BINDADDR
+          value: ":{{ .Values.service.internalPort }}"
 
         {{- if .Values.service.tls }}
         - name: PIPELINE_PIPELINE_CERTFILE
