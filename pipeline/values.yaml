@@ -7,7 +7,7 @@ global:
     clientid: ""
     clientsecret: ""
 
-signupredirectpath: /ui
+signupredirectpath: /ui/
 
 github:
   token: ""
