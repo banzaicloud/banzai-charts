@@ -7,6 +7,8 @@ tag: local
 
 formspree_form_id: ""
 
+googleAnalyticsTrackingID: ""
+
 replicaCount: 1
 
 image:

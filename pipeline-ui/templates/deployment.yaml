@@ -31,6 +31,8 @@ spec:
           value: "{{ .Values.tag }}"
         - name: FORMSPREE_FORM_ID
           value: "{{ .Values.formspree_form_id }}"
+        - name: GA_TRACKING_ID
+          value: "{{ .Values.googleAnalyticsTrackingID }}"
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
