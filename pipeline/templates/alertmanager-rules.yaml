@@ -5,8 +5,10 @@ metadata:
   labels:
     prometheus: prometheus-operator
     role: alert-rules
-    app: prometheus-operator
-    release: monitor
+    app: {{ include "pipeline.name" . }}
+    chart: {{ template "pipeline.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
   name: pipeline-rules
 spec:
   groups:
