@@ -101,7 +101,7 @@ monitor:
   configMap: prometheus-federation
   certSecret: prometheus-federation-secrets
   mountPath: /etc/prometheus/secrets
-  alertManagerEnabled: false
+  alertRulesEnabled: false
 
 loggingOperator:
   chartVersion: ""
