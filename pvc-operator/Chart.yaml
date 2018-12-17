@@ -1,10 +1,13 @@
 name: pvc-operator
-version: 0.0.6
+version: 0.0.7
 appVersion: 0.0.5
-description: A Helm chart for pvc-operaotr
+description: A Helm chart for pvc-operator
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/pvc-operator
 keywords:
 - pvc
 - storageclass
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

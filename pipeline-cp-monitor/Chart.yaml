@@ -1,7 +1,7 @@
 apiVersion: v1
-description: A Helm chart for Kubernetes
+description: Monitoring chart to deploy on the control-plane of a Pipeline installation
 name: pipeline-cp-monitor
-version: 0.0.2
+version: 0.0.3
 keywords:
     - pipeline
     - controlplane
@@ -9,3 +9,6 @@ keywords:
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/charts/
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

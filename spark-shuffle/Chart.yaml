@@ -1,9 +1,12 @@
 name: spark-shuffle
-version: 0.0.3
-description: A Helm chart for Kubernetes
+version: 0.0.4
+description: A Helm chart for Spark Shuffle in Kubernetes
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/spark
 keywords:
 - spark
 - shuffle
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

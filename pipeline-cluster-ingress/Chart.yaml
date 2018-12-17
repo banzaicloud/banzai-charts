@@ -1,7 +1,7 @@
 apiVersion: v1
-description: A Helm chart for Kubernetes
+description: Ingress controller to deploy on clusters managed by Banzai Cloud Pipeline
 name: pipeline-cluster-ingress
-version: 0.0.7
+version: 0.0.8
 keywords:
   - pipeline
   - cluster
@@ -9,3 +9,6 @@ keywords:
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/charts/
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

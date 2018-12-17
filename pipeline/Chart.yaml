@@ -2,7 +2,10 @@ name: pipeline
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/charts/
-version: 0.0.63
-description: A Helm chart for Kubernetes
+version: 0.0.64
+description: A Helm chart for Banzai Cloud Pipeline, a solution-oriented application platform which allows enterprises to develop, deploy and securely scale container-based applications in multi- and hybrid-cloud environments.
 keywords:
   - pipeline
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

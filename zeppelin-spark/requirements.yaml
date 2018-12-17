@@ -1,8 +1,8 @@
 dependencies:
 - name: spark
-  version: 0.0.15
+  version: 0.0.16
   repository: alias:banzaicloud-stable
 
 - name: zeppelin
-  version: 0.0.15
+  version: 0.0.16
   repository: alias:banzaicloud-stable

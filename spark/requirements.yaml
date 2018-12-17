@@ -1,15 +1,15 @@
 dependencies:
 - name: spark-shuffle
-  version: 0.0.3
+  version: 0.0.4
   repository: alias:banzaicloud-stable
   condition: sparkShuffle.enabled
 
 - name: spark-rss
-  version: 0.0.4
+  version: 0.0.5
   repository: alias:banzaicloud-stable
   condition: resourceStagingServer.enabled
 
 - name: spark-hs
-  version: 0.2.1
+  version: 0.2.2
   repository: alias:banzaicloud-stable
   condition: historyServer.enabled

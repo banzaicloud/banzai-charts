@@ -1,5 +1,8 @@
 apiVersion: v1
 appVersion: "1.0"
-description: A Helm chart for Kubernetes
+description: A Helm chart for serving Banzai Cloud documentations
 name: banzaicloud-docs
-version: 0.1.0
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com
+version: 0.1.1

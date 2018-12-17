@@ -6,3 +6,6 @@ version: 0.1.5
 description: Helm chart for Kubernetes. Provides the Graphical User Interface for Pipeline PaaS
 keywords:
   - pipeline-ui
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

@@ -2,9 +2,12 @@ name: spring-boot
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.2
+version: 0.0.3
 description: Run the simple spring-boot application
 keywords:
 - java
 - tomcat
 - spring-boot
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

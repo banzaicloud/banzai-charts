@@ -2,7 +2,7 @@ name: spot-termination-handler
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.2
+version: 0.0.3
 description: Spot Termination Handler Helm chart for Kubernetes
 keywords:
 - spot
@@ -12,3 +12,6 @@ keywords:
 - google
 - lifecycle
 - drain
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

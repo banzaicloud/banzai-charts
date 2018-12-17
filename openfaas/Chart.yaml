@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
 name: openfaas
-version: 1.0.5
+version: 1.0.6
 sources:
 - https://github.com/openfaas/faas
 - https://github.com/openfaas/faas-netes
@@ -10,3 +10,6 @@ icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stac
 keywords:
 - functions
 - service
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com
