@@ -1,0 +1,47 @@
+{{- if and .Values.monitor.alertManagerEnabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: prometheus-operator
+    role: alert-rules
+    app: prometheus-operator
+    release: monitor
+  name: pipeline-rules
+spec:
+  groups:
+  - name: pipeline
+    rules:
+    - alert: ClusterCreateFailed
+      annotations:
+        message: Pipeline cluster create failed.
+        runbook_url: https://alpha.dev.banzaicloud.com/grafana/d/pipeline/pipeline-dashboard-rev2
+      expr: |
+        sum(pipeline_cluster_active_total{status=~"ERROR"}) > 0
+      for: 1m
+      labels:
+        severity: critical
+        job: pipeline
+
+    - alert: TooManyBatRequests
+      annotations:
+        message: Pipeline too many bad requests
+        runbook_url: https://alpha.dev.banzaicloud.com/grafana/d/pipeline/pipeline-dashboard-rev2
+      expr: |
+        sum(rate(pipeline_requests_total{code=~"[4|5].*"}[1m])) > 0.1
+      for: 1m
+      labels:
+        severity: critical
+        job: pipeline
+
+    - alert: TooManyRequests
+      annotations:
+        message: Pipeline too many requests
+        runbook_url: https://alpha.dev.banzaicloud.com/grafana/d/pipeline/pipeline-dashboard-rev2
+      expr: |
+        sum(rate(pipeline_requests_total{code=~"[2].*"}[1m])) > 0.3
+      for: 1m
+      labels:
+        severity: critical
+        job: pipeline
+{{- end }}
