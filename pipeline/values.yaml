@@ -82,6 +82,7 @@ ark:
 
 spotguide:
   allowPrereleases: false
+  sharedLibraryGitHubOrganization: ""
 
 helm:
   retryAttempt: "30"
