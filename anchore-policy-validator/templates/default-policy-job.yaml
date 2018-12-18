@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ .Release.Name }}-default-policy"
+  name: "{{ template "anchore-policy-validator.fullname" . }}-default-policy"
   labels:
     app: {{ template "anchore-policy-validator.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}

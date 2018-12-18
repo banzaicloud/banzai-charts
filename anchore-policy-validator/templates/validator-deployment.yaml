@@ -21,7 +21,7 @@ spec:
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: {{ template "anchore-policy-validator.name" . }}
+          secretName: {{ template "anchore-policy-validator.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -40,7 +40,7 @@ spec:
           - name: ANCHORE_APISERVICE_VERSION
             value: {{ .Values.apiService.version }}
           - name: ANCHORE_RELEASE_NAME
-            value: {{ template "anchore-policy-validator.name" . }}
+            value: {{ template "anchore-policy-validator.fullname" . }}
           - name: ANCHORE_ENGINE_USERNAME
             value: {{ .Values.externalAnchore.anchoreUser }}
           - name: ANCHORE_ENGINE_PASSWORD
