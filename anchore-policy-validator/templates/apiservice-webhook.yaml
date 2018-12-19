@@ -10,7 +10,7 @@ items:
 - apiVersion: v1
   kind: Secret
   metadata:
-    name: {{ template "anchore-policy-validator.name" . }}
+    name: {{ template "anchore-policy-validator.fullname" . }}
     type: kubernetes.io/tls
   data:
     servingCert: {{ b64enc $server.Cert }}
