@@ -1,9 +1,12 @@
 name: spark-rss
-version: 0.0.4
-description: A Helm chart for Kubernetes
+version: 0.0.5
+description: A Helm chart for Spark RSS in Kubernetes
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/spark
 keywords:
 - spark
 - rss
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

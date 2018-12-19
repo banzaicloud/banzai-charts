@@ -2,10 +2,13 @@ name: spot-termination-exporter
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.3
+version: 0.0.4
 description: Spot Termination exporter Helm chart for Kubernetes
 keywords:
 - spot
 - aws
 - lifecycle
 - hollowtrees
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

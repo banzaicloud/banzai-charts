@@ -2,10 +2,13 @@ name: tidb
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/charts/
-version: 0.0.1
+version: 0.0.2
 description: A TiDB Helm chart for Kubernetes
 keywords:
 - tidb
 - mysql
 - database
 - sql
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

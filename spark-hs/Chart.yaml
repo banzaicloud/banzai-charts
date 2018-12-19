@@ -1,9 +1,12 @@
 name: spark-hs
-version: 0.2.1
-description: A Helm chart for Kubernetes
+version: 0.2.2
+description: A Helm chart for Spark HS in Kubernetes
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/spark
 keywords:
 - spark
 - history-server
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

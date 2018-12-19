@@ -1,5 +1,5 @@
 name: zeppelin
-version: 0.0.15
+version: 0.0.16
 description: A Helm chart for Kubernetes
 home: https://banzaicloud.com
 sources:
@@ -7,3 +7,6 @@ sources:
 keywords:
 - zeppelin
 - spotguide
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com

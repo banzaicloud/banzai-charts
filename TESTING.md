@@ -21,3 +21,9 @@ PIPELINE_HELM_BANZAIREPOSITORYURL="http://kubernetes-charts.banzaicloud.com/bran
 ```
 
 Clusters created with Pipeline will add this helm repo as `banzaicloud-stable`.
+
+For a quick check of the pinned versions of requirements, you may use the following snippet (jq and yq needed):
+
+```
+for i in */requirements.yaml; yq . <$i | jq -r '.dependencies|.[]|select(.repository == "alias:banzaicloud-stable")|(.name, .version)'|while read name && read version; do if [ -d $name ]; then ver="$(yq -r .version <$name/Chart.yaml)"; if [ "$ver" != "$version" ]; then echo $i: $name $version not found: $ver instead; fi; else; echo $i: $name does not exist; fi; done
+```
