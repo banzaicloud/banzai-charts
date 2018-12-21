@@ -5,6 +5,12 @@ dependencies:
   condition: prometheus.enabled
 
 - name: grafana
-  version: 1.18.1
+  version: 1.21.2
   repository: alias:banzaicloud-stable
   condition: grafana.enabled
+
+- name: loki
+  version: 0.0.1
+  repository: alias:banzaicloud-stable
+  condition: loki.enabled
+

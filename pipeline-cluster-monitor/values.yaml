@@ -314,9 +314,10 @@ grafana:
     path: /grafana
     hosts:
       - localhost
-
+  env:
+    GF_EXPLORE_ENABLED: true
   sidecar:
-    image: banzaicloud/k8s-sidecar:0.0.9
+#    image: banzaicloud/k8s-sidecar:0.0.9
     dashboards:
       enabled: true
       label: pipeline_grafana_dashboard
@@ -351,3 +352,6 @@ grafana:
 #      cluster:
 #        url: https://grafana.com/api/dashboards/5312/revisions/1/download
 #        datasource: Prometheus
+
+loki:
+  enabled: false
