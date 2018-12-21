@@ -5,6 +5,9 @@
 apiUrl: http://localhost
 tag: local
 
+cloudinfoUrl:
+recommenderUrl:
+
 formspree_form_id: ""
 
 googleAnalyticsTrackingID: ""

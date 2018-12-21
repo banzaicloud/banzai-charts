@@ -27,6 +27,14 @@ spec:
         env:
         - name: API_URL
           value: "{{ .Values.apiUrl }}"
+        {{- if .Values.cloudinfoUrl }}
+        - name: CLOUDINFO_URL
+          value: "{{ .Values.cloudinfoUrl }}"
+        {{- end }}
+        {{- if .Values.recommenderUrl }}
+        - name: RECOMMENDER_URL
+          value: "{{ .Values.recommenderUrl }}"
+        {{- end }}
         - name: TAG
           value: "{{ .Values.tag }}"
         - name: FORMSPREE_FORM_ID
