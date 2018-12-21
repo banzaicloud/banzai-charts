@@ -6,7 +6,7 @@ dependencies:
 
 - name: grafana
   version: 1.21.2
-  repository: alias:banzaicloud-stable
+  repository: https://kubernetes-charts.storage.googleapis.com/
   condition: grafana.enabled
 
 - name: loki

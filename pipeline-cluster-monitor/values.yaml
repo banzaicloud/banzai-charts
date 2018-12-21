@@ -321,9 +321,11 @@ grafana:
     dashboards:
       enabled: true
       label: pipeline_grafana_dashboard
+      searchNamespace: ALL
     datasources:
       enabled: true
       label: pipeline_grafana_datasource
+      searchNamespace: ALL
 #
 #  dashboardProviders:
 #    dashboardproviders.yaml:
