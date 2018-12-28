@@ -33,7 +33,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: efs-provisioner
-    namespace: default
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: efs-provisioner-runner
@@ -43,6 +43,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: efs-provisioner
+  namespace: {{ .Release.Namespace }}
 ---
 kind: Deployment
 apiVersion: extensions/v1beta1
