@@ -12,7 +12,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: "{{ template "ingressauthgenerator.fullname" . }}-rbac"
-    namespace: default
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: cluster-admin
