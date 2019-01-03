@@ -1,6 +1,6 @@
 name: pipeline-cicd
 home: https://banzaicloud.com/
-version: 1.0.0
+version: 1.0.1
 appVersion: 0.7.0
 description: Pipeline CI/CD
 keywords:
