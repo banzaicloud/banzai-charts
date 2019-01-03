@@ -1,7 +1,7 @@
 apiVersion: v1
 description: An umbrella Helm chart for Banzai Cloud Pipeline control planes
 name: pipeline-cp
-version: 0.3.38
+version: 0.3.39
 keywords:
     - pipeline
     - controlplane
