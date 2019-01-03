@@ -24,7 +24,7 @@ dependencies:
   condition: pipeline-ui.enabled
 
 - name: pipeline-cicd
-  version: 1.0.0
+  version: 1.0.1
   repository: alias:banzaicloud-stable
   condition: pipeline-cicd.enabled
 

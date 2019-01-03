@@ -77,8 +77,8 @@ spec:
           - name: CICD_DATABASE_DRIVER
             value: "mysql"
           - name: CICD_DATABASE_DATASOURCE
-        {{- if .Values.mysql.enabled  }}
-            value: bonanzabanzai:{{ include "mysql.password" . }}@tcp({{ .Release.Name }}-pipeline-db:3306)/drone?parseTime=true
+        {{- if .Values.mysql.enabled }}
+            value: {{ .Values.mysql.user }}:{{ include "mysql.password" . }}@tcp({{ .Release.Name }}-pipeline-db:3306)/drone?parseTime=true
         {{- else if .Values.cloudsql.enabled }}
             value: {{ .Values.cloudsql.dbUserName }}:{{ .Values.cloudsql.dbUserPass }}@tcp(127.0.0.1:3306)/drone?parseTime=true
         {{- end }}
