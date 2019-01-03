@@ -12,7 +12,7 @@ Charts are automatically pushed to the Banzai cloud S3 repository from every fea
 
 - stable charts from branch `master` are pushed to `http://kubernetes-charts.banzaicloud.com/branch/master`
 
-These charts can be used from any `helm` environment manually by adding them as a new repo with (*note the `/` at the end of the URL*):
+These charts can be used from any `helm` environment manually by adding them as a new repo with:
 
 ```
 helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
