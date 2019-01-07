@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 traefik:
+  enabled: true
   serviceType: LoadBalancer
   imageTag: 1.7.0-rc3
   dashboard:

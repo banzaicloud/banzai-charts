@@ -124,6 +124,7 @@ server:
 
 mysql:
   enabled: true
+  user: bonanzabanzai
 
 ##
 ## CloudSQL configuration
