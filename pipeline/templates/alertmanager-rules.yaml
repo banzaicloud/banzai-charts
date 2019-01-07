@@ -19,7 +19,7 @@ spec:
         message: Pipeline cluster create failed.
         runbook_url: https://alpha.dev.banzaicloud.com/grafana/d/pipeline/pipeline-dashboard-rev2
       expr: |
-        sum(pipeline_cluster_active_total{status=~"ERROR"}) > 0
+        pipeline_cluster_active_total{status=~"ERROR"} > 0
       for: 1m
       labels:
         severity: critical
