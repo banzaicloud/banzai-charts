@@ -39,8 +39,8 @@ The following tables lists configurable parameters of the anchore-policy-validat
 |logVerbosity                         |log verbosity level                          |8                                         |
 |apiService.group                     |group of registered api service              |admission.anchore.io                      |
 |apiService.version                   |version of registered api service            |v1beta1                                   |
-|image.repository                     |admission-server image repo                  |viglesiasce/anchore-image-admission-server|
-|image.tag                            |admission-server image tag                   |latest                                    |
+|image.repository                     |admission-server image repo                  |banzaicloud/anchore-image-validator       |
+|image.tag                            |admission-server image tag                   |0.3.0                                     |
 |image.pullPolicy                     |admission-server image pull policy           |IfNotPresent                              |
 |service.name                         |validation sevice name                       |anchoreimagecheck                         |
 |service.type                         |validation service type                      |ClusterIP                                 |
