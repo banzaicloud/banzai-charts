@@ -14,7 +14,6 @@ spec:
   selector:
     matchLabels:
       app: {{ include "thanos.name" . }}-store
-      chart: {{ include "thanos.chart" . }}
       release: "{{ .Release.Name }}"
       heritage: "{{ .Release.Service }}"
       thanos-peer: "true"
@@ -22,7 +21,6 @@ spec:
     metadata:
       labels:
         app: {{ include "thanos.name" . }}-store
-        chart: {{ include "thanos.chart" . }}
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
         thanos-peer: "true"
