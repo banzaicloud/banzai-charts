@@ -8,12 +8,68 @@ global:
     clientsecret: ""
   pipelineBasepath: /pipeline
 
+github:
+  token: ""
+
+replicaCount: 1
+strategy: {}
+image:
+  repository: banzaicloud/pipeline
+  tag: latest
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+## Additional deployment labels and annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+deploymentLabels: {}
+deploymentAnnotations: {}
+
+service:
+  name: pipeline
+  type: ClusterIP
+  internalPort: 9090
+  externalPort:  9090
+  tls: true
+
+ingress:
+  enabled: false
+  annotations: {}
+    #traefik.frontend.rule.type: PathPrefix
+  hosts: []
+    # - "/"
+    # - "domain.com/xyz"
+    # - "domain.com"
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
 database:
    dialect: mysql
    host: localhost
    port: 3306
    user: admin
    password: ""
+
+env: {}
+
+metrics:
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+  alertRulesEnabled: false
+
+# CA source for automated self sing cert generator
+cert:
+  source: file
+  path: /sign-ca
+  ca:
+    key: ""
+    cert: ""
 
 configuration:
   # Pipeline configs
@@ -36,6 +92,7 @@ configuration:
 
   anchore:
     enabled: true
+    serviceEndpoint: ""
 
   logging:
     logformat: text
@@ -76,10 +133,9 @@ configuration:
 
   monitor:
    enabled: false
-   configMap: ""
-   configMapPrometheusKey: ""
-   certSecret: ""
-   mountPath: ""
+   configMap: prometheus-federation
+   certSecret: prometheus-federation-secrets
+   mountPath: /etc/prometheus/secrets
    grafanaAdminUsername: admin
 
   loggingOperator:
@@ -103,7 +159,7 @@ configuration:
     maintenanceWindowMinute: 15
 
   # Pipeline infra environment related settings
-  infra_:
+  infra:
     namespace: pipeline-system
 
     # Name of the node pool reserved for infra deployments
@@ -165,134 +221,7 @@ configuration:
 
   cert:
     source: file
-    path: config/certs
-
-pipelineExternalBaseURL: https://example.org/pipeline
-signupredirectpath: /ui/
-
-github:
-  token: ""
-
-replicaCount: 1
-
-image:
-  repository: banzaicloud/pipeline
-  tag: latest
-  pullPolicy: IfNotPresent
-
-env: {}
-
-service:
-  name: pipeline
-  type: ClusterIP
-  internalPort: 9090
-  externalPort:  9090
-  tls: true
-
-ingress:
-  enabled: false
-  annotations: {}
-    #traefik.frontend.rule.type: PathPrefix
-  hosts: []
-    # - "/"
-    # - "domain.com/xyz"
-    # - "domain.com"
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-strategy:
-  type: recreate
-
-# CA source for automated self sing cert generator
-cert:
-  source: file
-  path: /sign-ca
-  ca:
-    key: ""
-    cert: ""
-
-logging:
-  logformat: text
-  loglevel: debug
-  kubicornloglevel: debug
-
-auth:
-  jwtissueer: "https://banzaicloud.com/"
-  jwtaudience: "https://pipeline.banzaicloud.com"
-  clientid: ""
-  clientsecret: ""
-  tokenSigningKey: ""
-  cookieDomain: ""
-  setCookieDomain: false
-  secureCookie: true
-
-ark:
-  name: "ark"
-  namespace: "pipeline-system"
-  chart: "banzaicloud-stable/ark"
-  chartVersion: "1.2.2"
-  image: "banzaicloud/ark"
-  imageTag: "v0.9.11"
-  pullPolicy: "IfNotPresent"
-  syncEnabled: true
-  logLevel: "info"
-  bucketSyncInterval: "10m"
-  restoreSyncInterval: "20s"
-  backupSyncInterval: "20s"
-  restoreWaitTimeout: "5m"
-
-spotguide:
-  allowPrereleases: false
-  sharedLibraryGitHubOrganization: "spotguides"
-
-helm:
-  retryAttempt: "30"
-  retrySleepSeconds: "15"
-  tillerVersion: "v2.12.2"
-  stableRepositoryURL: "https://kubernetes-charts.storage.googleapis.com"
-  banzaiRepositoryURL: "http://kubernetes-charts.banzaicloud.com/branch/master"
-
-  path: "/cache/helm"
-
-eks:
-  templateLocation: "https://raw.githubusercontent.com/banzaicloud/pipeline/master/templates/eks"
-  asgFulfillmentTimeout: "10m"
-
-monitor:
-  enabled: true
-  configMap: prometheus-federation
-  certSecret: prometheus-federation-secrets
-  mountPath: /etc/prometheus/secrets
-
-loggingOperator:
-  chartVersion: ""
-  image:
-    tag: "0.0.5"
-
-serviceMesh:
-  istioChartVersion: "1.0.5"
-  grafanaDashboardLocation: "https://raw.githubusercontent.com/banzaicloud/pipeline/master/dashboards/istio"
-
-metrics:
-  enabled: false
-  port: 9900
-  debug: true
-  alertRulesEnabled: false
-  serviceMonitor:
-    enabled: false
-    additionalLabels: {}
-
-spotmetrics:
-  enabled: true
-  collectionInterval: "30s"
-
-dns:
-  domain: "example.org"
-
-infra:
-  headNodePoolName: "system"
+    path: /sign-ca
 
 cache:
   persistence:
@@ -334,9 +263,6 @@ statestore:
     accessMode: ReadWriteOnce
     size: 128Mi
 
-database:
-  autoMigrateEnabled: false
-
 ## mysql image version
 ## ref: https://hub.docker.com/r/library/mysql/tags/
 ##
@@ -348,13 +274,11 @@ mysql:
 
   ## Default: random 10 character string
   # mysqlPassword:
-
   initializationFiles:
     cicd-db.sql: |-
       CREATE DATABASE IF NOT EXISTS drone;
       GRANT ALL PRIVILEGES ON drone.* TO 'bonanzabanzai'@'%';
       FLUSH PRIVILEGES;
-
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
