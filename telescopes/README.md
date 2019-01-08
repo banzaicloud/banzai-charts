@@ -52,7 +52,7 @@ The following tables lists the configurable parameters of the telescopes chart a
 | `service.port`              | Port to bind to for NodePort service type             | `nil`                           |
 | `service.annotations`       | The kubernetes service annotations                    | `nil`                           |
 | `app.logLevel`              | Log level                                             | `info`                          |
-| `app.productInfoAddress`    | The address of the Product Info service               | `http://localhost:9090/api/v1`  |
+| `app.cloudInfoAddress`      | The address of the cloudinfo service                  | `https://beta.banzaicloud.io/cloudinfo/api/v1`  |
 | `app.devMode`               | Developer mode                                        | `false`                         |
 | `app.vaultAddress`          | The vault address for authentication token management | `nil`                           |
 | `app.tokenSigningKey`       | The token signing key for the authentication process  | `nil`                           |
