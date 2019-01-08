@@ -30,7 +30,7 @@ dependencies:
   condition: pipeline-cicd.enabled
 
 - name: telescopes
-  version: 0.1.9
+  version: 0.1.10
   repository: alias:banzaicloud-stable
   condition: telescopes.enabled
 
