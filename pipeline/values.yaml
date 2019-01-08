@@ -8,6 +8,165 @@ global:
     clientsecret: ""
   pipelineBasepath: /pipeline
 
+database:
+   dialect: mysql
+   host: localhost
+   port: 3306
+   user: admin
+   password: ""
+
+configuration:
+  # Pipeline configs
+  pipeline:
+    bindaddr: 127.0.0.1:9090
+    # Url basepath
+    # Default is "/pipeline" in the development environment to allow using the UI locally
+    basepath: /pipeline
+
+    # Use to redirect url after login
+    uipath: http://localhost:4200/ui
+    signupRedirectPath: http://localhost:4200/ui
+
+  database:
+    # Vault role
+    role: pipeline
+    dbname: pipeline
+    logging: true
+    autoMigrateEnabled: false
+
+  anchore:
+    enabled: true
+
+  logging:
+    logformat: text
+    loglevel: debug
+
+  cloud:
+    configRetryCount: 30
+    configRetrySleep: 15
+
+  cors:
+    AllowAllOrigins: false
+    AllowOrigins: ["http://localhost:4200"]
+
+  statestore:
+    path: ""
+
+  cicd:
+    url: http://localhost:8000
+
+  auth:
+    jwtissueer: https://banzaicloud.com/
+    jwtaudience: https://pipeline.banzaicloud.com
+    secureCookie: true
+    # Domain field for cookies
+    cookieDomain: ""
+    setCookieDomain: false
+    whitelistEnabled: false
+
+  helm:
+   retryAttemp: 30
+   retrySleepSeconds: 15
+   tillerVersion: "v2.11.0"
+   path: "/cache/helm"
+
+   #helm repo URLs
+   stableRepositoryURL: "https://kubernetes-charts.storage.googleapis.com"
+   banzaiRepositoryURL: "http://kubernetes-charts.banzaicloud.com/branch/master"
+
+  monitor:
+   enabled: false
+   configMap: ""
+   configMapPrometheusKey: ""
+   certSecret: ""
+   mountPath: ""
+   grafanaAdminUsername: admin
+
+  loggingOperator:
+    chartVersion: ""
+    imageTag: 0.0.4
+
+  # DNS service settings
+  dns:
+    # base domain under which organisation level subdomains will be registered
+    domain: example.org
+    # Kubernetes namespace which the secret for interacting with external DNS server (Route53) is created into
+    secretNamespace: default
+    # The interval in minutes at which the garbage collector runs to clean up unused organisation level domains
+    gcIntervalMinute: 1
+    gcLogLevel: debug
+
+  # AWS Route53 config
+  route53:
+    # The window before the next AWS Route53 billing period starts when unused organisation level domains (which are older than 12hrs)
+    # are cleaned up
+    maintenanceWindowMinute: 15
+
+  # Pipeline infra environment related settings
+  infra_:
+    namespace: pipeline-system
+
+    # Name of the node pool reserved for infra deployments
+    # If you set this property Pipeline will place a taint on all nodes in this node pool and Tiller will be deployed with
+    # a node selector and toleration matching nodes from this node pool. Make sure all Infra deployments are setup with
+    # the node-affinity and toleration as described in docs/infra-node-pool.md
+    #headNodePoolName="head"
+
+    headNodeTaintRetryAttempt: 30
+    headNodeTaintRetrySleepSeconds: 5
+
+  eks:
+    templateLocation: https://raw.githubusercontent.com/banzaicloud/pipeline/master/templates/eks
+    ASGFulfillmentTimeout: 10m
+
+  gke:
+    resourceDeleteWaitAttempt: 12
+    resourceDeleteSleepSeconds: 5
+
+  oke:
+    waitAttemptsForNodepoolActive: 60
+    sleepSecondsForNodepoolActive: 30
+
+  ark:
+    name: ark
+    namespace: pipeline-infra
+    chart: banzaicloud-stable/ark
+    chartVersion: 1.2.1
+    image: banzaicloud/ark
+    imageTag: v0.9.6
+    pullPolicy: IfNotPresent
+    syncEnabled: true
+    logLevel: info
+    bucketSyncInterval: 10m
+    restoreSyncInterval: 20s
+    backupSyncInterval: 20s
+    restoreWaitTimeout: 5m
+
+  spotguide:
+    allowPrereleases: false
+    allowPrivateRepos: false
+    syncInterval: 5m
+    sharedLibraryGitHubOrganization: spotguides
+
+  metrics:
+    enabled: false
+    port: :9900
+    # if true, some metrics have unique labels
+    debug: true
+
+  issue:
+    type: "github"
+    githubOwner: "kelly-slater"
+    githubRepository: "the-pipeline-issues"
+
+  spotmetrics:
+    enabled: false
+    collectionInterval: 30s
+
+  cert:
+    source: file
+    path: config/certs
+
 pipelineExternalBaseURL: https://example.org/pipeline
 signupredirectpath: /ui/
 
@@ -186,8 +345,6 @@ mysql:
   nameOverride: pipeline-db
   mysqlDatabase: pipeline
   mysqlUser: bonanzabanzai
-
-
 
   ## Default: random 10 character string
   # mysqlPassword:
