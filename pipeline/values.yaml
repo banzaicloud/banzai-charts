@@ -9,6 +9,13 @@ global:
     clientsecret: ""
   pipelineBasepath: /pipeline
 
+database:
+  # Vault role
+  role: ""
+  dbname: pipeline
+  logging: true
+  autoMigrateEnabled: true
+
 github:
   token: ""
 
@@ -77,13 +84,6 @@ configuration:
     # Use to redirect url after login
     uipath: http://localhost:4200/ui
     signupRedirectPath: http://localhost:4200/ui
-
-  database:
-    # Vault role
-    role: pipeline
-    dbname: pipeline
-    logging: true
-    autoMigrateEnabled: false
 
   anchore:
     enabled: false
