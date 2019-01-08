@@ -13,8 +13,8 @@ database:
   # Vault role
   role: ""
   dbname: pipeline
-  logging: true
-  autoMigrateEnabled: true
+  logging: "true"
+  autoMigrateEnabled: "true"
 
 github:
   token: ""
