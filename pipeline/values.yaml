@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# These global variables will be passed as env variables therefore it will overwrite configuration changes
 global:
   auth:
     clientid: ""
@@ -48,16 +49,10 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-database:
-   dialect: mysql
-   host: localhost
-   port: 3306
-   user: admin
-   password: ""
-
 env: {}
 
 metrics:
+  enabled: false
   serviceMonitor:
     enabled: false
     additionalLabels: {}
@@ -91,7 +86,7 @@ configuration:
     autoMigrateEnabled: false
 
   anchore:
-    enabled: true
+    enabled: false
     serviceEndpoint: ""
 
   logging:
@@ -205,7 +200,6 @@ configuration:
     sharedLibraryGitHubOrganization: spotguides
 
   metrics:
-    enabled: false
     port: :9900
     # if true, some metrics have unique labels
     debug: true
@@ -271,7 +265,6 @@ mysql:
   nameOverride: pipeline-db
   mysqlDatabase: pipeline
   mysqlUser: bonanzabanzai
-
   ## Default: random 10 character string
   # mysqlPassword:
   initializationFiles:
@@ -329,5 +322,3 @@ vault:
   # If left empty SKIP_VERIFY will be used.
   tlsSecret: ""
 
-cicd:
-  url: ""
