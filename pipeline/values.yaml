@@ -218,48 +218,7 @@ issue:
   githubOwner: ""
   githubRepository: ""
 
-vault:
-  vault:
-    externalConfig:
-      policies:
-        - name: allow_accesstokens_and_orgs
-          rules: path "secret/data/accesstokens/*" {
-                  capabilities = ["create", "read", "update"]
-                }
-                path "secret/metadata/accesstokens/*" {
-                  capabilities = ["delete", "list"]
-                }
-                path "secret/data/orgs/*" {
-                  capabilities = ["create", "read", "update"]
-                }
-                path "secret/metadata/orgs/*" {
-                  capabilities = ["delete", "list"]
-                }
-                path "secret/data/banzaicloud/*" {
-                  capabilities = ["create", "read"]
-                }
-                path "secret/metadata/banzaicloud/*" {
-                  capabilities = ["list"]
-                }
-      auth:
-        - type: kubernetes
-          # Allows creating roles in Vault which can be used later on for the Kubernetes based
-          # authentication.
-          # See https://www.vaultproject.io/docs/auth/kubernetes.html#creating-a-role for
-          # more information.
-          roles:
-            # Allow pipeline pod in the all namespaces to use the secret kv store
-            - name: pipeline
-              bound_service_account_names: pipeline
-              bound_service_account_namespaces: "*"
-              policies: allow_accesstokens_and_orgs
-              ttl: 1h
-      secrets:
-        - path: secret
-          type: kv
-          description: General secrets.
-          options:
-            version: 2
+
 resources:
   requests:
     cpu: 250m
@@ -269,3 +228,11 @@ resources:
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 deploymentLabels: {}
 deploymentAnnotations: {}
+
+vault:
+  # Vault service endpoint
+  serviceAddress: ""
+  # The secret that holds the Vault CA cert.
+  # If left empty SKIP_VERIFY will be used.
+  tlsSecret: ""
+

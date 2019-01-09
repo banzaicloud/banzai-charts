@@ -3,7 +3,3 @@ dependencies:
   version: 0.7.2
   repository: alias:banzaicloud-stable
   condition: mysql.enabled
-
-- name: vault
-  version: 0.5.22
-  repository: alias:banzaicloud-stable

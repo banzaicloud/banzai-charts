@@ -227,8 +227,13 @@ spec:
 
         - name: VAULT_ADDR
           value: https://{{ .Release.Name }}-vault:8200
+        {{- if .Values.vault.tlsSecret }}
         - name: VAULT_CACERT
           value: /vault/tls/ca.crt
+        {{ else }}
+        - name: VAULT_SKIP_VERIFY
+          value: "true"
+        {{- end }}
 
         - name: PIPELINE_PIPELINE_BINDADDR
           value: ":{{ .Values.service.internalPort }}"
@@ -297,9 +302,10 @@ spec:
 
         - mountPath: /cache
           name: cache
-
+      {{- if .Values.vault.tlsSecret }}
         - name: vault-tls
           mountPath: /vault/tls
+       {{ end }}
       {{- if .Values.service.tls  }}
         - name: pipeline-tls
           mountPath: /tls
@@ -330,9 +336,11 @@ spec:
         hostPath:
           path: /opt/pipeline/statestore/
         {{- end }}
+      {{- if .Values.vault.tlsSecret }}
       - name: vault-tls
         secret:
           secretName: {{ .Release.Name }}-vault-tls
+      {{ end }}
       {{- if .Values.service.tls  }}
       - name: pipeline-tls
         secret:
