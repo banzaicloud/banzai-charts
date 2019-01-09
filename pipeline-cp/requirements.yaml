@@ -20,7 +20,7 @@ dependencies:
   repository: alias:banzaicloud-stable
 
 - name: pipeline-ui
-  version: 0.1.6
+  version: 0.1.7
   repository: alias:banzaicloud-stable
   condition: pipeline-ui.enabled
 
