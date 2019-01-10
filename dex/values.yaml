@@ -1,0 +1,78 @@
+# Default values for dex
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+
+image: quay.io/dexidp/dex
+imageTag: "master"
+imagePullPolicy: "IfNotPresent"
+
+inMiniKube: false
+
+replicas: 1
+
+postgresql:
+  enabled: true
+  postgresqlUsername: dex
+  postgresqlPassword: foo
+  postgresqlDatabase: dex_db
+
+# resources:
+  # limits:
+    # cpu: 100m
+    # memory: 50Mi
+  # requests:
+    # cpu: 100m
+    # memory: 50Mi
+
+ports:
+  - name: http
+    containerPort: 5556
+    protocol: TCP
+
+service:
+  type: ClusterIP
+  annotations: {}
+
+extraVolumes: []
+extraVolumeMounts: []
+
+certs:
+  web:
+    create: true
+    caDays: 10000
+    certDays: 10000
+    secret:
+      tlsName: dex-web-server-tls
+      caName: dex-web-server-ca
+
+env: []
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+config:
+  issuer: http://127.0.0.1:5556/dex
+  storage:
+    type: postgres
+    config:
+      database: dex_db
+      user: dex
+      password: foo
+      host: dextest-postgresql.default.svc.cluster.local:5432
+      ssl:
+        mode: disable
+  logger:
+    level: debug
+  web:
+    http: 0.0.0.0:5556
+
+nodeSelector: {}
