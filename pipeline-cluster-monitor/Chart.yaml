@@ -9,7 +9,7 @@ keywords:
   - monitor
 home: https://banzaicloud.com
 sources:
-  - https://github.com/banzaicloud/charts/
+  - https://github.com/banzaicloud/banzai-charts/
 maintainers:
 - name: Banzai Cloud
   email: info@banzaicloud.com
