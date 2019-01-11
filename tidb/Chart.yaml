@@ -1,7 +1,8 @@
 name: tidb
 home: https://banzaicloud.com
 sources:
-  - https://github.com/banzaicloud/charts/
+  - https://github.com/pingcap/tidb
+  - https://github.com/banzaicloud/banzai-charts/
 version: 0.0.2
 description: A TiDB Helm chart for Kubernetes
 keywords:
