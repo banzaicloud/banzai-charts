@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: {{ template "dex.name" . }}
+    chart: {{ template "dex.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  name: {{ template "dex.fullname" . }}
+data:
+  config.yaml: |-
+    issuer: {{ default "http://127.0.0.1:5556/dex" .Values.config.issuer }}
+    storage:
+      {{- if .Values.postgresql.enabled }}
+      type: postgres
+      {{- else }}
+      type: {{ .Values.config.storage.type }}
+      {{- end }}
+      config:
+        {{- if .Values.postgresql.enabled }}
+        database: {{ .Values.postgresql.postgresqlDatabase }}
+        user: {{ .Values.postgresql.postgresqlUsername }}
+        password: {{ .Values.postgresql.postgresqlPassword }}
+        {{- else }}
+        database: {{ .Values.config.storage.config.database }}
+        user: {{ .Values.config.storage.config.user }}
+        password: {{ .Values.config.storage.config.password }}
+        {{- end }}
+        host: {{ default (printf "%s-postgresql.%s.svc.cluster.local:5432" .Release.Name .Release.Namespace) .Values.config.storage.config.host }}
+        ssl:
+          mode: {{ default "disable" .Values.config.storage.config.ssl.mode }}
+    logger:
+      level: {{ default "debug" .Values.config.logger.level }}
+    web:
+      http: {{ default "0.0.0.0:5556" .Values.config.web.http }}
+
+    staticClients:
+    {{ range .Values.config.staticClients }}
+    - id: {{ .id }}
+      redirectURIs:
+      {{ range .redirectURIs }}
+      - {{ . }}
+      {{ end }}
+      name: {{ .name }}
+      secret: {{ .secret }}
+    {{ end }}
+
+    connectors:
+{{ toYaml .Values.config.connectors | indent 4 }}

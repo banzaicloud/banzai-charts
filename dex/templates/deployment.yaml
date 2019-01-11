@@ -55,12 +55,12 @@ spec:
 {{- end }}
       volumes:
       - name: config
-        secret:
+        configMap:
           defaultMode: 420
           items:
           - key: config.yaml
             path: config.yaml
-          secretName: {{ template "dex.fullname" . }}
+          name: {{ template "dex.fullname" . }}
       - name: https-tls
         secret:
           defaultMode: 420

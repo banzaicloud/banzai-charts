@@ -60,19 +60,26 @@ serviceAccount:
   name:
 
 config:
-  issuer: http://127.0.0.1:5556/dex
-  storage:
-    type: postgres
-    config:
-      database: dex_db
-      user: dex
-      password: foo
-      host: dextest-postgresql.default.svc.cluster.local:5432
-      ssl:
-        mode: disable
+  issuer: ""
+
   logger:
-    level: debug
+    level: ""
+
   web:
-    http: 0.0.0.0:5556
+    http: ""
+
+  storage:
+    type: ""
+    config:
+      database: ""
+      user: ""
+      password: ""
+      host: ""
+      ssl:
+        mode: ""
+
+  staticClients: []
+
+  connectors: []
 
 nodeSelector: {}
