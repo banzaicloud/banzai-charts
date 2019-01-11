@@ -6,7 +6,7 @@ dependencies:
   condition: traefik.enabled
 
 - name: prometheus
-  version: 7.3.4-thanos.1
+  version: 7.3.4-thanos.2
   repository: alias:banzaicloud-stable
   condition: prometheus.enabled
 
