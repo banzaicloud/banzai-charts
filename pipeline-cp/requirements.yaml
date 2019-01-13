@@ -24,10 +24,10 @@ dependencies:
   repository: alias:banzaicloud-stable
   condition: pipeline-ui.enabled
 
-- name: pipeline-cicd
-  version: 1.0.2
+- name: cicd
+  version: 1.0.1
   repository: alias:banzaicloud-stable
-  condition: pipeline-cicd.enabled
+  condition: cicd.enabled
 
 - name: telescopes
   version: 0.1.10

@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "cicd.fullname" . }}
+  name: "{{ template "cicd.fullname" . }}"
   labels:
-    app: {{ template "cicd.name" . }}
+    app: "{{ template "cicd.name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
     component: cicd
 {{- with .Values.labels }}
 {{ toYaml . | indent 4 }}
@@ -19,24 +19,24 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ template "cicd.name" . }}
+      app: "{{ template "cicd.name" . }}"
       release: "{{ .Release.Name }}"
       component: cicd
   template:
     metadata:
       labels:
-        app: {{ template "cicd.name" . }}
+        app: "{{ template "cicd.name" . }}"
         release: "{{ .Release.Name }}"
         component: cicd
     spec:
-      serviceAccount: {{ template "cicd.fullname" . }}
+      serviceAccount: "{{ template "cicd.fullname" . }}"
       containers:
-      {{- if .Values.cloudsql.enabled  }}
+{{- if .Values.cloudsql.enabled }}
       - name: cloudsql-proxy
-        image: {{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}
+        image: "{{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}"
         command: ["/cloud_sql_proxy",
                   "-instances={{ .Values.cloudsql.instance }}=tcp:3306"]
-      {{- end }}
+{{- end }}
       - name: cicd-server
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         command: ["/bin/cicd-server"]
@@ -47,57 +47,59 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           - name: CICD_HOST
-          {{- if hasKey .Values.server "host" }}
+            {{- if hasKey .Values.server "host" }}
             value: {{ .Values.server.host }}
-          {{- else }}
+            {{- else }}
             value: http://{{ template "cicd.fullname" . }}
-          {{- end }}
-
-          {{ range $key, $value := .Values.server.env }}
-          - name: {{ $key }}
-            value: {{ $value | quote }}
-          {{ end }}
-
-          {{ if not (hasKey .Values.server.env "CICD_GITHUB_CLIENT") }}
+            {{- end }}
           - name: CICD_GITHUB
             value: "true"
-          {{ end }}
-
-          {{ if not (hasKey .Values.server.env "CICD_GITHUB_CLIENT") }}
           - name: CICD_GITHUB_CLIENT
             value: {{ .Values.global.auth.clientid | quote }}
-          {{ end }}
-
-          {{ if not (hasKey .Values.server.env "CICD_GITHUB_SECRET") }}
           - name: CICD_GITHUB_SECRET
             value: {{ .Values.global.auth.clientsecret | quote }}
-          {{ end }}
-
           - name: CICD_DATABASE_DRIVER
             value: "mysql"
-          - name: CICD_DATABASE_DATASOURCE
         {{- if .Values.mysql.enabled }}
-            value: {{ .Values.mysql.user }}:{{ include "mysql.password" . }}@tcp({{ .Release.Name }}-pipeline-db:3306)/drone?parseTime=true
+          - name: CICD_DATABASE_PORT
+            value: "3306"
+          - name: CICD_DATABASE_NAME
+            value: {{ default "drone" .Values.mysql.mysqlDatabase | quote }}
+          - name: CICD_DATABASE_USER
+            value: {{ default "" .Values.mysql.mysqlUser | quote }}
+          - name: CICD_DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.mysql.existingSecret }}
+                key: mysql-password
+          - name: CICD_DATABASE_HOST
+            value: {{ default "localhost" .Values.mysql.host | quote }}
         {{- else if .Values.cloudsql.enabled }}
+          - name: CICD_DATABASE_DATASOURCE
             value: {{ .Values.cloudsql.dbUserName }}:{{ .Values.cloudsql.dbUserPass }}@tcp(127.0.0.1:3306)/drone?parseTime=true
         {{- end }}
+
         {{- if hasKey .Values.ingress "hosts" }}
           - name: CICD_EXTERNAL_URL
             value: https://{{ index .Values.ingress.hosts 0 }}
         {{- end }}
 
           - name: CICD_BUILD_URL
-            value: https://{{ .Values.global.pipelineHost }}/ui
+            value: "https://{{ .Values.global.pipelineHost }}/ui"
           - name: PIPELINE_BASEPATH
-            value: https://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090{{ .Values.global.pipelineBasepath }}
+            value: "https://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090{{ .Values.global.pipelineBasepath }}"
           - name: PIPELINE_EXTERNAL_BASEPATH
-            value: https://{{ .Values.global.pipelineHost }}{{ .Values.global.pipelineBasepath }}
+            value: "https://{{ .Values.global.pipelineHost }}{{ .Values.global.pipelineBasepath }}"
+
+        {{- range $key, $value := .Values.server.env }}
+          - name: {{ $key }}
+            value: {{ $value | quote }}
+        {{- end }}
 
         volumeMounts:
         - mountPath: /var/lib/cicd
           name: cicd-disk
           readOnly: false
-
         ports:
         - name: http
           containerPort: 8000

@@ -8,7 +8,7 @@ Checkout the repository and execute:
 
 ```console
 $ cd pipeline-cicd
-$ helm upgrade --install pipeline-cicd . --set global.auth.clientid=$GITHUB_CLIENT_ID --set global.auth.clientsecret=$GITHUB_CLIENT_SECRET
+$ helm upgrade --install cicd . --set global.auth.clientid=$GITHUB_CLIENT_ID --set global.auth.clientsecret=$GITHUB_CLIENT_SECRET
 ```
 
 ## Uninstalling the Chart
@@ -16,7 +16,7 @@ $ helm upgrade --install pipeline-cicd . --set global.auth.clientid=$GITHUB_CLIE
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete --purge pipeline-cicd
+$ helm delete --purge cicd
 ```
 
 The command removes nearly all the Kubernetes components associated with the
@@ -28,10 +28,10 @@ The following tables lists the configurable parameters of the chart and their de
 
 | Parameter               | Description                                                                                   | Default                 |
 |-------------------------|-----------------------------------------------------------------------------------------------|-------------------------|
-| `image.repository`      | CI/CD **server** image                                                                        | `banzaicloud/cicd` |
-| `image.tag`             | CI/CD **server** image tag                                                                    | `latest`                 |
+| `image.repository`      | CI/CD **server** image                                                                        | `banzaicloud/cicd`      |
+| `image.tag`             | CI/CD **server** image tag                                                                    | `0.8.1``                |
 | `image.pullPolicy`      | CI/CD **server** image pull policy                                                            | `IfNotPresent`          |
-| `agentImage.repository` | CI/CD **agent** image                                                                         | `banzaicloud/cicd` |
+| `agentImage.repository` | CI/CD **agent** image                                                                         | `banzaicloud/cicd`      |
 | `agentImage.tag`        | CI/CD **agent** image tag                                                                     | `0.8.1`                 |
 | `agentImage.pullPolicy` | CI/CD **agent** image pull policy                                                             | `IfNotPresent`          |
 | `service.httpPort`      | CI/CD's Web GUI HTTP port                                                                     | `80`                    |
@@ -46,4 +46,4 @@ The following tables lists the configurable parameters of the chart and their de
 | `server.resources`      | CI/CD **server** pod resource requests & limits                                               | `{}`                    |
 | `agent.env`             | CI/CD **agent** environment variables                                                         | `(default values)`      |
 | `agent.resources`       | CI/CD **agent** pod resource requests & limits                                                | `{}`                    |
-| `sharedSecret`         | CI/CD server and agent shared secret                                                          | `(random value)`        |
+| `sharedSecret`          | CI/CD server and agent shared secret                                                          | `(random value)`        |
