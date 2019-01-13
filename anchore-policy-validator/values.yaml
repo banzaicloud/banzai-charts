@@ -1,5 +1,5 @@
 replicaCount: 1
-logVerbosity: 8
+logVerbosity: 1
 apiService:
   group: admission.anchore.io
   version: v1beta1
