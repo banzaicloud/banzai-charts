@@ -1,3 +1,5 @@
+{{- $url := splitList "/" (index  .Values.ingress.hosts 0) }}
+{{- $basePath := (rest $url | join "/") }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -31,7 +33,7 @@ spec:
         env:
         {{- if .Values.ingress.hosts }}
         - name: TELESCOPES_BASEPATH
-          value: /{{ rest (splitList "/" (index  .Values.ingress.hosts 0) ) | join "/"  }}
+          value: /{{ $basePath }}
         {{- end }}
         command:
         - "/bin/sh"
@@ -55,14 +57,14 @@ spec:
           containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           httpGet:
-            path: {{ .Values.app.basePath }}/status
+            path: {{ $basePath }}/status
             port: http
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           httpGet:
-            path: {{ .Values.app.basePath }}/status
+            path: {{ $basePath }}/status
             port: http
             httpHeaders:
           initialDelaySeconds: 30

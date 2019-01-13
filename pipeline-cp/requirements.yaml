@@ -30,7 +30,7 @@ dependencies:
   condition: cicd.enabled
 
 - name: telescopes
-  version: 0.1.10
+  version: 0.1.11
   repository: alias:banzaicloud-stable
   condition: telescopes.enabled
 
