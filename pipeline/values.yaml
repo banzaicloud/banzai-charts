@@ -213,6 +213,9 @@ cloudsql:
 anchore:
   enabled: false
   serviceEndpoint: ""
+  username: admin
+  secretName: ""
+  secretKey: adminPassword
 
 issue:
   githubOwner: ""

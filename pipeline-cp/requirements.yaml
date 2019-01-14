@@ -16,7 +16,7 @@ dependencies:
   condition: thanos.enabled
 
 - name: pipeline
-  version: 0.0.67
+  version: 0.0.68
   repository: alias:banzaicloud-stable
 
 - name: pipeline-ui
