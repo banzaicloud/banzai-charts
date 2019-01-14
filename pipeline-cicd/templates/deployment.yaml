@@ -44,9 +44,8 @@ spec:
         env:
           - name: CICD_SECRET
             valueFrom:
-              secretKeyRef:
-                name: {{ template "cicd.fullname" . }}
-                key: secret
+              fieldRef:
+                fieldPath: metadata.name
           - name: CICD_HOST
           {{- if hasKey .Values.server "host" }}
             value: {{ .Values.server.host }}
@@ -120,9 +119,8 @@ spec:
         env:
           - name: CICD_SECRET
             valueFrom:
-              secretKeyRef:
-                name: {{ template "cicd.fullname" . }}
-                key: secret
+              fieldRef:
+                fieldPath: metadata.name
           {{ range $key, $value := .Values.agent.env }}
           - name: {{ $key }}
             value: {{ $value | quote }}
