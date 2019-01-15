@@ -239,3 +239,5 @@ vault:
   # If left empty SKIP_VERIFY will be used.
   tlsSecret: ""
 
+cicd:
+  url: ""

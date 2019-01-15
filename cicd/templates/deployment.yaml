@@ -87,7 +87,7 @@ spec:
           - name: CICD_BUILD_URL
             value: "https://{{ .Values.global.pipelineHost }}/ui"
           - name: PIPELINE_BASEPATH
-            value: "https://{{ .Release.Name }}-pipeline.{{ .Release.Namespace }}:9090{{ .Values.global.pipelineBasepath }}"
+            value: "https://{{ .Values.global.pipelineHost }}{{ .Values.global.pipelineBasepath }}"
           - name: PIPELINE_EXTERNAL_BASEPATH
             value: "https://{{ .Values.global.pipelineHost }}{{ .Values.global.pipelineBasepath }}"
 
