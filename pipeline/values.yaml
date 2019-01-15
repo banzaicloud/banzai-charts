@@ -102,7 +102,6 @@ monitor:
   configMap: prometheus-federation
   certSecret: prometheus-federation-secrets
   mountPath: /etc/prometheus/secrets
-  alertRulesEnabled: false
 
 loggingOperator:
   chartVersion: ""
@@ -113,6 +112,7 @@ metrics:
   enabled: true
   port: 9900
   debug: true
+  alertRulesEnabled: false
   serviceMonitor:
     enabled: true
     additionalLabels: {}

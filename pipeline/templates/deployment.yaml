@@ -223,7 +223,7 @@ spec:
           value: {{ .Values.issue.githubRepository | quote }}
 
         - name: VAULT_ADDR
-          value: https://{{ .Release.Name }}-vault:8200
+          value: {{ .Values.vault.serviceAddress }}
         {{- if .Values.vault.tlsSecret }}
         - name: VAULT_CACERT
           value: /vault/tls/ca.crt
