@@ -16,7 +16,6 @@ The following tables lists configurable parameters of the dex chart and their de
 |image                                |dex image                                    |quay.io/dexidp/dex                        |
 |imageTag                             |image tag                                    |master                                    |
 |imagePullPolicy                      |image pull policy                            |IfNotPresent                              |
-|inMiniKube                           |in minikube                                  |false                                     |
 |replicas                             |number of replicas                           |1                                         |
 |postgresql.enabled                   |deploy postgresql                            |true                                      |
 |postgresql.postgresqlUsername        |postgresql username                          |dex                                       |
@@ -27,13 +26,8 @@ The following tables lists configurable parameters of the dex chart and their de
 |posts[0].protocol                    |port 0 protocol                              |TCP                                       |
 |service.type                         |service type                                 |ClusterIP                                 |
 |service.annotations                  |service annotattions                         |{}                                        |
-|extraVolumes                         |extra vlolumes                               |[]                                        |
-|extraVolumeMounts                    |extra mounts                                 |[]                                        |
-|certs.web.create                     |web cert create                              |true                                      |
-|certs.web.caDays                     |expiration days of CAcert                    |10000                                     |
-|certs.web.certDays                   |expiration days of cert                      |10000                                     |
-|certs.web.secret.tlsName             |tls secret name                              |dex-web-server-tls                        |
-|certs.web.secret.caName              |CA secret name                               |dex-web-server-ca                         |
+|certs.tlsName                        |tls secret name                              |dex-web-server-tls                        |
+|certs.caName                         |CA secret name                               |dex-web-server-ca                         |
 |env                                  |environment variables                        |[]                                        |
 |rbac.create                          |RBAC resources should be created             |true                                      |
 |serviceAccount.create                |serviceAccount should be created             |true                                      |

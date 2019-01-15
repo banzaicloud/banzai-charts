@@ -7,8 +7,6 @@ image: quay.io/dexidp/dex
 imageTag: "master"
 imagePullPolicy: "IfNotPresent"
 
-inMiniKube: false
-
 replicas: 1
 
 postgresql:
@@ -38,13 +36,8 @@ extraVolumes: []
 extraVolumeMounts: []
 
 certs:
-  web:
-    create: true
-    caDays: 10000
-    certDays: 10000
-    secret:
-      tlsName: dex-web-server-tls
-      caName: dex-web-server-ca
+  tlsName: ""
+  caName: ""
 
 env: []
 
@@ -53,10 +46,7 @@ rbac:
   create: true
 
 serviceAccount:
-  # Specifies whether a ServiceAccount should be created
   create: true
-  # The name of the ServiceAccount to use.
-  # If not set and create is true, a name is generated using the fullname template
   name:
 
 config:

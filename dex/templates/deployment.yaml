@@ -1,7 +1,3 @@
-{{ $fullname := include "dex.fullname" . }}
-{{ $httpsTlsBuiltName := printf "%s-tls" $fullname }}
-{{ $httpsTlsSecretName := default $httpsTlsBuiltName .Values.certs.web.secret.tlsName }}
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,8 +5,8 @@ metadata:
   labels:
     app: {{ template "dex.name" . }}
     chart: {{ template "dex.chart" . }}
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicas }}
   strategy:
@@ -21,12 +17,12 @@ spec:
   selector:
     matchLabels:
       app: {{ template "dex.name" . }}
-      release: "{{ .Release.Name }}"
+      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app: {{ template "dex.name" . }}
-        release: "{{ .Release.Name }}"
+        release: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ template "dex.serviceAccountName" . }}
       nodeSelector:
@@ -64,7 +60,7 @@ spec:
       - name: https-tls
         secret:
           defaultMode: 420
-          secretName: {{ $httpsTlsSecretName | quote }}
+          secretName: {{ default (printf "%s-tls" (include "dex.fullname" . )) .Values.certs.tlsName | quote }}
 {{- if ne (len .Values.extraVolumes) 0 }}
 {{ toYaml .Values.extraVolumes | indent 6 }}
 {{- end }}
