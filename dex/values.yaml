@@ -42,7 +42,6 @@ certs:
 env: []
 
 rbac:
-  # Specifies whether RBAC resources should be created
   create: true
 
 serviceAccount:
