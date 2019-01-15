@@ -1,4 +1,4 @@
-{{ if and .Values.acme.persistence.enabled .Values.persistence.existingClaim }}
+{{ if and .Values.acme.persistence.enabled .Values.acme.persistence.existingClaim }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
