@@ -176,7 +176,7 @@ spec:
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
         - name: PIPELINE_MONITOR_CONFIGMAP
-          value: {{ .Release.Name }}-{{ .Values.monitor.configMap }}
+          value: {{ .Values.monitor.configMap }}
         - name: PIPELINE_MONITOR_MOUNTPATH
           value: {{ default "/etc/prometheus/secrets" .Values.monitor.mountPath | quote }}
         - name: PIPELINE_MONITOR_CERTSECRET
