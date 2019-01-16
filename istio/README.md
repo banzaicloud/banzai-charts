@@ -37,35 +37,16 @@ The chart deploys pods that consume minimum resources as specified in the resour
 
 ## Installing the Chart
 
-1. If a service account has not already been installed for Tiller, install one:
+Use the `banzaicloud-stable` repo:
 ```
-$ kubectl apply -f install/kubernetes/helm/helm-service-account.yaml
-```
-
-2. Install Tiller on your cluster with the service account:
-```
-$ helm init --service-account tiller
+$ helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
+$ helm repo update
 ```
 
-3. Install Istio’s [Custom Resource Definitions](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/#customresourcedefinitions) via `kubectl apply`, and wait a few seconds for the CRDs to be committed in the kube-apiserver:
-   ```
-   $ kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
-   ```
-   **Note**: If you are enabling `certmanager`, you also need to install its CRDs and wait a few seconds for the CRDs to be committed in the kube-apiserver:
-   ```
-   $ kubectl apply -f install/kubernetes/helm/istio/charts/certmanager/templates/crds.yaml
-   ```
-
-4. To install the chart with the release name `istio` in namespace `istio-system`:
-    - With [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#automatic-sidecar-injection) (requires Kubernetes >=1.9.0):
-    ```
-    $ helm install install/kubernetes/helm/istio --name istio --namespace istio-system
-    ```
-
-    - Without the sidecar injection webhook:
-    ```
-    $ helm install install/kubernetes/helm/istio --name istio --namespace istio-system --set sidecarInjectorWebhook.enabled=false
-    ```
+Install the chart:
+```
+helm install --name istio --namespace istio-system banzaicloud-stable/istio
+```
 
 ## Configuration
 
@@ -99,7 +80,7 @@ Helm charts expose configuration options which are currently in alpha.  The curr
 | `grafana.persist` | Specifies whether Grafana addon should persist config data | true/false | `false` |
 | `grafana.storageClassName` | If `grafana.persist` is true, specifies the [`StorageClass`](https://kubernetes.io/docs/concepts/storage/storage-classes/) to use for the `PersistentVolumeClaim` | `StorageClass` | "" |
 | `grafana.accessMode` | If `grafana.persist` is true, specifies the [`Access Mode`](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) to use for the `PersistentVolumeClaim` | RWO/ROX/RWX | `ReadWriteMany` |
-| `prometheus.enabled` | Specifies whether Prometheus addon should be installed | true/false | `true` |
+| `prometheus.enabled` | Specifies whether Prometheus addon should be installed | true/false | `false` |
 | `servicegraph.enabled` | Specifies whether Servicegraph addon should be installed | true/false | `false` |
 | `tracing.enabled` | Specifies whether Tracing(jaeger) addon should be installed | true/false | `false` |
 | `kiali.enabled` | Specifies whether Kiali addon should be installed | true/false | `false` |
