@@ -15,6 +15,14 @@ postgresql:
   postgresqlPassword: foo
   postgresqlDatabase: dex_db
 
+cloudsql:
+  enabled: false
+  image:
+    repository: gcr.io/cloudsql-docker/gce-proxy
+    tag: 1.11
+    pullPolicy: IfNotPresent
+  instance: ""
+
 # resources:
   # limits:
     # cpu: 100m

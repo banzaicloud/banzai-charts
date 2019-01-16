@@ -28,7 +28,17 @@ spec:
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 10 }}
       containers:
-      - name: main
+      {{- if .Values.cloudsql.enabled  }}
+      - name: cloudsql-proxy
+        image: {{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}
+        imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy }}
+        command: ["/cloud_sql_proxy",
+                  "-instances={{ .Values.cloudsql.instance }}=tcp:5432"]
+        securityContext:
+          runAsUser: 2
+          allowPrivilegeEscalation: false
+      {{- end }}
+      - name: dex-server
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy }}
         command:

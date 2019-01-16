@@ -18,15 +18,16 @@ data:
       {{- end }}
       config:
         {{- if .Values.postgresql.enabled }}
+        host: {{ printf "%s-postgresql.%s.svc.cluster.local:5432" .Release.Name .Release.Namespace }}
         database: {{ .Values.postgresql.postgresqlDatabase }}
         user: {{ .Values.postgresql.postgresqlUsername }}
         password: {{ .Values.postgresql.postgresqlPassword }}
         {{- else }}
+        host: {{ default "localhost:5432" .Values.config.storage.config.host }}
         database: {{ .Values.config.storage.config.database }}
         user: {{ .Values.config.storage.config.user }}
         password: {{ .Values.config.storage.config.password }}
         {{- end }}
-        host: {{ default (printf "%s-postgresql.%s.svc.cluster.local:5432" .Release.Name .Release.Namespace) .Values.config.storage.config.host }}
         ssl:
           mode: {{ default "disable" .Values.config.storage.config.ssl.mode }}
     logger:
