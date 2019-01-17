@@ -69,49 +69,12 @@ pipeline-ui:
 
 telescopes:
   enabled: false
-  app:
-    basePath: /recommender
-  ingress:
-    enabled: true
-    hosts:
-       - "/recommender"
-    annotations:
-      kubernetes.io/ingress.class: traefik
-      traefik.frontend.rule.type: PathPrefix
 
 cloudinfo:
   enabled: false
-  app:
-    basePath: /cloudinfo
-  ingress:
-    enabled: true
-    hosts:
-       - "/cloudinfo"
-    annotations:
-      kubernetes.io/ingress.class: traefik
-      traefik.frontend.rule.type: PathPrefix
 
-pipeline-cicd:
-  enabled: true
-  ingress:
-    enabled: false
-    hosts:
-       - "/build"
-    annotations:
-      kubernetes.io/ingress.class: traefik
-      traefik.frontend.rule.type: PathPrefixStrip
-  server:
-    env:
-      CICD_DEBUG: "false"
-      CICD_PROVIDER: "github"
-      CICD_GITHUB: "true"
-
-  cloudsql:
-    enabled: false
-    instance: ""
-    dbName: ""
-    dbUserName: ""
-    dbUserPass: ""
+cicd:
+  enabled: false
 
 thanos:
   enabled: false

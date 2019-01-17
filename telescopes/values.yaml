@@ -8,12 +8,12 @@
 ##
 image:
   repository: "banzaicloud/telescopes"
-  tag: 0.2.4
+  tag: 0.3.0
 
   ## Specify an imagePullPolicy (Required)
   ## It's recommended to change this to 'Always' if the image tag is 'latest'
   ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
-  imagePullPolicy: Always
+  imagePullPolicy: IfNotPresent
 
 replicas: 1
 
@@ -41,7 +41,7 @@ ingress:
     #ingress.kubernetes.io/ssl-redirect: "false"
     #traefik.frontend.rule.type: PathPrefix
   hosts:
-    # - "/"
+    - "/"
     # - "domain.com/xyz"
     # - "domain.com"
   tls: []
@@ -63,15 +63,13 @@ resources:
     cpu: 120m
 
 app:
-  productInfoAddress: http://localhost:9090/api/v1/
+  cloudInfoAddress: "https://beta.banzaicloud.io/cloudinfo/api/v1"
   logLevel: info
   devMode: true
-  basePath: "/"
-#  vaultAddress: 
+#  vaultAddress:
 #  tokenSigningKey: 
 
 ## Additional deployment labels and annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 deploymentLabels: {}
 deploymentAnnotations: {}
-

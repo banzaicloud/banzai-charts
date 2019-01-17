@@ -139,11 +139,8 @@ spec:
             secretKeyRef:
               name: {{ include "pipeline.fullname" . }}
               key: githubToken
-        # TODO: the Drone version has to be removed once Pipeline is changed
-        - name: PIPELINE_DRONE_URL
-          value: http://{{ .Release.Name }}-pipeline-cicd:80
         - name: PIPELINE_CICD_URL
-          value: http://{{ .Release.Name }}-pipeline-cicd:80
+          value: {{ .Values.cicd.url }}
 
         - name: PIPELINE_ARK_NAME
           value: {{ .Values.ark.name }}
@@ -179,7 +176,7 @@ spec:
         - name: PIPELINE_MONITOR_ENABLED
           value: {{ .Values.monitor.enabled | quote }}
         - name: PIPELINE_MONITOR_CONFIGMAP
-          value: {{ .Release.Name }}-{{ .Values.monitor.configMap }}
+          value: {{ .Values.monitor.configMap }}
         - name: PIPELINE_MONITOR_MOUNTPATH
           value: {{ default "/etc/prometheus/secrets" .Values.monitor.mountPath | quote }}
         - name: PIPELINE_MONITOR_CERTSECRET
@@ -226,9 +223,14 @@ spec:
           value: {{ .Values.issue.githubRepository | quote }}
 
         - name: VAULT_ADDR
-          value: https://{{ .Release.Name }}-vault:8200
+          value: {{ .Values.vault.serviceAddress }}
+        {{- if .Values.vault.tlsSecret }}
         - name: VAULT_CACERT
           value: /vault/tls/ca.crt
+        {{ else }}
+        - name: VAULT_SKIP_VERIFY
+          value: "true"
+        {{- end }}
 
         - name: PIPELINE_PIPELINE_BINDADDR
           value: ":{{ .Values.service.internalPort }}"
@@ -249,14 +251,14 @@ spec:
         - name: PIPELINE_ANCHORE_ENABLED
           value: "true"
         - name: PIPELINE_ANCHORE_ENDPOINT
-          value: {{ default (printf "http://%s-anchore-engine.%s.svc.cluster.local:8228" .Release.Name .Release.Namespace) .Values.anchore.serviceEndpoint | quote }}
+          value: {{ .Values.anchore.serviceEndpoint | quote }}
         - name: PIPELINE_ANCHORE_ADMINUSER
-          value: "admin"
+          value: {{ .Values.anchore.username }}
         - name: PIPELINE_ANCHORE_ADMINPASS
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-anchore-engine
-              key: adminPassword
+              name: {{ .Values.anchore.secretName }}
+              key: {{ .Values.anchore.secretKey }}
         {{ end }}
 
         {{ range $key, $value := .Values.env }}
@@ -295,11 +297,10 @@ spec:
         - mountPath: /statestore
           name: statestore
 
-        - mountPath: /cache
-          name: cache
-
+      {{- if .Values.vault.tlsSecret }}
         - name: vault-tls
           mountPath: /vault/tls
+       {{ end }}
       {{- if .Values.service.tls  }}
         - name: pipeline-tls
           mountPath: /tls
@@ -313,15 +314,6 @@ spec:
         configMap:
           name: {{ include "pipeline.fullname" . }}
 
-      - name: cache
-        {{- if .Values.cache.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ default (printf "%s-cache" (include "pipeline.fullname" .)) .Values.cache.persistence.existingClaim }}
-        {{- else }}
-        hostPath:
-          path: /opt/pipeline/statestore/cache
-        {{- end }}
-
       - name: statestore
         {{- if .Values.statestore.persistence.enabled }}
         persistentVolumeClaim:
@@ -330,9 +322,11 @@ spec:
         hostPath:
           path: /opt/pipeline/statestore/
         {{- end }}
+      {{- if .Values.vault.tlsSecret }}
       - name: vault-tls
         secret:
           secretName: {{ .Release.Name }}-vault-tls
+      {{ end }}
       {{- if .Values.service.tls  }}
       - name: pipeline-tls
         secret:

@@ -1,3 +1,5 @@
+{{- $url := splitList "/" (index  .Values.ingress.hosts 0) }}
+{{- $basePath := (rest $url | join "/") }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -29,8 +31,10 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.imagePullPolicy | quote }}
         env:
+        {{- if .Values.ingress.hosts }}
         - name: TELESCOPES_BASEPATH
-          value: {{ .Values.app.basePath }}
+          value: /{{ $basePath }}
+        {{- end }}
         command:
         - "/bin/sh"
         - "-ecx"
@@ -38,14 +42,14 @@ spec:
           /bin/telescopes \
           --listen-address=0.0.0.0:{{ .Values.service.internalPort }} \
           --log-level={{ .Values.app.logLevel }} \
-          --productinfo-address={{ .Values.app.productInfoAddress }} \
+          --cloudinfo-address={{ .Values.app.cloudInfoAddress }} \
+        {{- if .Values.app.devMode }}
         {{- if .Values.app.vaultAddress }}
           --vault-address={{ .Values.app.vaultAddress }} \
         {{- end }}
         {{- if .Values.app.tokenSigningKey }}
           --token-signing-key={{ .Values.app.tokenSigningKey }} \
         {{- end }}
-        {{- if .Values.app.devMode }}
           --dev-mode
         {{- end }}
         ports:
@@ -53,14 +57,14 @@ spec:
           containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           httpGet:
-            path: {{ .Values.app.basePath }}/status
+            path: {{ $basePath }}/status
             port: http
           initialDelaySeconds: 120
           timeoutSeconds: 5
           failureThreshold: 6
         readinessProbe:
           httpGet:
-            path: {{ .Values.app.basePath }}/status
+            path: {{ $basePath }}/status
             port: http
             httpHeaders:
           initialDelaySeconds: 30

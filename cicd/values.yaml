@@ -14,7 +14,12 @@ labels: {}
 image:
   repository: "banzaicloud/cicd"
   tag: "master"
-  pullPolicy: "Always"
+  pullPolicy: "IfNotPresent"
+
+global:
+  auth:
+    clientsecret: ""
+    clientid: ""
 
 service:
   httpPort: 80
@@ -62,7 +67,7 @@ server:
   ## https://beta.banzaicloud.io/docs/cicd/environment/
   ##
   env:
-    CICD_DEBUG: "false"
+    CICD_DEBUG: "true"
     CICD_OPEN: "true"
     CICD_REPO_CONFIG: ".banzaicloud/pipeline.yaml"
     # CICD_DATABASE_DRIVER: "sqlite3"
@@ -122,9 +127,16 @@ server:
   #    memory: 2Gi
   #    cpu: 1
 
+##
+## MysqlSQL configuration
+##
 mysql:
   enabled: true
-  user: bonanzabanzai
+  host: "mysql"
+  port: 3306
+  mysqlUser: "pipeline-rw"
+  mysqlDatabase: "drone"
+  existingSecret: "mysql"
 
 ##
 ## CloudSQL configuration
@@ -132,9 +144,10 @@ mysql:
 cloudsql:
   enabled: false
   instance: ""
-  dbName: ""
+  dbName: "drone"
   dbUserName: ""
   dbUserPass: ""
+  existingSecret: ""
   image:
     repository: gcr.io/cloudsql-docker/gce-proxy
     tag: 1.11
@@ -162,4 +175,4 @@ agent:
 ## Uncomment this if you want to set a specific shared secret between
 ## the agents and servers, otherwise this will be auto-generated.
 ##
-# sharedSecret: supersecret
+sharedSecret: "ss"
