@@ -36,7 +36,7 @@ data:
       http: {{ default "0.0.0.0:5556" .Values.config.web.http }}
 
     staticClients:
-{{ .Files.Get "config/clients-config.yaml" | indent 4 }}
+{{ tpl ( .Files.Get "config/clients-config.yaml" ) | indent 4 }}
 
     connectors:
-{{ .Files.Get "config/connectors-config.yaml" | indent 4 }}
+{{ tpl ( .Files.Get "config/connectors-config.yaml" )| indent 4 }}
