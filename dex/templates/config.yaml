@@ -47,4 +47,4 @@ data:
     {{- end }}
 
     connectors:
-{{ tpl ( .Files.Get "config/connectors-config.toml" ) . | indent 4 }}
+{{ tpl ( .Files.Get "config/connectors-config.tpl" ) . | indent 4 }}
