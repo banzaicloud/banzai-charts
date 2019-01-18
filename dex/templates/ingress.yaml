@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $serviceName := include "dex.fullname" . -}}
-{{- $servicePort := (index .Values.ports 1).containerPort -}}
+{{- $servicePort := ( index .Values.ports 0 ).containerPort -}}
 
 apiVersion: extensions/v1beta1
 kind: Ingress

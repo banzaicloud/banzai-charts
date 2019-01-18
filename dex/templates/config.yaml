@@ -36,7 +36,15 @@ data:
       http: {{ default "0.0.0.0:5556" .Values.config.web.http }}
 
     staticClients:
-{{ tpl ( .Files.Get "config/clients-config.yaml" ) | indent 4 }}
+    {{- range .Values.config.staticClients }}
+    - id: {{ .id | quote}}
+      redirectURIs:
+      {{- range .redirectURIs }}
+      - {{ . | quote }}
+      {{- end }}
+      name: {{ .name | quote }}
+      secret: {{ .secret | quote }}
+    {{- end }}
 
     connectors:
-{{ tpl ( .Files.Get "config/connectors-config.yaml" )| indent 4 }}
+{{ tpl ( .Files.Get "config/connectors-config.toml" ) . | indent 4 }}
