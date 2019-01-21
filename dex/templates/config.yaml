@@ -11,7 +11,7 @@ data:
   config.yaml: |-
     issuer: {{ default "http://127.0.0.1:5556/dex" .Values.config.issuer }}
     storage:
-      {{- if .Values.postgresql.enabled }}
+      {{- if or .Values.postgresql.enabled .Values.cloudsql.enabled }}
       type: postgres
       {{- else }}
       type: {{ .Values.config.storage.type }}
