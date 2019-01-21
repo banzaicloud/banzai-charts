@@ -1,0 +1,97 @@
+# Default values for dex
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+
+image: quay.io/dexidp/dex
+imageTag: "master"
+imagePullPolicy: "IfNotPresent"
+
+replicas: 1
+
+postgresql:
+  enabled: true
+  postgresqlUsername: dex
+  postgresqlPassword: foo
+  postgresqlDatabase: dex_db
+
+cloudsql:
+  enabled: false
+  image:
+    repository: gcr.io/cloudsql-docker/gce-proxy
+    tag: 1.11
+    pullPolicy: IfNotPresent
+  instance: ""
+
+# resources:
+  # limits:
+    # cpu: 100m
+    # memory: 50Mi
+  # requests:
+    # cpu: 100m
+    # memory: 50Mi
+
+ports:
+  - name: http
+    containerPort: 5556
+    protocol: TCP
+
+service:
+  type: ClusterIP
+  annotations: {}
+
+extraVolumes: []
+extraVolumeMounts: []
+
+certs:
+  tlsName: ""
+  caName: ""
+
+env: []
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name:
+
+config:
+  issuer: ""
+
+  logger:
+    level: ""
+
+  web:
+    http: ""
+
+  storage:
+    type: ""
+    config:
+      database: ""
+      user: ""
+      password: ""
+      host: ""
+      ssl:
+        mode: ""
+
+  staticClients: []
+
+  connectors: []
+
+nodeSelector: {}
+
+ingress:
+  enabled: false
+  annotations: {}
+    #kubernetes.io/ingress.class: traefik
+    #ingress.kubernetes.io/ssl-redirect: "false"
+    #traefik.frontend.rule.type: PathPrefix
+  hosts:
+    - "/"
+    # - "domain.com/xyz"
+    # - "domain.com"
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local

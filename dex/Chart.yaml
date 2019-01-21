@@ -1,0 +1,11 @@
+name: dex
+version: 0.0.1
+appVersion: master
+description: dexidp Dex
+keywords:
+- dex
+- oidc
+icon: https://raw.githubusercontent.com/dexidp/dex/master/Documentation/logos/dex-glyph-color.png
+source:
+- https://github.com/dexidp/dex
+
