@@ -8,7 +8,7 @@
 ##
 image:
   repository: "banzaicloud/telescopes"
-  tag: 0.3.0
+  tag: 0.4.1
 
   ## Specify an imagePullPolicy (Required)
   ## It's recommended to change this to 'Always' if the image tag is 'latest'
