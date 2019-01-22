@@ -1,18 +1,17 @@
 {{- if .Values.ingress.enabled -}}
-{{- $serviceName := include "pipeline-ui.fullname" . -}}
-{{- $servicePort := .Values.service.internalPort -}}
+{{- $fullName := include "pipeline-ui.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "pipeline-ui.fullname" . }}
+  name: {{ $fullName }}
   labels:
-    app: {{ template "pipeline-ui.name" . }}
-    chart: {{ template "pipeline-ui.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "pipeline-ui.name" . }}
+    helm.sh/chart: {{ include "pipeline-ui.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
+    {{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
 {{- if .Values.ingress.tls }}
@@ -33,7 +32,7 @@ spec:
         paths:
           - path: /{{ rest $url | join "/" }}
             backend:
-              serviceName: {{ $serviceName }}
-              servicePort: {{ $servicePort }}
+              serviceName: {{ $fullName }}
+              servicePort: http
   {{- end}}
 {{- end }}
