@@ -3,7 +3,7 @@ description: A Helm chart for Kubernetes
 name: cloudinfo
 version: 0.4.19
 
-appVersion: 0.4.8
+appVersion: "0.4.10"
 
 home: https://banzaicloud.com
 
