@@ -1,60 +1,93 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "pipeline-ui.fullname" . }}
+  name: {{ include "pipeline-ui.fullname" . }}
   labels:
-    app: {{ template "pipeline-ui.name" . }}
-    chart: {{ template "pipeline-ui.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    {{- if .Values.deploymentLabels }}
-{{ toYaml .Values.deploymentLabels | indent 4 }}
-    {{- end }}
+    app.kubernetes.io/name: {{ include "pipeline-ui.name" . }}
+    helm.sh/chart: {{ include "pipeline-ui.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.deploymentLabels }}
+   {{- toYaml . | nindent 4 }}
+{{- end }}
+{{- with .Values.deploymentAnnotations }}
   annotations:
-{{ toYaml .Values.deploymentAnnotations | indent 4 }}
+    {{- toYaml . | nindent 4 }}
+{{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "pipeline-ui.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "pipeline-ui.name" . }}
-        release: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "pipeline-ui.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        env:
-        - name: API_URL
-          value: "{{ .Values.apiUrl }}"
-        {{- if .Values.cloudinfoUrl }}
-        - name: CLOUDINFO_URL
-          value: "{{ .Values.cloudinfoUrl }}"
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          {{- if .Values.apiUrl }}
+          - name: API_URL
+            value: "{{ .Values.apiUrl }}"
+          {{- end }}
+          {{- if .Values.cloudinfoUrl }}
+          - name: CLOUDINFO_URL
+            value: "{{ .Values.cloudinfoUrl }}"
+          {{- end }}
+          {{- if .Values.recommenderUrl }}
+          - name: RECOMMENDER_URL
+            value: "{{ .Values.recommenderUrl }}"
+          {{- end }}
+          {{- if .Values.tag }}
+          - name: TAG
+            value: "{{ .Values.tag }}"
+          {{- end }}
+          {{- if .Values.formspreeFormId }}
+          - name: FORMSPREE_FORM_ID
+            value: "{{ .Values.formspreeFormId }}"
+          {{- end }}
+          {{- if .Values.googleAnalyticsTrackingID }}
+          - name: GA_TRACKING_ID
+            value: "{{ .Values.googleAnalyticsTrackingID }}"
+          {{- end }}
+        {{- with .Values.extraEnvs }}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
-        {{- if .Values.recommenderUrl }}
-        - name: RECOMMENDER_URL
-          value: "{{ .Values.recommenderUrl }}"
-        {{- end }}
-        - name: TAG
-          value: "{{ .Values.tag }}"
-        - name: FORMSPREE_FORM_ID
-          value: "{{ .Values.formspree_form_id }}"
-        - name: GA_TRACKING_ID
-          value: "{{ .Values.googleAnalyticsTrackingID }}"
-        ports:
-        - containerPort: {{ .Values.service.internalPort }}
-        livenessProbe:
-          tcpSocket:
-            port: {{ .Values.service.internalPort }}
-        readinessProbe:
-          tcpSocket:
-            port: {{ .Values.service.internalPort }}
-        volumeMounts:
-        - name: nginx-config
-          mountPath: /etc/nginx/conf.d/
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ui/status
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ui/status
+              port: http
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         - name: nginx-config
           configMap:
             name: {{ template "pipeline-ui.fullname" . }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
