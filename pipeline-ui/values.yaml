@@ -1,28 +1,20 @@
-# Default values for cloudinfo.
+# Default values for pipeline-ui.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
-apiUrl: http://localhost
-tag: local
-
-cloudinfoUrl:
-recommenderUrl:
-
-formspree_form_id: ""
-
-googleAnalyticsTrackingID: ""
 
 replicaCount: 1
 
 image:
   repository: banzaicloud/pipeline-web
-  tag: 0.6.0
+  tag: 0.6.2
   pullPolicy: IfNotPresent
 
+nameOverride: ""
+fullnameOverride: ""
+
 service:
-  port: 80
-  internalPort: 80
   type: ClusterIP
+  port: 80
   
 ingress:
   enabled: false
@@ -51,8 +43,25 @@ resources: #{}
     cpu: 250m
     memory: 256Mi
 
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
 ## Additional deployment labels and annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 deploymentLabels: {}
 deploymentAnnotations: {}
 
+apiUrl: http://localhost
+tag: local
+
+cloudinfoUrl:
+recommenderUrl:
+
+formspreeFormId: ""
+
+googleAnalyticsTrackingID: ""
+
+extraEnvs: []
