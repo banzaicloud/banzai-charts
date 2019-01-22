@@ -43,7 +43,7 @@ ingress:
 
 strategy: {}
 
-# CA source for automated self sing cert generator 
+# CA source for automated self sing cert generator
 cert:
   source: file
   path: /sign-ca
@@ -107,6 +107,10 @@ loggingOperator:
   chartVersion: ""
   image:
     tag: "0.0.4"
+
+serviceMesh:
+  istioChartVersion: "1.0.5"
+  grafanaDashboardLocation: "https://raw.githubusercontent.com/banzaicloud/pipeline/master/dashboards/istio"
 
 metrics:
   enabled: true

@@ -201,6 +201,11 @@ spec:
         - name: PIPELINE_LOGGINGOPERATOR_CHARTVERSION
           value: {{ .Values.loggingOperator.chartVersion | quote }}
 
+        - name: PIPELINE_SERVICEMESH_ISTIOCHARTVERSION
+          value: {{ .Values.serviceMesh.istioChartVersion | quote }}
+        - name: PIPELINE_SERVICEMESH_GRAFANADASHBOARDLOCATION
+          value: {{ .Values.serviceMesh.grafanaDashboardLocation | quote }}
+
         - name: PIPELINE_SPOTMETRICS_ENABLED
           value: {{ .Values.spotmetrics.enabled | quote }}
         - name: PIPELINE_SPOTMETRICS_COLLECTIONINTERVAL
@@ -210,7 +215,7 @@ spec:
           value: {{ .Values.dns.domain | quote }}
 
         - name: PIPELINE_EKS_TEMPLATELOCATION
-          value: {{ .Values.eks.templateLocation | quote }}  
+          value: {{ .Values.eks.templateLocation | quote }}
         - name: PIPELINE_EKS_ASGFULFILLMENTTIMEOUT
           value: {{ .Values.eks.asgFulfillmentTimeout | quote }}
 
