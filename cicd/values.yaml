@@ -13,7 +13,7 @@ labels: {}
 ##
 image:
   repository: "banzaicloud/cicd"
-  tag: "master"
+  tag: "0.8.1"
   pullPolicy: "IfNotPresent"
 
 global:
