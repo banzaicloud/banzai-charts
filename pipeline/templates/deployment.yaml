@@ -88,7 +88,7 @@ spec:
               key: dbUserPass
         {{ else }}
         - name: PIPELINE_DATABASE_HOST
-          value: {{ default (include "mysql.fullname" .) .Values.mysql.externalEndpoint }}
+          value: {{ default (include "pipeline.mysql.fullname" .) .Values.mysql.externalEndpoint }}
         - name: PIPELINE_DATABASE_DBNAME
           value: {{ default "" .Values.mysql.mysqlDatabase | quote }}
         - name: PIPELINE_DATABASE_USER
@@ -97,7 +97,7 @@ spec:
           {{ if .Values.mysql.enabled }}
           valueFrom:
             secretKeyRef:
-              name: {{ include "mysql.fullname" . }}
+              name: {{ include "pipeline.mysql.fullname" . }}
               key: mysql-password
           {{ else }}
           valueFrom:
