@@ -6,6 +6,7 @@ global:
   auth:
     clientid: ""
     clientsecret: ""
+  pipelineBasepath: /pipeline
 
 signupredirectpath: /ui/
 
@@ -41,7 +42,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-strategy: {}
+strategy:
+  type: recreate
 
 # CA source for automated self sing cert generator
 cert:
@@ -87,9 +89,9 @@ spotguide:
 helm:
   retryAttempt: "30"
   retrySleepSeconds: "15"
-
+  tillerVersion: "v2.12.2"
   stableRepositoryURL: "https://kubernetes-charts.storage.googleapis.com"
-  banzaiRepositoryURL: "http://kubernetes-charts.banzaicloud.com"
+  banzaiRepositoryURL: "http://kubernetes-charts.banzaicloud.com/branch/master"
 
   path: "/cache/helm"
 
@@ -106,19 +108,19 @@ monitor:
 loggingOperator:
   chartVersion: ""
   image:
-    tag: "0.0.4"
+    tag: "0.0.5"
 
 serviceMesh:
   istioChartVersion: "1.0.5"
   grafanaDashboardLocation: "https://raw.githubusercontent.com/banzaicloud/pipeline/master/dashboards/istio"
 
 metrics:
-  enabled: true
+  enabled: false
   port: 9900
   debug: true
   alertRulesEnabled: false
   serviceMonitor:
-    enabled: true
+    enabled: false
     additionalLabels: {}
 
 spotmetrics:
@@ -129,7 +131,7 @@ dns:
   domain: "example.org"
 
 infra:
-  headNodePoolName: ""
+  headNodePoolName: "system"
 
 cache:
   persistence:
@@ -180,9 +182,10 @@ database:
 mysql:
   enabled: true
   nameOverride: pipeline-db
-
   mysqlDatabase: pipeline
   mysqlUser: bonanzabanzai
+
+
 
   ## Default: random 10 character string
   # mysqlPassword:

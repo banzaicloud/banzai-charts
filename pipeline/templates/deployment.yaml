@@ -71,19 +71,7 @@ spec:
         - name: PIPELINE_DATABASE_AUTOMIGRATEENABLED
           value: {{ .Values.database.autoMigrateEnabled | quote }}
 
-        {{- if .Values.mysql.enabled  }}
-        - name: PIPELINE_DATABASE_HOST
-          value: {{ .Release.Name }}-pipeline-db
-        - name: PIPELINE_DATABASE_DBNAME
-          value: {{ default "" .Values.mysql.mysqlDatabase | quote }}
-        - name: PIPELINE_DATABASE_USER
-          value: {{ default "" .Values.mysql.mysqlUser | quote }}
-        - name: PIPELINE_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name:  {{ .Release.Name }}-pipeline-db
-              key: mysql-password
-        {{- else if .Values.cloudsql.enabled }}
+        {{ if .Values.cloudsql.enabled }}
         - name: PIPELINE_DATABASE_HOST
           value: "127.0.0.1"
         - name: PIPELINE_DATABASE_DBNAME
@@ -98,7 +86,26 @@ spec:
             secretKeyRef:
               name:  {{ include "pipeline.fullname" . }}-cloudsql
               key: dbUserPass
-        {{- end }}
+        {{ else }}
+        - name: PIPELINE_DATABASE_HOST
+          value: {{ default (include "mysql.fullname" .) .Values.mysql.externalEndpoint }}
+        - name: PIPELINE_DATABASE_DBNAME
+          value: {{ default "" .Values.mysql.mysqlDatabase | quote }}
+        - name: PIPELINE_DATABASE_USER
+          value: {{ default "" .Values.mysql.mysqlUser | quote }}
+        - name: PIPELINE_DATABASE_PASSWORD
+          {{ if .Values.mysql.enabled }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "mysql.fullname" . }}
+              key: mysql-password
+          {{ else }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "pipeline.fullname" . }}-mysql
+              key: mysql-password
+          {{ end }}
+        {{ end }}
 
         - name: PIPELINE_LOGGING_LOGFORMAT
           value: {{ .Values.logging.logformat | quote }}
