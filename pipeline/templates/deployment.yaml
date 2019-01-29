@@ -65,6 +65,8 @@ spec:
 
         - name: PIPELINE_PIPELINE_BASEPATH
           value: {{ .Values.global.pipelineBasepath | quote }}
+        - name: PIPELINE_PIPELINE_EXTERNALURL
+          value: {{ .Values.pipelineExternalBaseURL | quote }}
         - name: PIPELINE_PIPELINE_SIGNUPREDIRECTPATH
           value: {{ .Values.signupredirectpath | quote }}
 
