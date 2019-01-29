@@ -64,6 +64,7 @@ auth:
   jwtaudience: "https://pipeline.banzaicloud.com"
   clientid: ""
   clientsecret: ""
+  tokenSigningKey: ""
   cookieDomain: ""
   setCookieDomain: false
   secureCookie: true
