@@ -8,6 +8,7 @@ global:
     clientsecret: ""
   pipelineBasepath: /pipeline
 
+pipelineExternalBaseURL: https://example.org/pipeline
 signupredirectpath: /ui/
 
 github:
