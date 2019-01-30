@@ -34,6 +34,8 @@ data:
       level: {{ default "debug" .Values.config.logger.level }}
     web:
       http: {{ default "0.0.0.0:5556" .Values.config.web.http }}
+    frontend:
+      theme: {{ default "coreos" .Values.config.frontend.theme }}
 
     staticClients:
 {{ toYaml .Values.config.staticClients | indent 4 }}
