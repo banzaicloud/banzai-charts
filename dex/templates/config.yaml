@@ -39,6 +39,10 @@ data:
 
     staticClients:
 {{ toYaml .Values.config.staticClients | indent 4 }}
-
     connectors:
 {{ toYaml .Values.config.connectors | indent 4 }}
+{{- if ne (len .Values.config.staticPasswords) 0 }}
+    enablePasswordDB: {{ .Values.config.enablePasswordDB }}
+    staticPasswords:
+{{ toYaml .Values.config.staticPasswords | indent 4 }}
+{{- end }}
