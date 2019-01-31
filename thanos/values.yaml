@@ -1,13 +1,11 @@
 image:
   repository: improbable/thanos
-  tag: master-2018-10-29-8f247d6
+  tag: master-2019-01-29-5e5e353
   pullPolicy: IfNotPresent
-  
-gcs:
-  bucket: pipeline-thanos
 
 store:
   enabled: true
+  # annotations:
   replicaCount: 1
   monitoring:
     enabled: true
@@ -19,6 +17,7 @@ store:
 
 query:
   enabled: true
+  # annotations:
   replicaCount: 1
   monitoring:
     enabled: true
@@ -30,6 +29,7 @@ query:
 
 compact:
   enabled: true
+  # annotations:
   monitoring:
     enabled: true
   http:
@@ -42,13 +42,7 @@ cluster:
 
 objstore:
   provider: gcs
-  configFile: "bucket.yaml"
-  bucketName: ""
-  gcsCredentials: ""
+  configFile: bucket.yaml
+  config: ""
 
 replicaLabelName: replica
-
-#prometheus:
-#  enabled: false
-#  thanosSidecar:
-#    enabled: true

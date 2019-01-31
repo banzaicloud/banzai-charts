@@ -9,7 +9,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.query.replicaCount}}
+  replicas: {{ .Values.query.replicaCount }}
   selector:
     matchLabels:
       app: {{ include "thanos.name" . }}-query
@@ -24,6 +24,9 @@ spec:
         heritage: "{{ .Release.Service }}"
         thanos-peer: "true"
       annotations:
+      {{- with .Values.query.annotations }}
+{{ toYaml . | indent 8 }}
+      {{- end }}
       {{- if .Values.query.monitoring.enabled  }}
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.query.http.port}}"

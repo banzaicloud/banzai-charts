@@ -24,6 +24,9 @@ spec:
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
       annotations:
+      {{- with .Values.compact.annotations }}
+{{ toYaml . | indent 8 }}
+      {{- end }}
       {{- if .Values.compact.monitoring.enabled  }}
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.compact.http.port }}"
@@ -33,9 +36,11 @@ spec:
       - name: thanos-compact
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{ if eq .Values.objstore.provider "gcs" }}
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /credentials/google.json
+        {{- end }}
         args:
         - "compact"
         - "--log.level={{ .Values.compact.logLevel }}"
@@ -63,8 +68,8 @@ spec:
       - name: data
         emptyDir: {}
       - name: config-volume
-        configMap:
-          name: {{ include "thanos.fullname" . }}
+        secret:
+          secretName: {{ include "thanos.fullname" . }}
     {{- if eq .Values.objstore.provider "gcs" }}
       - name: {{ .Values.objstore.provider }}
         secret:
