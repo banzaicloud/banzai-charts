@@ -1,19 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thanos.fullname" . }}-query
+  name: {{ include "thanos.fullname" . }}-store
   labels:
-    app: {{ include "thanos.name" . }}-query
+    app: {{ include "thanos.name" . }}-store
     chart: {{ include "thanos.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    factory: query
 spec:
   ports:
-  - port: {{ .Values.query.http.port }}
+  - port: {{ .Values.store.http.port }}
     protocol: TCP
-    targetPort: http
+    targetPort: monitoring
     name: http
   selector:
-    app: {{ include "thanos.name" . }}-query
+    app: {{ include "thanos.name" . }}-store
     release: {{ .Release.Name }}
