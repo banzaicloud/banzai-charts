@@ -37,12 +37,16 @@ data:
     frontend:
       theme: {{ default "coreos" .Values.config.frontend.theme }}
 
+{{- with .Values.config.staticClients }}
     staticClients:
-{{ toYaml .Values.config.staticClients | indent 4 }}
+{{ toYaml . | indent 6 }}
+{{- end }}
+{{- with .Values.config.connectors }}
     connectors:
-{{ toYaml .Values.config.connectors | indent 4 }}
-{{- if not (empty .Values.config.staticPasswords) }}
+{{ toYaml . | indent 6 }}
+{{- end }}
     enablePasswordDB: {{ .Values.config.enablePasswordDB }}
+{{- with .Values.config.staticPasswords }}
     staticPasswords:
-{{ toYaml .Values.config.staticPasswords | indent 4 }}
+{{ toYaml . | indent 6 }}
 {{- end }}
