@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "hollowtrees-with-ps.fullname" . }}"
+  labels:
+    app: "{{ template "hollowtrees-with-ps.fullname" . }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  config.yaml: |-
+    log:
+      format: {{ .Values.log.format | quote }}
+      level: {{ .Values.log.level | quote }}
+
+    healthcheck:
+      listenAddress: ":{{ .Values.healthcheck.listenPort }}"
+      endpoint: {{ .Values.healthcheck.endpoint |quote }}
+
+    promalert:
+      listenAddress: ":{{ .Values.promalert.listenPort }}"
+
+    plugins:
+    - name: {{ .Values.scaler.name | quote }}
+      address: "{{ .Values.scaler.hostname }}:{{ .Values.scaler.port }}"
+      type: {{ .Values.scaler.type | quote }}
+
+    flows:
+      scaler:
+        name: {{ .Values.scaler.name | quote }}
+        description: {{ .Values.scaler.description | quote }}
+        allowedEvents:
+        {{- range .Values.scaler.allowedEvents }}
+        - {{ . | quote }}
+        {{- end }}
+        plugins:
+        - {{ .Values.scaler.name | quote }}
+        cooldown: {{ .Values.scaler.cooldown | quote }}
+        groupBy:
+        {{- range .Values.scaler.groupBy }}
+        - {{ . | quote }}
+        {{- end }}
