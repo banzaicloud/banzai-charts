@@ -1,0 +1,39 @@
+{{- if .Values.query.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "thanos.fullname" . }}-query
+  labels:
+    app: {{ include "thanos.name" . }}
+    chart: {{ include "thanos.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+{{- if .Values.query.ingress.labels }}
+{{ toYaml .Values.ingress.labels | indent 4 }}
+{{- end }}
+{{- with .Values.query.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+{{- if .Values.query.ingress.tls }}
+  tls:
+  {{- range .Values.query.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . | quote }}
+      {{- end }}
+      secretName: {{ .secretName }}
+  {{- end }}
+{{- end }}
+  rules:
+  {{- range .Values.query.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+          - path: {{ $.Values.query.ingress.path }}
+            backend:
+              serviceName: {{ include "thanos.fullname" $ }}-query
+              servicePort: {{ $.Values.query.http.port }}
+  {{- end }}
+{{- end }}
