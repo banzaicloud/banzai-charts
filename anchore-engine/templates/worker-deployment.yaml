@@ -16,12 +16,10 @@ spec:
       release: "{{ .Release.Name }}"
       app: "{{ template "anchore-engine.name" . }}"
       heritage: "{{ .Release.Service }}"
-      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   template:
     metadata:
       labels:
         app: "{{ template "anchore-engine.name" . }}"
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
         component: "anchore-worker"
