@@ -7,7 +7,7 @@
 ##
 image:
   repository: "banzaicloud/instance-termination-handler"
-  tag: "0.0.3"
+  tag: "0.0.4"
 
   ## Specify an imagePullPolicy (Required)
   ## It's recommended to change this to 'Always' if the image tag is 'latest'
