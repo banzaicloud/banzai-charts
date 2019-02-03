@@ -41,7 +41,7 @@ spec:
         message: Pipeline too many requests
         runbook_url: https://alpha.dev.banzaicloud.com/grafana/d/pipeline/pipeline-dashboard-rev2
       expr: |
-        sum(rate(pipeline_requests_total{code=~"[2].*"}[1m])) > 0.3
+        sum(rate(pipeline_requests_total{code=~"[2].*"}[1m])) > 0.6
       for: 1m
       labels:
         severity: critical
