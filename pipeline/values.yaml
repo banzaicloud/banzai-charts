@@ -22,6 +22,13 @@ service:
   externalPort:  9090
   tls: true
 
+serviceInternal:
+  name: pipeline-internal
+  type: ClusterIP
+  externalPort:  9091
+  internalPort: 9091
+  tls: true
+
 ingress:
   enabled: false
   annotations: {}
@@ -61,6 +68,7 @@ configuration:
   # Pipeline configs
   pipeline:
     bindaddr: 127.0.0.1:9090
+    internalBindAddr: 127.0.0.1:9091
     # Url basepath
     # Default is "/pipeline" in the development environment to allow using the UI locally
     basepath: /pipeline
