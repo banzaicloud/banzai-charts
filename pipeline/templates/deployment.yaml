@@ -58,14 +58,12 @@ spec:
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
+        # Kubernetes environment variables
         - name: KUBERNETES_RELEASE_NAME
           value: {{ .Release.Name | quote }}
         - name: KUBERNETES_NAMESPACE
           value: {{ .Release.Namespace | quote }}
-
-        - name: PIPELINE_PIPELINE_BASEPATH
-          value: {{ .Values.global.pipelineBasepath | quote }}
-
+        # Database related section
         {{ if .Values.cloudsql.enabled }}
         - name: PIPELINE_DATABASE_HOST
           value: "127.0.0.1"
@@ -101,7 +99,7 @@ spec:
               key: mysql-password
           {{ end }}
         {{ end }}
-
+        # Authentication configuration
         - name: PIPELINE_AUTH_CLIENTID
           valueFrom:
             secretKeyRef:
@@ -122,9 +120,7 @@ spec:
             secretKeyRef:
               name: {{ include "pipeline.fullname" . }}
               key: githubToken
-        - name: PIPELINE_CICD_URL
-          value: {{ .Values.cicd.url }}
-
+        # Vault configuration
         - name: VAULT_ADDR
           value: {{ .Values.vault.serviceAddress }}
         {{- if .Values.vault.tlsSecret }}
@@ -135,21 +131,16 @@ spec:
           value: "true"
         {{- end }}
 
+        # Pipeline service and TLS
         - name: PIPELINE_PIPELINE_BINDADDR
           value: ":{{ .Values.service.internalPort }}"
-
         {{- if .Values.service.tls }}
         - name: PIPELINE_PIPELINE_CERTFILE
           value: /tls/server.crt
         - name: PIPELINE_PIPELINE_KEYFILE
           value: /tls/server.key
         {{ end }}
-
-        - name: PIPELINE_CERT_SOURCE
-          value: {{ .Values.cert.source }}
-        - name: PIPELINE_CERT_PATH
-          value: {{ .Values.cert.path }}
-
+        # Anchore configuration
         {{- if .Values.configuration.anchore.enabled }}
         - name: PIPELINE_ANCHORE_ENDPOINT
           value: {{ .Values.anchore.serviceEndpoint | quote }}
@@ -161,7 +152,7 @@ spec:
               name: {{ .Values.anchore.secretName }}
               key: {{ .Values.anchore.secretKey }}
         {{ end }}
-
+        # Additional environment variables
         {{ range $key, $value := .Values.env }}
         - name: {{ $key }}
           value: {{ $value | quote }}
@@ -174,7 +165,7 @@ spec:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           httpGet:
-            path: {{ .Values.global.pipelineBasepath }}/api
+            path: {{ .Values.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
           {{- if .Values.service.tls }}
             scheme: HTTPS
@@ -182,7 +173,7 @@ spec:
           initialDelaySeconds: 15
         readinessProbe:
           httpGet:
-            path: {{ .Values.global.pipelineBasepath }}/api
+            path: {{ .Values.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
           {{- if .Values.service.tls }}
             scheme: HTTPS
@@ -206,9 +197,9 @@ spec:
         - name: pipeline-tls
           mountPath: /tls
       {{ end }}
-      {{- if eq .Values.cert.source "file" }}
+      {{- if eq .Values.configuration.cert.source "file" }}
         - name: sign-ca
-          mountPath: {{ .Values.cert.path }}
+          mountPath: {{ .Values.configuration.cert.path }}
       {{ end }}
       volumes:
       - name: config-volume
@@ -233,7 +224,7 @@ spec:
         secret:
           secretName: {{ include "pipeline.fullname" . }}-tls
       {{ end }}
-      {{- if eq .Values.cert.source "file" }}
+      {{- if eq .Values.configuration.cert.source "file" }}
       - name: sign-ca
         secret:
           secretName: {{ include "pipeline.fullname" . }}-sign-ca

@@ -95,7 +95,9 @@ configuration:
   # CICD
   cicd:
     url: http://localhost:8000
-
+  # Github
+  github:
+    token: ""
   # Authentication
   auth:
     clientid: ""
