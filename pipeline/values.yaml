@@ -1,25 +1,9 @@
 # Default values for pipeline
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 
-# These global variables will be passed as env variables therefore it will overwrite configuration changes
-global:
-  auth:
-    clientid: ""
-    clientsecret: ""
-  pipelineBasepath: /pipeline
 
-database:
-  # Vault role
-  role: ""
-  dbname: pipeline
-  logging: "true"
-  autoMigrateEnabled: "true"
-
-github:
-  token: ""
-
+## Resource definitions for Kubernetes resources
 replicaCount: 1
+# Upgrade strategy
 strategy: {}
 image:
   repository: banzaicloud/pipeline
@@ -30,11 +14,6 @@ resources:
   requests:
     cpu: 250m
     memory: 256Mi
-
-## Additional deployment labels and annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-deploymentLabels: {}
-deploymentAnnotations: {}
 
 service:
   name: pipeline
@@ -58,6 +37,21 @@ ingress:
 
 env: {}
 
+## Additional deployment labels and annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+deploymentLabels: {}
+deploymentAnnotations: {}
+
+# Database configuration
+database:
+  # Vault role
+  role: ""
+  dbname: pipeline
+  logging: "true"
+  autoMigrateEnabled: "true"
+
+
+## Pipeline metrics, rules and alerting configuration
 metrics:
   enabled: false
   serviceMonitor:
@@ -65,14 +59,7 @@ metrics:
     additionalLabels: {}
   alertRulesEnabled: false
 
-# CA source for automated self sing cert generator
-cert:
-  source: file
-  path: /sign-ca
-  ca:
-    key: ""
-    cert: ""
-
+## The Pipeline configuration definition
 configuration:
   # Pipeline configs
   pipeline:
@@ -97,6 +84,7 @@ configuration:
     configRetryCount: 30
     configRetrySleep: 15
 
+  # CORS configuration
   cors:
     AllowAllOrigins: false
     AllowOrigins: ["http://localhost:4200"]
@@ -104,10 +92,14 @@ configuration:
   statestore:
     path: ""
 
+  # CICD
   cicd:
     url: http://localhost:8000
 
+  # Authentication
   auth:
+    clientid: ""
+    clientsecret: ""
     jwtissueer: https://banzaicloud.com/
     jwtaudience: https://pipeline.banzaicloud.com
     secureCookie: true
@@ -116,6 +108,7 @@ configuration:
     setCookieDomain: false
     whitelistEnabled: false
 
+  # Pipeline Helm related configuration
   helm:
    retryAttemp: 30
    retrySleepSeconds: 15
@@ -126,6 +119,7 @@ configuration:
    stableRepositoryURL: "https://kubernetes-charts.storage.googleapis.com"
    banzaiRepositoryURL: "http://kubernetes-charts.banzaicloud.com/branch/master"
 
+  # Pipeline federated monitoring configurations
   monitor:
    enabled: false
    configMap: prometheus-federation
@@ -213,10 +207,37 @@ configuration:
     enabled: false
     collectionInterval: 30s
 
+  # CA source for automated self sing cert generator
   cert:
     source: file
     path: /sign-ca
+    ca:
+      key: ""
+      cert: ""
 
+##
+## Vault connector settings
+##
+vault:
+  # Vault service endpoint
+  serviceAddress: ""
+  # The secret that holds the Vault CA cert.
+  # If left empty SKIP_VERIFY will be used.
+  tlsSecret: ""
+
+##
+## Anchore configuration
+##
+anchore:
+  enabled: false
+  serviceEndpoint: ""
+  username: admin
+  secretName: ""
+  secretKey: adminPassword
+
+##
+## Enable Cache persistence store
+##
 cache:
   persistence:
     enabled: true
@@ -257,6 +278,10 @@ statestore:
     accessMode: ReadWriteOnce
     size: 128Mi
 
+## This is the MySQL connector related configuration
+## If enabled MySQL dependent chart will be installed else you need to prepare
+## MySQL by hand or use CloudSQL
+##
 ## mysql image version
 ## ref: https://hub.docker.com/r/library/mysql/tags/
 ##
@@ -292,33 +317,3 @@ cloudsql:
     repository: gcr.io/cloudsql-docker/gce-proxy
     tag: 1.11
     pullPolicy: IfNotPresent
-
-anchore:
-  enabled: false
-  serviceEndpoint: ""
-  username: admin
-  secretName: ""
-  secretKey: adminPassword
-
-issue:
-  githubOwner: ""
-  githubRepository: ""
-
-
-resources:
-  requests:
-    cpu: 250m
-    memory: 256Mi
-
-## Additional deployment labels and annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-deploymentLabels: {}
-deploymentAnnotations: {}
-
-vault:
-  # Vault service endpoint
-  serviceAddress: ""
-  # The secret that holds the Vault CA cert.
-  # If left empty SKIP_VERIFY will be used.
-  tlsSecret: ""
-
