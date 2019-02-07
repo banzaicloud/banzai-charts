@@ -48,8 +48,6 @@ database:
   role: ""
   dbname: pipeline
   logging: "true"
-  autoMigrateEnabled: "true"
-
 
 ## Pipeline metrics, rules and alerting configuration
 metrics:
@@ -71,6 +69,7 @@ configuration:
     # Use to redirect url after login
     uipath: http://localhost:4200/ui
     signupRedirectPath: http://localhost:4200/ui
+  pipelineExternalBaseURL: https://example.org/pipeline
 
   anchore:
     enabled: false
@@ -100,6 +99,7 @@ configuration:
     token: ""
   # Authentication
   auth:
+    dexurl: http://dex/dex
     clientid: ""
     clientsecret: ""
     jwtissueer: https://banzaicloud.com/
@@ -109,6 +109,9 @@ configuration:
     cookieDomain: ""
     setCookieDomain: false
     whitelistEnabled: false
+  # Database handling
+  database:
+    autoMigrateEnabled: false
 
   # Pipeline Helm related configuration
   helm:

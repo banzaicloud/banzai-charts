@@ -165,7 +165,7 @@ spec:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           httpGet:
-            path: {{ .Values.pipelineBasepath }}/api
+            path: {{ .Values.configuration.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
           {{- if .Values.service.tls }}
             scheme: HTTPS
@@ -173,7 +173,7 @@ spec:
           initialDelaySeconds: 15
         readinessProbe:
           httpGet:
-            path: {{ .Values.pipelineBasepath }}/api
+            path: {{ .Values.configuration.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
           {{- if .Values.service.tls }}
             scheme: HTTPS
