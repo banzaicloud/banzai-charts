@@ -51,7 +51,6 @@ database:
 
 ## Pipeline metrics, rules and alerting configuration
 metrics:
-  enabled: false
   serviceMonitor:
     enabled: false
     additionalLabels: {}
@@ -202,7 +201,8 @@ configuration:
     sharedLibraryGitHubOrganization: spotguides
 
   metrics:
-    port: :9900
+    enabled: false
+    port: 9900
     # if true, some metrics have unique labels
     debug: true
 
