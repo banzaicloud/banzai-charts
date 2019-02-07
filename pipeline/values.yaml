@@ -71,6 +71,9 @@ configuration:
     signupRedirectPath: http://localhost/ui
   pipelineExternalBaseURL: https://example.org/pipeline
 
+  cloudinfo:
+    endPointUrl: ""
+
   anchore:
     enabled: false
     serviceEndpoint: ""

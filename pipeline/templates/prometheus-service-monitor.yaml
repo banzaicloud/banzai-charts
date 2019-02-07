@@ -45,9 +45,9 @@ spec:
   clusterIP: None
   ports:
   - name: metrics
-    port: {{ .Values.metrics.port }}
+    port: {{ .Values.configuration.metrics.port }}
     protocol: TCP
-    targetPort: {{ .Values.metrics.port }}
+    targetPort: {{ .Values.configuration.metrics.port }}
   selector:
     app: {{ include "pipeline.name" . }}
     release: "{{ .Release.Name }}"
