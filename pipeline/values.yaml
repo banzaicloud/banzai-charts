@@ -67,8 +67,8 @@ configuration:
     basepath: /pipeline
 
     # Use to redirect url after login
-    uipath: http://localhost:4200/ui
-    signupRedirectPath: http://localhost:4200/ui
+    uipath: http://localhost/ui
+    signupRedirectPath: http://localhost/ui
   pipelineExternalBaseURL: https://example.org/pipeline
 
   anchore:
