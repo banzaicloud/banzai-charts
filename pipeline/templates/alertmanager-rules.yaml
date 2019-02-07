@@ -30,7 +30,7 @@ spec:
         message: Pipeline too many bad requests
         runbook_url: https://alpha.dev.banzaicloud.com/grafana/d/pipeline/pipeline-dashboard-rev2
       expr: |
-        sum(rate(pipeline_requests_total{code=~"[4|5].*"}[1m])) > 0.1
+        sum(rate(pipeline_requests_total{code=~"[4|5].*"}[1m]))*60 > 20
       for: 1m
       labels:
         severity: critical
@@ -41,7 +41,7 @@ spec:
         message: Pipeline too many requests
         runbook_url: https://alpha.dev.banzaicloud.com/grafana/d/pipeline/pipeline-dashboard-rev2
       expr: |
-        sum(rate(pipeline_requests_total{code=~"[2].*"}[1m])) > 0.6
+        sum(rate(pipeline_requests_total{code=~"[2].*"}[1m]))*60 > 60
       for: 1m
       labels:
         severity: critical
