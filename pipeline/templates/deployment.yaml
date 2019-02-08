@@ -58,21 +58,12 @@ spec:
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
+        # Kubernetes environment variables
         - name: KUBERNETES_RELEASE_NAME
           value: {{ .Release.Name | quote }}
         - name: KUBERNETES_NAMESPACE
           value: {{ .Release.Namespace | quote }}
-
-        - name: PIPELINE_PIPELINE_BASEPATH
-          value: {{ .Values.global.pipelineBasepath | quote }}
-        - name: PIPELINE_PIPELINE_EXTERNALURL
-          value: {{ .Values.pipelineExternalBaseURL | quote }}
-        - name: PIPELINE_PIPELINE_SIGNUPREDIRECTPATH
-          value: {{ .Values.signupredirectpath | quote }}
-
-        - name: PIPELINE_DATABASE_AUTOMIGRATEENABLED
-          value: {{ .Values.database.autoMigrateEnabled | quote }}
-
+        # Database related section
         {{ if .Values.cloudsql.enabled }}
         - name: PIPELINE_DATABASE_HOST
           value: "127.0.0.1"
@@ -108,14 +99,7 @@ spec:
               key: mysql-password
           {{ end }}
         {{ end }}
-
-        - name: PIPELINE_LOGGING_LOGFORMAT
-          value: {{ .Values.logging.logformat | quote }}
-        - name: PIPELINE_LOGGING_LOGLEVEL
-          value: {{ .Values.logging.loglevel | quote }}
-        - name: PIPELINE_LOGGING_KUBICORNLOGLEVEL
-          value: {{ .Values.logging.kubicornloglevel | quote }}
-
+        # Authentication configuration
         - name: PIPELINE_AUTH_CLIENTID
           valueFrom:
             secretKeyRef:
@@ -131,111 +115,12 @@ spec:
             secretKeyRef:
               name: {{ include "pipeline.fullname" . }}
               key: tokenSigningKey
-        - name: PIPELINE_AUTH_JWTISSUEER
-          value: {{ .Values.auth.jwtissueer | quote }}
-        - name: PIPELINE_AUTH_JWTAUDIENCE
-          value: {{ .Values.auth.jwtaudience | quote }}
-        - name: PIPELINE_AUTH_COOKIEDOMAIN
-          value: {{ .Values.auth.cookieDomain | quote }}
-        - name: PIPELINE_AUTH_SETCOOKIEDOMAIN
-          value: {{ .Values.auth.setCookieDomain | quote }}
-        - name: PIPELINE_AUTH_SECURECOOKIE
-          value: {{ .Values.auth.secureCookie | quote }}
-        - name: PIPELINE_AUTH_WHITELISTENABLED
-          value: {{ default "false" .Values.auth.whitelistEnabled | quote}}
         - name: PIPELINE_GITHUB_TOKEN
           valueFrom:
             secretKeyRef:
               name: {{ include "pipeline.fullname" . }}
               key: githubToken
-        - name: PIPELINE_CICD_URL
-          value: {{ .Values.cicd.url }}
-
-        - name: PIPELINE_ARK_NAME
-          value: {{ .Values.ark.name }}
-        - name: PIPELINE_ARK_NAMESPACE
-          value: {{ .Values.ark.namespace }}
-        - name: PIPELINE_ARK_CHART
-          value: {{ .Values.ark.chart }}
-        - name: PIPELINE_ARK_CHARTVERSION
-          value: {{ .Values.ark.chartVersion }}
-        - name: PIPELINE_ARK_IMAGE
-          value: {{ .Values.ark.image }}
-        - name: PIPELINE_ARK_IMAGETAG
-          value: {{ .Values.ark.imageTag }}
-        - name: PIPELINE_ARK_PULLPOLICY
-          value: {{ .Values.ark.pullPolicy }}
-
-        - name: PIPELINE_ARK_SYNCENABLED
-          value: {{ .Values.ark.syncEnabled | quote }}
-        - name: PIPELINE_ARK_LOGLEVEL
-          value: {{ .Values.ark.logLevel }}
-        - name: PIPELINE_ARK_BUCKETSYNCINTERVAL
-          value: {{ .Values.ark.bucketSyncInterval }}
-        - name: PIPELINE_ARK_RESTORESYNCINTERVAL
-          value: {{ .Values.ark.restoreSyncInterval }}
-        - name: PIPELINE_ARK_BACKUPSYNCINTERVAL
-          value: {{ .Values.ark.backupSyncInterval }}
-        - name: PIPELINE_ARK_RESTOREWAITTIMEOUT
-          value: {{ .Values.ark.restoreWaitTimeout }}
-        - name: PIPELINE_SPOTGUIDE_ALLOWPRERELEASES
-          value: {{ .Values.spotguide.allowPrereleases | quote }}
-        - name: PIPELINE_SPOTGUIDE_SHAREDLIBRARYGITHUBORGANIZATION
-          value: {{ .Values.spotguide.sharedLibraryGitHubOrganization | quote }}
-        - name: PIPELINE_MONITOR_ENABLED
-          value: {{ .Values.monitor.enabled | quote }}
-        - name: PIPELINE_MONITOR_CONFIGMAP
-          value: {{ .Values.monitor.configMap }}
-        - name: PIPELINE_MONITOR_MOUNTPATH
-          value: {{ default "/etc/prometheus/secrets" .Values.monitor.mountPath | quote }}
-        - name: PIPELINE_MONITOR_CERTSECRET
-          value: {{ default "prometheus-federation-secrets" .Values.monitor.certSecret | quote }}
-        - name: PIPELINE_METRICS_ENABLED
-          value: {{ .Values.metrics.enabled | quote }}
-        - name: PIPELINE_METRICS_DEBUG
-          value: {{ .Values.metrics.debug | quote }}
-        - name: PIPELINE_METRICS_PORT
-          value: :{{ .Values.metrics.port }}
-        - name: PIPELINE_HELM_RETRYATTEMPT
-          value: {{ .Values.helm.retryAttempt | quote }}
-        - name: PIPELINE_HELM_RETRYSLEEPSECONDS
-          value: {{ .Values.helm.retrySleepSeconds | quote }}
-        - name: PIPELINE_HELM_STABLEREPOSITORYURL
-          value: {{ .Values.helm.stableRepositoryURL | quote }}
-        - name: PIPELINE_HELM_BANZAIREPOSITORYURL
-          value: {{ .Values.helm.banzaiRepositoryURL | quote }}
-
-        - name: PIPELINE_LOGGINGOPERATOR_IMAGETAG
-          value: {{ .Values.loggingOperator.image.tag | quote }}
-        - name: PIPELINE_LOGGINGOPERATOR_CHARTVERSION
-          value: {{ .Values.loggingOperator.chartVersion | quote }}
-
-        - name: PIPELINE_SERVICEMESH_ISTIOCHARTVERSION
-          value: {{ .Values.serviceMesh.istioChartVersion | quote }}
-        - name: PIPELINE_SERVICEMESH_GRAFANADASHBOARDLOCATION
-          value: {{ .Values.serviceMesh.grafanaDashboardLocation | quote }}
-
-        - name: PIPELINE_SPOTMETRICS_ENABLED
-          value: {{ .Values.spotmetrics.enabled | quote }}
-        - name: PIPELINE_SPOTMETRICS_COLLECTIONINTERVAL
-          value: {{ .Values.spotmetrics.collectionInterval | quote }}
-
-        - name: PIPELINE_DNS_DOMAIN
-          value: {{ .Values.dns.domain | quote }}
-
-        - name: PIPELINE_EKS_TEMPLATELOCATION
-          value: {{ .Values.eks.templateLocation | quote }}
-        - name: PIPELINE_EKS_ASGFULFILLMENTTIMEOUT
-          value: {{ .Values.eks.asgFulfillmentTimeout | quote }}
-
-        - name: PIPELINE_INFRA_HEADNODEPOOLNAME
-          value: {{ .Values.infra.headNodePoolName | quote }}
-
-        - name: PIPELINE_ISSUE_GITHUBOWNER
-          value: {{ .Values.issue.githubOwner | quote }}
-        - name: PIPELINE_ISSUE_GITHUBREPOSITORY
-          value: {{ .Values.issue.githubRepository | quote }}
-
+        # Vault configuration
         - name: VAULT_ADDR
           value: {{ .Values.vault.serviceAddress }}
         {{- if .Values.vault.tlsSecret }}
@@ -246,24 +131,17 @@ spec:
           value: "true"
         {{- end }}
 
+        # Pipeline service and TLS
         - name: PIPELINE_PIPELINE_BINDADDR
           value: ":{{ .Values.service.internalPort }}"
-
         {{- if .Values.service.tls }}
         - name: PIPELINE_PIPELINE_CERTFILE
           value: /tls/server.crt
         - name: PIPELINE_PIPELINE_KEYFILE
           value: /tls/server.key
         {{ end }}
-
-        - name: PIPELINE_CERT_SOURCE
-          value: {{ .Values.cert.source }}
-        - name: PIPELINE_CERT_PATH
-          value: {{ .Values.cert.path }}
-
-        {{- if .Values.anchore.enabled }}
-        - name: PIPELINE_ANCHORE_ENABLED
-          value: "true"
+        # Anchore configuration
+        {{- if .Values.configuration.anchore.enabled }}
         - name: PIPELINE_ANCHORE_ENDPOINT
           value: {{ .Values.anchore.serviceEndpoint | quote }}
         - name: PIPELINE_ANCHORE_ADMINUSER
@@ -274,20 +152,20 @@ spec:
               name: {{ .Values.anchore.secretName }}
               key: {{ .Values.anchore.secretKey }}
         {{ end }}
-
+        # Additional environment variables
         {{ range $key, $value := .Values.env }}
         - name: {{ $key }}
           value: {{ $value | quote }}
         {{ end }}
 
         ports:
-        {{- if .Values.metrics.enabled }}
-        - containerPort: {{ .Values.metrics.port }}
+        {{- if .Values.configuration.metrics.enabled }}
+        - containerPort: {{ .Values.configuration.metrics.port }}
         {{- end }}
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           httpGet:
-            path: {{ .Values.global.pipelineBasepath }}/api
+            path: {{ .Values.configuration.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
           {{- if .Values.service.tls }}
             scheme: HTTPS
@@ -295,7 +173,7 @@ spec:
           initialDelaySeconds: 15
         readinessProbe:
           httpGet:
-            path: {{ .Values.global.pipelineBasepath }}/api
+            path: {{ .Values.configuration.pipelineBasepath }}/api
             port: {{ .Values.service.internalPort }}
           {{- if .Values.service.tls }}
             scheme: HTTPS
@@ -319,9 +197,9 @@ spec:
         - name: pipeline-tls
           mountPath: /tls
       {{ end }}
-      {{- if eq .Values.cert.source "file" }}
+      {{- if eq .Values.configuration.cert.source "file" }}
         - name: sign-ca
-          mountPath: {{ .Values.cert.path }}
+          mountPath: {{ .Values.configuration.cert.path }}
       {{ end }}
       volumes:
       - name: config-volume
@@ -346,7 +224,7 @@ spec:
         secret:
           secretName: {{ include "pipeline.fullname" . }}-tls
       {{ end }}
-      {{- if eq .Values.cert.source "file" }}
+      {{- if eq .Values.configuration.cert.source "file" }}
       - name: sign-ca
         secret:
           secretName: {{ include "pipeline.fullname" . }}-sign-ca
