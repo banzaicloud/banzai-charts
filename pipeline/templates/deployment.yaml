@@ -163,6 +163,7 @@ spec:
         - containerPort: {{ .Values.configuration.metrics.port }}
         {{- end }}
         - containerPort: {{ .Values.service.internalPort }}
+        - containerPort: {{ .Values.serviceInternal.internalPort }}
         livenessProbe:
           httpGet:
             path: {{ .Values.configuration.pipelineBasepath }}/api
