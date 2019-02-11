@@ -76,7 +76,7 @@ spec:
       - name: {{ .Values.objstore.provider }}
         secret:
           defaultMode: 420
-          secretName: {{ include "thanos.fullname" . }}
+          secretName: {{ include "thanos.fullname" . }}-gcs
           items:
             - key: google.json
               path: google.json

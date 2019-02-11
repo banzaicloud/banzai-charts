@@ -49,11 +49,39 @@ helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" -
 | cluster.port | Binding port for cluster discovery | 10900 |
 | objstore.provider | Supported providers: `gcs` (soon s3) | gcs |
 | objstore.configFile | The file name containing bucket configuration |  "bucket.yaml" |
-| objstore.bucketName | The bucket name used to store logs | "" |
+| objstore.config | The storage module configuration check [official documentation](https://github.com/improbable-eng/thanos/blob/master/docs/storage.md) | "" |
 | objstore.gcsCredentials | Google credentials **json content base64 encoded** | "" |
 | replicaLabelName | Replica label (separate different Prometheus instances)| "replica" |
-| prometheus.enabled | Prometheus deployment with sidecar | false |
-| prometheus.thanosSidecar.enabled | Enable sidecar in Prometheus  | true |
+
+### Example GCS configuration
+```
+objstore:
+  provider: gcs
+  gcsCredentials: <base64encodedjson>
+  configFile: "bucket.yaml"
+  config: |-
+    type: GCS
+    config:
+      bucket: ""
+
+```
+
+### Example S3 configuration
+This is an example configuration using thanos with S3. Check endpoints here: https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
+
+```
+objstore:
+  provider: amazon
+  configFile: "bucket.yaml"
+  config: |-
+    type: S3
+    config:
+      endpoint: ""
+      bucket: ""
+      access_key: ""
+      secret_key: ""
+```
+
 
 ## Upcoming features
 - Support S3
