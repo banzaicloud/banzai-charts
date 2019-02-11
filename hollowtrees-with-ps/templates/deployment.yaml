@@ -61,10 +61,16 @@ spec:
           value: {{ .Values.htpsp.healthcheck.endpoint | quote }}
         - name: HTPSP_EVENTHANDLER_LISTENADDRESS
           value: ":{{ .Values.htpsp.listenPort }}"
-        - name: HTPSP_EVENTHANDLER_PIPELINEINTERNALADDRESS
-          value: {{ .Values.htpsp.eventHandler.pipelineInternalAddress | quote }}
-        - name: HTPSP_EVENTHANDLER_RECOMMENDERADDRESS
-          value: {{ .Values.htpsp.eventHandler.recommenderAddress | quote }}
+        - name: HTPSP_SCALER_PIPELINEINTERNALADDRESS
+          value: {{ .Values.htpsp.scaler.pipelineInternalAddress | quote }}
+        - name: HTPSP_SCALER_RECOMMENDERADDRESS
+          value: {{ .Values.htpsp.scaler.recommenderAddress | quote }}
+        - name: HTPSP_SCALER_RETRIES
+          value: {{ .Values.htpsp.scaler.retries | quote }}
+        - name: HTPSP_SCALER_WAITBETWEENRETRIES
+          value: {{ .Values.htpsp.scaler.waitBetweenRetries | quote }}
+        - name: HTPSP_SCALER_WAITINQUEUE
+          value: {{ .Values.htpsp.scaler.waitInQueue | quote }}
         ports:
         - name: http
           containerPort: {{ .Values.htpsp.listenPort }}

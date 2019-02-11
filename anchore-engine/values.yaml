@@ -13,7 +13,7 @@ service:
 image:
   # Can use 'latest' but not recommended
   repository: "docker.io/anchore/anchore-engine"
-  tag: "v0.3.0"
+  tag: "v0.3.2"
   pullPolicy: IfNotPresent
 
 ingress:

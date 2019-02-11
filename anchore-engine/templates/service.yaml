@@ -34,6 +34,5 @@ spec:
   selector:
       app: "{{ template "anchore-engine.name" . }}"
       component: "anchore-core"
-      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
       release: "{{ .Release.Name }}"
       heritage: "{{ .Release.Service }}"
