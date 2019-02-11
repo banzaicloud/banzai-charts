@@ -58,5 +58,6 @@ objstore:
   provider: gcs
   configFile: bucket.yaml
   config: ""
+  gcsCredentials: "" 
 
 replicaLabelName: replica
