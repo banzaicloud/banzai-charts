@@ -28,7 +28,7 @@ htpsp:
   listenPort: 9993
   image:
     repository: banzaicloud/ht-pipeline-scaler-plugin
-    tag: "0.0.1"
+    tag: "0.0.2"
     imagePullPolicy: IfNotPresent
   log:
     format: logfmt
@@ -36,9 +36,12 @@ htpsp:
   healthcheck:
     listenPort: 8083
     endpoint: /healthz
-  eventHandler:
-    pipelineInternalAddress: 
-    recommenderAddress: 
+  scaler:
+    pipelineInternalAddress:
+    recommenderAddress:
+    retries: 2
+    waitBetweenRetries: 10s
+    waitInQueue: 60s
   resources:
     requests:
       memory: 256Mi
@@ -56,6 +59,7 @@ scaler:
   - org_id
   - cluster_id
   - cluster_name
+  - instance_id
   cooldown: 5m
 
 resources:
