@@ -20,7 +20,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 rules:
-- apiGroups: [ "banzaicloud.io" ]
+- apiGroups: [ "labels.banzaicloud.io" ]
   resources: [ "nodepoollabelsets" ]
   verbs: ["*"]
 - apiGroups: [""]

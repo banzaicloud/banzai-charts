@@ -2,14 +2,14 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: nodepoollabelsets.banzaicloud.io
+  name: nodepoollabelsets.labels.banzaicloud.io
   labels:
     app: {{ include "nodepool-labels-operator.name" . }}
     chart: {{ include "nodepool-labels-operator.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  group: banzaicloud.io
+  group: labels.banzaicloud.io
   version: v1alpha1
   scope: Namespaced
   names:
