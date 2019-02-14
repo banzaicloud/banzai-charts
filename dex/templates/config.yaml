@@ -41,9 +41,13 @@ data:
     staticClients:
 {{ toYaml . | indent 6 }}
 {{- end }}
-{{- with .Values.config.connectors }}
     connectors:
-{{ toYaml . | indent 6 }}
+{{- range $key, $value := .Values.config.connectors }}
+    - id: {{ $value.id }}
+      type: {{ $value.type }}
+      name: {{ $value.name }}
+      config:
+{{ toYaml $value.config | indent 8 }}
 {{- end }}
     enablePasswordDB: {{ .Values.config.enablePasswordDB }}
 {{- with .Values.config.staticPasswords }}
