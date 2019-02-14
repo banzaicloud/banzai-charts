@@ -33,6 +33,8 @@ jobs:
 
             helm repo remove local
 
+            helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+
             echo "REPO -> STABLE"
 
             find -H . -type d -empty -delete
