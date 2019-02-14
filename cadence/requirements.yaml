@@ -1,0 +1,10 @@
+dependencies:
+- name: cassandra
+  version: 0.10.4
+  repository: alias:incubator
+  condition: cassandra.enabled
+
+- name: cadence-web
+  version: 0.1.0
+  repository: alias:banzaicloud-stable
+  condition: cadence-web.enabled
