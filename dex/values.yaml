@@ -80,7 +80,7 @@ config:
 
   staticClients: []
 
-  connectors: []
+  connectors: {}
 
   enablePasswordDB: false
   staticPasswords: []
