@@ -1,0 +1,76 @@
+{{ if .Values.rbac.enabled }}
+{{- $serviceName := include "zookeeper-operator.fullname" . -}}
+apiVersion: rbac.authorization.k8s.io/{{ required "A valid .Values.rbac.apiVersion entry required!" .Values.rbac.apiVersion }}
+kind: ClusterRole
+metadata:
+  name: {{ $serviceName }}
+  labels:
+    app: "{{ template "zookeeper-operator.fullname" . }}"
+    chart: "{{ include "zookeeper-operator.chart" . }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+rules:
+- apiGroups:
+  - zookeeper.pravega.io
+  resources:
+  - "*"
+  verbs:
+  - "*"
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  - endpoints
+  - persistentvolumeclaims
+  - events
+  - configmaps
+  - secrets
+  verbs:
+  - "*"
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - daemonsets
+  - replicasets
+  - statefulsets
+  verbs:
+  - "*"
+- apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - "*"
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/{{ required "A valid .Values.rbac.apiVersion entry required!" .Values.rbac.apiVersion }}
+metadata:
+  name: {{ $serviceName }}
+  labels:
+    app: "{{ template "zookeeper-operator.fullname" . }}"
+    chart: "{{ include "zookeeper-operator.chart" . }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+subjects:
+- kind: ServiceAccount
+  name: {{ $serviceName }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ $serviceName }}
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "zookeeper-operator.fullname" . }}
+  labels:
+    app: "{{ template "zookeeper-operator.fullname" . }}"
+    chart: "{{ include "zookeeper-operator.chart" . }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+{{ end }}
