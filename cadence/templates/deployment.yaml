@@ -32,10 +32,8 @@ spec:
           env:
           - name: LOG_LEVEL
             value: "{{ .Values.server.logLevel }}"
-          {{- if .Values.cassandra.enabled }}
           - name: CASSANDRA_SEEDS
             value: {{ template "cassandra.fullname" . }}
-          {{- end }}
           - name: KEYSPACE
             value: "{{ .Values.cassandra.keyspace }}"
           - name: VISIBILITY_KEYSPACE
