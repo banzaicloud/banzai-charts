@@ -31,3 +31,20 @@ The following tables lists the configurable parameters of the Zookeeper Oparator
 | nodeSelector | no | nodeSelector can be specified to operator pods | {} |
 | tolerations | no | tolerations can be specified to operator pods | {} |
 | affinity | no | affinity can be specified to operator pods | {} |
+
+
+## Install Zookeeper Cluster
+
+To install a Zookeeper cluster with 3 nodes:
+
+```
+kubectl create -f - <<EOF
+apiVersion: zookeeper.pravega.io/v1beta1
+kind: ZookeeperCluster
+metadata:
+  name: example-zookeepercluster
+spec:
+  # Add fields here
+  replicas: 3
+EOF
+```
