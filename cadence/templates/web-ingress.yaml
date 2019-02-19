@@ -1,23 +1,22 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := include "cadence-web.fullname" . -}}
-{{- $ingressPaths := .Values.ingress.paths -}}
+{{- if .Values.web.ingress.enabled -}}
+{{- $ingressPaths := .Values.web.ingress.paths -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ include "cadence.fullname" . }}-web
   labels:
-    app.kubernetes.io/name: {{ include "cadence-web.name" . }}
-    helm.sh/chart: {{ include "cadence-web.chart" . }}
+    app.kubernetes.io/name: {{ include "cadence.name" . }}-web
+    helm.sh/chart: {{ include "cadence.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  {{- with .Values.ingress.annotations }}
+  {{- with .Values.web.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-{{- if .Values.ingress.tls }}
+{{- if .Values.web.ingress.tls }}
   tls:
-  {{- range .Values.ingress.tls }}
+  {{- range .Values.web.ingress.tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . | quote }}
@@ -26,14 +25,14 @@ spec:
   {{- end }}
 {{- end }}
   rules:
-  {{- range .Values.ingress.hosts }}
+  {{- range .Values.web.ingress.hosts }}
     - host: {{ . | quote }}
       http:
         paths:
 	{{- range $ingressPaths }}
           - path: {{ . }}
             backend:
-              serviceName: {{ $fullName }}
+              serviceName: {{ include "cadence.fullname" . }}-web
               servicePort: http
 	{{- end }}
   {{- end }}
