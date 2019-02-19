@@ -18,6 +18,8 @@ server:
 
   bindOnLocalHost: false
 
+  cassandraVisibilityKeyspace: cadence
+
   frontend:
     enabled: true
     bindOnIP: "0.0.0.0"
@@ -88,7 +90,5 @@ cassandra:
 #  seeds: cassandra
 #  consistency: One
 #  keyspace: cadence
-#  visibility:
-#    keyspace: cadence_visibility
 #  config:
 #    cluster_size: 1

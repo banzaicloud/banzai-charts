@@ -39,7 +39,7 @@ spec:
           - name: KEYSPACE
             value: "{{ .Values.cassandra.keyspace }}"
           - name: VISIBILITY_KEYSPACE
-            value: "{{ .Values.cassandra.visibility.keyspace }}"
+            value: "{{ .Values.cassandraVisibilityKeyspace }}"
           - name: CASSANDRA_CONSISTENCY
             value: "{{ .Values.cassandra.consistency }}"
           - name: NUM_HISTORY_SHARDS
