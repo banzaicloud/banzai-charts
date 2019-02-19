@@ -15,6 +15,24 @@ resources:
     cpu: 250m
     memory: 256Mi
 
+worker:
+  ## Resource definitions for Kubernetes resources
+  replicaCount: 1
+  # Upgrade strategy
+  strategy: {}
+  image:
+    repository: banzaicloud/pipeline
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+  deploymentLabels: {}
+  deploymentAnnotations: {}
+
 service:
   name: pipeline
   type: ClusterIP
@@ -230,6 +248,11 @@ configuration:
     ca:
       key: ""
       cert: ""
+
+  cadence:
+    host: ""
+    port: 7933
+    domain: pipeline
 
 ##
 ## Vault connector settings
