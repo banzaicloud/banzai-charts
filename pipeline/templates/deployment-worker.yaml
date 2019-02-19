@@ -7,16 +7,16 @@ metadata:
     chart: {{ include "pipeline.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    {{- if .Values.deploymentLabels }}
-{{ toYaml .Values.deploymentLabels | indent 4 }}
+    {{- if .Values.worker.deploymentLabels }}
+{{ toYaml .Values.worker.deploymentLabels | indent 4 }}
     {{- end }}
   annotations:
-{{ toYaml .Values.deploymentAnnotations | indent 4 }}
+{{ toYaml .Values.worker.deploymentAnnotations | indent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
-  {{- if .Values.strategy }}
+  replicas: {{ .Values.worker.replicaCount }}
+  {{- if .Values.worker.strategy }}
   strategy:
-{{ toYaml .Values.strategy | indent 4 }}
+{{ toYaml .Values.worker.strategy | indent 4 }}
   {{- end }}
   selector:
     matchLabels:
@@ -39,8 +39,8 @@ spec:
       {{- end }}
 
       - name: pipeline
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        image: {{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}
+        imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
         args: /worker
         env:
         # Database related section
