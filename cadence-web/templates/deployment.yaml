@@ -23,7 +23,7 @@ spec:
       initContainers:
       - name: check-frontend
         image: "banzaicloud/tcheck:latest"
-        command: ['sh', '-c', 'until tcheck --peer {{ .Release.Name }}-cadence-frontend:7933 --serviceName cadence-frontend; do echo waiting for frontend; sleep 2; done;']
+        command: ['sh', '-c', 'until tcheck --peer {{ .Release.Name }}-frontend:7933 --serviceName cadence-frontend; do echo waiting for frontend; sleep 2; done;']
 
       containers:
         - name: {{ .Chart.Name }}
@@ -31,7 +31,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           - name: CADENCE_TCHANNEL_PEERS
-            value: "{{ .Release.Name }}-cadence-frontend:7933"
+            value: "{{ .Release.Name }}-frontend:7933"
 
           ports:
             - name: http
