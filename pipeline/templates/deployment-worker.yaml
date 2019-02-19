@@ -41,7 +41,7 @@ spec:
       - name: pipeline
         image: {{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}
         imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
-        args: /worker
+        command: ["/worker"]
         env:
         # Database related section
         {{ if .Values.cloudsql.enabled }}
