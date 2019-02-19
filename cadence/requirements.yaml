@@ -1,7 +1,7 @@
 dependencies:
 - name: cassandra
   version: 0.10.4
-  repository: alias:incubator
+  repository: http://storage.googleapis.com/kubernetes-charts-incubator
   condition: cassandra.enabled
 
 - name: cadence-web
