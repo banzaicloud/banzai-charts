@@ -103,15 +103,18 @@ web:
   ingress:
     enabled: false
     annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-    paths: []
+      #kubernetes.io/ingress.class: traefik
+      #ingress.kubernetes.io/ssl-redirect: "false"
+      #traefik.frontend.rule.type: PathPrefix
     hosts:
-      - chart-example.local
+      - "/"
+      # - "domain.com/xyz"
+      # - "domain.com"
     tls: []
     #  - secretName: chart-example-tls
     #    hosts:
     #      - chart-example.local
+
 
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
