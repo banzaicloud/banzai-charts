@@ -6,8 +6,8 @@ server:
   replicaCount: 1
 
   image:
-    repository: banzaicloud/cadence-server
-    tag: latest
+    repository: ubercadence/server
+    tag: 0.5.2
     pullPolicy: IfNotPresent
 
   logLevel: "debug,info"
@@ -37,7 +37,7 @@ server:
   history:
     enabled: true
     bindOnIP: "0.0.0.0"
-    NumHistoryShards: 4
+    numHistoryShards: 4
     service:
       type: ClusterIP
       port: 7934

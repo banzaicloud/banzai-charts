@@ -41,7 +41,7 @@ spec:
           - name: CASSANDRA_CONSISTENCY
             value: "{{ .Values.cassandra.consistency }}"
           - name: NUM_HISTORY_SHARDS
-            value: "{{ .Values.server.history.NumHistoryShards }}"
+            value: "{{ .Values.server.history.numHistoryShards }}"
           - name: BIND_ON_LOCALHOST
             value: "{{ .Values.server.bindOnLocalHost }}"
 
