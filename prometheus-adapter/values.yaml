@@ -1,8 +1,21 @@
 # Default values for k8s-prometheus-adapter..
+affinity: {}
+
 image:
-  repository: quay.io/coreos/k8s-prometheus-adapter-amd64
-  tag: v0.2.0
+  repository: directxman12/k8s-prometheus-adapter-amd64
+  tag: v0.4.1
   pullPolicy: IfNotPresent
+
+logLevel: 4
+
+metricsRelistInterval: 1m
+
+nodeSelector: {}
+
+# Url to access prometheus
+prometheus:
+  url: http://prometheus.default.svc
+  port: 9090
 
 replicas: 1
 
@@ -17,25 +30,40 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name:
 
-resources:
-  requests:
-    cpu: 100m
-    memory: 128Mi
-  limits:
-    cpu: 100m
-    memory: 128Mi
+resources: {}
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+rules:
+  default: true
+  custom: []
+# - seriesQuery: '{__name__=~"^some_metric_count$"}'
+#   resources:
+#     template: <<.Resource>>
+#   name:
+#     matches: ""
+#     as: "my_custom_metric"
+#   metricsQuery: sum(<<.Series>>{<<.LabelMatchers>>}) by (<<.GroupBy>>)
+  # Mounts a configMap with pre-generated rules for use. Overrides the
+  # default and custom entries
+  existing:
+
+service:
+  annotations: {}
+  port: 443
+  type: ClusterIP
 
 tls:
   enable: false
+  ca: |-
+    # Public CA file that signed the APIService
   key: |-
     # Private key of the APIService
   certificate: |-
     # Public key of the APIService
 
-# Url to access prometheus
-prometheus:
-  url: http://prometheus.default.svc
-
-metricsRelistInterval: 30s
-rateInterval: 5m
-logLevel: 10
+tolerations: []

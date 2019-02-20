@@ -1,6 +1,6 @@
 name: prometheus-adapter
-version: v0.0.1
-appVersion: v0.1.0
+version: v0.4.1
+appVersion: v0.4.1
 description: A Helm chart for k8s prometheus adapter
 home: https://github.com/DirectXMan12/k8s-prometheus-adapter
 keywords:
@@ -11,6 +11,5 @@ sources:
   - https://github.com/kubernetes/charts
   - https://github.com/DirectXMan12/k8s-prometheus-adapter
 maintainers:
-- name: szander
-  email: szander@banzaicloud.com
-engine: gotpl
+  - name: mattiasgees
+    email: mattias.gees@jetstack.io
