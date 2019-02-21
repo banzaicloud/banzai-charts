@@ -35,6 +35,9 @@ ports:
   - name: http
     containerPort: 5556
     protocol: TCP
+  - name: grpc
+    containerPort: 5557
+    protocol: TCP
 
 service:
   type: ClusterIP
@@ -64,6 +67,9 @@ config:
 
   web:
     http: ""
+
+  grpc:
+    addr: ""
 
   frontend:
     theme: ""
