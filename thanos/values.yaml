@@ -14,6 +14,7 @@ store:
   grpc:
     port: 10901
   logLevel: debug
+  securityContext: {}
 
 query:
   enabled: true
@@ -41,6 +42,8 @@ query:
     #    hosts:
     #      - chart-example.local
 
+  securityContext: {}
+
 compact:
   enabled: true
   # annotations:
@@ -49,6 +52,7 @@ compact:
   http:
     port: 10902
   logLevel: debug
+  securityContext: {}
 
 cluster:
   address: 0.0.0.0
@@ -58,6 +62,6 @@ objstore:
   provider: gcs
   configFile: bucket.yaml
   config: ""
-  gcsCredentials: "" 
+  gcsCredentials: ""
 
 replicaLabelName: replica
