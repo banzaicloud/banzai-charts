@@ -22,6 +22,7 @@ jobs:
             GIT_TAG=${CIRCLE_TAG}
 
             helm init -c
+            helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
 
             if [ "$GIT_TAG" = "0.3.0" ]; then
                 BANZAICLOUD_STABLE_REPO=http://kubernetes-charts.banzaicloud.com
