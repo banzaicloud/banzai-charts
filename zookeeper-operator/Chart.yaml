@@ -1,0 +1,12 @@
+apiVersion: v1
+description: Pravega Zookeeper-operator Helm chart for Kubernetes
+name: zookeeper-operator
+version: 0.0.1
+appVersion: "0.2.0"
+home: https://github.com/pravega/zookeeper-operator
+keywords:
+- operator
+- zookeeper
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com
