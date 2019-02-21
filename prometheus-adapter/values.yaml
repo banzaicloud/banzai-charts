@@ -4,6 +4,16 @@ image:
   tag: v0.2.0
   pullPolicy: IfNotPresent
 
+logLevel: 4
+
+metricsRelistInterval: 1m
+
+nodeSelector: {}
+
+# Url to access prometheus
+prometheus:
+  url: http://prometheus.default.svc
+
 replicas: 1
 
 rbac:
