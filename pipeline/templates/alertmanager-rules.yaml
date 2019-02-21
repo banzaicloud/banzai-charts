@@ -16,7 +16,7 @@ spec:
     rules:
     - alert: ClusterCreateFailed
       annotations:
-        message: Pipeline cluster create failed.
+        summary: "{{ $labels.clusterName }} cluster create failed."
         runbook_url: https://alpha.dev.banzaicloud.com/grafana/d/pipeline/pipeline-dashboard-rev2
       expr: |
         pipeline_cluster_active_total{status=~"ERROR"} > 0
