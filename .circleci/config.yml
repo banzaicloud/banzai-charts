@@ -22,6 +22,7 @@ jobs:
             GIT_TAG=${CIRCLE_TAG}
 
             helm init -c
+            helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
 
             if [ "$GIT_TAG" = "0.3.0" ]; then
                 BANZAICLOUD_STABLE_REPO=http://kubernetes-charts.banzaicloud.com
@@ -49,7 +50,7 @@ jobs:
                 mkdir -p /tmp/s3-chart/stable
 
                 echo "Dependency update and build"
-                if [ $i == 4 ]; then
+                if [ $i == 2 ]; then
                     for chart in $(find -H . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print)
                     do
                         helm dependency update $chart
