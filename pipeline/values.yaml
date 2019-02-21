@@ -7,7 +7,7 @@ replicaCount: 1
 strategy: {}
 image:
   repository: banzaicloud/pipeline
-  tag: latest
+  tag: 0.11.0
   pullPolicy: IfNotPresent
 
 resources:
@@ -17,12 +17,12 @@ resources:
 
 worker:
   ## Resource definitions for Kubernetes resources
-  replicaCount: 1
+  replicaCount: 0
   # Upgrade strategy
   strategy: {}
   image:
     repository: banzaicloud/pipeline
-    tag: latest
+    tag: 0.11.0
     pullPolicy: IfNotPresent
 
   resources:
@@ -145,7 +145,7 @@ configuration:
   helm:
    retryAttemp: 30
    retrySleepSeconds: 15
-   tillerVersion: "v2.11.0"
+   tillerVersion: "v2.12.2"
    path: "/cache/helm"
 
    #helm repo URLs
