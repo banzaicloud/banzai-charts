@@ -15,7 +15,6 @@ nodeSelector: {}
 # Url to access prometheus
 prometheus:
   url: http://prometheus.default.svc
-  port: 9090
 
 replicas: 1
 
