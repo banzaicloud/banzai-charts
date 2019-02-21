@@ -38,7 +38,7 @@ jobs:
             find -H . -type d -empty -delete
 
             #TODO: Dirty hack to solve multi level dependency, the current dependency depth is 4
-            for i in $(seq 1 4);
+            for i in $(seq 1 2);
             do
 
                 helm repo add banzaicloud-stable ${BANZAICLOUD_STABLE_REPO} || true

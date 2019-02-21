@@ -1,0 +1,150 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pipeline.fullname" . }}-worker
+  labels:
+    app: {{ include "pipeline.name" . }}-worker
+    chart: {{ include "pipeline.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    {{- if .Values.worker.deploymentLabels }}
+{{ toYaml .Values.worker.deploymentLabels | indent 4 }}
+    {{- end }}
+  annotations:
+{{ toYaml .Values.worker.deploymentAnnotations | indent 4 }}
+spec:
+  replicas: {{ .Values.worker.replicaCount }}
+  {{- if .Values.worker.strategy }}
+  strategy:
+{{ toYaml .Values.worker.strategy | indent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "pipeline.name" . }}-worker
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      name: {{ include "pipeline.fullname" . }}
+      labels:
+        app: {{ include "pipeline.name" . }}-worker
+        release: "{{ .Release.Name }}"
+
+    spec:
+      containers:
+      {{- if .Values.cloudsql.enabled  }}
+      - name: cloudsql-proxy
+        image: {{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}
+        command: ["/cloud_sql_proxy",
+                  "-instances={{ .Values.cloudsql.instance }}=tcp:3306"]
+      {{- end }}
+
+      - name: pipeline
+        image: {{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}
+        imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+        command: ["/worker"]
+        env:
+        # Database related section
+        {{ if .Values.cloudsql.enabled }}
+        - name: PIPELINE_DATABASE_HOST
+          value: "127.0.0.1"
+        - name: PIPELINE_DATABASE_DBNAME
+          value: {{ default "" .Values.cloudsql.dbName | quote }}
+        - name: PIPELINE_DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name:  {{ include "pipeline.fullname" . }}-cloudsql
+              key: dbUserName
+        - name: PIPELINE_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name:  {{ include "pipeline.fullname" . }}-cloudsql
+              key: dbUserPass
+        {{ else }}
+        - name: PIPELINE_DATABASE_HOST
+          value: {{ default (include "pipeline.mysql.fullname" .) .Values.mysql.externalEndpoint }}
+        - name: PIPELINE_DATABASE_DBNAME
+          value: {{ default "" .Values.mysql.mysqlDatabase | quote }}
+        - name: PIPELINE_DATABASE_USER
+          value: {{ default "" .Values.mysql.mysqlUser | quote }}
+        - name: PIPELINE_DATABASE_PASSWORD
+          {{ if .Values.mysql.enabled }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "pipeline.mysql.fullname" . }}
+              key: mysql-password
+          {{ else }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "pipeline.fullname" . }}-mysql
+              key: mysql-password
+          {{ end }}
+        {{ end }}
+        # Authentication configuration
+        - name: PIPELINE_AUTH_CLIENTID
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "pipeline.fullname" . }}
+              key: githubClientId
+        - name: PIPELINE_AUTH_CLIENTSECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "pipeline.fullname" . }}
+              key: githubClientSecret
+        - name: PIPELINE_AUTH_TOKENSIGNINGKEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "pipeline.fullname" . }}
+              key: tokenSigningKey
+        - name: PIPELINE_GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "pipeline.fullname" . }}
+              key: githubToken
+        # Vault configuration
+        - name: VAULT_ADDR
+          value: {{ .Values.vault.serviceAddress }}
+        {{- if .Values.vault.tlsSecret }}
+        - name: VAULT_CACERT
+          value: /vault/tls/ca.crt
+        {{ else }}
+        - name: VAULT_SKIP_VERIFY
+          value: "true"
+        {{- end }}
+
+        # Additional environment variables
+        {{ range $key, $value := .Values.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{ end }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+
+        volumeMounts:
+        - name: config-volume
+          mountPath: /root/config/
+
+      {{- if .Values.vault.tlsSecret }}
+        - name: vault-tls
+          mountPath: /vault/tls
+       {{ end }}
+      {{- if .Values.service.tls  }}
+        - name: pipeline-tls
+          mountPath: /tls
+      {{ end }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ include "pipeline.fullname" . }}
+
+      {{- if .Values.vault.tlsSecret }}
+      - name: vault-tls
+        secret:
+          secretName: {{ .Release.Name }}-vault-tls
+      {{ end }}
+      {{- if .Values.service.tls  }}
+      - name: pipeline-tls
+        secret:
+          secretName: {{ include "pipeline.fullname" . }}-tls
+      {{ end }}
+
+      serviceAccountName: pipeline

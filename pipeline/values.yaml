@@ -7,13 +7,31 @@ replicaCount: 1
 strategy: {}
 image:
   repository: banzaicloud/pipeline
-  tag: latest
+  tag: 0.11.0
   pullPolicy: IfNotPresent
 
 resources:
   requests:
     cpu: 250m
     memory: 256Mi
+
+worker:
+  ## Resource definitions for Kubernetes resources
+  replicaCount: 0
+  # Upgrade strategy
+  strategy: {}
+  image:
+    repository: banzaicloud/pipeline
+    tag: 0.11.0
+    pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+  deploymentLabels: {}
+  deploymentAnnotations: {}
 
 service:
   name: pipeline
@@ -127,7 +145,7 @@ configuration:
   helm:
    retryAttemp: 30
    retrySleepSeconds: 15
-   tillerVersion: "v2.11.0"
+   tillerVersion: "v2.12.2"
    path: "/cache/helm"
 
    #helm repo URLs
@@ -230,6 +248,11 @@ configuration:
     ca:
       key: ""
       cert: ""
+
+  cadence:
+    host: ""
+    port: 7933
+    domain: pipeline
 
 ##
 ## Vault connector settings
