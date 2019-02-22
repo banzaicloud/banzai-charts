@@ -240,6 +240,6 @@ spec:
               - key: google.json
                 path: google.json
         - name: thanos-config-volume
-          configMap:
-            name: {{ default (printf "%s-thanos" .Release.Name ) .Values.thanosSidecar.objstore.configMapName }}
+          secret:
+            secretName: {{ default (printf "%s-thanos" .Release.Name ) .Values.thanosSidecar.objstore.configSecretName }}
       {{- end }}
