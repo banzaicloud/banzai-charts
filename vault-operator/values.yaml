@@ -50,7 +50,7 @@ readinessProbe:
   timeoutSeconds: 1
       
 vault:
-  enabled: true
+  enabled: false
   name: vault
   size: 1
   image: vault:1.0.3
