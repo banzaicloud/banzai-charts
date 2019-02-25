@@ -1,0 +1,23 @@
+{{- if .Values.vault.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Values.vault.name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    kubernetes.io/ingress.class: internal-nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  rules:
+  - host: {{ .Values.vault.dns }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Values.vault.name }}
+          servicePort: {{ .Values.vault.serverPort }}
+        path: /
+  tls:
+  - hosts:
+    - {{ .Values.vault.dns }}
+    secretName: {{ .Values.vault.name }}-tls
+{{- end }}

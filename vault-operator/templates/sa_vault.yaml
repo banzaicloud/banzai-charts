@@ -1,0 +1,11 @@
+{{- if .Values.vault.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.vault.name }}
+  labels:
+    app: {{ .Values.vault.name }}
+    chart: {{ include "vault-operator.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- end }}
