@@ -39,7 +39,7 @@ jobs:
             find -H . -type d -empty -delete
 
             #TODO: Dirty hack to solve multi level dependency, the current dependency depth is 4
-            for i in $(seq 1 2);
+            for i in $(seq 1 3);
             do
 
                 helm repo add banzaicloud-stable ${BANZAICLOUD_STABLE_REPO} || true
@@ -50,7 +50,7 @@ jobs:
                 mkdir -p /tmp/s3-chart/stable
 
                 echo "Dependency update and build"
-                if [ $i == 2 ]; then
+                if [ $i == 3 ]; then
                     for chart in $(find -H . -maxdepth 1 ! -path /tmp  ! -path . ! -path ./.circleci ! -path ./.git -type d -print)
                     do
                         helm dependency update $chart

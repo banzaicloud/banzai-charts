@@ -274,7 +274,7 @@ thanosSidecar:
   objstore:
     provider: gcs
     secretName: ""
-    configMapName: ""
+    configSecretName: ""
     configFile: "bucket.yaml"
 
   # ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/

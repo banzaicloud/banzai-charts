@@ -44,6 +44,7 @@ spec:
         {{- end }}
         args:
         - "store"
+        - "--data-dir=/var/thanos/store"
         - "--log.level={{ .Values.store.logLevel }}"
         - "--grpc-address=0.0.0.0:{{ .Values.store.grpc.port }}"
         - "--cluster.address={{ .Values.cluster.address }}:{{ .Values.cluster.port}}"

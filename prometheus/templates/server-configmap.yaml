@@ -38,14 +38,22 @@ data:
           regex: {{ $root.Release.Namespace }}
           action: keep
         - source_labels: [__meta_kubernetes_pod_label_app]
-          regex: {{ template "prometheus.name" $root }}
+          separator: ;
+          regex: (hollowtrees-with-ps|alertmanager)
+          replacement: $1
           action: keep
-        - source_labels: [__meta_kubernetes_pod_label_component]
-          regex: alertmanager
-          action: keep
+        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+          separator: ;
+          regex: (.+)(?::\d+);(\d+)
+          target_label: __address__
+          replacement: $1:$2
+          action: replace
         - source_labels: [__meta_kubernetes_pod_container_port_number]
-          regex:
+          separator: ;
+          regex: null
+          replacement: $1
           action: drop
+
 {{- end -}}
 {{- end -}}
 {{- end -}}
