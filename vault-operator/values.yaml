@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/vault-operator
-  tag: 0.4.8
+  tag: 0.4.10
   pullPolicy: IfNotPresent
 
 service:
@@ -17,7 +17,9 @@ service:
 nameOverride: ""
 fullnameOverride: ""
 
-crdAnnotations: {}
+crdAnnotations:
+  "helm.sh/hook": "crd-install"
+  "helm.sh/hook-delete-policy": "before-hook-creation"
 
 # The namespace where the operator watches for vault CRD objects, if not defined
 # all namespaces are watched
@@ -46,6 +48,163 @@ readinessProbe:
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
+      
+vault:
+  enabled: true
+  name: vault
+  size: 1
+  image: vault:1.0.3
+  bankVaultsImage: banzaicloud/bank-vaults:0.4.10
+  resources:
+    vault:
+      requests:
+        memory: "256Mi"
+        cpu: "200m"
+      limits:
+        memory: "2Gi"
+        cpu: "2"
+    bankVaults:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    prometheusExporter:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+  supportUpgrade: true
+  serviceAccount: vault
+  logLevel: info
+  podAntiAffinity: failure-domain.beta.kubernetes.io/zone
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9102"
+    iam.amazonaws.com/role: "vault-role"
+  serviceType: ClusterIP
+  dns: vault.dev.example.com
+  serverPort: 8200
+  unsealConfig:
+    aws:
+      kmsKeyId: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+      kmsRegion: "us-east-1"
+      s3Bucket: "vault-dev"
+      s3Prefix: "key-"
+      s3Region: "us-east-1"
+  config:
+    storage:
+      s3:
+        bucket: "vault-dev"
+        region: "us-east-1"
+        disable_ssl: "false"
+        max_parallel: "128"
+    ha_storage:
+      dynamodb:
+        table: "vault-dev"
+        ha_enabled: "true"
+        region: "us-east-1"
+        max_parallel: "128"
+        read_capacity: "5"
+        write_capacity: "5"
+    listener:
+      tcp:
+        address: "0.0.0.0:8200"
+        cluster_address: "0.0.0.0:8201"
+        max_request_duration: "90s"
+        max_request_size: 33554432
+        tls_disable: "false"
+        tls_min_version: "tls12"
+        tls_cert_file: /vault/tls/server.crt
+        tls_key_file: /vault/tls/server.key
+        proxy_protocol_behavior: use_always
+        x_forwarded_for_authorized_addrs: 10.10.0.0/11
+        x_forwarded_for_hop_skips: 0
+        x_forwarded_for_reject_not_authorized: true
+        x_forwarded_for_reject_not_present: false
+    api_addr: https://vault.example.com
+    telemetry:
+      statsd_address: localhost:9125
+    ui: true
+  externalConfig:
+    policies:
+    - name: secrets
+      rules: path "secret/*" {
+              capabilities = ["create", "read", "update", "delete", "list"]
+            }
+    - name: secrets_read
+      rules: path "secret/*" {
+               capabilities = ["read", "list"]
+             }
+    - name: approle
+      rules: path "auth/approle/role/*" {
+               capabilities = ["create", "read", "update", "delete", "list"]
+             }
+    - name: admin
+      rules: path "*" {
+              capabilities = ["create", "read", "update", "delete", "list"]
+            }
+    auth:
+    - type: github
+      config:
+        organization: DummyMyOrg
+      map:
+        teams:
+          dev: secrets_read
+        users:
+          dummyMe: admin
+    - type: kubernetes
+      config:
+        token_reviewer_jwt: eyJhDUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_3AYcg
+        kubernetes_ca_cert: |
+          -----BEGIN CERTIFICATE-----
+          MIIC1z_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY
+          _DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY
+          _DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY
+          _DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY
+          _DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY
+          _DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY
+          _DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY_DUMMY
+          _DUMMY_DUMMYxH4+c8=
+          -----END CERTIFICATE-----
+        kubernetes_host: https://api.k8s.example.com
+      roles:
+        - name: dev-myapp
+          bound_service_account_names: myapp
+          bound_service_account_namespaces: dev-myapp
+          policies: secrets_read
+          ttl: 10m
+          max_ttl: 10m
+          period: 
+    - type: approle
+      roles:
+        - name: dev-legacyapp
+          bind_secret_id: true
+          secret_id_bound_cidrs: 10.20.10.0/20
+          token_bound_cidrs: 10.20.10.0/20
+          secret_id_num_uses: 0
+          secret_id_ttl: 1h
+          token_num_uses: 0
+          token_ttl: 1h
+          token_max_ttl: 1h
+          period:
+          enable_local_secret_ids: false
+          token_type: service
+          policies: secrets_read
+    secrets:
+      - path: secret
+        type: kv
+        description: General secrets.
+        options:
+          version: 2
+    audit:
+    - type: file
+      description: "File based audit logging device"
+      options:
+        file_path: /tmp/vault.log
 
 etcd-operator:
   enabled: false
