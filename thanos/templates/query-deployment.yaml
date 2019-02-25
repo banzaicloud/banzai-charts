@@ -51,6 +51,8 @@ spec:
           containerPort: {{ .Values.query.grpc.port }}
         - name: cluster
           containerPort: {{ .Values.cluster.port }}
+        resources:
+          {{ toYaml .Values.query.resources | nindent 10 }}
       securityContext:
         {{ toYaml .Values.query.securityContext | nindent 8 }}
 {{ end }}

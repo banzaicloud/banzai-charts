@@ -15,6 +15,7 @@ store:
     port: 10901
   logLevel: debug
   securityContext: {}
+  resources: {}
 
 query:
   enabled: true
@@ -27,6 +28,7 @@ query:
   http:
     port: 10902
   logLevel: debug
+  resources: {}
 
   ingress:
     enabled: false
@@ -53,6 +55,7 @@ compact:
     port: 10902
   logLevel: debug
   securityContext: {}
+  resources: {}
 
 cluster:
   address: 0.0.0.0

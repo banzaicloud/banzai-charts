@@ -64,6 +64,8 @@ spec:
         {{- end }}
         - name: data
           mountPath: /var/thanos/store
+        resources:
+          {{ toYaml .Values.compact.resources | nindent 10 }}
       volumes:
       - name: data
         emptyDir: {}
