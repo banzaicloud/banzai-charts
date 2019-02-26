@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: banzaicloud/hpa-operator
-  tag: 0.1.4
+  tag: 0.1.5
   pullPolicy: IfNotPresent
 
 resources:
@@ -34,4 +34,3 @@ affinity: {}
 ## Tolerations
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
-
