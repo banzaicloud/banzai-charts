@@ -79,4 +79,6 @@ spec:
             - key: google.json
               path: google.json
     {{- end }}
+      securityContext:
+        {{ toYaml .Values.compact.securityContext | nindent 8 }}
 {{- end }}

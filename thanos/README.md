@@ -20,7 +20,7 @@ $ helm repo update
 Create the Service Account and Bucket at Google cloud.
 
 Install the chart:
-```bash 
+```bash
 helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" --set objstore.gcsCredentials="<base64encoded>"
 
 ```
@@ -37,14 +37,17 @@ helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" -
 | store.http.port | Enable http port (includes /metrics) | 10902 |
 | store.grpc.port | Enable grpc port (data plane) | 10901 |
 | store.logLevel | Log level | debug |
+| store.securityContext | Manage securityContext of store pods | {} |
 | query.replicaCount | Pod replica count| 1 |
 | query.monitoring.enabled | | true |
 | query.http.port | Enable http port (includes /metrics) | 10901 |
 | query.grpc.port | Enable grpc port (data plane) | 10902 |
 | query.logLevel | Log level| debug |
+| query.securityContext | Manage securityContext of query pods | {} |
 | compact.monitoring.enabled | Enable prometheus scraping endpoint | true |
 | compact.http.port | Enable http port (includes /metrics) | 10902 |
-| compact.logLevel |  Log level | DEBUG |
+| compact.logLevel | Log level | DEBUG |
+| compact.securityContext | Manage securityContext of compact pods | {} |
 | cluster.address | Binding address for cluster discovery | 0.0.0.0 |
 | cluster.port | Binding port for cluster discovery | 10900 |
 | objstore.provider | Supported providers: `gcs` (soon s3) | gcs |
