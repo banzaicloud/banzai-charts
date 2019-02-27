@@ -139,6 +139,8 @@ spec:
           value: /tls/server.crt
         - name: PIPELINE_PIPELINE_KEYFILE
           value: /tls/server.key
+        - name: PIPELINE_API_URL
+          value: https://127.0.0.1:{{ .Values.service.internalPort }}
         {{ end }}
         # Anchore configuration
         {{- if .Values.configuration.anchore.enabled }}
