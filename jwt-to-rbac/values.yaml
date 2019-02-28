@@ -23,7 +23,6 @@ service:
   type: ClusterIP
   port: 5555
 
-
 config:
   app:
     addr: ":5555"
@@ -39,12 +38,6 @@ config:
   rbachandler:
     githubOrg: ""
     customGroups: []
-
-    - groupName: developers
-      customRules:
-      - verbs: [ "get", "list" ]
-        resources: [ "deployments", "replicasets", "pods" ]
-        apiGroups: [ "", "extensions", "apps" ]
 
 ingress:
   enabled: false
