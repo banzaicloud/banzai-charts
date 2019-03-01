@@ -3,13 +3,13 @@ kind: APIService
 metadata:
   name: v1beta1.custom.metrics.k8s.io
   labels:
-    app: {{ template "k8s-prometheus-adapter.name" . }}
-    chart: {{ template "k8s-prometheus-adapter.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   service:
-    name: {{ template "k8s-prometheus-adapter.name" . }}
+    name: {{ template "fullname" . }}
     namespace: {{ .Release.Namespace | quote }}
   group: custom.metrics.k8s.io
   version: v1beta1
