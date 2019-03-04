@@ -193,6 +193,18 @@ configuration:
     headNodeTaintRetryAttempt: 30
     headNodeTaintRetrySleepSeconds: 5
 
+    forbiddenLabelDomains:
+      - k8s.io
+      - kubernetes.io
+      - google.com
+      - coreos.com
+      - oraclecloud.com
+      - node.info
+      - azure.com
+      - agentpool
+      - storageprofile
+      - storagetier
+
   eks:
     templateLocation: https://raw.githubusercontent.com/banzaicloud/pipeline/master/templates/eks
     ASGFulfillmentTimeout: 10m
