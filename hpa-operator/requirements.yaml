@@ -4,5 +4,5 @@ dependencies:
   repository: alias:banzaicloud-stable
   condition: metricsServer.enabled
 - name: kube-metrics-adapter
-  version: 0.0.1
+  version: 0.0.2
   repository: alias:banzaicloud-stable
