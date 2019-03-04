@@ -228,7 +228,7 @@ configuration:
 
   metrics:
     enabled: false
-    port: 9900
+    address: 0.0.0.0:9900
     # if true, some metrics have unique labels
     debug: true
 
