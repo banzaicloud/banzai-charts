@@ -7,7 +7,7 @@ replicaCount: 1
 strategy: {}
 image:
   repository: banzaicloud/pipeline
-  tag: 0.11.0
+  tag: 0.13.0
   pullPolicy: IfNotPresent
 
 resources:
@@ -17,12 +17,12 @@ resources:
 
 worker:
   ## Resource definitions for Kubernetes resources
-  replicaCount: 0
+  replicaCount: 1
   # Upgrade strategy
   strategy: {}
   image:
     repository: banzaicloud/pipeline
-    tag: 0.11.0
+    tag: 0.13.0
     pullPolicy: IfNotPresent
 
   resources:
