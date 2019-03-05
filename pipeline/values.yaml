@@ -221,7 +221,7 @@ configuration:
     name: ark
     namespace: pipeline-infra
     chart: banzaicloud-stable/ark
-    chartVersion: 1.2.1
+    chartVersion: 1.2.2
     image: banzaicloud/ark
     imageTag: v0.9.6
     pullPolicy: IfNotPresent
