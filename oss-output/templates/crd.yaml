@@ -1,5 +1,5 @@
 apiVersion: "logging.banzaicloud.com/v1alpha1"
-kind: "LoggingOperator"
+kind: "Plugin"
 metadata:
   name: "{{ .Release.Name }}-oss-output"
 spec:
