@@ -9,6 +9,7 @@ keywords:
   - adapter
 sources:
   - https://github.com/kubernetes/charts
+  - https://github.com/banzaicloud/kube-metrics-adapter
   - https://github.com/zalando-incubator/kube-metrics-adapter
 maintainers:
   - name: Banzai Cloud

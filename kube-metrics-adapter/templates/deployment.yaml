@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "kube-metrics-adapter.fullname" . }}
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: {{ template "kube-metrics-adapter.fullname" . }}
+    chart: {{ template "kube-metrics-adapter.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: {{ template "kube-metrics-adapter.fullname" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        app: {{ template "kube-metrics-adapter.fullname" . }}
+        chart: {{ template "kube-metrics-adapter.chart" . }}
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
     spec:
-      serviceAccountName: {{ template "fullname" . }}
+      serviceAccountName: {{ template "kube-metrics-adapter.fullname" . }}
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:

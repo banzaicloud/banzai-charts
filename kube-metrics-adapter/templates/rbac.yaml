@@ -22,7 +22,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "fullname" . }}-resource-reader
+  name: {{ template "kube-metrics-adapter.fullname" . }}-resource-reader
 rules:
 - apiGroups:
   - ""
@@ -38,7 +38,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "fullname" . }}-resource-collector
+  name: {{ template "kube-metrics-adapter.fullname" . }}-resource-collector
 rules:
 - apiGroups:
   - ""
@@ -104,52 +104,52 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ template "fullname" . }}-auth-reader
+  name: {{ template "kube-metrics-adapter.fullname" . }}-auth-reader
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: extension-apiserver-authentication-reader
 subjects:
 - kind: ServiceAccount
-  name: {{ template "fullname" . }}
+  name: {{ template "kube-metrics-adapter.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "fullname" . }}:system:auth-delegator
+  name: {{ template "kube-metrics-adapter.fullname" . }}:system:auth-delegator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: system:auth-delegator
 subjects:
 - kind: ServiceAccount
-  name: {{ template "fullname" . }}
+  name: {{ template "kube-metrics-adapter.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "fullname" . }}-resource-collector
+  name: {{ template "kube-metrics-adapter.fullname" . }}-resource-collector
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "fullname" . }}-resource-collector
+  name: {{ template "kube-metrics-adapter.fullname" . }}-resource-collector
 subjects:
 - kind: ServiceAccount
-  name: {{ template "fullname" . }}
+  name: {{ template "kube-metrics-adapter.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "fullname" . }}-resource-reader
+  name: {{ template "kube-metrics-adapter.fullname" . }}-resource-reader
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "fullname" . }}-resource-reader
+  name: {{ template "kube-metrics-adapter.fullname" . }}-resource-reader
 subjects:
 - kind: ServiceAccount
-  name: {{ template "fullname" . }}
+  name: {{ template "kube-metrics-adapter.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
 {{- end -}}
