@@ -1,0 +1,26 @@
+{{- if .Values.authProxy.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/port: "8443"
+    prometheus.io/scheme: https
+    prometheus.io/scrape: "true"
+  labels:
+    control-plane: controller-manager
+    controller-tools.k8s.io: "1.0"
+    app: {{ include "istio-operator.name" . }}
+    chart: {{ include "istio-operator.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  name: "{{ .Values.namePrefix }}-controller-manager-metrics-service"
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+  - name: https
+    port: 8443
+    targetPort: https
+  selector:
+    control-plane: controller-manager
+    controller-tools.k8s.io: "1.0"
+{{- end }}

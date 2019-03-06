@@ -1,0 +1,38 @@
+# Default values for istio-operator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: banzaicloud/istio-operator
+  tag: 0.0.8
+  pullPolicy: Always
+
+namespace: istio-system
+namePrefix: istio-operator
+
+# Enable or disable the auth proxy (https://github.com/brancz/kube-rbac-proxy)
+# which protects your /metrics endpoint.
+# Only one of authProxy and prometheusMetrics should be enabled.
+authProxy:
+  enabled: true
+# If you want your controller-manager to expose the /metrics
+# endpoint w/o any authn/z, set prometheusMetrics to true and
+# set authProxy to false.
+# Only one of authProxy and prometheusMetrics should be enabled.
+prometheusMetrics:
+  enabled: false
+
+nameOverride: ""
+fullnameOverride: ""
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 30Mi
+  requests:
+    cpu: 100m
+    memory: 20Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
