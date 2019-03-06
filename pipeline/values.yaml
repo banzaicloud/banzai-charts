@@ -7,7 +7,7 @@ replicaCount: 1
 strategy: {}
 image:
   repository: banzaicloud/pipeline
-  tag: 0.11.0
+  tag: 0.13.0
   pullPolicy: IfNotPresent
 
 resources:
@@ -17,12 +17,12 @@ resources:
 
 worker:
   ## Resource definitions for Kubernetes resources
-  replicaCount: 0
+  replicaCount: 1
   # Upgrade strategy
   strategy: {}
   image:
     repository: banzaicloud/pipeline
-    tag: 0.11.0
+    tag: 0.13.0
     pullPolicy: IfNotPresent
 
   resources:
@@ -193,6 +193,18 @@ configuration:
     headNodeTaintRetryAttempt: 30
     headNodeTaintRetrySleepSeconds: 5
 
+    forbiddenLabelDomains:
+      - k8s.io
+      - kubernetes.io
+      - google.com
+      - coreos.com
+      - oraclecloud.com
+      - node.info
+      - azure.com
+      - agentpool
+      - storageprofile
+      - storagetier
+
   eks:
     templateLocation: https://raw.githubusercontent.com/banzaicloud/pipeline/master/templates/eks
     ASGFulfillmentTimeout: 10m
@@ -209,7 +221,7 @@ configuration:
     name: ark
     namespace: pipeline-infra
     chart: banzaicloud-stable/ark
-    chartVersion: 1.2.1
+    chartVersion: 1.2.2
     image: banzaicloud/ark
     imageTag: v0.9.6
     pullPolicy: IfNotPresent
