@@ -316,13 +316,14 @@ grafana:
       - localhost
 
   sidecar:
-    image: banzaicloud/k8s-sidecar:0.0.9
     dashboards:
       enabled: true
       label: pipeline_grafana_dashboard
+      searchNamespace: ALL
     datasources:
       enabled: true
       label: pipeline_grafana_datasource
+      searchNamespace: ALL
 #
 #  dashboardProviders:
 #    dashboardproviders.yaml:
