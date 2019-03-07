@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "kube-metrics-adapter.fullname" . }}
   labels:
-    app: {{ template "kube-metrics-adapter.fullname" . }}
+    app: {{ template "kube-metrics-adapter.name" . }}
     chart: {{ template "kube-metrics-adapter.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -11,12 +11,12 @@ spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: {{ template "kube-metrics-adapter.fullname" . }}
+      app: {{ template "kube-metrics-adapter.name" . }}
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: {{ template "kube-metrics-adapter.fullname" . }}
+        app: {{ template "kube-metrics-adapter.name" . }}
         chart: {{ template "kube-metrics-adapter.chart" . }}
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"

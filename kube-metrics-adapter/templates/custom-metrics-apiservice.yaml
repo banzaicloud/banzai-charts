@@ -3,7 +3,7 @@ kind: APIService
 metadata:
   name: v1beta1.custom.metrics.k8s.io
   labels:
-    app: {{ template "kube-metrics-adapter.fullname" . }}
+    app: {{ template "kube-metrics-adapter.name" . }}
     chart: {{ template "kube-metrics-adapter.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
