@@ -32,6 +32,7 @@ spec:
           - "--tls-cert-file=/var/serving-cert/servingCert"
           - "--tls-private-key-file=/var/serving-cert/servingKey"
           - "--v={{ .Values.logVerbosity }}"
+          - "--secure-port={{ .Values.service.internalPort }}"
           env:
           - name: KUBERNETES_NAMESPACE
             value: {{ .Release.Namespace }}
@@ -47,6 +48,9 @@ spec:
             value: {{ .Values.externalAnchore.anchorePass }}
           - name: ANCHORE_ENGINE_URL
             value: {{ .Values.externalAnchore.anchoreHost }}
+          securityContext:
+            runAsUser: 65534
+            allowPrivilegeEscalation: false
           ports:
             - containerPort: {{ .Values.service.internalPort }}
           livenessProbe:

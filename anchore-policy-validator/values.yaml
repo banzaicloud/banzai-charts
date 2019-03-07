@@ -5,13 +5,13 @@ apiService:
   version: v1beta1
 image:
   repository: banzaicloud/anchore-image-validator
-  tag: 0.3.1
+  tag: 0.3.2
   pullPolicy: IfNotPresent
 service:
   name: anchoreimagecheck
   type: ClusterIP
   externalPort: 443
-  internalPort: 443
+  internalPort: 8443
 externalAnchore:
   anchoreHost: ""
   anchoreUser: ""
