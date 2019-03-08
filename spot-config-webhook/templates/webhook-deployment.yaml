@@ -34,6 +34,7 @@ spec:
           - "--tls-cert-file=/var/serving-cert/servingCert"
           - "--tls-private-key-file=/var/serving-cert/servingKey"
           - "--v={{ .Values.logVerbosity }}"
+          - "--secure-port={{ .Values.service.internalPort }}"
           env:
           - name: SPOT_ANNOTATION_KEY
             value: {{ .Values.webhook.spotAnnotationKey }}
@@ -50,6 +51,9 @@ spec:
           - name: SPOT_SCHEDULER_NAME
             value: {{ .Values.webhook.schedulerName }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            runAsUser: 65534
+            allowPrivilegeEscalation: false
           ports:
             - containerPort: {{ .Values.service.internalPort }}
           readinessProbe:

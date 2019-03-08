@@ -12,14 +12,14 @@ apiService:
 
 image:
   repository: banzaicloud/spot-config-webhook
-  tag: 0.1.2
+  tag: 0.1.3
   pullPolicy: IfNotPresent
 
 service:
   name: spotwebhook
   type: ClusterIP
   externalPort: 443
-  internalPort: 443
+  internalPort: 8443
 
 webhook:
   spotAnnotationKey: "app.banzaicloud.io/odPercentage"
