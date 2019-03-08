@@ -3,50 +3,70 @@ kind: Deployment
 metadata:
   name: {{ template "logging-operator.fullname" . }}
   labels:
-    app: {{ template "logging-operator.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "logging-operator.name" . }}
+    helm.sh/chart: {{ include "logging-operator.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      name: {{ template "logging-operator.fullname" . }}
+      app.kubernetes.io/name: {{ include "logging-operator.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       annotations:
         scheduler.alpha.kubernetes.io/tolerations: {{ toJson .Values.tolerations | quote }}
       labels:
-        name: {{ template "logging-operator.fullname" . }}
+        app.kubernetes.io/name: {{ include "logging-operator.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ template "logging-operator.fullname" . }}
-      {{- if .Values.affinity }}
-      affinity:
-{{ toYaml .Values.affinity | indent 8 }}
-      {{- end }}
       containers:
       - name: {{ template "logging-operator.name" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         command:
         - logging-operator
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         env:
         - name: WATCH_NAMESPACE
-          value: {{ .Values.watchNamespace}}
+          value: {{ .Values.watchNamespace | quote }}
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        - name: KUBERNETES_POD_NAME
+        - name: POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: OPERATOR_NAME
+          value: {{ include "logging-operator.fullname" . | quote }}
         volumeMounts:
         - mountPath: /logging-operator/config
           name: config
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+
+    {{- if .Values.securityContext }}
+      securityContext: {{ toYaml .Values.securityContext | nindent 8 }}
+    {{- end }}
+    {{- if .Values.rbac.enabled }}
+      serviceAccountName: {{ template "logging-operator.fullname" . }}
+    {{- else }}
+
       volumes:
       - configMap:
           name: {{ template "logging-operator.fullname" . }}
         name: config
-      tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+
+    {{- with .Values.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations: {{ toYaml . | nindent 8 }}
+    {{- end }}
+{{- end }}
