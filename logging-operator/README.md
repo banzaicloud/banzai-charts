@@ -45,7 +45,7 @@ The following tables lists the configurable parameters of the logging-operator c
 |          Parameter          |                Description                               |             Default            |
 | --------------------------- | -------------------------------------------------------- | ------------------------------ |
 | `image.repository`          | Container image repository                               | `banzaicloud/logging-operator` |
-| `image.tag       `          | Container image tag                                      | `0.1.0`                       |
+| `image.tag       `          | Container image tag                                      | `0.1.2`                       |
 | `image.pullPolicy`          | Container pull policy                                    | `IfNotPresent`                       |
 | `tls.enabled`               | Enabled TLS communication between components             | true                           |
 | `tls.secretName`            | Specified secret name, which contain tls certs           | This will overwrite automatic Helm certificate generation. |
