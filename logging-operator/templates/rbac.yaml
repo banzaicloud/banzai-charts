@@ -23,7 +23,9 @@ rules:
 - apiGroups:
   - logging.banzaicloud.com
   resources:
-  - loggingoperators
+  - plugins
+  - fluentds
+  - fluentbits
   verbs:
   - "*"
 - apiGroups:
