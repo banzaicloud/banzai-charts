@@ -21,6 +21,6 @@ spec:
   fluentdPvcSpec: {{ toYaml .Values.fluentd.fluentdPvcSpec | nindent 4 }}
   tls:
     enabled: {{ .Values.tls.enabled }}
-    secretName: {{ template "logging-operator.fullname" . }}
+    secretName: {{ .Values.tls.secretName | default (include "logging-operator.fullname" .) }}
     sharedKey: {{ .Values.tls.sharedKey | default (derivePassword 1 "long" (.Release.Time | toString) .Release.Name .Chart.Name ) | b64enc | quote }}
 {{ end }}
