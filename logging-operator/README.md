@@ -87,5 +87,3 @@ $ helm install --name my-release -f values.yaml banzaicloud-stable/logging-opera
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-```
-
