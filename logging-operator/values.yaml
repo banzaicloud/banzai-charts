@@ -62,7 +62,7 @@ grafana:
 ##
 
 rbac:
-  create: true
+  enabled: true
 
 ## Define resources requests and limits for single Pods.
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
