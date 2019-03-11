@@ -6,6 +6,11 @@ spec:
   input:
     label:
       app: "*"
+      app.kubernetes.io/name: {{ include "s3-output.name" . }}
+      helm.sh/chart: {{ include "s3-output.chart" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/managed-by: {{ .Release.Service }}
+
   output:
     - type: s3
       name: outputS3
