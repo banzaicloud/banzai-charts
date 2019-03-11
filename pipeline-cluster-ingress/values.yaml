@@ -4,32 +4,22 @@
 
 traefik:
   serviceType: LoadBalancer
-  imageTag: 1.7.4
   kubernetes:
     ingressEndpoint:
       useDefaultPublishedService: true
-  dashboard:
-    enabled: false
-    ingress:
-      enabled: false
-      hosts:
-        - /dashboard
-    service:
-      port: 8080
   acme:
     persistence:
-    # This size is required because specific cloud provider requires at least 20Gi for storage
+      # This size is required because specific cloud provider requires at least 20Gi for storage
       size: 20Gi
-
   rbac:
     enabled: true
-  cpuLimit: 200m
-  memoryLimit: 250Mi
-  debug:
-    enabled: false
   ssl:
     enabled: true
     insecureSkipVerify: true
   metrics:
     prometheus:
       enabled: true
+  resources:
+    limits:
+      cpu: 200m
+      memory: 250Mi
