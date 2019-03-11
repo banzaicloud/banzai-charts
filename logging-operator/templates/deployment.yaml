@@ -43,18 +43,17 @@ spec:
         volumeMounts:
         - mountPath: /logging-operator/config
           name: config
-          resources: {{ toYaml .Values.resources | nindent 12 }}
+
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
-
+        resources: {{ toYaml .Values.resources | nindent 10 }}
     {{- if .Values.securityContext }}
       securityContext: {{ toYaml .Values.securityContext | nindent 8 }}
     {{- end }}
     {{- if .Values.rbac.enabled }}
       serviceAccountName: {{ template "logging-operator.fullname" . }}
-    {{- else }}
-
+    {{- end }}
       volumes:
       - configMap:
           name: {{ template "logging-operator.fullname" . }}
@@ -69,4 +68,3 @@ spec:
     {{- with .Values.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
     {{- end }}
-{{- end }}
