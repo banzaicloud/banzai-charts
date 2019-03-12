@@ -4,4 +4,4 @@ version: "0.0.1"
 description: istio-operator manages Istio deployments on Kubernetes
 sources:
   - https://github.com/banzaicloud/istio-operator
-appVersion: "0.0.8"
+appVersion: "1.0.0"
