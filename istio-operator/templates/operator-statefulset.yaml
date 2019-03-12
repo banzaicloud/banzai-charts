@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.namePrefix }}-controller-manager-service"
-  namespace: {{ .Values.namespace }}
+  name: "{{ include "istio-operator.fullname" . }}-operator"
   labels:
     control-plane: controller-manager
     controller-tools.k8s.io: "1.0"
@@ -10,18 +9,28 @@ metadata:
     chart: {{ include "istio-operator.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    component: operator
+    app.kubernetes.io/name: {{ include "istio-operator.name" . }}
+    helm.sh/chart: {{ include "istio-operator.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: operator
 spec:
   selector:
     control-plane: controller-manager
     controller-tools.k8s.io: "1.0"
+    app: {{ include "istio-operator.name" . }}
+    release: {{ .Release.Name }}
+    component: operator
   ports:
-  - port: 443
+  - name: https
+    port: 443
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: "{{ .Values.namePrefix }}-controller-manager"
-  namespace: {{ .Values.namespace }}
+  name: "{{ include "istio-operator.fullname" . }}-operator"
   labels:
     control-plane: controller-manager
     controller-tools.k8s.io: "1.0"
@@ -29,12 +38,22 @@ metadata:
     chart: {{ include "istio-operator.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    component: operator
+    app.kubernetes.io/name: {{ include "istio-operator.name" . }}
+    helm.sh/chart: {{ include "istio-operator.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: operator
 spec:
   selector:
     matchLabels:
       control-plane: controller-manager
       controller-tools.k8s.io: "1.0"
-  serviceName: "{{ .Values.namePrefix }}-controller-manager-service"
+      app: {{ include "istio-operator.name" . }}
+      release: {{ .Release.Name }}
+      component: operator
+  serviceName: {{ include "istio-operator.fullname" . }}-operator
   template:
     metadata:
       {{- if .Values.prometheusMetrics.enabled }}
@@ -45,14 +64,15 @@ spec:
         control-plane: controller-manager
         controller-tools.k8s.io: "1.0"
         app: {{ include "istio-operator.name" . }}
-        chart: {{ include "istio-operator.chart" . }}
         release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
+        component: operator
     spec:
+      serviceAccountName: {{ include "istio-operator.fullname" . }}-operator
       containers:
       {{- if .Values.authProxy.enabled }}
       - name: kube-rbac-proxy
-        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.4.0
+        image: "{{ .Values.authProxy.image.repository }}:{{ .Values.authProxy.image.tag }}"
+        imagePullPolicy: {{ .Values.authProxy.image.pullPolicy }}
         args:
           - "--secure-listen-address=0.0.0.0:8443"
           - "--upstream=http://127.0.0.1:8080/"
@@ -64,23 +84,19 @@ spec:
       {{- end }}
       - command:
         - /manager
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        image: "{{ .Values.operator.image.repository }}:{{ .Values.operator.image.tag }}"
+        imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
         name: manager
-        {{- if .Values.authProxy.enabled }}
         args:
           - "--metrics-addr=127.0.0.1:8080"
           - "--watch-created-resources-events=false"
-        {{- end }}
         env:
           - name: POD_NAMESPACE
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-          - name: SECRET_NAME
-            value: "{{ .Values.namePrefix }}-webhook-server-secret"
         ports:
-        - containerPort: 9876
+        - containerPort: 443
           name: webhook-server
           protocol: TCP
           {{- if .Values.prometheusMetrics.enabled }}
@@ -88,10 +104,6 @@ spec:
           name: metrics
           protocol: TCP
           {{- end }}
-        volumeMounts:
-        - mountPath: /tmp/cert
-          name: cert
-          readOnly: true
         resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
@@ -107,19 +119,3 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
       terminationGracePeriodSeconds: 10
-      volumes:
-      - name: cert
-        secret:
-          defaultMode: 420
-          secretName: "{{ .Values.namePrefix }}-webhook-server-secret"
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: "{{ .Values.namePrefix }}-webhook-server-secret"
-  namespace: {{ .Values.namespace }}
-  labels:
-    app: {{ include "istio-operator.name" . }}
-    chart: {{ include "istio-operator.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
