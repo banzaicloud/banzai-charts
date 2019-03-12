@@ -1,6 +1,20 @@
-bucketName: banzailoggingtest
-region: eu-west-1
+# S3 Bucket name exp: my-logging-01
+bucketName: ""
+
+# S3 bucket region
+region: "us-west-1"
+
 secret:
-  secretName: my-aws-secret
-  awsSecretKey: AWS_SECRET_ACCESS_KEY
+  # Kubernetes secret  name of amazon credentials.
+  # Use existing secret, If empty it will be created.
+  secretName: ""
+
+  # Amazon Access Key Name
   awsAccessKey: AWS_ACCESS_KEY_ID
+  # Amazon Access Key
+  awsAccessValue: ""
+
+  # Amazon Secret Key Name
+  awsSecretKey: AWS_SECRET_ACCESS_KEY
+  # Amazon Secret Key
+  awsSecretValue: ""
