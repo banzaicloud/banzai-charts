@@ -1,7 +1,7 @@
 # S3 Bucket name exp: my-logging-01
 bucketName: ""
 
-# S3 bucket reign
+# S3 bucket region
 region: "us-west-1"
 
 secret:
