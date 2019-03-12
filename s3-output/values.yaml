@@ -9,7 +9,7 @@ secret:
   # Use existing secret, If empty it will be created.
   secretName: ""
 
-  # Amazon Access Key secret name
+  # Amazon Access Key Name
   awsAccessKey: AWS_ACCESS_KEY_ID
   # Amazon Access Key
   awsAccessValue: ""
