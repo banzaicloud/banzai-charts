@@ -14,7 +14,7 @@ secret:
   # Amazon Access Key
   awsAccessValue: ""
 
-  # Amazon Secret Key
+  # Amazon Secret Key Name
   awsSecretKey: AWS_SECRET_ACCESS_KEY
   # Amazon Secret Key
   awsSecretValue: ""
