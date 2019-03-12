@@ -9,8 +9,12 @@ secret:
   # Use existing secret, If empty it will be created.
   secretName: ""
 
+  # Amazon Access Key secret name
+  awsAccessKey: AWS_ACCESS_KEY_ID
   # Amazon Access Key
-  awsAccessKey: AWS_SECRET_ACCESS_KEY
+  awsAccessValue: ""
 
   # Amazon Secret Key
-  awsSecretKey: AWS_ACCESS_KEY_ID
+  awsSecretKey: AWS_SECRET_ACCESS_KEY
+  # Amazon Secret Key
+  awsSecretValue: ""
