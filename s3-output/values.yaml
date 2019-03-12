@@ -5,7 +5,7 @@ bucketName: ""
 region: "us-west-1"
 
 secret:
-  # Kubernetes secrete  name of amazon credentials.
+  # Kubernetes secret  name of amazon credentials.
   # Use existing secret, If empty it will be created.
   secretName: ""
 
