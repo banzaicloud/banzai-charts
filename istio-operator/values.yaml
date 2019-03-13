@@ -27,6 +27,12 @@ prometheusMetrics:
       tag: v0.4.0
       pullPolicy: IfNotPresent
 
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  enabled: true
+
 nameOverride: ""
 fullnameOverride: ""
 

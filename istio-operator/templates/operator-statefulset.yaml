@@ -29,7 +29,9 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: operator
     spec:
+      {{- if .Values.rbac.enabled }}
       serviceAccountName: {{ include "istio-operator.fullname" . }}-operator
+      {{- end }}
       containers:
       {{- if and .Values.prometheusMetrics.enabled .Values.prometheusMetrics.authProxy.enabled }}
       - name: kube-rbac-proxy
