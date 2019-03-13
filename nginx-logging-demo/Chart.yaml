@@ -3,3 +3,6 @@ appVersion: "1.0"
 description: A Demo application for the logging-operator
 name: nginx-logging-demo
 version: 0.1.0
+maintainers:
+- name: Banzai Cloud
+  email: info@banzaicloud.com
