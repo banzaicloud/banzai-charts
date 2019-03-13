@@ -15,22 +15,17 @@ operator:
       cpu: 100m
       memory: 20Mi
 
-# Enable or disable the auth proxy (https://github.com/brancz/kube-rbac-proxy)
-# which protects your /metrics endpoint.
-# Only one of authProxy and prometheusMetrics should be enabled.
-authProxy:
-  enabled: true
-  image:
-    repository: gcr.io/kubebuilder/kube-rbac-proxy
-    tag: v0.4.0
-    pullPolicy: IfNotPresent
-
-# If you want your controller-manager to expose the /metrics
-# endpoint w/o any authn/z, set prometheusMetrics to true and
-# set authProxy to false.
-# Only one of authProxy and prometheusMetrics should be enabled.
+# If you want the operator to expose the /metrics
 prometheusMetrics:
-  enabled: false
+  enabled: true
+  # Enable or disable the auth proxy (https://github.com/brancz/kube-rbac-proxy)
+  # which protects your /metrics endpoint.
+  authProxy:
+    enabled: true
+    image:
+      repository: gcr.io/kubebuilder/kube-rbac-proxy
+      tag: v0.4.0
+      pullPolicy: IfNotPresent
 
 nameOverride: ""
 fullnameOverride: ""
