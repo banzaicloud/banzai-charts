@@ -4,18 +4,12 @@ metadata:
   name: istios.istio.banzaicloud.io
   labels:
     controller-tools.k8s.io: "1.0"
-    app: {{ include "istio-operator.name" . }}
-    chart: {{ include "istio-operator.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    component: operator
     app.kubernetes.io/name: {{ include "istio-operator.name" . }}
     helm.sh/chart: {{ include "istio-operator.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
     app.kubernetes.io/component: operator
-  creationTimestamp: null
 spec:
   group: istio.banzaicloud.io
   names:
