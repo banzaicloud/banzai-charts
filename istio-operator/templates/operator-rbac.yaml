@@ -1,3 +1,4 @@
+{{- if .Values.rbac.enabled }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -190,3 +191,4 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "istio-operator.fullname" . }}-operator
   namespace: {{ .Release.Namespace }}
+{{- end }}
