@@ -1,7 +1,7 @@
 
 # Logging Operator Nginx demonstration Chart
 
-[Logging Operator](https://github.com/banzaicloud/logging-operator) Managed centralized logging component fluentd and fluent-bit instance on cluster.
+[Logging Operator](https://github.com/banzaicloud/logging-operator) is a managed centralized logging component based on fluentd and fluent-bit.
 ## tl;dr:
 
 ```bash
@@ -12,7 +12,7 @@ $ helm install banzaicloud-stable/nginx-logging-demo
 
 ## Introduction
 
-This chart demonstrates an example app that utilise [Logging Operator](https://github.com/banzaicloud/banzai-charts/logging-operator) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart demonstrates the use of the  [Logging Operator](https://github.com/banzaicloud/banzai-charts/logging-operator) with an nginx deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -21,17 +21,17 @@ This chart demonstrates an example app that utilise [Logging Operator](https://g
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+To install the chart with the release name `log-test-nginx`:
 
 ```bash
 $ helm install --name log-test-nginx banzaicloud-stable/nginx-logging-demo
 ```
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the `log-test-nginx` deployment:
 
 ```bash
-$ helm delete my-release
+$ helm delete log-test-nginx
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
