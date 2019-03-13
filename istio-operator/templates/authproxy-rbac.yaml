@@ -4,11 +4,6 @@ kind: ServiceAccount
 metadata:
   name: {{ include "istio-operator.fullname" . }}-authproxy
   labels:
-    app: {{ include "istio-operator.name" . }}
-    chart: {{ include "istio-operator.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    component: authproxy
     app.kubernetes.io/name: {{ include "istio-operator.name" . }}
     helm.sh/chart: {{ include "istio-operator.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -21,11 +16,6 @@ kind: ClusterRole
 metadata:
   name: "{{ include "istio-operator.fullname" . }}-authproxy"
   labels:
-    app: {{ include "istio-operator.name" . }}
-    chart: {{ include "istio-operator.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    component: authproxy
     app.kubernetes.io/name: {{ include "istio-operator.name" . }}
     helm.sh/chart: {{ include "istio-operator.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -47,11 +37,6 @@ kind: ClusterRoleBinding
 metadata:
   name: "{{ include "istio-operator.fullname" . }}-authproxy"
   labels:
-    app: {{ include "istio-operator.name" . }}
-    chart: {{ include "istio-operator.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    component: authproxy
     app.kubernetes.io/name: {{ include "istio-operator.name" . }}
     helm.sh/chart: {{ include "istio-operator.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

@@ -3,11 +3,6 @@ kind: ServiceAccount
 metadata:
   name: {{ include "istio-operator.fullname" . }}-operator
   labels:
-    app: {{ include "istio-operator.name" . }}
-    chart: {{ include "istio-operator.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    component: operator
     app.kubernetes.io/name: {{ include "istio-operator.name" . }}
     helm.sh/chart: {{ include "istio-operator.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -18,14 +13,8 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: {{ include "istio-operator.fullname" . }}-operator
   labels:
-    app: {{ include "istio-operator.name" . }}
-    chart: {{ include "istio-operator.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    component: operator
     app.kubernetes.io/name: {{ include "istio-operator.name" . }}
     helm.sh/chart: {{ include "istio-operator.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -185,14 +174,8 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  creationTimestamp: null
   name: {{ include "istio-operator.fullname" . }}-operator
   labels:
-    app: {{ include "istio-operator.name" . }}
-    chart: {{ include "istio-operator.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    component: operator
     app.kubernetes.io/name: {{ include "istio-operator.name" . }}
     helm.sh/chart: {{ include "istio-operator.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
