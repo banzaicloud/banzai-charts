@@ -38,26 +38,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the logging-operator chart and their default values.
+The following tables lists the configurable parameters of the nginx-logging-demo chart and their default values.
 
 |                      Parameter                      |                        Description                     |             Default            |
 | --------------------------------------------------- | ------------------------------------------------------ | ------------------------------ |
-| `image.repository`                                  | Container image repository                             | `banzaicloud/logging-operator` |
-| `image.tag`                                         | Container image tag                                    | `0.1.2`                        |
+| `image.repository`                                  | Container image repository                             | `nginx` |
+| `image.tag`                                         | Container image tag                                    | `stable`                        |
 | `image.pullPolicy`                                  | Container pull policy                                  | `IfNotPresent`                 |
 | `nameOverride`                                      | Override name of app                                   | ``                             |
 | `fullnameOverride`                                  | Override full name of app                              | ``                             |
-| `watchNamespace`                                    | Namespace to watch fot LoggingOperator CRD             | ``                             |
 | `affinity`                                          | Node Affinity                                          | `{}`                           |
 | `resources`                                         | CPU/Memory resource requests/limits                    | `{}`                           |
 | `tolerations`                                       | Node Tolerations                                       | `[]`                           |
 | `nodeSelector`                                      | Define which Nodes the Pods are scheduled on.          | `{}`                           |
-| `securityContext`                                   | SecurityContext for Logging operator                   | `{"runAsNonRoot": true, "runAsUser": 1000}` |
+
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 
 ```bash
-$ helm install --name my-release -f values.yaml banzaicloud-stable/logging-operator
+$ helm install --name my-release -f values.yaml banzaicloud-stable/nginx-logging-demo
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
