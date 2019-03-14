@@ -9,11 +9,11 @@ operator:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: 100m
-      memory: 30Mi
+      cpu: 200m
+      memory: 256Mi
     requests:
       cpu: 100m
-      memory: 20Mi
+      memory: 128Mi
 
 # If you want the operator to expose the /metrics
 prometheusMetrics:
