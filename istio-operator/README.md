@@ -34,7 +34,7 @@ Parameter | Description | Default
 `operator.image.repository` | Operator container image repository | `banzaicloud/istio-operator`
 `operator.image.tag` | Operator container image tag | `1.0.0`
 `operator.image.pullPolicy` | Operator container image pull policy | `IfNotPresent`
-`operator.resources` | CPU/Memory resource requests/limits (YAML) | Memory: `20Mi/30Mi`, CPU: `100m/100m`
+`operator.resources` | CPU/Memory resource requests/limits (YAML) | Memory: `128Mi/256Mi`, CPU: `100m/200m`
 `prometheusMetrics.enabled` | If true, use direct access for Prometheus metrics | `false`
 `prometheusMetrics.authProxy.enabled` | If true, use auth proxy for Prometheus metrics | `true`
 `prometheusMetrics.authProxy.image.repository` | Auth proxy container image repository | `gcr.io/kubebuilder/kube-rbac-proxy`
