@@ -2,7 +2,7 @@
 version: 2.0
 
 jobs:
-  build:
+  build-and-publish-all:
     docker:
       - image: banzaicloud/helm:0.0.2
         environment:
@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build Charts
+          name: Build Charts and publish to S3
           no_output_timeout: 2700
           environment:
 
@@ -77,11 +77,85 @@ jobs:
                 fi
             done
 
+  build-and-publish-single-chart:
+    docker:
+      - image: banzaicloud/helm:0.0.2
+
+    working_directory: /workspace/banzai-charts
+
+    steps:
+      - checkout
+
+      - run:
+          name: Setup helm repositories
+          command: |
+            helm init -c
+            helm repo remove local
+            helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+            helm repo add chartmuseum https://helm-charts.banzaicloud.io
+            helm repo update
+            helm repo list
+
+      - run:
+          name: Install helm push plugin
+          command: |
+            helm plugin install https://github.com/chartmuseum/helm-push
+
+      - run:
+          name: Check versions
+          command: |
+            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $1}')"
+            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $2}')"
+
+            if [ ! -d "/workspace/banzai-charts/${chart_name}" ]; then
+                echo "Chart does not exists; name='${chart_name}'"
+                exit 1
+            fi
+
+            if ! grep -q -F "version: $chart_version" "/workspace/banzai-charts/${chart_name}/Chart.yaml"; then
+                echo "Chart version mismatch; name='${chart_name}', version='${chart_version}'"
+                exit 1
+            fi
+
+            if ! helm search "chartmuseum/${chart_name}" -v "${chart_version}" | grep -q 'No results found'; then
+                echo "Chart already exists in chartmuseum; name='${chart_name}', version='${chart_version}'"
+                exit 1
+            fi
+
+      - run:
+          name: Build chart
+          command: |
+            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $1}')"
+            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $2}')"
+
+            mkdir -p "/workspace/tgz"
+
+            helm package \
+                --dependency-update \
+                --destination '/workspace/tgz/' \
+                "${chart_name}"
+
+      - run:
+          name: Publish charts to chartmuseum
+          command: |
+            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $1}')"
+            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $2}')"
+
+            helm push "/workspace/tgz/${chart_name}-${chart_version}.tgz" chartmuseum
+
 workflows:
   version: 2
-  build-and-deploy:
+  build-and-publish-single-chart-to-chartmuseum:
     jobs:
-      - build:
+      - build-and-publish-single-chart:
           filters:
             tags:
-              only: /.*/
+              only: /\S+\/\d.\d.\d/
+            branches:
+              ignore: /.*/
+  build-all-and-publish-to-s3:
+    jobs:
+      - build-and-publish-all:
+          filters:
+            tags:
+              ignore: /\S+\/\d.\d.\d/
