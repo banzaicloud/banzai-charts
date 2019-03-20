@@ -2,6 +2,25 @@
 version: 2.0
 
 jobs:
+  build:
+    docker:
+      - image: banzaicloud/helm:0.0.2
+
+    steps:
+      - checkout
+      - run:
+          name: Helm lint
+          command: |
+            pwd
+            find -H . \
+                -maxdepth 1 \
+                -type d \
+                ! -path . \
+                ! -path ./.gitignore \
+                ! -path ./.git \
+                ! -path ./.circleci \
+                -exec helm lint {} +
+
   build-and-publish-all:
     docker:
       - image: banzaicloud/helm:0.0.2
@@ -108,7 +127,7 @@ jobs:
             chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $2}')"
 
             if [ ! -d "/workspace/banzai-charts/${chart_name}" ]; then
-                echo "Chart does not exists; name='${chart_name}'"
+                echo "Chart does not exist; name='${chart_name}'"
                 exit 1
             fi
 
@@ -145,6 +164,12 @@ jobs:
 
 workflows:
   version: 2
+  static-checks:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
   build-and-publish-single-chart-to-chartmuseum:
     jobs:
       - build-and-publish-single-chart:
