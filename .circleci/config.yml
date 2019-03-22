@@ -4,7 +4,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: banzaicloud/helm:0.0.2
+      - image: banzaicloud/helm:0.0.3
 
     steps:
       - checkout
@@ -23,7 +23,7 @@ jobs:
 
   build-and-publish-all:
     docker:
-      - image: banzaicloud/helm:0.0.2
+      - image: banzaicloud/helm:0.0.3
         environment:
           AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
           AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
@@ -40,7 +40,6 @@ jobs:
             GIT_BRANCH=${CIRCLE_BRANCH}
             GIT_TAG=${CIRCLE_TAG}
 
-            helm init -c
             helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
 
             if [ "$GIT_TAG" = "0.3.0" ]; then
@@ -50,8 +49,6 @@ jobs:
             elif [ "$GIT_TAG" != "" ]; then
                 BANZAICLOUD_STABLE_REPO=http://kubernetes-charts.banzaicloud.com/release/${GIT_TAG}/
             fi
-
-            helm repo remove local
 
             echo "REPO -> STABLE"
 
@@ -98,7 +95,7 @@ jobs:
 
   build-and-publish-single-chart:
     docker:
-      - image: banzaicloud/helm:0.0.2
+      - image: banzaicloud/helm:0.0.3
 
     working_directory: /workspace/banzai-charts
 
@@ -108,17 +105,10 @@ jobs:
       - run:
           name: Setup helm repositories
           command: |
-            helm init -c
-            helm repo remove local
             helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
             helm repo add chartmuseum https://helm-charts.banzaicloud.io
             helm repo update
             helm repo list
-
-      - run:
-          name: Install helm push plugin
-          command: |
-            helm plugin install https://github.com/chartmuseum/helm-push
 
       - run:
           name: Check versions
