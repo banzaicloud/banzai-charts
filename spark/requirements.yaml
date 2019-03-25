@@ -1,15 +1,15 @@
 dependencies:
 - name: spark-shuffle
   version: 0.0.4
-  repository: alias:banzaicloud-stable
+  repository: http://kubernetes-charts.banzaicloud.com/branch/master/
   condition: sparkShuffle.enabled
 
 - name: spark-rss
   version: 0.0.5
-  repository: alias:banzaicloud-stable
+  repository: http://kubernetes-charts.banzaicloud.com/branch/master/
   condition: resourceStagingServer.enabled
 
 - name: spark-hs
   version: 0.2.2
-  repository: alias:banzaicloud-stable
+  repository: http://kubernetes-charts.banzaicloud.com/branch/master/
   condition: historyServer.enabled
