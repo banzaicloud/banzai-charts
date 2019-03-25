@@ -165,7 +165,7 @@ workflows:
       - build-and-publish-single-chart:
           filters:
             tags:
-              only: /\S+\/\d.\d.\d/
+              only: /\S+\/\d+.\d+.\d+/
             branches:
               ignore: /.*/
   build-all-and-publish-to-s3:
@@ -173,4 +173,4 @@ workflows:
       - build-and-publish-all:
           filters:
             tags:
-              ignore: /\S+\/\d.\d.\d/
+              ignore: /\S+\/\d+.\d+.\d+/
