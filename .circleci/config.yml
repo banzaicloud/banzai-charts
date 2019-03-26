@@ -127,7 +127,7 @@ jobs:
                 exit 1
             fi
 
-            if ! helm search "chartmuseum/${chart_name}" -v "${chart_version}" | grep -q 'No results found'; then
+            if ! helm search -r "chartmuseum\/${chart_name}[^-]" -v "${chart_version}" | grep -q 'No results found'; then
                 echo "Chart already exists in chartmuseum; name='${chart_name}', version='${chart_version}'"
                 exit 1
             fi
