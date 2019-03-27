@@ -16,6 +16,8 @@ data:
     spark.kubernetes.authenticate.driver.serviceAccountName={{ .Values.sparkSubmitOptions.driverServiceAccountName }}
     spark.kubernetes.driver.secrets.spark-{{ .Release.Name }}=/opt/spark/conf/monitoring
     spark.kubernetes.executor.secrets.spark-{{ .Release.Name }}=/opt/spark/conf/monitoring
+    spark.kubernetes.driver.label.app={{ template "fullname" . }}
+    spark.kubernetes.executor.label.app={{ template "fullname" . }}
 
     {{- if .Values.sparkEventLogStorage.logDirectory }}
 

@@ -4,5 +4,5 @@ dependencies:
   repository: http://kubernetes-charts.banzaicloud.com/branch/master/
 
 - name: zeppelin
-  version: 0.0.16
+  version: 0.0.17
   repository: http://kubernetes-charts.banzaicloud.com/branch/master/
