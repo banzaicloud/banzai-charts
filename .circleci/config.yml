@@ -107,7 +107,7 @@ jobs:
           command: |
             helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
             helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
-            helm repo add chartmuseum https://helm-charts.banzaicloud.io
+            helm repo add chartmuseum https://kubernetes-charts.banzaicloud.com
             helm repo update
             helm repo list
 
