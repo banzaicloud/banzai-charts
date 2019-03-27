@@ -1,4 +1,4 @@
 dependencies:
 - name: etcd-operator
   version: 0.1.1
-  repository: https://kubernetes-charts.banzaicloud.com/
+  repository: https://kubernetes-charts.banzaicloud.com

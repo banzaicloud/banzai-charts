@@ -1,4 +1,4 @@
 dependencies:
 - name: kafka
-  version: 0.3.2
-  repository: http://kubernetes-charts.banzaicloud.com/branch/master/
+  version: 0.3.3
+  repository: https://kubernetes-charts.banzaicloud.com
