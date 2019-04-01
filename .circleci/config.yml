@@ -4,7 +4,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: banzaicloud/helm:0.0.3
+      - image: banzaicloud/helm:0.0.4
 
     steps:
       - checkout
@@ -23,7 +23,7 @@ jobs:
 
   build-and-publish-single-chart:
     docker:
-      - image: banzaicloud/helm:0.0.3
+      - image: banzaicloud/helm:0.0.4
 
     working_directory: /workspace/banzai-charts
 
