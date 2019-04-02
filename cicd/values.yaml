@@ -8,12 +8,17 @@ annotations: {}
 ##
 labels: {}
 
+## Resource definitions for Kubernetes resources
+replicaCount: 1
+# Upgrade strategy
+strategy: {}
+
 ## The official CI/CD image, change tag to use a different version.
 ## https://hub.docker.com/r/banzaicloud/cicd/tags/
 ##
 image:
   repository: "banzaicloud/cicd"
-  tag: "0.8.1"
+  tag: "0.8.6"
   pullPolicy: "IfNotPresent"
 
 global:

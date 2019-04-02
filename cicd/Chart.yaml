@@ -1,7 +1,7 @@
 name: cicd
 home: https://banzaicloud.com/
-version: 1.0.3
-appVersion: "0.8.1"
+version: 1.1.0
+appVersion: "0.8.6"
 description: Pipeline CI/CD
 keywords:
 - continuous-delivery
