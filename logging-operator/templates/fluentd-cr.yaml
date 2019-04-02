@@ -8,6 +8,9 @@ metadata:
     helm.sh/chart: {{ include "logging-operator.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": "before-hook-creation"
 spec:
   namespace: {{ default .Release.Namespace .Values.watchNamespace }}
   annotations:
