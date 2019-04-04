@@ -40,6 +40,25 @@ spec:
           runAsUser: 2
           allowPrivilegeEscalation: false
       {{- end }}
+      {{- if .Values.exampleApp.enabled  }}
+      - name: example-app
+        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        command:
+        - /usr/local/bin/example-app
+        - --client-id {{ .Values.exampleApp.clientID }}
+        - --client-secret {{ .Values.exampleApp.clientSecret }}
+        - --issuer {{ .Values.config.issuer }}
+        - --redirect-uri {{ .Values.exampleApp.redirectURI }}
+        - --listen http://0.0.0.0:5555
+        securityContext:
+          runAsUser: 2
+          allowPrivilegeEscalation: false
+        ports:
+        - name: example-app
+          containerPort: 5555
+          protocol: TCP
+      {{- end }}
       - name: dex-server
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy }}

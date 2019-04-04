@@ -1,6 +1,6 @@
 name: dex
-version: 0.0.10
-appVersion: master
+version: 0.0.11
+appVersion: 0.3.2
 description: dexidp Dex
 keywords:
 - dex
