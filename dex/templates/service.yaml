@@ -15,6 +15,11 @@ spec:
   type: {{ .Values.service.type}}
   sessionAffinity: None
   ports:
+{{- if .Values.exampleApp.enabled  }}
+  - name: example-app
+    port: 5555
+    targetPort: 5555
+{{- end}}
 {{- range .Values.ports }}
   - name: {{ .name }} 
     port: {{ .containerPort }}
