@@ -1,9 +1,10 @@
+{{- if .Values.exampleApp.enabled  }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "dex.fullname" . }}
+  name: {{ template "dex.fullname" . }}-example
   labels:
-    app: {{ template "dex.name" . }}
+    app: {{ template "dex.name" . }}-example
     chart: {{ template "dex.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -15,15 +16,14 @@ spec:
   type: {{ .Values.service.type}}
   sessionAffinity: None
   ports:
-{{- range .Values.ports }}
-  - name: {{ .name }} 
-    port: {{ .containerPort }}
-    targetPort: {{ .containerPort}}
-{{- end}}
+  - name: example-app
+    port: 5555
+    targetPort: 5555
 {{- if hasKey .Values.service "externalIPs" }}
   externalIPs:
 {{ toYaml .Values.service.externalIPs | indent 4 }}
 {{- end }}
   selector:
-    app: {{ template "dex.name" . }}
+    app: {{ template "dex.name" . }}-example
     release: {{ .Release.Name | quote }}
+{{- end}}
