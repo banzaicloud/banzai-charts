@@ -19,6 +19,10 @@ spec:
         app: {{ template "hpa-operator.fullname" . }}
         heritage: "{{ .Release.Service }}"
         release: "{{ .Release.Name }}"
+{{- with .Values.podAnnotations }}
+      annotations:
+{{- toYaml . | nindent 8 }}
+{{- end }}
     spec:
 {{ if .Values.rbac.install }}
       serviceAccountName: {{ template "hpa-operator.fullname" . }}
