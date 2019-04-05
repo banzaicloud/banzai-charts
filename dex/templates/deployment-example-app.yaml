@@ -1,0 +1,54 @@
+{{- if .Values.exampleApp.enabled  }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "dex.fullname" . }}-example
+  labels:
+    app: {{ template "dex.name" . }}-example
+    chart: {{ template "dex.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: {{ template "dex.name" . }}-example
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "dex.name" . }}-example
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ template "dex.serviceAccountName" . }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 10 }}
+      containers:
+      - name: example-app
+        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        command:
+        - /usr/local/bin/example-app
+        - --client-id
+        - {{ .Values.exampleApp.clientID }}
+        - --client-secret
+        - {{ .Values.exampleApp.clientSecret }}
+        - --issuer
+        - {{ .Values.config.issuer }}
+        - --redirect-uri
+        - {{ .Values.exampleApp.redirectURI }}
+        - --listen
+        - http://0.0.0.0:5555
+        securityContext:
+          runAsUser: 2
+          allowPrivilegeEscalation: false
+        ports:
+        - name: example-app
+          containerPort: 5555
+          protocol: TCP
+{{- end }}
