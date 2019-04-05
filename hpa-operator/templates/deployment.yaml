@@ -21,7 +21,7 @@ spec:
         release: "{{ .Release.Name }}"
 {{- with .Values.podAnnotations }}
       annotations:
-{{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
 {{- end }}
     spec:
 {{ if .Values.rbac.install }}
