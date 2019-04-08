@@ -1,0 +1,190 @@
+version: 2.1
+
+description: |
+  A set of tools to release a helm chart and publish to chartmuseum
+
+examples:
+  release:
+    description: Release a helm chart to chartmuseum
+    usage:
+      version: 2.1
+
+      orbs:
+        helm: banzaicloud/helm@volatile
+
+      workflows:
+        helm-chart-release:
+          jobs:
+            - helm/publish-chart:
+                context: helm
+                chart-path: helm/logging-operator
+                filters:
+                  branches:
+                    ignore: /.*/
+                  tags:
+                    only: /logging-operator\/\d+.\d+.\d+/
+  custom-repository:
+    description: Release a helm chart using additional helm repositories
+    usage:
+      version: 2.1
+
+      orbs:
+        helm: banzaicloud/helm@volatile
+
+      workflows:
+        helm-chart-release:
+          jobs:
+            - helm/publish-chart:
+                context: helm
+                chart-path: helm/logging-operator
+                add-extra-repositories:
+                  - run: helm repo add extra https://kubernetes-charts-incubator.storage.googleapis.com/
+                filters:
+                  branches:
+                    ignore: /.*/
+                  tags:
+                    only: /logging-operator\/\d+.\d+.\d+/
+
+executors:
+  helm:
+    docker:
+      - image: banzaicloud/helm:0.0.4
+
+commands:
+  lint:
+    description: Run helm lint
+    parameters:
+      chart-path:
+        default: helm
+        description: Path of helm chart relative to workdir
+        type: string
+    steps:
+      - run:
+          name: Helm lint
+          command: |
+            chart_path="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.chart-path >>/"
+            helm lint "${chart_path}"
+
+  setup-repositories:
+    parameters:
+      add-extra-repositories:
+        default: []
+        description: Steps to add extra repositories
+        type: steps
+      chartmuseum-url:
+        default:  https://kubernetes-charts.banzaicloud.com
+        description: URL of Chartmuseum
+        type: string
+    steps:
+      - run:
+          name: Setup helm repositories
+          command: |
+            helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+            helm repo add chartmuseum << parameters.chartmuseum-url >>
+      - steps: << parameters.add-extra-repositories >>
+      - run:
+          name: Update repositories
+          command: |
+            helm repo update
+            helm repo list
+
+  check-versions:
+    parameters:
+      chart-path:
+        default: helm
+        description: Path of helm chart relative to workdir
+        type: string
+    steps:
+      - run:
+          name: Check chart version
+          command: |
+            chart_path="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.chart-path >>"
+
+            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $1}')"
+            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $2}')"
+
+            if [ ! -d "${chart_path}" ]; then
+                echo "Chart does not exist; name='${chart_name}'"
+                exit 1
+            fi
+
+            if ! grep -q -F "version: ${chart_version}" "${chart_path}/Chart.yaml"; then
+                echo "Chart version mismatch; name='${chart_name}', version='${chart_version}'"
+                exit 1
+            fi
+
+            if helm search "chartmuseum/" -v "${chart_version}" | grep -q "chartmuseum\/${chart_name}\s"; then
+                echo "Chart already exists in chartmuseum; name='${chart_name}', version='${chart_version}'"
+                exit 1
+            fi
+
+  build:
+    parameters:
+      chart-path:
+        default: helm
+        description: Path of helm chart relative to workdir
+        type: string
+      tgz-dir:
+        default: /workspace/tgz
+        description: Path to dir containing release tgz
+        type: string
+    steps:
+      - run:
+          name: Build chart
+          command: |
+            chart_path="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.chart-path >>"
+
+            mkdir -p "<< parameters.tgz-dir >>"
+
+            helm package \
+                --dependency-update \
+                --destination '<< parameters.tgz-dir >>' \
+                "${chart_path}"
+
+  publish:
+    parameters:
+      tgz-dir:
+        default: /workspace/tgz
+        description: Path to dir containing release tgz
+        type: string
+    steps:
+      - run:
+          name: Publish chart to chartmuseum
+          command: |
+            tgz="$(find '<< parameters.tgz-dir >>/' -name '*.tgz')"
+            helm push "${tgz}" chartmuseum
+
+jobs:
+  publish-chart:
+    executor: helm
+    parameters:
+      chart-path:
+        default: helm
+        description: Path of helm chart relative to workdir
+        type: string
+      chartmuseum-url:
+        default:  https://kubernetes-charts.banzaicloud.com
+        description: URL of Chartmuseum
+        type: string
+      add-extra-repositories:
+        default: []
+        description: Steps to add extra repositories
+        type: steps
+      tgz-dir:
+        default: /workspace/tgz
+        description: Directory of chart tgz
+        type: string
+    steps:
+      - checkout
+      - lint:
+          chart-path: << parameters.chart-path >>
+      - setup-repositories:
+          chartmuseum-url: << parameters.chartmuseum-url >>
+          add-extra-repositories: << parameters.add-extra-repositories >>
+      - check-versions:
+          chart-path: << parameters.chart-path >>
+      - build:
+          chart-path: << parameters.chart-path >>
+          tgz-dir: <<parameters.tgz-dir >>
+      - publish:
+          tgz-dir: <<parameters.tgz-dir >>
