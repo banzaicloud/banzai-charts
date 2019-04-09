@@ -7,7 +7,7 @@ replicaCount: 1
 strategy: {}
 image:
   repository: banzaicloud/pipeline
-  tag: 0.13.0
+  tag: 0.16.2
   pullPolicy: IfNotPresent
 
 resources:
@@ -22,7 +22,7 @@ worker:
   strategy: {}
   image:
     repository: banzaicloud/pipeline
-    tag: 0.13.0
+    tag: 0.16.2
     pullPolicy: IfNotPresent
 
   resources:
@@ -101,7 +101,9 @@ configuration:
 
   anchore:
     enabled: false
+    username: admin
     serviceEndpoint: ""
+    secretName: ""
 
   logging:
     logformat: text
@@ -286,16 +288,6 @@ vault:
   # The secret that holds the Vault CA cert.
   # If left empty SKIP_VERIFY will be used.
   tlsSecret: ""
-
-##
-## Anchore configuration
-##
-anchore:
-  enabled: false
-  serviceEndpoint: ""
-  username: admin
-  secretName: ""
-  secretKey: adminPassword
 
 ##
 ## Enable Cache persistence store
