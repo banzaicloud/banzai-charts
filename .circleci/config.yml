@@ -1,10 +1,11 @@
-# Golang CircleCI 2.0 configuration file
-version: 2.0
+version: 2.1
+
+orbs:
+  helm: banzaicloud/helm@volatile
 
 jobs:
   build:
-    docker:
-      - image: banzaicloud/helm:0.0.4
+    executor: helm/helm
 
     steps:
       - checkout
@@ -21,23 +22,17 @@ jobs:
                 ! -path ./.circleci \
                 -exec helm lint {} +
 
-  build-and-publish-single-chart:
-    docker:
-      - image: banzaicloud/helm:0.0.4
+  publish-chart:
+    executor: helm/helm
 
     working_directory: /workspace/banzai-charts
 
     steps:
       - checkout
 
-      - run:
-          name: Setup helm repositories
-          command: |
-            helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
-            helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
-            helm repo add chartmuseum https://kubernetes-charts.banzaicloud.com
-            helm repo update
-            helm repo list
+      - helm/setup-repositories:
+          add-extra-repositories:
+            - run: helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
 
       - run:
           name: Check versions
@@ -55,7 +50,7 @@ jobs:
                 exit 1
             fi
 
-            if ! helm search -r "chartmuseum\/${chart_name}[^-]" -v "${chart_version}" | grep -q 'No results found'; then
+            if helm search "chartmuseum/" -v "${chart_version}" | grep -q "chartmuseum\/${chart_name}\s"; then
                 echo "Chart already exists in chartmuseum; name='${chart_name}', version='${chart_version}'"
                 exit 1
             fi
@@ -73,13 +68,8 @@ jobs:
                 --destination '/workspace/tgz/' \
                 "${chart_name}"
 
-      - run:
-          name: Publish charts to chartmuseum
-          command: |
-            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $1}')"
-            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $2}')"
-
-            helm push "/workspace/tgz/${chart_name}-${chart_version}.tgz" chartmuseum
+      - helm/publish:
+            tgz-dir: /workspace/tgz
 
 workflows:
   version: 2
@@ -89,9 +79,9 @@ workflows:
           filters:
             tags:
               only: /.*/
-  build-and-publish-single-chart-to-chartmuseum:
+  release:
     jobs:
-      - build-and-publish-single-chart:
+      - publish-chart:
           filters:
             tags:
               only: /\S+\/\d+.\d+.\d+/
