@@ -110,7 +110,14 @@ spec:
         - name: VAULT_SKIP_VERIFY
           value: "true"
         {{- end }}
-
+        # Anchore configuration
+        {{- if .Values.configuration.anchore.enabled }}
+        - name: PIPELINE_ANCHORE_ADMINPASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.configuration.anchore.secretName }}
+              key: adminPassword
+        {{ end }}
         # Additional environment variables
         {{ range $key, $value := .Values.env }}
         - name: {{ $key }}
