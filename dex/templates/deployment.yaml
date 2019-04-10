@@ -28,7 +28,7 @@ spec:
     spec:
       serviceAccountName: {{ template "dex.serviceAccountName" . }}
       nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 10 }}
+        {{- toYaml .Values.nodeSelector | nindent 10 }}
       containers:
       {{- if .Values.cloudsql.enabled  }}
       - name: cloudsql-proxy
@@ -48,11 +48,11 @@ spec:
         - serve
         - /etc/dex/cfg/config.yaml
         resources:
-{{ toYaml .Values.resources | indent 10 }}
+          {{- toYaml .Values.resources | nindent 10 }}
         ports:
-{{ toYaml .Values.ports | indent 10 }}
+          {{- toYaml .Values.ports | nindent 10 }}
         env:
-{{ toYaml .Values.env | indent 10 }}
+          {{- toYaml .Values.env | nindent 10 }}
         envFrom:
           {{- toYaml .Values.envFrom | nindent 10 }}
         volumeMounts:
@@ -60,9 +60,9 @@ spec:
           name: config
         - mountPath: /etc/dex/tls/https/server
           name: https-tls
-{{- if ne (len .Values.extraVolumeMounts) 0 }}
-{{ toYaml .Values.extraVolumeMounts | indent 8 }}
-{{- end }}
+        {{- if .Values.extraVolumeMounts }}
+        {{ toYaml .Values.extraVolumeMounts | nindent 8 }}
+        {{- end }}
       volumes:
       - name: config
         configMap:
@@ -75,7 +75,7 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ default (printf "%s-tls" (include "dex.fullname" . )) .Values.certs.tlsName | quote }}
-{{- if ne (len .Values.extraVolumes) 0 }}
-{{ toYaml .Values.extraVolumes | indent 6 }}
-{{- end }}
+      {{- if ne (len .Values.extraVolumes) 0 }}
+      {{ toYaml .Values.extraVolumes | nindent 6 }}
+      {{- end }}
 
