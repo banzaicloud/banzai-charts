@@ -11,12 +11,6 @@ metadata:
     release: "{{ .Release.Name }}"
 rules:
 - apiGroups:
-  - banzaicloud.com
-  resources:
-  - "*"
-  verbs:
-  - "*"
-- apiGroups:
   - ""
   resources:
   - pods
