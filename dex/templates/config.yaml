@@ -51,7 +51,7 @@ data:
       type: {{ $value.type }}
       name: {{ $value.name }}
       config:
-{{ toYaml $value.config | indent 8 }}
+        {{ toYaml $value.config | nindent 8 }}
 {{- end }}
     enablePasswordDB: {{ .Values.config.enablePasswordDB }}
 {{- with .Values.config.staticPasswords }}
