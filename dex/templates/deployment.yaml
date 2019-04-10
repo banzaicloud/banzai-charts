@@ -53,6 +53,8 @@ spec:
 {{ toYaml .Values.ports | indent 10 }}
         env:
 {{ toYaml .Values.env | indent 10 }}
+        envFrom:
+          {{- toYaml .Values.envFrom | nindent 10 }}
         volumeMounts:
         - mountPath: /etc/dex/cfg
           name: config

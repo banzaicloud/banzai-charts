@@ -57,6 +57,7 @@ certs:
   caName: ""
 
 env: []
+envFrom: []
 
 rbac:
   create: true
