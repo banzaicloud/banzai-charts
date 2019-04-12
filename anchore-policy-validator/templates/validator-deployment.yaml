@@ -49,8 +49,10 @@ spec:
           - name: ANCHORE_ENGINE_URL
             value: {{ .Values.externalAnchore.anchoreHost }}
           securityContext:
-            runAsUser: 65534
+            readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
+            runAsUser: 65534
+            fsGroup: 65534
           ports:
             - containerPort: {{ .Values.service.internalPort }}
           livenessProbe:
