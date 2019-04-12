@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/logging-operator
-  tag: 0.1.5
+  tag: 0.1.6
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -33,7 +33,7 @@ fluentd:
   enabled: true
   namespace: ""
   image:
-    tag: "v1.1.4"
+    tag: "v1.4.2"
     repository: "banzaicloud/fluentd"
     pullPolicy: "IfNotPresent"
   volumeModImage:
