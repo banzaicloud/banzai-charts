@@ -17,7 +17,7 @@ spec:
       name:  {{ include "nginx-logging-es-demo.name" . }}
       parameters:
         - name: host
-          value: "elasticsearch-elasticsearch-cluster.logging.svc.cluster.local"
+          value: "elasticsearch-elasticsearch-cluster"
         - name: port
           value: "9200"
         - name: scheme
