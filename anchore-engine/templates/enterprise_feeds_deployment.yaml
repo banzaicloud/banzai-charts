@@ -51,10 +51,10 @@ spec:
             name: {{ template "anchore-engine.fullname" . }}
         env:
         {{- with .Values.anchoreGlobal.extraEnv }}
-        {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- with .Values.anchoreEnterpriseFeeds.extraEnv }}
-        {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- if and (index .Values "anchore-feeds-db" "externalEndpoint") (not (index .Values "anchore-feeds-db" "enabled")) }}
         - name: ANCHORE_DB_HOST
