@@ -38,10 +38,10 @@ spec:
             name: {{ template "anchore-engine.fullname" . }}
         env:
         {{- with .Values.anchoreGlobal.extraEnv }}
-        {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- with .Values.anchoreAnalyzer.extraEnv }}
-        {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
         - name: ANCHORE_POD_NAME
           valueFrom:
