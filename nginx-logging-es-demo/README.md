@@ -12,7 +12,7 @@ $ helm install banzaicloud-stable/nginx-logging-es-demo
 
 ## Introduction
 
-This chart demonstrates the use of the  [Logging Operator](https://github.com/banzaicloud/banzai-charts/logging-operator) with an nginx deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart demonstrates the use of the  [Logging Operator](https://github.com/banzaicloud/banzai-charts/logging-operator) with an Nginx deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
