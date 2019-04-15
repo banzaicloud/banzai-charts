@@ -5,7 +5,7 @@
 ## tl;dr:
 
 ```bash
-$ helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
+$ helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com/
 $ helm repo update
 $ helm install banzaicloud-stable/nginx-logging-es-demo
 ```
