@@ -10,4 +10,9 @@ To install the chart:
 $ helm install banzaicloud-stable/hpa-operator
 ```
 
+Installing chart with enabled PodSecurityPolicy:
+```
+$ helm install banzaicloud-stable/hpa-operator --set pspEnabled=true --set kube-metrics-adapter.pspEnabled=true
+```
+
 ## Notes
