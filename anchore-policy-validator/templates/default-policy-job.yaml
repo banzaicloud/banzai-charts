@@ -15,6 +15,9 @@ spec:
       labels:
         app: {{ template "anchore-policy-validator.fullname" . }}-default-policy
     spec:
+      {{- if .Values.rbac.enabled }}
+      serviceAccountName: {{ template "anchore-policy-validator.fullname" . }}
+      {{- end }}
       restartPolicy: OnFailure
       volumes:
       - name: default-policy
