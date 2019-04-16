@@ -17,8 +17,10 @@ resources:
 
 ## Install Default RBAC roles and bindings
 rbac:
-  install: true
+  enabled: true
   apiVersion: v1beta1
+  psp:
+    enabled: false
 
 metricsServer:
   enabled: false
@@ -36,5 +38,3 @@ affinity: {}
 tolerations: []
 
 podAnnotations: {}
-
-pspEnabled: false
