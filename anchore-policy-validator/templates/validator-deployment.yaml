@@ -16,7 +16,9 @@ spec:
         app: {{ template "anchore-policy-validator.name" . }}
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.rbac.enabled }}
       serviceAccountName: {{ template "anchore-policy-validator.fullname" . }}
+      {{- end }}
       volumes:
       - name: serving-cert
         secret:

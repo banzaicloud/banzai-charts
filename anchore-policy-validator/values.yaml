@@ -30,4 +30,7 @@ affinity: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
 
-pspEnabled: false
+rbac:
+  enabled: true
+  psp:
+    enabled: false
