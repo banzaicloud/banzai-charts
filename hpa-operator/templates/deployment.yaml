@@ -33,6 +33,9 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command:
         - hpa-operator
+        securityContext:
+          runAsUser: 1000
+          fsGroup: 2000
         resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
