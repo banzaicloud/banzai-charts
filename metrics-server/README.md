@@ -16,3 +16,4 @@ Parameter | Description | Default
 `nodeSelector`  | Node labels for pod assignment  | {} 
 `affinity`  | Affinity for pod assignment | {}
 `tolerations`  | Toleration labels for pod assignment   | {} 
+`pspEnabled` | create PSP resources if enabled | false

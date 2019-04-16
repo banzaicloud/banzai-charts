@@ -36,3 +36,5 @@ affinity: {}
 tolerations: []
 
 podAnnotations: {}
+
+pspEnabled: false
