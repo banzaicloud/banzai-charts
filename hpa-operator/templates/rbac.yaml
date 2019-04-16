@@ -1,4 +1,4 @@
-{{ if .Values.rbac.install }}
+{{ if .Values.rbac.enabled }}
 {{- $serviceName := include "hpa-operator.fullname" . -}}
 apiVersion: rbac.authorization.k8s.io/{{ required "A valid .Values.rbac.apiVersion entry required!" .Values.rbac.apiVersion }}
 kind: ClusterRole
@@ -52,4 +52,34 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: {{ $serviceName }}
+
+{{ if .Values.rbac.psp.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: psp:{{ template "hpa-operator.fullname" . }}
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: psp:{{ template "hpa-operator.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "hpa-operator.fullname" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: psp:{{ template "hpa-operator.fullname" . }}
+rules:
+- apiGroups:
+  - policy
+  resourceNames:
+  - psp.hpa-operator
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+{{ end }}
 {{ end }}

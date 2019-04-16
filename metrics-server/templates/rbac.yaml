@@ -1,0 +1,50 @@
+{{ if .Values.rbac.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: {{ template "metrics-server.fullname" .  }}-auth-reader
+  namespace: kube-system
+  labels:
+    app: {{ template "metrics-server.name" . }}
+    chart: {{ template "metrics-server.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: extension-apiserver-authentication-reader
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "metrics-server.fullname" . }}
+    namespace: {{ .Release.Namespace }}
+
+{{ if .Values.rbac.psp.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: psp:{{ template "metrics-server.serviceAccountName" . }}
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: psp:{{ template "metrics-server.serviceAccountName" . }}
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "metrics-server.serviceAccountName" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: psp:{{ template "metrics-server.serviceAccountName" . }}
+rules:
+- apiGroups:
+  - policy
+  resourceNames:
+  - psp.metrics-server
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+{{ end }}
+{{ end }}

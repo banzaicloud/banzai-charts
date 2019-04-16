@@ -1,6 +1,8 @@
 rbac:
   # Specifies whether RBAC resources should be created
-  create: true
+  enabled: true
+  psp:
+    enabled: false
 
 serviceAccount:
   # Specifies whether a ServiceAccount should be created
@@ -33,5 +35,3 @@ affinity: {}
 ## Tolerations
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
-
-pspEnabled: false
