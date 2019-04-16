@@ -22,6 +22,8 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ template "anchore-policy-validator.fullname" . }}
+      - name: tmp
+        emptyDir: {}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -60,14 +62,11 @@ spec:
               path: /healthz
               port: {{ .Values.service.internalPort }}
               scheme: HTTPS
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: {{ .Values.service.internalPort }}
-              scheme: HTTPS
           volumeMounts:
           - mountPath: /var/serving-cert
             name: serving-cert
+          - mountPath: /tmp
+            name: tmp
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}

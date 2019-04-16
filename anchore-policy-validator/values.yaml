@@ -5,7 +5,7 @@ apiService:
   version: v1beta1
 image:
   repository: banzaicloud/anchore-image-validator
-  tag: 0.3.2
+  tag: 0.3.3
   pullPolicy: IfNotPresent
 service:
   name: anchoreimagecheck
@@ -29,3 +29,5 @@ affinity: {}
 ## Tolerations
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
+
+pspEnabled: false
