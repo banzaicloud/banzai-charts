@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "pipeline-ui.fullname" . }}
+  name: {{ include "pipeline-ui.fullname" . }}-nginx
   labels:
     app.kubernetes.io/name: {{ include "pipeline-ui.name" . }}
     helm.sh/chart: {{ include "pipeline-ui.chart" . }}
@@ -35,3 +35,17 @@ data:
         try_files $uri $uri/ /ui/index.html =404;
       }
     }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pipeline-ui.fullname" . }}-ui
+  labels:
+    app.kubernetes.io/name: {{ include "pipeline-ui.name" . }}
+    helm.sh/chart: {{ include "pipeline-ui.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  feature-set.json: |-
+    {{ .Values.featureSet | toJson }}
