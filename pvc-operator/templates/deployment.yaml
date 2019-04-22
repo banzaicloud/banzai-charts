@@ -43,6 +43,11 @@ spec:
               value: "{{ .Values.rbac.enabled }}"
             - name: NFS_SERVICE_ACCOUNT_NAME
               value: "{{ default (printf "%s-nfs" (include "pvc-operator.fullname" . )) .Values.nfs.serviceAccount.name  }}"
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            runAsUser: 65534
+            fsGroup: 65534
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}

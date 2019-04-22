@@ -19,6 +19,8 @@ nfs:
 ## Install Default RBAC roles and bindings
 rbac:
   enabled: true
+  psp:
+    enabled: false
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
