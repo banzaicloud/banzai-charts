@@ -1,3 +1,4 @@
+{{ if .Values.rbac.enabled }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -16,3 +17,33 @@ subjects:
 - kind: ServiceAccount
   namespace: {{ .Release.Namespace }}
   name: {{ template "spot-config-webhook.fullname" . }}
+---
+{{ if .Values.rbac.psp.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: psp:{{ template "spot-config-webhook.fullname" . }}
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: psp:{{ template "spot-config-webhook.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "spot-config-webhook.fullname" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: psp:{{ template "spot-config-webhook.fullname" . }}
+rules:
+- apiGroups:
+  - policy
+  resourceNames:
+  - psp.spot-config-webhook
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+{{ end }}
+{{ end }}

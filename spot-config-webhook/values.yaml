@@ -21,6 +21,11 @@ service:
   externalPort: 443
   internalPort: 8443
 
+rbac:
+  enabled: true
+  psp:
+    enabled: false
+
 webhook:
   spotAnnotationKey: "app.banzaicloud.io/odPercentage"
   configMapNamespace: "pipeline-system"

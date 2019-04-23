@@ -64,6 +64,11 @@ spec:
           volumeMounts:
           - mountPath: /var/serving-cert
             name: serving-cert
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            runAsUser: 65534
+            fsGroup: 65534
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
