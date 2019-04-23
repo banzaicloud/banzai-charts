@@ -33,6 +33,7 @@ jobs:
       - helm/setup-repositories:
           add-extra-repositories:
             - run: helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
+            - run: helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
 
       - run:
           name: Check versions
