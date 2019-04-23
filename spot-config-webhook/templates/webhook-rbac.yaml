@@ -19,23 +19,11 @@ subjects:
   name: {{ template "spot-config-webhook.fullname" . }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: auth-delegator-{{ template "spot-config-webhook.fullname" . }}-admin
-roleRef:
-  kind: ClusterRole
-  apiGroup: rbac.authorization.k8s.io
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  namespace: {{ .Release.Namespace }}
-  name: {{ template "spot-config-webhook.fullname" . }}
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
   annotations:
-  name: {{ template "spot-config-webhook.fullname" . }}
+  name: {{ template "spot-config-webhook.fullname" . }}-apiext
+  namespace: kube-system
 rules:
 - apiGroups:
   - {{ .Values.apiService.group }}
@@ -46,6 +34,16 @@ rules:
   - list
   - watch
   - create
+- apiGroups:
+  - ""
+  resources:
+  - endpoints
+  - namespaces
+  - secrets
+  - configmaps
+  - serviceaccounts
+  verbs:
+  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -55,10 +53,11 @@ metadata:
 roleRef:
   kind: Role
   apiGroup: rbac.authorization.k8s.io
-  name: extension-api{{ template "spot-config-webhook.fullname" . }}-authentication-reader
+  name: {{ template "spot-config-webhook.fullname" . }}-apiext
 subjects:
 - kind: ServiceAccount
   name: {{ template "spot-config-webhook.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
