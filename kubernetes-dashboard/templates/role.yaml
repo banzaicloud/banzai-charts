@@ -69,4 +69,21 @@ rules:
     - "https:heapster:"
   verbs:
     - get
+
+{{- if .Values.rbac.psp.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: psp:{{ template "kubernetes-dashboard.fullname" . }}
+rules:
+- apiGroups:
+  - policy
+  resourceNames:
+  - psp.{{ template "kubernetes-dashboard.fullname" . }}
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+{{- end -}}
 {{- end -}}
