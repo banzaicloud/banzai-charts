@@ -34,6 +34,8 @@ configuration:
 
 rbac:
   enabled: true
+  psp:
+    enabled: false
 
 nameOverride: ""
 fullnameOverride: ""
