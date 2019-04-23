@@ -23,7 +23,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      serviceAccountName: nodepool-labels-operator
+      serviceAccountName: {{ include "nodepool-labels-operator.name" . }}
       volumes:
       - name: config-volume
         configMap:
@@ -52,6 +52,11 @@ spec:
           volumeMounts:
           - name: config-volume
             mountPath: /config/
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            runAsUser: 65534
+            fsGroup: 65534
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
