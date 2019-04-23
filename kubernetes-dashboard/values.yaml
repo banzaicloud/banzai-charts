@@ -103,6 +103,8 @@ rbac:
   # Specifies whether cluster-admin ClusterRole will be used for dashboard
   # ServiceAccount (NOT RECOMMENDED).
   clusterAdminRole: false
+  psp:
+    enabled: false
 
 serviceAccount:
   # Specifies whether a service account should be created
