@@ -1,3 +1,4 @@
+{{- if and .Values.rbac.create .Values.rbac.psp.enabled }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -27,3 +28,4 @@ spec:
   volumes:
   - secret
   - emptyDir
+{{ end }}
