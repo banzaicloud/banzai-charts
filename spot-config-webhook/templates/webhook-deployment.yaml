@@ -26,6 +26,8 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ template "spot-config-webhook.fullname" . }}
+      - name: tmp
+        emptyDir: {}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -64,6 +66,8 @@ spec:
           volumeMounts:
           - mountPath: /var/serving-cert
             name: serving-cert
+          - mountPath: /tmp
+            name: tmp
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
