@@ -1,3 +1,4 @@
+{{ if .Values.rbac.enabled }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -22,3 +23,34 @@ roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
   name: system:kube-scheduler
+
+{{ if .Values.rbac.psp.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: psp:{{ template "spot-scheduler.fullname" . }}
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: psp:{{ template "spot-scheduler.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "spot-scheduler.fullname" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: psp:{{ template "spot-scheduler.fullname" . }}
+rules:
+- apiGroups:
+  - policy
+  resourceNames:
+  - psp.{{ template "spot-scheduler.fullname" . }}
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+{{ end }}
+{{ end }}
