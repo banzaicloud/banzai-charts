@@ -1,0 +1,27 @@
+{{- if and .Values.traefik.rbac.enabled .Values.traefik.rbac.psp.enabled }}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  creationTimestamp: null
+  name: psp.{{ template "pipeline-cluster-ingress.saname" . }}
+  annotations:
+    seccomp.security.alpha.kubernetes.io/defaultProfileName:  'docker/default'
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default'
+spec:
+  readOnlyRootFilesystem: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  allowedCapabilities:
+    - "NET_BIND_SERVICE"
+  runAsUser:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  volumes:
+  - secret
+  - configMap
+{{- end }}

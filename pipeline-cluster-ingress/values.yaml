@@ -13,6 +13,13 @@ traefik:
       size: 20Gi
   rbac:
     enabled: true
+    psp:
+      enabled: false
+  securityContext:
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      - "NET_BIND_SERVICE"
   ssl:
     enabled: true
     insecureSkipVerify: true
