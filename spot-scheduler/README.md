@@ -28,3 +28,5 @@ The following tables lists configurable parameters of the anchore-policy-validat
 |nodeSelector                         |node selector to use                         |{}                                        |
 |tolerations                          |tolerations to add                           |[]                                        |
 |affinity                             |affinities to use                            |{}                                        |
+|rbac.enabled                         |RBAC                                         |true                                      |
+|rbac.psp.enabled                     |PSP enabled                                  |false                                     |
