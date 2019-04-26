@@ -116,7 +116,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ .Values.configuration.anchore.secretName }}
-              key: adminPassword
+              key: {{ .Values.configuration.anchore.secretKey }}
         {{ end }}
         # Additional environment variables
         {{ range $key, $value := .Values.env }}
