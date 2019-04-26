@@ -104,6 +104,7 @@ configuration:
     username: admin
     serviceEndpoint: ""
     secretName: ""
+    secretKey: adminPassword
 
   logging:
     logformat: text
