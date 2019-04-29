@@ -47,6 +47,13 @@ spec:
         - /usr/local/bin/dex
         - serve
         - /etc/dex/cfg/config.yaml
+        readinessProbe:
+          httpGet:
+            path: /{{ slice (splitList "/" .Values.config.issuer) 3 | join "/" }}/healthz
+            port: http
+            {{- if .Values.config.web.https }}
+            scheme: HTTPS
+            {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         ports:

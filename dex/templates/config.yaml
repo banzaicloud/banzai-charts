@@ -9,7 +9,7 @@ metadata:
     release: {{ .Release.Name }}
 data:
   config.yaml: |-
-    issuer: {{ default "http://127.0.0.1:5556/dex" .Values.config.issuer }}
+    issuer: {{ .Values.config.issuer }}
     storage:
       {{- if or .Values.postgresql.enabled .Values.cloudsql.enabled }}
       type: postgres
