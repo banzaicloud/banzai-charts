@@ -44,6 +44,16 @@ rules:
   resources:
     - ingresses
   verbs:
+    - list
     - get
     - create
     - update
+- apiGroups:
+    - monitoring.coreos.com
+  resources:
+    - servicemonitors
+  verbs:
+    - update
+    - list
+    - get
+    - create
