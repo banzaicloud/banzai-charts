@@ -35,16 +35,15 @@ spec:
           - name: {{ template "cloudinfo.fullname" . }}-oci
             mountPath: /.oci
             readOnly: true
-          command:
-            - "/bin/sh"
-            - "-ecx"
-            - |
-              /entrypoint.sh \
-              --log-level {{ .Values.app.logLevel }} \
-              --listen-address 0.0.0.0:{{ .Values.service.internalPort }} \
-              {{ range $key, $value := .Values.providers }}
-              {{- if $value.enabled }} --provider {{ $key }}{{ end }}
-              {{- end }}
+          command: ["cloudinfo"]
+          args:
+            - --log-level={{ .Values.app.logLevel }}
+            - --listen-address=0.0.0.0:{{ .Values.service.internalPort }}
+            {{- range $key, $value := .Values.providers }}
+            {{- if $value.enabled }}
+            - --provider={{ $key }}
+            {{- end }}
+            {{- end }}
           env:
             - name: CLOUDINFO_BASEPATH
               value: {{ .Values.app.basePath }}

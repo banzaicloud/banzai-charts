@@ -1,9 +1,9 @@
 apiVersion: v1
 description: A Helm chart for Kubernetes
 name: cloudinfo
-version: 0.4.19
+version: 0.5.0
 
-appVersion: "0.4.10"
+appVersion: "0.5.0
 
 home: https://banzaicloud.com
 
