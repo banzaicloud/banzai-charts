@@ -1,7 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $serviceName := include "dex.fullname" . -}}
-{{- $servicePort := ( index .Values.ports 0 ).containerPort -}}
-
+{{- $httpPort := .Values.config.web.port -}}
+{{- $grpcPort := .Values.config.grpc.port }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -37,8 +37,12 @@ spec:
           - path: /{{ rest $url | join "/" }}
             backend:
               serviceName: {{ $serviceName }}
-              servicePort: {{ $servicePort }}
-{{- if $exampleAppEnabled }}
+              servicePort: {{ $httpPort }}
+          - path: /api
+            backend:
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $grpcPort }}
+  {{- if $exampleAppEnabled }}
           - path: /
             backend:
               serviceName: {{ $serviceName }}-example
@@ -51,6 +55,6 @@ spec:
             backend:
               serviceName: {{ $serviceName }}-example
               servicePort: 5555
-{{- end }}
+  {{- end }}
   {{- end}}
 {{- end }}

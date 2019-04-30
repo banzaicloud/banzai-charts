@@ -35,11 +35,22 @@ data:
     logger:
       level: {{ default "debug" .Values.config.logger.level }}
     web:
-      http: {{ default "0.0.0.0:5556" .Values.config.web.http }}
-    grpc:
-      addr: {{ default "0.0.0.0:5557" .Values.config.grpc.addr }}
+      http: {{ .Values.config.web.bind }}:{{ .Values.config.web.port }}
+      {{- if .Values.config.web.tls.enabled }}
+      tlsCert: /etc/dex/tls/https/server/tls.crt
+      tlsKey: /etc/dex/tls/https/server/tls.key
+      {{ end }}
     telemetry:
-      http: {{ default "0.0.0.0:5558" .Values.config.telemetry.http }}
+      http: {{ .Values.config.telemetry.bind }}:{{ .Values.config.telemetry.port }}
+    grpc:
+      addr: {{ .Values.config.grpc.bind }}:{{ .Values.config.grpc.port }}
+      {{- if .Values.config.grpc.tls.enabled }}
+      tlsCert: /etc/dex/tls/grpc/server/tls.crt
+      tlsKey: /etc/dex/tls/grpc/server/tls.key
+      {{- if .Values.config.grpc.tls.clientAuth }}
+      tlsClientCA: /etc/dex/tls/grpc/ca/ca.crt
+      {{- end }}
+      {{ end }}
     frontend:
       theme: {{ default "coreos" .Values.config.frontend.theme }}
 

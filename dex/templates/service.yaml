@@ -15,11 +15,12 @@ spec:
   type: {{ .Values.service.type}}
   sessionAffinity: None
   ports:
-{{- range .Values.ports }}
-  - name: {{ .name }} 
-    port: {{ .containerPort }}
-    targetPort: {{ .containerPort}}
-{{- end}}
+  - name: http-grpc
+    port: {{ .Values.config.grpc.port }}
+    targetPort: grpc
+  - name: http
+    port: {{ .Values.config.web.port }}
+    targetPort: http
 {{- if hasKey .Values.service "externalIPs" }}
   externalIPs:
 {{ toYaml .Values.service.externalIPs | indent 4 }}

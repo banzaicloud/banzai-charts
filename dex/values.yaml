@@ -55,9 +55,11 @@ service:
 extraVolumes: []
 extraVolumeMounts: []
 
-certs:
-  tlsName: ""
-  caName: ""
+tls:
+  enabled: true
+  existingSecret: ""
+  IPList: []
+  SANList: []
 
 env: []
 envFrom: []
@@ -76,13 +78,21 @@ config:
     level: ""
 
   web:
-    http: ""
+    bind: 0.0.0.0
+    port: 5556
+    tls:
+      enabled: false
 
   grpc:
-    addr: ""
+    bind: 0.0.0.0
+    port: 5557
+    tls:
+      enabled: true
+      clientAuth: false
 
   telemetry:
-    http: ""
+    bind: 0.0.0.0
+    port: 5558
 
   frontend:
     theme: ""
@@ -109,14 +119,14 @@ nodeSelector: {}
 ingress:
   enabled: false
   annotations: {}
-    #kubernetes.io/ingress.class: traefik
-    #ingress.kubernetes.io/ssl-redirect: "false"
-    #traefik.frontend.rule.type: PathPrefix
+#    kubernetes.io/ingress.class: traefik
+#    ingress.kubernetes.io/ssl-redirect: "false"
+#    traefik.frontend.rule.type: PathPrefix
   hosts:
     - "/"
-    # - "domain.com/xyz"
-    # - "domain.com"
+#    - "domain.com/xyz"
+#    - "domain.com"
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+#    - secretName: chart-example-tls
+#      hosts:
+#        - chart-example.local

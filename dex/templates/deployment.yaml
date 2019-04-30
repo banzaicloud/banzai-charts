@@ -30,7 +30,7 @@ spec:
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 10 }}
       containers:
-      {{- if .Values.cloudsql.enabled  }}
+      {{- if .Values.cloudsql.enabled }}
       - name: cloudsql-proxy
         image: {{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}
         imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy }}
@@ -57,7 +57,12 @@ spec:
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         ports:
-          {{- toYaml .Values.ports | nindent 10 }}
+          - name: grpc
+            containerPort: {{ .Values.config.grpc.port }}
+            protocol: TCP
+          - name: http
+            containerPort: {{ .Values.config.web.port }}
+            protocol: TCP
         env:
           {{- toYaml .Values.env | nindent 10 }}
         envFrom:
@@ -65,8 +70,15 @@ spec:
         volumeMounts:
         - mountPath: /etc/dex/cfg
           name: config
-        - mountPath: /etc/dex/tls/https/server
-          name: https-tls
+        {{- if .Values.tls.enabled }}
+        - mountPath: /etc/dex/tls/grpc/server/
+          name: tls-server
+        {{- if .Values.config.grpc.tls.clientAuth }}
+        - mountPath: /etc/dex/tls/grpc/ca/ca.crt
+          name: tls-ca
+          subPath: tls.crt
+        {{- end }}
+        {{ end }}
         {{- if .Values.extraVolumeMounts }}
         {{ toYaml .Values.extraVolumeMounts | nindent 8 }}
         {{- end }}
@@ -78,11 +90,20 @@ spec:
           - key: config.yaml
             path: config.yaml
           name: {{ template "dex.fullname" . }}
-      - name: https-tls
+      {{- if .Values.tls.enabled }}
+      - name: tls-server
         secret:
           defaultMode: 420
-          secretName: {{ default (printf "%s-tls" (include "dex.fullname" . )) .Values.certs.tlsName | quote }}
-      {{- if ne (len .Values.extraVolumes) 0 }}
+          secretName: {{ default (printf "%s-server" (include "dex.fullname" . )) .Values.tls.existingSecret | quote }}
+      {{- if  .Values.config.grpc.tls.clientAuth }}
+      - name: tls-ca
+        secret:
+          defaultMode: 420
+          secretName: {{ default (printf "%s-client" (include "dex.fullname" . )) .Values.tls.existingSecret | quote }}
+      {{- end }}
+      {{- end }}
+
+      {{- if .Values.extraVolumes }}
       {{ toYaml .Values.extraVolumes | nindent 6 }}
       {{- end }}
 
