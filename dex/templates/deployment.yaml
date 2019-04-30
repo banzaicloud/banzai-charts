@@ -63,6 +63,9 @@ spec:
           - name: http
             containerPort: {{ .Values.config.web.port }}
             protocol: TCP
+          - name: telemetry
+            containerPort: {{ .Values.config.telemetry.port }}
+            protocol: TCP
         env:
           {{- toYaml .Values.env | nindent 10 }}
         envFrom:

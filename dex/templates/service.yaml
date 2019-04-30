@@ -21,6 +21,9 @@ spec:
   - name: http
     port: {{ .Values.config.web.port }}
     targetPort: http
+  - name: telemetry
+    port: {{ .Values.config.telemetry.port }}
+    targetPort: telemetry
 {{- if hasKey .Values.service "externalIPs" }}
   externalIPs:
 {{ toYaml .Values.service.externalIPs | indent 4 }}
