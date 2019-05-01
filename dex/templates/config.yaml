@@ -47,7 +47,7 @@ data:
       {{- if .Values.config.grpc.tls.enabled }}
       tlsCert: /etc/dex/tls/grpc/server/tls.crt
       tlsKey: /etc/dex/tls/grpc/server/tls.key
-      {{- if .Values.config.grpc.tls.clientAuth }}
+      {{- if .Values.config.grpc.tls.clientAuthEnabled }}
       tlsClientCA: /etc/dex/tls/grpc/ca/ca.crt
       {{- end }}
       {{ end }}
