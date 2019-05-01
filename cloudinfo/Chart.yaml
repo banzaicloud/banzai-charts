@@ -3,7 +3,7 @@ description: Cloud instance type and price information as a service
 name: cloudinfo
 version: 0.5.0
 
-appVersion: "0.5.0
+appVersion: "0.5.0"
 
 home: https://banzaicloud.com
 
