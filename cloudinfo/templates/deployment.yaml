@@ -35,8 +35,8 @@ spec:
           - name: {{ template "cloudinfo.fullname" . }}-oci
             mountPath: /.oci
             readOnly: true
-          command: ["cloudinfo"]
           args:
+            - cloudinfo
             - --log-level={{ .Values.app.logLevel }}
             - --listen-address=0.0.0.0:{{ .Values.service.internalPort }}
             {{- range $key, $value := .Values.providers }}
