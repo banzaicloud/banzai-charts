@@ -6,6 +6,7 @@ orbs:
 jobs:
   build:
     executor: helm/helm
+    resource_class: small
 
     steps:
       - checkout
@@ -24,6 +25,7 @@ jobs:
 
   publish-chart:
     executor: helm/helm
+    resource_class: small
 
     working_directory: /workspace/banzai-charts
 
@@ -38,8 +40,8 @@ jobs:
       - run:
           name: Check versions
           command: |
-            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $1}')"
-            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $2}')"
+            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
+            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $NF}')"
 
             if [ ! -d "/workspace/banzai-charts/${chart_name}" ]; then
                 echo "Chart does not exist; name='${chart_name}'"
@@ -59,8 +61,8 @@ jobs:
       - run:
           name: Build chart
           command: |
-            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $1}')"
-            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $2}')"
+            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
+            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $NF}')"
 
             mkdir -p "/workspace/tgz"
 
