@@ -4,17 +4,42 @@ bucketName: ""
 # S3 bucket region
 region: "us-west-1"
 
-secret:
-  # Kubernetes secret  name of amazon credentials.
-  # Use existing secret, If empty it will be created.
-  secretName: ""
+awsCredentialsAccess:
+  enabled: false
+  secret:
+    # Kubernetes secret  name of amazon credentials.
+    # Use existing secret, If empty it will be created.
+    secretName: ""
+    # Amazon Access Key Name
+    awsAccessKey: AWS_ACCESS_KEY_ID
+    # Amazon Access Key
+    awsAccessValue: ""
 
-  # Amazon Access Key Name
-  awsAccessKey: AWS_ACCESS_KEY_ID
-  # Amazon Access Key
-  awsAccessValue: ""
+    # Amazon Secret Key Name
+    awsSecretKey: AWS_SECRET_ACCESS_KEY
+    # Amazon Secret Key
+    awsSecretValue: ""
 
-  # Amazon Secret Key Name
-  awsSecretKey: AWS_SECRET_ACCESS_KEY
-  # Amazon Secret Key
-  awsSecretValue: ""
+
+assumeRoleCredentials:
+  enabled: false
+  secret:
+    # Kubernetes secret  name of amazon credentials.
+    # Use existing secret, If empty it will be created.
+    secretName: ""
+
+    # AssumeRole Key
+    roleArnKey: ROLE_ARN
+    # AssumeRole Value
+    roleArnValue: ""
+
+    # Role Session Key
+    roleSessioNameKey: ROLE_SESSION_NAME
+    # Role Session Value
+    roleSessioNameValue: ""
+
+
+instanceProfileCredentials:
+  enabled: false
+  ip_address: "169.254.169.254"
+  port: "80"
