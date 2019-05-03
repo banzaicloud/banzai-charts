@@ -6,6 +6,7 @@ orbs:
 jobs:
   build:
     executor: helm/helm
+    resource_class: small
 
     steps:
       - checkout
@@ -24,6 +25,7 @@ jobs:
 
   publish-chart:
     executor: helm/helm
+    resource_class: small
 
     working_directory: /workspace/banzai-charts
 
