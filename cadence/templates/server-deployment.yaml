@@ -18,6 +18,8 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "cadence.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        prometheus.io/scrape: 'true'
     spec:
 
       initContainers:
@@ -51,20 +53,32 @@ spec:
             - name: frontend
               containerPort: {{ .Values.server.frontend.service.port }}
               protocol: TCP
+            - name: metrics-front
+              containerPort: {{ .Values.server.frontend.prometheus.port }}
+              protocol: TCP
           {{- end }}
           {{- if .Values.server.matching.enabled }}
             - name: matching
               containerPort: {{ .Values.server.matching.service.port }}
+              protocol: TCP
+            - name: metrics-match
+              containerPort: {{ .Values.server.matching.prometheus.port }}
               protocol: TCP
           {{- end }}
           {{- if .Values.server.history.enabled }}
             - name: history
               containerPort: {{ .Values.server.history.service.port }}
               protocol: TCP
+            - name: metrics-history
+              containerPort: {{ .Values.server.history.prometheus.port }}
+              protocol: TCP
           {{- end }}
           {{- if .Values.server.worker.enabled }}
             - name: worker
               containerPort: {{ .Values.server.worker.service.port }}
+              protocol: TCP
+            - name: metrics-worker
+              containerPort: {{ .Values.server.worker.prometheus.port }}
               protocol: TCP
           {{- end }}
 

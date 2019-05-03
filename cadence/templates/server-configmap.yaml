@@ -40,21 +40,38 @@ data:
             rpc:
                 port: {{ .Values.server.frontend.service.port }}
                 bindOnIP: {{ .Values.server.frontend.bindOnIP }}
+            metrics:
+                prometheus:
+                    timerType: {{ .Values.server.frontend.prometheus.timerType }}
+                    listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.frontend.prometheus.port }}
 
         matching:
             rpc:
                 port: {{ .Values.server.matching.service.port }}
                 bindOnIP: {{ .Values.server.matching.bindOnIP }}
+            metrics:
+                prometheus:
+                    timerType: {{ .Values.server.matching.prometheus.timerType }}
+                    listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.matching.prometheus.port }}
 
         history:
             rpc:
                 port: {{ .Values.server.history.service.port }}
                 bindOnIP: {{ .Values.server.history.bindOnIP }}
+            metrics:
+                prometheus:
+                    timerType: {{ .Values.server.history.prometheus.timerType }}
+                    listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.history.prometheus.port }}
 
         worker:
             rpc:
                 port: {{ .Values.server.worker.service.port }}
                 bindOnIP: {{ .Values.server.worker.bindOnIP }}
+            metrics:
+                prometheus:
+                    timerType: {{ .Values.server.worker.prometheus.timerType }}
+                    listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.worker.prometheus.port }}
+
     clustersInfo:
         enableGlobalDomain: false
         failoverVersionIncrement: 10
@@ -86,5 +103,3 @@ data:
                 - name: "custom-bucket-2"
                   owner: "custom-owner-2"
                   retentionDays: 5
-
-

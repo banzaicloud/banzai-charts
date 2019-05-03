@@ -7,7 +7,7 @@ server:
 
   image:
     repository: ubercadence/server
-    tag: 0.5.2
+    tag: master
     pullPolicy: IfNotPresent
 
   logLevel: "debug,info"
@@ -26,6 +26,9 @@ server:
     service:
       type: ClusterIP
       port: 7933
+    prometheus:
+      timerType: "histogram"
+      port: 8000
 
   matching:
     enabled: true
@@ -33,6 +36,9 @@ server:
     service:
       type: ClusterIP
       port: 7935
+    prometheus:
+      timerType: "histogram"
+      port: 8001
 
   history:
     enabled: true
@@ -41,6 +47,9 @@ server:
     service:
       type: ClusterIP
       port: 7934
+    prometheus:
+      timerType: "histogram"
+      port: 8002
 
   worker:
     enabled: true
@@ -48,7 +57,9 @@ server:
     service:
       type: ClusterIP
       port: 7939
-
+    prometheus:
+      timerType: "histogram"
+      port: 8003
 
   ingress:
     enabled: false
