@@ -22,7 +22,7 @@ examples:
                   branches:
                     ignore: /.*/
                   tags:
-                    only: /logging-operator\/\d+.\d+.\d+/
+                    only: /chart\/logging-operator\/\d+.\d+.\d+/
   custom-repository:
     description: Release a helm chart using additional helm repositories
     usage:
@@ -43,7 +43,7 @@ examples:
                   branches:
                     ignore: /.*/
                   tags:
-                    only: /logging-operator\/\d+.\d+.\d+/
+                    only: /chart\/logging-operator\/\d+.\d+.\d+/
 
 executors:
   helm:
@@ -100,8 +100,8 @@ commands:
           command: |
             chart_path="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.chart-path >>"
 
-            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $1}')"
-            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $2}')"
+            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
+            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $NF}')"
 
             if [ ! -d "${chart_path}" ]; then
                 echo "Chart does not exist; name='${chart_name}'"
