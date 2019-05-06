@@ -13,6 +13,13 @@ examples:
         helm: banzaicloud/helm@volatile
 
       workflows:
+        helm-chart-lint:
+          jobs:
+            - helm/lint-chart:
+                chart-path: helm/logging-operator
+                filters:
+                  tags:
+                    ignore: /.*/
         helm-chart-release:
           jobs:
             - helm/publish-chart:
@@ -188,3 +195,15 @@ jobs:
           tgz-dir: <<parameters.tgz-dir >>
       - publish:
           tgz-dir: <<parameters.tgz-dir >>
+
+  lint-chart:
+    executor: helm
+    parameters:
+      chart-path:
+        default: helm
+        description: Path of helm chart relative to workdir
+        type: string
+    steps:
+      - checkout
+      - lint:
+          chart-path: << parameters.chart-path >>
