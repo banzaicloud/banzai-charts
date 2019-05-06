@@ -67,13 +67,6 @@ env: {}
 deploymentLabels: {}
 deploymentAnnotations: {}
 
-# Database configuration
-database:
-  # Vault role
-  role: ""
-  dbname: pipeline
-  logging: "true"
-
 ## Pipeline metrics, rules and alerting configuration
 metrics:
   serviceMonitor:
@@ -341,17 +334,11 @@ statestore:
 ## ref: https://hub.docker.com/r/library/mysql/tags/
 ##
 mysql:
-  enabled: true
-  nameOverride: pipeline-db
+  enabled: false
   mysqlDatabase: pipeline
-  mysqlUser: bonanzabanzai
+  mysqlUser: pipeline-rw
   ## Default: random 10 character string
   # mysqlPassword:
-  initializationFiles:
-    cicd-db.sql: |-
-      CREATE DATABASE IF NOT EXISTS drone;
-      GRANT ALL PRIVILEGES ON drone.* TO 'bonanzabanzai'@'%';
-      FLUSH PRIVILEGES;
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -359,16 +346,34 @@ mysql:
   persistence:
     enabled: false
 
+postgres:
+  enabled: false
+  postgresqlDatabase: pipeline
+  postgresqlUsername: pipeline-rw
+  # Random 10 character alphanumeric string
+  postgresqlPassword: 
+
 ##
 ## CloudSQL configuration
-##
+## Read more: https://github.com/rimusz/charts/tree/master/stable/gcloud-sqlproxy
+## 
 cloudsql:
   enabled: false
-  instance: ""
-  dbName: ""
-  dbUserName: ""
-  dbUserPass: ""
-  image:
-    repository: gcr.io/cloudsql-docker/gce-proxy
-    tag: 1.11
-    pullPolicy: IfNotPresent
+  cloudsql:
+    instances: [] 
+    # instances: 
+    #   - project:  
+    #     region: 
+    #     instance: 
+    #     port: 
+
+# Database configuration
+database:
+  # mysql, postgres
+  driver: ""
+  host: ""
+  port: ""
+  name: ""
+  username: ""
+  password: ""
+  existingSecret: ""
