@@ -2,15 +2,12 @@
 apiVersion: logging.banzaicloud.com/v1alpha1
 kind: Fluentd
 metadata:
-  name: {{ template "logging-operator.fullname" . }}-fluentd
+  name: {{ template "logging-operator-fluent.fullname" . }}-fluentd
   labels:
-    app.kubernetes.io/name: {{ include "logging-operator.name" . }}
-    helm.sh/chart: {{ include "logging-operator.chart" . }}
+    app.kubernetes.io/name: {{ include "logging-operator-fluent.name" . }}
+    helm.sh/chart: {{ include "logging-operator-fluent.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": "before-hook-creation"
 spec:
   namespace: {{ default .Release.Namespace .Values.watchNamespace }}
   annotations:
@@ -24,6 +21,6 @@ spec:
   fluentdPvcSpec: {{ toYaml .Values.fluentd.fluentdPvcSpec | nindent 4 }}
   tls:
     enabled: {{ .Values.tls.enabled }}
-    secretName: {{ .Values.tls.secretName | default (include "logging-operator.fullname" .) }}
+    secretName: {{ .Values.tls.secretName | default (include "logging-operator-fluent.fullname" .) }}
     sharedKey: {{ .Values.tls.sharedKey | default (derivePassword 1 "long" (.Release.Time | toString) .Release.Name .Chart.Name ) | b64enc | quote }}
 {{ end }}
