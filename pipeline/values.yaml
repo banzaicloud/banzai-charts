@@ -338,6 +338,7 @@ mysql:
 ##
 postgres:
   enabled: true
+  service: {}
 
 ##
 ## CloudSQL configuration
@@ -363,3 +364,6 @@ database:
   username: "pipeline-rw"
   password: ""
   existingSecret: ""
+
+global:
+  postgresql: {}

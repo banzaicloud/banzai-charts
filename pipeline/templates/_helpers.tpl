@@ -39,7 +39,10 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- $dot := index . 0 }}
 {{- $subchart := index . 1 }}
 {{- $template := index . 2 }}
-{{- include $template (dict "Chart" (dict "Name" $subchart) "Values" (index $dot.Values $subchart) "Release" $dot.Release "Capabilities" $dot.Capabilities) }}
+{{- $subchartValues := index $dot.Values $subchart -}}
+{{- $globalValues := dict "global" (index $dot.Values "global") -}}
+{{- $values := merge $globalValues $subchartValues -}}
+{{- include $template (dict "Chart" (dict "Name" $subchart) "Values" $values "Release" $dot.Release "Capabilities" $dot.Capabilities) }}
 {{- end -}}
 
 {{- define "pipeline.database.name" -}}
