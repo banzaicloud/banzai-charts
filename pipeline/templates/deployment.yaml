@@ -47,13 +47,6 @@ spec:
       {{- end }}
 
       containers:
-      {{- if .Values.cloudsql.enabled  }}
-      - name: cloudsql-proxy
-        image: {{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}
-        command: ["/cloud_sql_proxy",
-                  "-instances={{ .Values.cloudsql.instance }}=tcp:3306"]
-      {{- end }}
-
       - name: pipeline
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -64,41 +57,22 @@ spec:
         - name: KUBERNETES_NAMESPACE
           value: {{ .Release.Namespace | quote }}
         # Database related section
-        {{ if .Values.cloudsql.enabled }}
         - name: PIPELINE_DATABASE_HOST
-          value: "127.0.0.1"
+          value: {{ include "pipeline.database.host" . }}
+        - name: PIPELINE_DATABASE_PORT
+          value: {{ include "pipeline.database.port" . }}
         - name: PIPELINE_DATABASE_DBNAME
-          value: {{ default "" .Values.cloudsql.dbName | quote }}
+          value: {{ include "pipeline.database.name" . }}
         - name: PIPELINE_DATABASE_USER
-          valueFrom:
-            secretKeyRef:
-              name:  {{ include "pipeline.fullname" . }}-cloudsql
-              key: dbUserName
+          value: {{ include "pipeline.database.username" . }}
+        - name : PIPELINE_DATABASE_DIALECT
+          value: {{ include "pipeline.database.driver" . }}
         - name: PIPELINE_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name:  {{ include "pipeline.fullname" . }}-cloudsql
-              key: dbUserPass
-        {{ else }}
-        - name: PIPELINE_DATABASE_HOST
-          value: {{ default (include "pipeline.mysql.fullname" .) .Values.mysql.externalEndpoint }}
-        - name: PIPELINE_DATABASE_DBNAME
-          value: {{ default "" .Values.mysql.mysqlDatabase | quote }}
-        - name: PIPELINE_DATABASE_USER
-          value: {{ default "" .Values.mysql.mysqlUser | quote }}
-        - name: PIPELINE_DATABASE_PASSWORD
-          {{ if .Values.mysql.enabled }}
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pipeline.mysql.fullname" . }}
-              key: mysql-password
-          {{ else }}
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pipeline.fullname" . }}-mysql
-              key: mysql-password
-          {{ end }}
-        {{ end }}
+              name: {{ include "pipeline.database.secretName" .}}
+              key: {{ include "pipeline.database.secretKey" .}}
+
         # Authentication configuration
         - name: PIPELINE_AUTH_CLIENTID
           valueFrom:
