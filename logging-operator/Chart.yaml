@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Logging operator for Kubernetes based on Fluentd and Fluent-bit.
 name: logging-operator
-version: 0.1.9
+version: 0.2.0
 appVersion: 0.1.8
 home: https://github.com/banzaicloud/logging-operator
 icon: https://banzaicloud.com/img/banzai-cloud-logo.png
@@ -16,4 +16,3 @@ sources:
 maintainers:
 - name: Banzai Cloud
   email: info@banzaicloud.com
-
