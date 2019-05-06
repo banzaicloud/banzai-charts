@@ -7,7 +7,7 @@ replicaCount: 1
 strategy: {}
 image:
   repository: banzaicloud/pipeline
-  tag: 0.16.2
+  tag: 0.17.0
   pullPolicy: IfNotPresent
 
 resources:
@@ -146,7 +146,7 @@ configuration:
 
    #helm repo URLs
    stableRepositoryURL: "https://kubernetes-charts.storage.googleapis.com"
-   banzaiRepositoryURL: "http://kubernetes-charts.banzaicloud.com/branch/master"
+   banzaiRepositoryURL: "https://kubernetes-charts.banzaicloud.com"
 
   # Pipeline federated monitoring configurations
   monitor:
@@ -326,32 +326,18 @@ statestore:
     accessMode: ReadWriteOnce
     size: 128Mi
 
-## This is the MySQL connector related configuration
-## If enabled MySQL dependent chart will be installed else you need to prepare
-## MySQL by hand or use CloudSQL
 ##
-## mysql image version
-## ref: https://hub.docker.com/r/library/mysql/tags/
+## MySQL configuration
+## Read more: https://github.com/helm/charts/tree/master/stable/mysql
 ##
 mysql:
   enabled: false
-  mysqlDatabase: pipeline
-  mysqlUser: pipeline-rw
-  ## Default: random 10 character string
-  # mysqlPassword:
 
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  persistence:
-    enabled: false
-
+## Postgres configuration
+## Read more: https://github.com/helm/charts/tree/master/stable/postgresql
+##
 postgres:
-  enabled: false
-  postgresqlDatabase: pipeline
-  postgresqlUsername: pipeline-rw
-  # Random 10 character alphanumeric string
-  postgresqlPassword: 
+  enabled: true
 
 ##
 ## CloudSQL configuration
@@ -360,12 +346,12 @@ postgres:
 cloudsql:
   enabled: false
   cloudsql:
-    instances: [] 
-    # instances: 
-    #   - project:  
-    #     region: 
-    #     instance: 
-    #     port: 
+    instances: []
+    # instances:
+    #   - project:
+    #     region:
+    #     instance:
+    #     port:
 
 # Database configuration
 database:
@@ -373,7 +359,7 @@ database:
   driver: ""
   host: ""
   port: ""
-  name: ""
-  username: ""
+  name: "pipeline"
+  username: "pipeline-rw"
   password: ""
   existingSecret: ""
