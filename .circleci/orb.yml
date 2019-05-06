@@ -164,6 +164,7 @@ commands:
 jobs:
   publish-chart:
     executor: helm
+    resource_class: small
     parameters:
       chart-path:
         default: helm
@@ -198,6 +199,7 @@ jobs:
 
   lint-chart:
     executor: helm
+    resource_class: small
     parameters:
       chart-path:
         default: helm
