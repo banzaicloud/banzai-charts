@@ -1,3 +1,6 @@
+# S3 bucket endpoint URL exp: https://s3.amazonaws.com, https://s3.wasabisys.com, or http://minio-service.default.svc.cluster.local:9000
+endpoint: ""
+
 # S3 Bucket name exp: my-logging-01
 bucketName: ""
 
