@@ -60,7 +60,7 @@ mysql:
 | database.host           | Database host                                 | ``            |
 | database.port           | Database port                                 | ``            |
 | database.name           | Database name                                 | `cicd`    |
-| database.username       | Database username                             | `pipeline-rw` |
+| database.username       | Database username                             | `cicd-rw` |
 | database.password       | Database password                             | ``            |
 | database.existingSecret | Use an existing secret for database passwords | ``            |
 
