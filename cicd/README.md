@@ -1,14 +1,13 @@
 # Pipeline CI/CD
 
-[Pipeline CI/CD](https://beta.banzaicloud.io/docs/cicd/getting_started/ is a Continuous Integration platform built on Kubernetes.
+[Pipeline CI/CD](https://beta.banzaicloud.io/docs/cicd/getting_started/) is a Continuous Integration platform built on Kubernetes.
 
 ## Installing the Chart
 
 Checkout the repository and execute:
 
 ```console
-$ cd pipeline-cicd
-$ helm upgrade --install cicd . --set global.auth.clientid=$GITHUB_CLIENT_ID --set global.auth.clientsecret=$GITHUB_CLIENT_SECRET
+$ helm upgrade --install cicd ./cicd/ --set github.clientID=$GITHUB_CLIENT_ID --set github.clientSecret=$GITHUB_CLIENT_SECRET
 ```
 
 ## Uninstalling the Chart
@@ -22,6 +21,68 @@ $ helm delete --purge cicd
 The command removes nearly all the Kubernetes components associated with the
 chart and deletes the release.
 
+
+## Configuration (Database)
+
+The following table lists the configurable parameters of the CICD chart database configuration and their default values.
+
+#### Postgres (default)
+
+Read more [stable/postgresql](https://github.com/helm/charts/tree/master/stable/postgresql)
+
+```yaml
+postgres:
+  enabled: true
+```
+
+| Parameter        | Description              | Default  |
+| ---------------- | ------------------------ | -------- |
+| postgres.enabled | Install postgresql chart | true     |
+
+#### Mysql
+
+Read more [stable/mysql](https://github.com/helm/charts/tree/master/stable/mysql)
+
+```yaml
+mysql:
+  enabled: true
+```
+
+| Parameter     | Description         | Default  |
+| ------------- | ------------------- | -------- |
+| mysql.enabled | Install mysql chart | false    |
+
+#### Custom settings (These `values` ​​are preferred against mysql or postgres `values`)
+
+| Parameter               | Description                                   | Default       |
+| ------------------------| --------------------------------------------- | ------------- |
+| database.driver         | Database driver (mysql, postgres)             | ``            |
+| database.host           | Database host                                 | ``            |
+| database.port           | Database port                                 | ``            |
+| database.name           | Database name                                 | `cicd`    |
+| database.username       | Database username                             | `cicd-rw` |
+| database.password       | Database password                             | ``            |
+| database.existingSecret | Use an existing secret for database passwords | ``            |
+
+#### Setting up Google CloudSQL Proxy
+
+Read more [rimusz/gcloud-sqlproxy](https://github.com/rimusz/charts/tree/master/stable/gcloud-sqlproxy)
+
+```yaml
+cloudsql:
+  enabled: true
+    instances: []
+#      - project:
+#        region: 
+#        instance:
+#        port:
+```
+
+| Parameter        | Description            | Default  |
+| ---------------- | ---------------------- | -------- |
+| cloudsql.enabled | Install cloudsql chart | false    |
+
+
 ## Configuration
 
 The following tables lists the configurable parameters of the chart and their default values.
@@ -29,10 +90,10 @@ The following tables lists the configurable parameters of the chart and their de
 | Parameter               | Description                                                                                   | Default                 |
 |-------------------------|-----------------------------------------------------------------------------------------------|-------------------------|
 | `image.repository`      | CI/CD **server** image                                                                        | `banzaicloud/cicd`      |
-| `image.tag`             | CI/CD **server** image tag                                                                    | `0.8.1``                |
+| `image.tag`             | CI/CD **server** image tag                                                                    | `0.8.7`                |
 | `image.pullPolicy`      | CI/CD **server** image pull policy                                                            | `IfNotPresent`          |
 | `agentImage.repository` | CI/CD **agent** image                                                                         | `banzaicloud/cicd`      |
-| `agentImage.tag`        | CI/CD **agent** image tag                                                                     | `0.8.1`                 |
+| `agentImage.tag`        | CI/CD **agent** image tag                                                                     | `0.8.7`                 |
 | `agentImage.pullPolicy` | CI/CD **agent** image pull policy                                                             | `IfNotPresent`          |
 | `service.httpPort`      | CI/CD's Web GUI HTTP port                                                                     | `80`                    |
 | `service.nodePort`      | If `service.type` is `NodePort` and this is non-empty, sets the http node port of the service | `32015`                 |

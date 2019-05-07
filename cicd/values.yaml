@@ -1,5 +1,3 @@
-appVersion: "0.7.0"
-
 ## CI/CD server and agent Deplyoment annotations
 ##
 annotations: {}
@@ -18,13 +16,33 @@ strategy: {}
 ##
 image:
   repository: "banzaicloud/cicd"
-  tag: "0.8.6"
+  tag: "0.8.7"
   pullPolicy: "IfNotPresent"
 
-global:
-  auth:
-    clientsecret: ""
-    clientid: ""
+rbac:
+  enabled: true
+
+serviceAccount:
+  create: false
+  name:
+
+github:
+  enabled: true
+  existingSecret: ""
+  clientSecret: ""
+  clientID: ""
+
+gitlab:
+  enabled: false
+  existingSecret: ""
+  clientSecret: ""
+  clientID: ""
+
+## The hostname where the Banzai Cloud Control Plane is hosted
+##
+cpHost: cp.example.com
+
+pipelineBasePath: /pipeline
 
 service:
   httpPort: 80
@@ -90,38 +108,6 @@ server:
     # CICD_GITHUB_CLIENT: "github-oauth2-client-id"
     # CICD_GITHUB_SECRET: "github-oauth2-client-secret"
 
-  persistentVolume:
-    enabled: true
-
-    ## A manually managed Persistent Volume and Claim
-    ## Requires persistence.enabled: true
-    ## If defined, PVC must be created manually before volume will be bound
-    # existingClaim:
-
-    ## Pipeline StateStore data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
-    accessModes:
-      - ReadWriteOnce
-
-    ## CI/CD server data Persistent Volume existing claim name
-    ## Requires server.persistentVolume.enabled: true
-    ## If defined, PVC must be created manually before volume will be bound
-    existingClaim: ""
-
-    ## CI/CD server data Persistent Volume size
-    ##
-    size: 1Gi
-
-
-    ## CI/CD server data Persistent Volume annotations
-    ##
-    annotations: {}
   ## CPU and memory limits for CI/CD server
   ##
   resources: {}
@@ -133,30 +119,46 @@ server:
   #    cpu: 1
 
 ##
-## MysqlSQL configuration
+## MySQL configuration
+## Read more: https://github.com/helm/charts/tree/master/stable/mysql
 ##
 mysql:
+  enabled: false
+
+## Postgres configuration
+## Read more: https://github.com/helm/charts/tree/master/stable/postgresql
+##
+postgres:
   enabled: true
-  host: "mysql"
-  port: 3306
-  mysqlUser: "pipeline-rw"
-  mysqlDatabase: "drone"
-  existingSecret: "mysql"
+  service: {}
 
 ##
 ## CloudSQL configuration
+## Read more: https://github.com/rimusz/charts/tree/master/stable/gcloud-sqlproxy
 ##
 cloudsql:
   enabled: false
-  instance: ""
-  dbName: "drone"
-  dbUserName: ""
-  dbUserPass: ""
+  cloudsql:
+    instances: []
+    # instances:
+    #   - project:
+    #     region:
+    #     instance:
+    #     port:
+
+# Database configuration
+database:
+  # mysql, postgres
+  driver: ""
+  host: ""
+  port: ""
+  name: "cicd"
+  username: "cicd-rw"
+  password: ""
   existingSecret: ""
-  image:
-    repository: gcr.io/cloudsql-docker/gce-proxy
-    tag: 1.11
-    pullPolicy: IfNotPresent
+
+global:
+  postgresql: {}
 
 agent:
   ## CI/CD  agent configuration.

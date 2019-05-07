@@ -6,8 +6,8 @@ kind: Ingress
 metadata:
   name: {{ template "cicd.fullname" . }}
   labels:
-    app: {{ template "cicd.name" . }}
-    chart: {{ template "cicd.chart" . }}
+    app: "{{ template "cicd.name" . }}"
+    chart: "{{ template "cicd.chart" .}}"
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}
