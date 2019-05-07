@@ -24,7 +24,7 @@ This chart bootstraps a [Pipeline](https://github.com/banzaicloud/pipeline) depl
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release --namespace cadence banzaicloud-stable/pipeline
+$ helm install --name my-release --namespace banzaicloud banzaicloud-stable/pipeline
 ```
 
 ## Uninstalling the Chart
@@ -86,8 +86,11 @@ Read more [rimusz/gcloud-sqlproxy](https://github.com/rimusz/charts/tree/master/
 ```yaml
 cloudsql:
   enabled: true
-  instances:
-    - 
+    instances: []
+#      - project:
+#        region: 
+#        instance:
+#        port:
 ```
 
 | Parameter        | Description            | Default  |
