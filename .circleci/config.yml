@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   helm: banzaicloud/helm@volatile
 
+helm-repositories: &helm_repositories
+  - run: helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
+  - run: helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
+  - run: helm repo add rimusz https://charts.rimusz.net
+
 jobs:
   build:
     executor: helm/helm
@@ -10,10 +15,22 @@ jobs:
 
     steps:
       - checkout
+      - helm/setup-repositories:
+          add-extra-repositories: *helm_repositories
+      - run:
+          name: Update helm dependencies
+          command: |
+            find -H . \
+                -maxdepth 1 \
+                -type d \
+                ! -path . \
+                ! -path ./.gitignore \
+                ! -path ./.git \
+                ! -path ./.circleci \
+                -exec helm dependency update {} \;
       - run:
           name: Helm lint
           command: |
-            pwd
             find -H . \
                 -maxdepth 1 \
                 -type d \
@@ -33,10 +50,7 @@ jobs:
       - checkout
 
       - helm/setup-repositories:
-          add-extra-repositories:
-            - run: helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
-            - run: helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
-            - run: helm repo add rimusz https://charts.rimusz.net
+          add-extra-repositories: *helm_repositories
 
       - run:
           name: Check versions
