@@ -88,3 +88,4 @@ featureSet:
   nodePoolLabeling: false
   horizontalPodAutoscaler: false
   onDemandNodeAffinity: false
+  azurePKE: false
