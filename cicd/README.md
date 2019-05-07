@@ -59,7 +59,7 @@ mysql:
 | database.driver         | Database driver (mysql, postgres)             | ``            |
 | database.host           | Database host                                 | ``            |
 | database.port           | Database port                                 | ``            |
-| database.name           | Database name                                 | `pipeline`    |
+| database.name           | Database name                                 | `cicd`    |
 | database.username       | Database username                             | `pipeline-rw` |
 | database.password       | Database password                             | ``            |
 | database.existingSecret | Use an existing secret for database passwords | ``            |
