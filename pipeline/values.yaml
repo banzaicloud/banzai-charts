@@ -7,7 +7,7 @@ replicaCount: 1
 strategy: {}
 image:
   repository: banzaicloud/pipeline
-  tag: 0.17.0
+  tag: 0.18.2
   pullPolicy: IfNotPresent
 
 resources:
@@ -22,7 +22,7 @@ worker:
   strategy: {}
   image:
     repository: banzaicloud/pipeline
-    tag: 0.16.2
+    tag: 0.18.2
     pullPolicy: IfNotPresent
 
   resources:
@@ -360,6 +360,7 @@ database:
   driver: ""
   host: ""
   port: ""
+  tls: ""
   name: "pipeline"
   username: "pipeline-rw"
   password: ""

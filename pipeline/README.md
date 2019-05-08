@@ -74,6 +74,7 @@ mysql:
 | database.driver         | Database driver (mysql, postgres)             | ``            |
 | database.host           | Database host                                 | ``            |
 | database.port           | Database port                                 | ``            |
+| database.tls            | Database TLS parameter                        | `turned off`  |
 | database.name           | Database name                                 | `pipeline`    |
 | database.username       | Database username                             | `pipeline-rw` |
 | database.password       | Database password                             | ``            |
