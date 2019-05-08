@@ -46,6 +46,8 @@ spec:
           value: "{{ .Values.instanceProfileCredentials.port }}"
         {{ end }}
 
+        - name: s3_endpoint
+          value: "{{ .Values.endpoint }}"
         - name: s3_bucket
           value: "{{ .Values.bucketName }}"
         - name: s3_region
