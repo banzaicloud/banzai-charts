@@ -130,7 +130,7 @@ spec:
           mountPath: /cadence/config/docker_template_cassandra.yaml
           subPath: docker_template_cassandra.yaml
         resources:
-          {{- toYaml .Values.resources | nindent 12 }}
+          {{- toYaml .Values.server.resources | nindent 12 }}
 
       volumes:
       - name: "{{ .Chart.Name }}-config"
