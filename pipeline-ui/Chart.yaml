@@ -3,7 +3,7 @@ home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts/
 version: 1.1.1
-appVersion: "0.6.2"
+appVersion: "0.14.0"
 description: Helm chart for Kubernetes. Provides the Graphical User Interface for Pipeline PaaS
 keywords:
   - pipeline-ui
