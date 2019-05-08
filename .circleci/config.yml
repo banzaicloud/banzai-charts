@@ -21,24 +21,17 @@ jobs:
           name: Update helm dependencies
           command: |
             find -H . \
-                -maxdepth 1 \
-                -type d \
-                ! -path . \
-                ! -path ./.gitignore \
-                ! -path ./.git \
-                ! -path ./.circleci \
-                -exec helm dependency update {} \;
+                -maxdepth 2 \
+                -name 'Chart.yaml' \
+                -execdir helm dependency update \;
       - run:
           name: Helm lint
           command: |
             find -H . \
-                -maxdepth 1 \
-                -type d \
-                ! -path . \
-                ! -path ./.gitignore \
-                ! -path ./.git \
-                ! -path ./.circleci \
-                -exec helm lint {} +
+                -maxdepth 2 \
+                -name 'Chart.yaml' \
+                -printf '%h\n' \
+                  | xargs helm lint
 
   publish-chart:
     executor: helm/helm
