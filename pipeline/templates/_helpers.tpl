@@ -160,3 +160,15 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- required "Please specify database driver" .Values.database.driver -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "pipeline.database.tls" -}}
+{{- if .Values.database.tls -}}
+{{- .Values.database.tls -}}
+{{- else if ( eq (include "pipeline.database.driver" .) "mysql") -}}
+{{- print "false" -}}
+{{- else if ( eq (include "pipeline.database.driver" .) "postgres") -}}
+{{- print "disable" -}}
+{{- else -}}
+{{- fail "Please specify database tls" -}}
+{{- end -}}
+{{- end -}}

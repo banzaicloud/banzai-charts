@@ -41,6 +41,8 @@ spec:
           value: {{ include "pipeline.database.host" . }}
         - name: PIPELINE_DATABASE_PORT
           value: {{ include "pipeline.database.port" . | quote }}
+        - name: PIPELINE_DATABASE_TLS
+          value: {{ include "pipeline.database.tls" . }}
         - name: PIPELINE_DATABASE_DBNAME
           value: {{ include "pipeline.database.name" . }}
         - name: PIPELINE_DATABASE_USER
