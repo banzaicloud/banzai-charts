@@ -8,7 +8,14 @@ metadata:
     helm.sh/chart: {{ include "cadence.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.web.service.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
+{{- with .Values.web.service.loadBalancerIP }}
+  loadBalancerIP: {{.}}
+{{- end }}
   type: {{ .Values.web.service.type }}
   ports:
     - port: {{ .Values.web.service.port }}
