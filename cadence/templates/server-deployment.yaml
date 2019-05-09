@@ -18,10 +18,10 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "cadence.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- with .Values.server.annotations }}
       annotations:
-        # Prometheus: issue with multiple scrape ports on same pod:
-        # https://github.com/prometheus/prometheus/issues/3756
-        prometheus.io/scrape: 'true'
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       initContainers:
       - name: check-cassandra

@@ -92,6 +92,10 @@ server:
 
   affinity: {}
 
+  annotations: {}
+    # Annotation to enable Prometheus scrape functionality.
+    # prometheus.io/scrape: 'true'
+
 web:
   enabled: true
 
