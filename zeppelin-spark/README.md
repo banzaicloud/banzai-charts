@@ -2,11 +2,11 @@
 
 This is a composite chart deploying the following sub-charts:
 
-- [Zeppelin](https://github.com/banzaicloud/banzai-charts/tree/master/stable/zeppelin)
-- [Spark](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark) this is again a composite charts deploying the following sub-charts:
-  - [Spark History Server](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark-hs) only if enabled (default *historyServer.enabled=true*)
-  - [Spark Resource Staging Server](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark-rss) only if enabled (default *resourceStagingServer.enabled=false*)
-  - [Spark Shuffle Service](https://github.com/banzaicloud/banzai-charts/tree/master/stable/spark-shuffle) only if enabled (default *sparkShuffle.enabled=false*)
+- [Zeppelin](https://github.com/banzaicloud/banzai-charts/tree/master/zeppelin)
+- [Spark](https://github.com/banzaicloud/banzai-charts/tree/master/spark) this is again a composite charts deploying the following sub-charts:
+  - [Spark History Server](https://github.com/banzaicloud/banzai-charts/tree/master/spark-hs) only if enabled (default *historyServer.enabled=true*)
+  - [Spark Resource Staging Server](https://github.com/banzaicloud/banzai-charts/tree/master/spark-rss) only if enabled (default *resourceStagingServer.enabled=false*)
+  - [Spark Shuffle Service](https://github.com/banzaicloud/banzai-charts/tree/master/spark-shuffle) only if enabled (default *sparkShuffle.enabled=false*)
 
 ## Chart Details
 
