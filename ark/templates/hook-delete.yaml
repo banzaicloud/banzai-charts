@@ -19,6 +19,11 @@ spec:
         app: {{ template "ark.name" . }}
     spec:
       restartPolicy: Never
+{{- if .Values.rbac.psp.enabled }}
+      securityContext:
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+{{- end }}
       containers:
         - name: delete-ark-config
           image: "{{ .Values.kubectl.image.repository }}:{{ .Values.kubectl.image.tag }}"
@@ -32,6 +37,11 @@ spec:
           volumeMounts:
             - name: ark-config
               mountPath: /config
+{{- if .Values.rbac.psp.enabled }}
+          securityContext:
+            runAsUser: 65534
+            fsGroup: 65534
+{{- end }}
       volumes:
         - name: ark-config
           configMap:
