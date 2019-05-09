@@ -57,6 +57,7 @@ Parameter | Description | Default
 `kubectl.image.pullPolicy` | Image pull policy | `IfNotPresent`
 `podAnnotations` | Annotations for the Ark server pod | `{}`
 `rbac.create` | If true, create and use RBAC resources | `true`
+`rbac.psp.enabled` | Must be used with `rbac.create` true. If true, creates & uses RBAC resources required in the cluster with [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) enabled. | `false`
 `rbac.server.serviceAccount.create` | Whether a new service account name that the server will use should be created | `true`
 `rbac.server.serviceAccount.name` | Service account to be used for the server. If not set and `rbac.server.serviceAccount.create` is `true` a name is generated using the fullname template | ``
 `rbac.hook.serviceAccount.create` | Whether a new service account name that the hook will use should be created | `true`
