@@ -117,13 +117,13 @@ configuration:
 
   # CICD
   cicd:
-    url: http://localhost:8000
+    url: http://cicd:8000
   # Github
   github:
     token: ""
   # Authentication
   auth:
-    dexurl: http://dex/dex
+    dexurl: http://dex:5556/dex
     clientid: ""
     clientsecret: ""
     jwtissueer: https://banzaicloud.com/
@@ -141,7 +141,7 @@ configuration:
   helm:
    retryAttemp: 30
    retrySleepSeconds: 15
-   tillerVersion: "v2.12.2"
+   tillerVersion: "v2.13.1"
    path: "/cache/helm"
 
    #helm repo URLs
@@ -269,7 +269,7 @@ configuration:
       cert: ""
 
   cadence:
-    host: ""
+    host: "cadence"
     port: 7933
     domain: pipeline
 
@@ -278,7 +278,7 @@ configuration:
 ##
 vault:
   # Vault service endpoint
-  serviceAddress: ""
+  serviceAddress: "https://vault:8200"
   # The secret that holds the Vault CA cert.
   # If left empty SKIP_VERIFY will be used.
   tlsSecret: ""
