@@ -10,13 +10,13 @@ examples:
       version: 2.1
 
       orbs:
-        helm: banzaicloud/helm@volatile
+        helm: banzaicloud/helm@v0.0.4
 
       workflows:
         helm-chart-lint:
           jobs:
             - helm/lint-chart:
-                chart-path: helm/logging-operator
+                charts-dir: charts
                 filters:
                   tags:
                     ignore: /.*/
@@ -24,7 +24,7 @@ examples:
           jobs:
             - helm/publish-chart:
                 context: helm
-                chart-path: helm/logging-operator
+                charts-dir: charts
                 filters:
                   branches:
                     ignore: /.*/
@@ -36,14 +36,14 @@ examples:
       version: 2.1
 
       orbs:
-        helm: banzaicloud/helm@volatile
+        helm: banzaicloud/helm@0.0.4
 
       workflows:
         helm-chart-release:
           jobs:
             - helm/publish-chart:
                 context: helm
-                chart-path: helm/logging-operator
+                charts-dir: charts
                 add-extra-repositories:
                   - run: helm repo add extra https://kubernetes-charts-incubator.storage.googleapis.com/
                 filters:
@@ -61,18 +61,28 @@ commands:
   lint:
     description: Run helm lint
     parameters:
-      chart-path:
-        default: helm
-        description: Path of helm chart relative to workdir
+      charts-dir:
+        default: charts
+        description: Path of helm chart(s)
         type: string
     steps:
       - run:
           name: Helm lint
           command: |
-            chart_path="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.chart-path >>/"
-            helm lint "${chart_path}"
+            charts_dir="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.charts-dir >>"
+
+            if [ -n "${CIRCLE_TAG}" ]; then
+              helm lint "${charts_dir}/$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
+            else
+              find -H "${charts_dir}" \
+                -maxdepth 2 \
+                -name 'Chart.yaml' \
+                -printf '%h\n' \
+                  | xargs helm lint
+            fi
 
   setup-repositories:
+    description: Add helm repositories
     parameters:
       add-extra-repositories:
         default: []
@@ -95,41 +105,69 @@ commands:
             helm repo update
             helm repo list
 
-  check-versions:
+  update-dependencies:
+    description: Update helm dependencies
     parameters:
-      chart-path:
-        default: helm
-        description: Path of helm chart relative to workdir
+      charts-dir:
+        default: charts
+        description: Path of helm chart(s)
         type: string
     steps:
       - run:
-          name: Check chart version
+          name: Update helm dependencies
           command: |
-            chart_path="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.chart-path >>"
+            charts_dir="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.charts-dir >>"
 
-            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
+            if [ -n "${CIRCLE_TAG}" ]; then
+              helm dependency update "${charts_dir}/$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
+            else
+              find -H "${charts_dir}" \
+                -maxdepth 2 \
+                -name 'Chart.yaml' \
+                -execdir helm dependency update \;
+            fi
+
+  check-parameters:
+    parameters:
+      charts-dir:
+        default: charts
+        description: Path of helm chart(s)
+        type: string
+    steps:
+      - run:
+          name: Check parameters
+          command: |
+            charts_dir="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.charts-dir >>"
+
+            if [ -z "${CIRCLE_TAG}" ]; then
+              echo 'No release tag specified'
+              exit 1
+            fi
+
             chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $NF}')"
+            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
 
-            if [ ! -d "${chart_path}" ]; then
+            if [ ! -d "${charts_dir}/${chart_name}" ]; then
                 echo "Chart does not exist; name='${chart_name}'"
                 exit 1
             fi
 
-            if ! grep -q -F "version: ${chart_version}" "${chart_path}/Chart.yaml"; then
-                echo "Chart version mismatch; name='${chart_name}', version='${chart_version}'"
+            if ! grep -q -F "version: ${chart_version}" "${charts_dir}/${chart_name}/Chart.yaml"; then
+                echo "Chart version mismatch; name='${chart_name}', expected_version='${chart_version}'"
                 exit 1
             fi
 
-            if helm search "chartmuseum/" -v "${chart_version}" | grep -q "chartmuseum\/${chart_name}\s"; then
+            if helm search 'chartmuseum/' -v "${chart_version}" | grep -q "chartmuseum\/${chart_name}\s"; then
                 echo "Chart already exists in chartmuseum; name='${chart_name}', version='${chart_version}'"
                 exit 1
             fi
 
   build:
+    description: Build helm package
     parameters:
-      chart-path:
-        default: helm
-        description: Path of helm chart relative to workdir
+      charts-dir:
+        default: charts
+        description: Path of helm chart(s)
         type: string
       tgz-dir:
         default: /workspace/tgz
@@ -139,16 +177,18 @@ commands:
       - run:
           name: Build chart
           command: |
-            chart_path="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.chart-path >>"
+            charts_dir="${CIRCLE_WORKING_DIRECTORY//\~/$HOME}/<< parameters.charts-dir >>"
+            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
 
             mkdir -p "<< parameters.tgz-dir >>"
 
             helm package \
                 --dependency-update \
                 --destination '<< parameters.tgz-dir >>' \
-                "${chart_path}"
+                "${charts_dir}/${chart_name}"
 
   publish:
+    description: Publish to chartmuseum
     parameters:
       tgz-dir:
         default: /workspace/tgz
@@ -166,9 +206,9 @@ jobs:
     executor: helm
     resource_class: small
     parameters:
-      chart-path:
-        default: helm
-        description: Path of helm chart relative to workdir
+      charts-dir:
+        default: charts
+        description: Path of helm chart(s)
         type: string
       chartmuseum-url:
         default:  https://kubernetes-charts.banzaicloud.com
@@ -184,15 +224,17 @@ jobs:
         type: string
     steps:
       - checkout
-      - lint:
-          chart-path: << parameters.chart-path >>
       - setup-repositories:
           chartmuseum-url: << parameters.chartmuseum-url >>
           add-extra-repositories: << parameters.add-extra-repositories >>
-      - check-versions:
-          chart-path: << parameters.chart-path >>
+      - check-parameters:
+          charts-dir: << parameters.charts-dir >>
+      - update-dependencies:
+          charts-dir: << parameters.charts-dir >>
+      - lint:
+          charts-dir: << parameters.charts-dir >>
       - build:
-          chart-path: << parameters.chart-path >>
+          charts-dir: << parameters.charts-dir >>
           tgz-dir: <<parameters.tgz-dir >>
       - publish:
           tgz-dir: <<parameters.tgz-dir >>
@@ -201,11 +243,24 @@ jobs:
     executor: helm
     resource_class: small
     parameters:
-      chart-path:
-        default: helm
-        description: Path of helm chart relative to workdir
+      charts-dir:
+        default: charts
+        description: Path of helm chart(s)
         type: string
+      chartmuseum-url:
+        default:  https://kubernetes-charts.banzaicloud.com
+        description: URL of Chartmuseum
+        type: string
+      add-extra-repositories:
+        default: []
+        description: Steps to add extra repositories
+        type: steps
     steps:
       - checkout
+      - setup-repositories:
+          chartmuseum-url: << parameters.chartmuseum-url >>
+          add-extra-repositories: << parameters.add-extra-repositories >>
+      - update-dependencies:
+          charts-dir: << parameters.charts-dir >>
       - lint:
-          chart-path: << parameters.chart-path >>
+          charts-dir: << parameters.charts-dir >>

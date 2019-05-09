@@ -1,98 +1,30 @@
 version: 2.1
 
 orbs:
-  helm: banzaicloud/helm@volatile
+  helm: banzaicloud/helm@0.0.4
 
 helm-repositories: &helm_repositories
   - run: helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
   - run: helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
   - run: helm repo add rimusz https://charts.rimusz.net
 
-jobs:
-  build:
-    executor: helm/helm
-    resource_class: small
-
-    steps:
-      - checkout
-      - helm/setup-repositories:
-          add-extra-repositories: *helm_repositories
-      - run:
-          name: Update helm dependencies
-          command: |
-            find -H . \
-                -maxdepth 2 \
-                -name 'Chart.yaml' \
-                -execdir helm dependency update \;
-      - run:
-          name: Helm lint
-          command: |
-            find -H . \
-                -maxdepth 2 \
-                -name 'Chart.yaml' \
-                -printf '%h\n' \
-                  | xargs helm lint
-
-  publish-chart:
-    executor: helm/helm
-    resource_class: small
-
-    working_directory: /workspace/banzai-charts
-
-    steps:
-      - checkout
-
-      - helm/setup-repositories:
-          add-extra-repositories: *helm_repositories
-
-      - run:
-          name: Check versions
-          command: |
-            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
-            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $NF}')"
-
-            if [ ! -d "/workspace/banzai-charts/${chart_name}" ]; then
-                echo "Chart does not exist; name='${chart_name}'"
-                exit 1
-            fi
-
-            if ! grep -q -F "version: $chart_version" "/workspace/banzai-charts/${chart_name}/Chart.yaml"; then
-                echo "Chart version mismatch; name='${chart_name}', version='${chart_version}'"
-                exit 1
-            fi
-
-            if helm search "chartmuseum/" -v "${chart_version}" | grep -q "chartmuseum\/${chart_name}\s"; then
-                echo "Chart already exists in chartmuseum; name='${chart_name}', version='${chart_version}'"
-                exit 1
-            fi
-
-      - run:
-          name: Build chart
-          command: |
-            chart_name="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $(NF-1)}')"
-            chart_version="$(echo "${CIRCLE_TAG}" | awk -F '/' '{print $NF}')"
-
-            mkdir -p "/workspace/tgz"
-
-            helm package \
-                --dependency-update \
-                --destination '/workspace/tgz/' \
-                "${chart_name}"
-
-      - helm/publish:
-            tgz-dir: /workspace/tgz
-
 workflows:
   version: 2
   static-checks:
     jobs:
-      - build:
+      - helm/lint-chart:
+          context: helm
+          charts-dir: '.'
+          add-extra-repositories: *helm_repositories
           filters:
             tags:
-              only: /.*/
+              ignore: /.*/
   release:
     jobs:
-      - publish-chart:
+      - helm/publish-chart:
+          context: helm
+          charts-dir: '.'
+          add-extra-repositories: *helm_repositories
           filters:
             tags:
               only: /\S+\/\d+.\d+.\d+/
