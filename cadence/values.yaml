@@ -7,7 +7,7 @@ server:
 
   image:
     repository: ubercadence/server
-    tag: master
+    tag: 0.5.8
     pullPolicy: IfNotPresent
 
   logLevel: "debug,info"

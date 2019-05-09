@@ -126,9 +126,15 @@ spec:
             port: {{ .Values.server.worker.service.port }}
           {{- end }}
         volumeMounts:
+{{- if semverCompare "<= 0.5.5" .Values.server.image.tag }}
+        - name: "{{ .Chart.Name }}-config"
+          mountPath: /cadence/config/docker_template.yaml
+          subPath: docker_template.yaml
+{{- else }}
         - name: "{{ .Chart.Name }}-config"
           mountPath: /cadence/config/docker_template_cassandra.yaml
           subPath: docker_template_cassandra.yaml
+{{- end }}
         resources:
           {{- toYaml .Values.server.resources | nindent 12 }}
 
