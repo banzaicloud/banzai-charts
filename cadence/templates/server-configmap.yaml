@@ -41,6 +41,8 @@ data:
           port: {{ .Values.server.frontend.service.port }}
           bindOnIP: {{ .Values.server.frontend.bindOnIP }}
         metrics:
+          tags:
+            type: frontend
           prometheus:
             timerType: {{ .Values.server.frontend.prometheus.timerType }}
             listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.frontend.prometheus.port }}
@@ -50,6 +52,8 @@ data:
           port: {{ .Values.server.matching.service.port }}
           bindOnIP: {{ .Values.server.matching.bindOnIP }}
         metrics:
+          tags:
+            type: matching
           prometheus:
             timerType: {{ .Values.server.matching.prometheus.timerType }}
             listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.matching.prometheus.port }}
@@ -59,6 +63,8 @@ data:
           port: {{ .Values.server.history.service.port }}
           bindOnIP: {{ .Values.server.history.bindOnIP }}
         metrics:
+          tags:
+            type: history
           prometheus:
             timerType: {{ .Values.server.history.prometheus.timerType }}
             listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.history.prometheus.port }}
@@ -68,6 +74,8 @@ data:
           port: {{ .Values.server.worker.service.port }}
           bindOnIP: {{ .Values.server.worker.bindOnIP }}
         metrics:
+          tags:
+            type: worker
           prometheus:
             timerType: {{ .Values.server.worker.prometheus.timerType }}
             listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.worker.prometheus.port }}
