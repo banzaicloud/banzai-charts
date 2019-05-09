@@ -159,3 +159,12 @@ cassandra:
   keyspace: cadence
   config:
     cluster_size: 1
+  resources: {}
+    # requests:
+    #   memory: 4Gi
+    #   cpu: 1
+    # limits:
+    #   cpu: 2
+  # podDisruptionBudget:
+  #   maxUnavailable: 1
+    # minAvailable: 1
