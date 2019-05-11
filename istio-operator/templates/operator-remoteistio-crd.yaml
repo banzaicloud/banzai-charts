@@ -11,6 +11,22 @@ metadata:
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
     app.kubernetes.io/component: operator
 spec:
+  additionalPrinterColumns:
+  - JSONPath: .status.Status
+    description: Status of the resource
+    name: Status
+    type: string
+  - JSONPath: .status.ErrorMessage
+    description: Error message
+    name: Error
+    type: string
+  - JSONPath: .status.GatewayAddress
+    description: Ingress gateways of the resource
+    name: Gateways
+    type: string
+  - JSONPath: .metadata.creationTimestamp
+    name: Age
+    type: date
   group: istio.banzaicloud.io
   names:
     kind: RemoteIstio
@@ -44,11 +60,12 @@ spec:
             citadel:
               description: Citadel configuration options
               properties:
+                enabled:
+                  type: boolean
                 image:
                   type: string
-                replicaCount:
-                  format: int32
-                  type: integer
+                resources:
+                  type: object
               type: object
             enabledServices:
               description: EnabledServices the Istio component services replicated
@@ -63,9 +80,12 @@ spec:
                     items:
                       type: string
                     type: array
+                  ports:
+                    items:
+                      type: object
+                    type: array
                 required:
                 - name
-                - labelSelector
                 type: object
               type: array
             excludeIPRanges:
@@ -97,11 +117,44 @@ spec:
             sidecarInjector:
               description: SidecarInjector configuration options
               properties:
+                autoInjectionPolicyEnabled:
+                  description: This controls the 'policy' in the sidecar injector
+                  type: boolean
+                enabled:
+                  type: boolean
                 image:
                   type: string
+                initCNIConfiguration:
+                  properties:
+                    binDir:
+                      description: Must be the same as the environment’s --cni-bin-dir
+                        setting (kubelet parameter)
+                      type: string
+                    confDir:
+                      description: Must be the same as the environment’s --cni-conf-dir
+                        setting (kubelet parameter)
+                      type: string
+                    enabled:
+                      description: If true, the privileged initContainer istio-init
+                        is not needed to perform the traffic redirect settings for
+                        the istio-proxy
+                      type: boolean
+                    excludeNamespaces:
+                      description: List of namespaces to exclude from Istio pod check
+                      items:
+                        type: string
+                      type: array
+                    image:
+                      type: string
+                    logLevel:
+                      description: Logging level for CNI binary
+                      type: string
+                  type: object
                 replicaCount:
                   format: int32
                   type: integer
+                resources:
+                  type: object
                 rewriteAppHTTPProbe:
                   description: If true, sidecar injector will rewrite PodSpec for
                     liveness health check to redirect request to sidecar. This makes
