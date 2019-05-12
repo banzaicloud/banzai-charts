@@ -22,7 +22,7 @@ The following table lists configurable parameters of the dex chart and their def
 |               Parameter             |                Description                  |                  Default                 |
 | ----------------------------------- | ------------------------------------------- | -----------------------------------------|
 |image.repository                     |jwt-to-rbac image                            |banzaicloud/jwt-to-rbac                   |
-|image.tag                            |image tag                                    |0.1.0                                     |
+|image.tag                            |image tag                                    |0.2.0                                     |
 |image.pullPolicy                     |image pull policy                            |IfNotPresent                              |
 |port.name                            |port name                                    |http                                      |
 |port.containerPort                   |port port                                    |5555                                      |
