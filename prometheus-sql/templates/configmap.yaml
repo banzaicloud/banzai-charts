@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "prometheus-sql.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "prometheus-sql.name" . }}
+    helm.sh/chart: {{ include "prometheus-sql.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  sql_exporter.yml: |-
+    global:
+      scrape_timeout: {{ .Values.global.scrapeTimeout }}
+      scrape_timeout_offset: {{ .Values.global.scrapeTimeoutOffset }}
+      min_interval: {{ .Values.global.minInterval }}
+      max_connections: {{ .Values.global.maxConnections }}
+      max_idle_connections: {{ .Values.global.maxIdleConnections }}
+    target:
+      data_source_name: {{ .Values.target.dataSourceName }}
+      collectors: {{ .Values.target.collectors }}
+
+
+    collector_files:
+      - "/tmp/collector/*.collector.yml"
