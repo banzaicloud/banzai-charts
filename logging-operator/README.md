@@ -51,12 +51,14 @@ The following tables lists the configurable parameters of the logging-operator c
 | `fullnameOverride`                                  | Override full name of app                              | ``                             |
 | `watchNamespace`                                    | Namespace to watch fot LoggingOperator CRD             | ``                             |
 | `grafana.dashboard.enabled`                         | Install grafana logging-operator dashboard             | `true`                         |
-| `rbac.create`                                       | Create rbac service account and roles                  | `true`                         |
+| `rbac.enabled`                                      | Create rbac service account and roles                  | `true`                         |
+| `rbac.psp.enabled`                                  | Must be used with `rbac.enabled` true. If true, creates & uses RBAC resources required in the cluster with [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) enabled.              | `false`                        |
 | `affinity`                                          | Node Affinity                                          | `{}`                           |
 | `resources`                                         | CPU/Memory resource requests/limits                    | `{}`                           |
 | `tolerations`                                       | Node Tolerations                                       | `[]`                           |
 | `nodeSelector`                                      | Define which Nodes the Pods are scheduled on.          | `{}`                           |
-| `securityContext`                                   | SecurityContext for Logging operator                   | `{"runAsNonRoot": true, "runAsUser": 1000}` |
+| `podSecurityContext`                                | Pod SecurityContext for Logging operator. [More info](https://kubernetes.io/docs/concepts/policy/security-context/)                                                                                             | `{"runAsNonRoot": true, "runAsUser": 1000, "fsGroup": 2000}` |
+| `securityContext`                                   | Container SecurityContext for Logging operator. [More info](https://kubernetes.io/docs/concepts/policy/security-context/)                                                                                             | `{"allowPrivilegeEscalation": false, "readOnlyRootFilesystem": true}` |
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:
 

@@ -23,9 +23,13 @@ grafana:
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
-
 rbac:
   enabled: true
+  ## Pod Security Policy
+  ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+  ##
+  psp:
+    enabled: false
 
 ## Define resources requests and limits for single Pods.
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -76,8 +80,12 @@ affinity: {}
 ## This defaults to non root user with uid 1000 and gid 2000.	*v1.PodSecurityContext	false
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
-securityContext:
+podSecurityContext:
   runAsNonRoot: true
   runAsUser: 1000
   fsGroup: 2000
-
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  # capabilities:
+  #   drop: ["ALL"]
