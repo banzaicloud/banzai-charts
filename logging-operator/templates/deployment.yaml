@@ -44,12 +44,12 @@ spec:
         - mountPath: /logging-operator/config
           name: config
 
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+        {{- if .Values.securityContext }}
+        securityContext: {{ toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
         resources: {{ toYaml .Values.resources | nindent 10 }}
-    {{- if .Values.securityContext }}
-      securityContext: {{ toYaml .Values.securityContext | nindent 8 }}
+    {{- if .Values.podSecurityContext }}
+      securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
     {{- end }}
     {{- if .Values.rbac.enabled }}
       serviceAccountName: {{ template "logging-operator.fullname" . }}
