@@ -60,12 +60,20 @@ spec:
             citadel:
               description: Citadel configuration options
               properties:
+                affinity:
+                  type: object
                 enabled:
                   type: boolean
                 image:
                   type: string
+                nodeSelector:
+                  type: object
                 resources:
                   type: object
+                tolerations:
+                  items:
+                    type: object
+                  type: array
               type: object
             controlPlaneSecurityEnabled:
               description: ControlPlaneSecurityEnabled control plane services are
@@ -89,29 +97,43 @@ spec:
             galley:
               description: Galley configuration options
               properties:
+                affinity:
+                  type: object
                 enabled:
                   type: boolean
                 image:
                   type: string
+                nodeSelector:
+                  type: object
                 replicaCount:
                   format: int32
                   type: integer
                 resources:
                   type: object
+                tolerations:
+                  items:
+                    type: object
+                  type: array
               type: object
             gateways:
               description: Gateways configuration options
               properties:
                 egress:
                   properties:
+                    affinity:
+                      type: object
                     enabled:
                       type: boolean
+                    loadBalancerIP:
+                      type: string
                     maxReplicas:
                       format: int32
                       type: integer
                     minReplicas:
                       format: int32
                       type: integer
+                    nodeSelector:
+                      type: object
                     ports:
                       items:
                         type: object
@@ -138,19 +160,29 @@ spec:
                       - NodePort
                       - LoadBalancer
                       type: string
+                    tolerations:
+                      items:
+                        type: object
+                      type: array
                   type: object
                 enabled:
                   type: boolean
                 ingress:
                   properties:
+                    affinity:
+                      type: object
                     enabled:
                       type: boolean
+                    loadBalancerIP:
+                      type: string
                     maxReplicas:
                       format: int32
                       type: integer
                     minReplicas:
                       format: int32
                       type: integer
+                    nodeSelector:
+                      type: object
                     ports:
                       items:
                         type: object
@@ -177,6 +209,10 @@ spec:
                       - NodePort
                       - LoadBalancer
                       type: string
+                    tolerations:
+                      items:
+                        type: object
+                      type: array
                   type: object
               type: object
             imagePullPolicy:
@@ -198,6 +234,8 @@ spec:
             mixer:
               description: Mixer configuration options
               properties:
+                affinity:
+                  type: object
                 enabled:
                   type: boolean
                 image:
@@ -208,11 +246,17 @@ spec:
                 minReplicas:
                   format: int32
                   type: integer
+                nodeSelector:
+                  type: object
                 replicaCount:
                   format: int32
                   type: integer
                 resources:
                   type: object
+                tolerations:
+                  items:
+                    type: object
+                  type: array
               type: object
             mtls:
               description: MTLS enables or disables global mTLS
@@ -220,12 +264,20 @@ spec:
             nodeAgent:
               description: NodeAgent configuration options
               properties:
+                affinity:
+                  type: object
                 enabled:
                   type: boolean
                 image:
                   type: string
+                nodeSelector:
+                  type: object
                 resources:
                   type: object
+                tolerations:
+                  items:
+                    type: object
+                  type: array
               type: object
             outboundTrafficPolicy:
               description: Set the default behavior of the sidecar for handling outbound
@@ -240,6 +292,8 @@ spec:
             pilot:
               description: Pilot configuration options
               properties:
+                affinity:
+                  type: object
                 enabled:
                   type: boolean
                 image:
@@ -250,11 +304,17 @@ spec:
                 minReplicas:
                   format: int32
                   type: integer
+                nodeSelector:
+                  type: object
                 replicaCount:
                   format: int32
                   type: integer
                 resources:
                   type: object
+                tolerations:
+                  items:
+                    type: object
+                  type: array
                 traceSampling:
                   format: float
                   type: number
@@ -311,6 +371,8 @@ spec:
             sidecarInjector:
               description: SidecarInjector configuration options
               properties:
+                affinity:
+                  type: object
                 autoInjectionPolicyEnabled:
                   description: This controls the 'policy' in the sidecar injector
                   type: boolean
@@ -320,6 +382,8 @@ spec:
                   type: string
                 initCNIConfiguration:
                   properties:
+                    affinity:
+                      type: object
                     binDir:
                       description: Must be the same as the environment’s --cni-bin-dir
                         setting (kubelet parameter)
@@ -344,6 +408,8 @@ spec:
                       description: Logging level for CNI binary
                       type: string
                   type: object
+                nodeSelector:
+                  type: object
                 replicaCount:
                   format: int32
                   type: integer
@@ -354,6 +420,10 @@ spec:
                     liveness health check to redirect request to sidecar. This makes
                     liveness check work even when mTLS is enabled.
                   type: boolean
+                tolerations:
+                  items:
+                    type: object
+                  type: array
               type: object
             tracing:
               description: Configuration for each of the supported tracers
