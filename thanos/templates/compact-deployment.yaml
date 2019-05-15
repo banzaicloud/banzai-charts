@@ -48,11 +48,10 @@ spec:
         - "--retention.resolution-raw=30d"
         - "--retention.resolution-5m=120d"
         - "--retention.resolution-1h=10y"
-        - "--sync-delay=30m"
         - "--data-dir=/var/thanos/store"
         - "--wait"
         ports:
-        - name: monitoring
+        - name: http
           containerPort: {{ .Values.compact.http.port }}
         volumeMounts:
         - name: config-volume

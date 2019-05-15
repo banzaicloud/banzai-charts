@@ -29,7 +29,7 @@ spec:
       {{- end }}
       {{- if .Values.query.monitoring.enabled  }}
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.query.http.port}}"
+        prometheus.io/port: "{{ .Values.query.http.port }}"
       {{ end }}
     spec:
       containers:
@@ -40,10 +40,12 @@ spec:
         - "query"
         - "--log.level={{ .Values.query.logLevel }}"
         - "--grpc-address=0.0.0.0:{{ .Values.query.grpc.port }}"
-        - "--cluster.address={{ .Values.cluster.address }}:{{ .Values.cluster.port}}"
-        - "--cluster.peers={{ include "thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.cluster.port }}"
         - "--query.replica-label={{ .Values.replicaLabelName }}"
         - "--http-address=0.0.0.0:{{ .Values.query.http.port }}"
+        - "--store=dns+{{ include "thanos.name" . }}-store.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.store.grpc.port }}"
+        {{- if .Values.query.prometheusSidecarEndpoint }}
+        - "--store={{ .Values.query.prometheusSidecarEndpoint }}"
+        {{- end }}
         ports:
         - name: http
           containerPort: {{ .Values.query.http.port}}

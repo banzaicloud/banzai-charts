@@ -1,6 +1,6 @@
 image:
   repository: improbable/thanos
-  tag: master-2019-01-29-5e5e353
+  tag: 0.4.0
   pullPolicy: IfNotPresent
 
 store:
@@ -29,6 +29,10 @@ query:
     port: 10902
   logLevel: debug
   resources: {}
+
+  # Use this variable if you want to specify an endpoint in order for the query
+  # componenent to reach your prometheus sidecar grpc endpoints
+  prometheusSidecarEndpoint: ~
 
   ingress:
     enabled: false

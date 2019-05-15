@@ -46,6 +46,7 @@ helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" -
 | query.logLevel | Log level| debug |
 | query.resources | Resources of the pods | {} |
 | query.securityContext | Manage securityContext of query pods | {} |
+| query.prometheusSidecarEndpoint | Additional storage endpoints definition | ~ |
 | compact.monitoring.enabled | Enable prometheus scraping endpoint | true |
 | compact.http.port | Enable http port (includes /metrics) | 10902 |
 | compact.logLevel | Log level | DEBUG |

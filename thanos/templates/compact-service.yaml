@@ -11,7 +11,7 @@ spec:
   ports:
   - port: {{ .Values.compact.http.port }}
     protocol: TCP
-    targetPort: monitoring
+    targetPort: http
     name: http
   selector:
     app: {{ include "thanos.name" . }}-compact

@@ -8,11 +8,17 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+  # We need headless for gRPC
+  clusterIP: None
   ports:
   - port: {{ .Values.store.http.port }}
     protocol: TCP
-    targetPort: monitoring
+    targetPort: http
     name: http
+  - port: {{ .Values.store.grpc.port }}
+    protocol: TCP
+    targetPort: grpc
+    name: grpc
   selector:
     app: {{ include "thanos.name" . }}-store
     release: {{ .Release.Name }}
