@@ -10,11 +10,7 @@ config:
   sharedSecret: ""
   cookieSecret: ""
   generateTLS: true
-  policyFile: |-
-    - from: monitor.alpha.dev.banzaicloud.com
-      to: http://httpbin
-      allowed_domains:
-      - banzaicloud
+  policyFile:
     - from: external-httpbin.corp.pomerium.io
       to: httpbin.org
       allowed_domains:
