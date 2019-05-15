@@ -63,8 +63,8 @@ spec:
               key: shared-secret
         - name: REDIRECT_URL
           value: {{ default (printf "https://%s.%s/oauth2/callback" .Values.authenticate.name  .Values.config.rootDomain ) .Values.authenticate.redirectUrl }}
-        - name: PROXY_ROOT_DOMAIN
-          value: {{ .Values.config.rootDomain }}
+        - name: AUTHENTICATE_SERVICE_URL
+          value: {{ default (printf "https://%s.%s" .Values.authenticate.name .Values.config.rootDomain ) .Values.proxy.authenticateServiceUrl }}
         - name: IDP_PROVIDER
           value: {{ .Values.authenticate.idp.provider }}
         - name: IDP_CLIENT_ID
