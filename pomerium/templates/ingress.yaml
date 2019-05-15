@@ -16,17 +16,15 @@ spec:
   tls:
     - secretName: {{ default .Values.ingress.secretName .Values.ingress.secret.name}}
       hosts:
-        {{- $rootDomain := .Values.config.rootDomain }}
         {{- range .Values.config.policyFile }}
-        - {{ .from }}.{{ $rootDomain }}
+        - {{ .from }}
         {{- end }}
         - {{ .Values.authorize.name }}.{{ .Values.config.rootDomain }}
         - {{ .Values.authenticate.name }}.{{ .Values.config.rootDomain }}
   rules:
-    {{- $rootDomain := .Values.config.rootDomain }}
     {{- $proxyService := printf "%s-%s" (include "pomerium.fullname" .)  .Values.proxy.name }}
     {{- range .Values.config.policyFile }}
-    - host: {{ .from }}.{{ $rootDomain }}
+    - host: {{ .from }}
       http:
         paths:
           - paths:
