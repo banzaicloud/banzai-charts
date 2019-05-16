@@ -136,6 +136,10 @@ web:
 
 
 cassandra:
+  image:
+    repo: cassandra
+    tag: 3.11.3
+    pullPolicy: IfNotPresent
   enabled: true
   seeds: cassandra
   consistency: One

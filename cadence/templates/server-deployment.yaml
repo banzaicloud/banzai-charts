@@ -22,7 +22,8 @@ spec:
 
       initContainers:
       - name: check-cassandra
-        image: "cassandra:3"
+        image: "{{ .Values.cassandra.image.repo }}:{{ .Values.cassandra.image.tag }}"
+        imagePullPolicy: {{ .Values.cassandra.image.pullPolicy | quote }}
         command: ['sh', '-c', 'until cqlsh {{ template "cassandra.fullname" . }} -e "describe cluster"; do echo waiting for cassandra; sleep 2; done;']
 
       containers:
