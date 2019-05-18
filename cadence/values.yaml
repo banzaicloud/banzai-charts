@@ -7,7 +7,7 @@ server:
 
   image:
     repository: ubercadence/server
-    tag: 0.5.2
+    tag: 0.5.8
     pullPolicy: IfNotPresent
 
   logLevel: "debug,info"
@@ -26,6 +26,9 @@ server:
     service:
       type: ClusterIP
       port: 7933
+    prometheus:
+      timerType: "histogram"
+      port: 8000
 
   matching:
     enabled: true
@@ -33,6 +36,9 @@ server:
     service:
       type: ClusterIP
       port: 7935
+    prometheus:
+      timerType: "histogram"
+      port: 8001
 
   history:
     enabled: true
@@ -41,6 +47,9 @@ server:
     service:
       type: ClusterIP
       port: 7934
+    prometheus:
+      timerType: "histogram"
+      port: 8002
 
   worker:
     enabled: true
@@ -48,7 +57,9 @@ server:
     service:
       type: ClusterIP
       port: 7939
-
+    prometheus:
+      timerType: "histogram"
+      port: 8003
 
   ingress:
     enabled: false
@@ -81,6 +92,10 @@ server:
 
   affinity: {}
 
+  annotations: {}
+    # Annotation to enable Prometheus scrape functionality.
+    # prometheus.io/scrape: 'true'
+
 web:
   enabled: true
 
@@ -99,6 +114,8 @@ web:
   service:
     type: ClusterIP
     port: 80
+    annotations: {}
+    # loadBalancerIP:
 
   ingress:
     enabled: false
@@ -146,3 +163,12 @@ cassandra:
   keyspace: cadence
   config:
     cluster_size: 1
+  resources: {}
+    # requests:
+    #   memory: 4Gi
+    #   cpu: 1
+    # limits:
+    #   cpu: 2
+  # podDisruptionBudget:
+  #   maxUnavailable: 1
+    # minAvailable: 1
