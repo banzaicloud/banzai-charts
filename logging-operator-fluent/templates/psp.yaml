@@ -14,15 +14,24 @@ spec:
   - pathPrefix: /var/log
     readOnly: true
   fsGroup:
-    rule: RunAsAny
+    rule: MustRunAs
+    ranges:
+      - min: 1
+        max: 65535
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   runAsUser:
-    rule: RunAsAny
+    rule: MustRunAs
+    ranges:
+      - min: 1
+        max: 65535
   seLinux:
     rule: RunAsAny
   supplementalGroups:
-    rule: RunAsAny
+    rule: MustRunAs
+    ranges:
+      - min: 1
+        max: 65535
   volumes:
   - configMap
   - emptyDir
@@ -39,14 +48,23 @@ metadata:
     seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default' 
 spec:
   fsGroup:
-    rule: RunAsAny
+    rule: MustRunAs
+    ranges:
+      - min: 1
+        max: 65535
   allowPrivilegeEscalation: false
   runAsUser:
-    rule: RunAsAny
+    rule: MustRunAs
+    ranges:
+      - min: 1
+        max: 65535
   seLinux:
     rule: RunAsAny
   supplementalGroups:
-    rule: RunAsAny
+    rule: MustRunAs
+    ranges:
+      - min: 1
+        max: 65535
   volumes:
   - configMap
   - emptyDir
