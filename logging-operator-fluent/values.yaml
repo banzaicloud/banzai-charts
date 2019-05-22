@@ -36,3 +36,6 @@ fluentd:
     resources:
       requests:
         storage: 21Gi
+
+psp:
+  enabled: false
