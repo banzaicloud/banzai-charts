@@ -44,4 +44,4 @@ This chart applies Fluentd and Fluent-bit custom resources to [Logging Operator]
 | `fluentd.configReloaderImage.pullPolicy`            | Fluentd configReloaderImage container pull policy      | `IfNotPresent`                 |
 | `fluentd.fluentdPvcSpec.accessModes`                | Fluentd persistence volume access modes                | `[ReadWriteOnce]`              |
 | `fluentd.fluentdPvcSpec.resources.requests.storage` | Fluentd persistence volume size                        | `21Gi`                         |
-| `psp.enabled`                                       | Install PodSecurityPolicy                              | `fales`                        |
+| `psp.enabled`                                       | Install PodSecurityPolicy                              | `false`                        |
