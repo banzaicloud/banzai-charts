@@ -20,10 +20,11 @@ worker:
   replicaCount: 1
   # Upgrade strategy
   strategy: {}
-  image:
-    repository: banzaicloud/pipeline
-    tag: 0.18.2
-    pullPolicy: IfNotPresent
+  # Image configuration is taken from the root level if not specified otherwise
+  image: {}
+    # repository: banzaicloud/pipeline
+    # tag: 0.18.2
+    # pullPolicy: IfNotPresent
 
   resources:
     requests:
