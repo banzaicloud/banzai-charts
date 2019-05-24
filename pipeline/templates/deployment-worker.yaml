@@ -32,8 +32,8 @@ spec:
     spec:
       containers:
       - name: pipeline
-        image: {{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}
-        imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+        image: {{ default .Values.image.repository .Values.worker.image.repository }}:{{ default .Values.image.tag .Values.worker.image.tag }}
+        imagePullPolicy: {{ default .Values.image.pullPolicy .Values.worker.image.pullPolicy }}
         command: ["/worker"]
         env:
         # Database related section
