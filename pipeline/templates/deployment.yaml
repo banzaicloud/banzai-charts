@@ -29,6 +29,7 @@ spec:
         app: {{ include "pipeline.name" . }}
         release: "{{ .Release.Name }}"
     annotations:
+      checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     {{- if .Values.metrics.enabled  }}
       prometheus.io/scrape: "true"
       prometheus.io/path: "/metrics"
