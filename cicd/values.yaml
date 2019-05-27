@@ -179,7 +179,5 @@ agent:
   #    memory: 2Gi
   #    cpu: 1
 
-## Uncomment this if you want to set a specific shared secret between
-## the agents and servers, otherwise this will be auto-generated.
-##
-sharedSecret: "ss"
+# Specifies if the external URL where CICD is called by webhooks is using a custom certificate
+externalURLInsecure: false
