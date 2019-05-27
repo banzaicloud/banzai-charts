@@ -101,7 +101,7 @@ spec:
           - name: CICD_EXTERNAL_URL
             value: https://{{ index .Values.ingress.hosts 0 }}
           - name: CICD_EXTERNAL_URL_INSECURE
-            value: {{ .Values.externalURLInsecure }}
+            value: {{ .Values.externalURLInsecure | quote }}
         {{- end }}
 
           - name: CICD_BUILD_URL
