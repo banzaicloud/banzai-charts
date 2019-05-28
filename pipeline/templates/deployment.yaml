@@ -28,13 +28,13 @@ spec:
       labels:
         app: {{ include "pipeline.name" . }}
         release: "{{ .Release.Name }}"
-    annotations:
-      checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | quote }}
-    {{- if .Values.metrics.enabled  }}
-      prometheus.io/scrape: "true"
-      prometheus.io/path: "/metrics"
-      prometheus.io/port: {{ .Values.metrics.port | quote }}
-    {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | quote }}
+      {{- if .Values.metrics.enabled  }}
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: {{ .Values.metrics.port | quote }}
+      {{- end }}
 
     spec:
       initContainers:
