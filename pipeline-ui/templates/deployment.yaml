@@ -10,9 +10,9 @@ metadata:
 {{- with .Values.deploymentLabels }}
    {{- toYaml . | nindent 4 }}
 {{- end }}
-{{- with .Values.deploymentAnnotations }}
   annotations:
     checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | quote }}
+{{- with .Values.deploymentAnnotations }}
     {{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
