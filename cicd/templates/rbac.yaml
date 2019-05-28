@@ -1,16 +1,4 @@
 {{- if .Values.rbac.enabled -}}
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: "{{ template "cicd.name" . }}"
-    chart: "{{ template "cicd.chart" .}}"
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: {{ template "cicd.fullname" . }}
-
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
