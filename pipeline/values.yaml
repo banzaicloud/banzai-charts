@@ -7,7 +7,7 @@ replicaCount: 1
 strategy: {}
 image:
   repository: banzaicloud/pipeline
-  tag: 0.18.2
+  tag: 0.21.0
   pullPolicy: IfNotPresent
 
 resources:
@@ -88,7 +88,7 @@ configuration:
     # Use to redirect url after login
     uipath: /ui/
     signupRedirectPath: /ui/
-  pipelineExternalBaseURL: https://example.org/pipeline
+  pipelineExternalBaseURL: https://localhost/pipeline
 
   cloudinfo:
     endPointUrl: ""
@@ -111,7 +111,8 @@ configuration:
   # CORS configuration
   cors:
     AllowAllOrigins: false
-    AllowOrigins: ["http://localhost:4200"]
+    AllowOrigins: []
+    AllowOriginsRegexp: ".*"
 
   statestore:
     path: ""
@@ -164,7 +165,7 @@ configuration:
   # DNS service settings
   dns:
     # base domain under which organisation level subdomains will be registered
-    domain: example.org
+    domain: ""
     # Kubernetes namespace which the secret for interacting with external DNS server (Route53) is created into
     secretNamespace: default
     # The interval in minutes at which the garbage collector runs to clean up unused organisation level domains
