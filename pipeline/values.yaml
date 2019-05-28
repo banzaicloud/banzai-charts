@@ -7,7 +7,7 @@ replicaCount: 1
 strategy: {}
 image:
   repository: banzaicloud/pipeline
-  tag: 0.21.0
+  tag: 0.21.1
   pullPolicy: IfNotPresent
 
 resources:
