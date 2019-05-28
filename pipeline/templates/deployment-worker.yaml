@@ -29,7 +29,7 @@ spec:
         app: {{ include "pipeline.name" . }}-worker
         release: "{{ .Release.Name }}"
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | quote }}
 
     spec:
       containers:
