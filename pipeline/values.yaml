@@ -238,6 +238,10 @@ configuration:
     backupSyncInterval: 20s
     restoreWaitTimeout: 5m
 
+  autoscale:
+    clusterAutoscalerChartVersion: 0.12.3
+    hpaOperatorChartVersion: 0.0.10
+
   servicemesh:
     istioOperatorChartVersion: 0.0.3
 
@@ -322,7 +326,7 @@ postgres:
 ##
 ## CloudSQL configuration
 ## Read more: https://github.com/rimusz/charts/tree/master/stable/gcloud-sqlproxy
-## 
+##
 cloudsql:
   enabled: false
   cloudsql:
