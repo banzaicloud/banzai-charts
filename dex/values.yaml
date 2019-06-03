@@ -4,7 +4,7 @@
 # name: value
 
 image: banzaicloud/dex-shim
-imageTag: "0.3.4"
+imageTag: "0.3.8"
 imagePullPolicy: "IfNotPresent"
 
 replicas: 1
