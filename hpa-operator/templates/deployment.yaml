@@ -24,6 +24,9 @@ spec:
         {{- toYaml . | nindent 8 }}
 {{- end }}
     spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 2000
 {{ if .Values.rbac.enabled }}
       serviceAccountName: {{ template "hpa-operator.fullname" . }}
 {{ end }}
@@ -33,9 +36,6 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command:
         - hpa-operator
-        securityContext:
-          runAsUser: 1000
-          fsGroup: 2000
         resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
