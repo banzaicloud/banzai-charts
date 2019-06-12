@@ -8,7 +8,7 @@
   {{- else if eq .Values.sparkEventLogStorage.cloudProvider "google"}}
     {{- printf "gs://%s" .Values.sparkEventLogStorage.logDirectory }}
   {{- else if eq .Values.sparkEventLogStorage.cloudProvider "oracle"}}
-    {{- printf "oci://%s" .Values.sparkEventLogStorage.logDirectory }}
+    {{- printf "oci://%s@%s" .Values.sparkEventLogStorage.logDirectory .Values.sparkEventLogStorage.oracleNamespace }}
   {{- end }}
 {{- end }}
 {{- $schema := .Values.sparkEventLogStorage.cloudProvider }}
