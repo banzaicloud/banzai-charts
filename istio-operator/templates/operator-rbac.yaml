@@ -24,153 +24,274 @@ metadata:
     app.kubernetes.io/component: operator
 rules:
 - apiGroups:
-    - apps
+  - ""
   resources:
-    - deployments
+  - nodes
+  - services
+  - endpoints
+  - pods
+  - replicationcontrollers
+  - services
+  - endpoints
+  - pods
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
+  - get
+  - list
+  - watch
 - apiGroups:
-    - apps
+  - ""
   resources:
-    - deployments/status
+  - serviceaccounts
+  - configmaps
   verbs:
-    - get
-    - update
-    - patch
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
 - apiGroups:
-    - operator.istio.io
+  - ""
   resources:
-    - configs
+  - namespaces
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
+  - get
+  - list
+  - watch
+  - update
+  - patch
 - apiGroups:
-    - operator.istio.io
+  - apps
   resources:
-    - configs/status
+  - replicasets
   verbs:
-    - get
-    - update
-    - patch
+  - get
+  - list
+  - watch
 - apiGroups:
-    - admissionregistration.k8s.io
+  - apps
   resources:
-    - mutatingwebhookconfigurations
-    - validatingwebhookconfigurations
+  - deployments
+  - daemonsets
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
 - apiGroups:
-    - ""
+  - apps
   resources:
-    - secrets
+  - deployments/status
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
+  - get
+  - update
+  - patch
 - apiGroups:
-    - ""
+  - extensions
   resources:
-    - services
+  - ingresses
+  - ingresses/status
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
+  - '*'
 - apiGroups:
-    - ""
+  - extensions
   resources:
-    - serviceaccounts
+  - deployments
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
+  - get
 - apiGroups:
-    - rbac.authorization.k8s.io
+  - extensions
   resources:
-    - clusterroles
+  - deployments/finalizers
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
-    - escalate
+  - update
 - apiGroups:
-    - rbac.authorization.k8s.io
+  - extensions
   resources:
-    - clusterrolebindings
+  - replicasets
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
+  - get
+  - list
+  - watch
 - apiGroups:
-    - ""
+  - policy
   resources:
-    - configmaps
+  - poddisruptionbudgets
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
 - apiGroups:
-    - apiextensions.k8s.io
+  - autoscaling
   resources:
-    - customresourcedefinitions
+  - horizontalpodautoscalers
   verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
 - apiGroups:
-    - '*'
+  - apiextensions.k8s.io
   resources:
-    - '*'
+  - customresourcedefinitions
   verbs:
-    - '*'
-- nonResourceURLs:
-    - '*'
+  - '*'
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  - clusterrolebindings
+  - roles
+  - rolebindings
+  - ""
   verbs:
-    - '*'
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - istio.banzaicloud.io
+  resources:
+  - istios
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - istio.banzaicloud.io
+  resources:
+  - istios/status
+  verbs:
+  - get
+  - update
+  - patch
+- apiGroups:
+  - authentication.istio.io
+  - cloud.istio.io
+  - config.istio.io
+  - istio.istio.io
+  - networking.istio.io
+  - rbac.istio.io
+  - scalingpolicy.istio.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - apps
+  resources:
+  - deployments/status
+  verbs:
+  - get
+  - update
+  - patch
+- apiGroups:
+  - istio.banzaicloud.io
+  resources:
+  - remoteistios
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - istio.banzaicloud.io
+  resources:
+  - remoteistios/status
+  verbs:
+  - get
+  - update
+  - patch
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - validatingwebhookconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - istio.banzaicloud.io
+  resources:
+  - istios
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - mutatingwebhookconfigurations
+  - validatingwebhookconfigurations
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
