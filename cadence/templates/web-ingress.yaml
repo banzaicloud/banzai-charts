@@ -1,15 +1,18 @@
 {{- if .Values.web.ingress.enabled -}}
-{{- $serviceName := include "cadence.fullname" . -}}
+{{- $serviceName := include "cadence.fullname" . -}}-web
 {{- $servicePort := .Values.web.service.port -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "cadence.fullname" . }}-web
   labels:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}-web
+    app.kubernetes.io/name: {{ include "cadence.name" . }}
     helm.sh/chart: {{ include "cadence.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
 {{- with .Values.web.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}

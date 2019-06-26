@@ -1,79 +1,22 @@
-# Default values for cadence.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+nameOverride: ""
+fullnameOverride: ""
 
 server:
-  replicaCount: 1
-
   image:
-    repository: ubercadence/server
-    tag: 0.5.8
+    # repository: ubercadence/server
+    repository: banzaicloud/cadence-server
+    tag: 0.5.9
     pullPolicy: IfNotPresent
 
-  logLevel: "debug,info"
-
-  nameOverride: ""
-  fullnameOverride: ""
-
-
-  bindOnLocalHost: false
-
-  cassandraVisibilityKeyspace: cadence
-
-  frontend:
-    enabled: true
-    bindOnIP: "0.0.0.0"
-    service:
-      type: ClusterIP
-      port: 7933
+  # Global default settings (can be overridden per service)
+  replicaCount: 1
+  metrics:
     prometheus:
-      timerType: "histogram"
-      port: 8000
-
-  matching:
-    enabled: true
-    bindOnIP: "0.0.0.0"
-    service:
-      type: ClusterIP
-      port: 7935
-    prometheus:
-      timerType: "histogram"
-      port: 8001
-
-  history:
-    enabled: true
-    bindOnIP: "0.0.0.0"
-    numHistoryShards: 4
-    service:
-      type: ClusterIP
-      port: 7934
-    prometheus:
-      timerType: "histogram"
-      port: 8002
-
-  worker:
-    enabled: true
-    bindOnIP: "0.0.0.0"
-    service:
-      type: ClusterIP
-      port: 7939
-    prometheus:
-      timerType: "histogram"
-      port: 8003
-
-  ingress:
-    enabled: false
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-    paths: []
-    hosts:
-      - chart-example.local
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
-
+      timerType: histogram
+  podAnnotations: {}
+    # Annotation to enable Prometheus scrape functionality.
+    # prometheus.io/scrape: 'true'
+    # prometheus.io/port: '9090'
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -85,16 +28,107 @@ server:
     # requests:
     #  cpu: 100m
     #  memory: 128Mi
-
   nodeSelector: {}
-
   tolerations: []
-
   affinity: {}
 
-  annotations: {}
-    # Annotation to enable Prometheus scrape functionality.
-    # prometheus.io/scrape: 'true'
+  config:
+    logLevel: "debug,info"
+    numHistoryShards: 4
+    persistence:
+      default:
+        driver: "" # cassandra or sql
+
+        cassandra:
+          hosts: []
+          # port: 9042
+          keyspace: cadence
+          consistency: One
+          user: ""
+          password: ""
+
+        sql:
+          driver: "" # mysql
+          host: ""
+          # port: 3306
+          database: cadence
+          user: ""
+          password: ""
+
+      visibility:
+        driver: "" # cassandra or sql
+
+        cassandra:
+          hosts: []
+          # port: 9042
+          keyspace: cadence_visibility
+          consistency: One
+          user: ""
+          password: ""
+
+        sql:
+          driver: "" # mysql
+          host: ""
+          # port: 3306
+          database: cadence_visibility
+          user: ""
+          password: ""
+
+  frontend:
+    # replicaCount: 1
+    service:
+      type: ClusterIP
+      port: 7933
+    metrics:
+      prometheus: {}
+        # timerType: histogram
+    podAnnotations: {}
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+  history:
+    # replicaCount: 1
+    service:
+      # type: ClusterIP
+      port: 7934
+    metrics:
+      prometheus: {}
+        # timerType: histogram
+    podAnnotations: {}
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+  matching:
+    # replicaCount: 1
+    service:
+      # type: ClusterIP
+      port: 7935
+    metrics:
+      prometheus: {}
+        # timerType: histogram
+    podAnnotations: {}
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+  worker:
+    # replicaCount: 1
+    service:
+      # type: ClusterIP
+      port: 7939
+    metrics:
+      prometheus: {}
+        # timerType: histogram
+    podAnnotations: {}
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
 
 web:
   enabled: true
@@ -103,13 +137,8 @@ web:
 
   image:
     repository: ubercadence/web
-    tag: 3.1.2
+    tag: 3.3.1
     pullPolicy: IfNotPresent
-
-  cadenceTchannelPeers: cadence:7933
-
-  nameOverride: ""
-  fullnameOverride: ""
 
   service:
     type: ClusterIP
@@ -153,22 +182,24 @@ web:
 
 
 cassandra:
+  enabled: true
   image:
     repo: cassandra
     tag: 3.11.3
     pullPolicy: IfNotPresent
-  enabled: true
-  seeds: cassandra
-  consistency: One
-  keyspace: cadence
   config:
     cluster_size: 1
-  resources: {}
-    # requests:
-    #   memory: 4Gi
-    #   cpu: 1
-    # limits:
-    #   cpu: 2
-  # podDisruptionBudget:
-  #   maxUnavailable: 1
-    # minAvailable: 1
+    ports:
+      cql: 9042
+
+mysql:
+  enabled: false
+  imageTag: "5.7.26"
+  service:
+    port: 3306
+  mysqlUser: cadence
+  # TODO: support secrets
+  mysqlPassword: cadence
+  initializationFiles:
+    user.sql: |-
+      GRANT ALL PRIVILEGES ON *.* TO 'cadence'@'%';

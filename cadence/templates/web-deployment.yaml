@@ -4,28 +4,35 @@ kind: Deployment
 metadata:
   name: {{ include "cadence.fullname" . }}-web
   labels:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}-web
+    app.kubernetes.io/name: {{ include "cadence.name" . }}
     helm.sh/chart: {{ include "cadence.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
 spec:
   replicas: {{ .Values.web.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "cadence.name" . }}-web
+      app.kubernetes.io/name: {{ include "cadence.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: web
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "cadence.name" . }}-web
+        app.kubernetes.io/name: {{ include "cadence.name" . }}
+        helm.sh/chart: {{ include "cadence.chart" . }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+        app.kubernetes.io/component: web
+        app.kubernetes.io/part-of: {{ .Chart.Name }}
     spec:
-
       initContainers:
       - name: check-frontend
         image: "banzaicloud/tcheck:latest"
         command: ['sh', '-c', 'until tcheck --peer {{ include "cadence.fullname" . }}-frontend:{{ .Values.server.frontend.service.port }} --serviceName cadence-frontend; do echo waiting for frontend; sleep 2; done;']
-
       containers:
         - name: {{ .Chart.Name }}-web
           image: "{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}"
@@ -41,11 +48,11 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 8088
+              port: http
           readinessProbe:
             httpGet:
               path: /
-              port: 8088
+              port: http
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
       {{- with .Values.web.nodeSelector }}

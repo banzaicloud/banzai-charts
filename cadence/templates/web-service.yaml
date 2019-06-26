@@ -4,13 +4,16 @@ kind: Service
 metadata:
   name: {{ include "cadence.fullname" . }}-web
   labels:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}-web
+    app.kubernetes.io/name: {{ include "cadence.name" . }}
     helm.sh/chart: {{ include "cadence.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
 {{- with .Values.web.service.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
+    {{- toYaml . | indent 4 }}
 {{- end }}
 spec:
 {{- with .Values.web.service.loadBalancerIP }}
@@ -19,10 +22,11 @@ spec:
   type: {{ .Values.web.service.type }}
   ports:
     - port: {{ .Values.web.service.port }}
-      targetPort: 8088
+      targetPort: http
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}-web
+    app.kubernetes.io/name: {{ include "cadence.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: web
 {{- end }}

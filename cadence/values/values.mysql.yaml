@@ -1,0 +1,27 @@
+server:
+  config:
+    persistence:
+      default:
+        driver: "sql"
+
+        sql:
+          driver: "mysql"
+          host: "mysql"
+          port: 3306
+          database: cadence
+          user: "cadence"
+          password: "cadence"
+
+      visibility:
+        driver: "sql"
+
+        sql:
+          driver: "mysql"
+          host: "mysql"
+          port: 3306
+          database: cadence_visibility
+          user: "cadence"
+          password: "cadence"
+
+cassandra:
+  enabled: false

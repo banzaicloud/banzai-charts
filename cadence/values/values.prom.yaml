@@ -1,0 +1,4 @@
+server:
+  podAnnotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9090'

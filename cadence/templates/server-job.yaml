@@ -1,0 +1,252 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "cadence.fullname" . }}-schema-setup
+  labels:
+    app.kubernetes.io/name: {{ include "cadence.name" . }}
+    helm.sh/chart: {{ include "cadence.chart" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
+  annotations:
+    {{- if or .Values.cassandra.enabled .Values.mysql.enabled }}
+    "helm.sh/hook": post-install
+    {{- else }}
+    "helm.sh/hook": pre-install
+    {{- end }}
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  backoffLimit: 10
+  template:
+    metadata:
+      name: {{ include "cadence.fullname" . | trunc 42 | trimSuffix "-" }}-schema-setup
+      labels:
+        app.kubernetes.io/name: {{ include "cadence.name" . }}
+        helm.sh/chart: {{ include "cadence.chart" . }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: {{ .Chart.Name }}
+    spec:
+      restartPolicy: "OnFailure"
+      initContainers:
+        {{- if or .Values.cassandra.enabled .Values.mysql.enabled }}
+        {{- if .Values.cassandra.enabled }}
+        - name: check-cassandra-service
+          image: busybox
+          command: ['sh', '-c', 'until nslookup {{ include "cassandra.host" $ }}; do echo waiting for cassandra service; sleep 1; done;']
+        - name: check-cassandra
+          image: "{{ .Values.cassandra.image.repo }}:{{ .Values.cassandra.image.tag }}"
+          imagePullPolicy: {{ .Values.cassandra.image.pullPolicy }}
+          command: ['sh', '-c', 'until cqlsh {{ include "cassandra.host" $ }} {{ .Values.cassandra.config.ports.cql }} -e "SHOW VERSION"; do echo waiting for cassandra to start; sleep 1; done;']
+        {{- else if .Values.mysql.enabled }}
+        - name: check-mysql-service
+          image: busybox
+          command: ['sh', '-c', 'until nslookup {{ include "mysql.host" $ }}; do echo waiting for mysql service; sleep 1; done;']
+        - name: check-mysql-port
+          image: busybox
+          command: ['sh', '-c', 'until echo STATUS | nc -w 2 {{ include "mysql.host" $ }} {{ .Values.mysql.service.port }}; do echo waiting for mysql to start; sleep 1; done;']
+        {{- end }}
+        {{- range $store := (list "default" "visibility") }}
+        {{- $storeConfig := index $.Values.server.config.persistence $store }}
+        - name: create-{{ $store }}-store
+          image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
+          imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
+          {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
+          # args: ["cadence-cassandra-tool", "create", "-k", "{{ $storeConfig.cassandra.keyspace }}"]
+          args: ['sh', '-c', 'cadence-cassandra-tool create -k {{ $storeConfig.cassandra.keyspace }} || true']
+          {{- end }}
+          {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
+          {{- if eq (include "cadence.persistence.sql.driver" (list $ $store)) "mysql" }}
+          # args: ["cadence-sql-tool", "create", "--db", "{{ $storeConfig.sql.database }}"]
+          args: ['sh', '-c', 'cadence-sql-tool create --db {{ $storeConfig.sql.database }} || true']
+          {{- end }}
+          {{- end }}
+          env:
+            - name: PATH
+              value: "/cadence:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
+            - name: CASSANDRA_HOST
+              value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
+            - name: CASSANDRA_PORT
+              value: {{ include "cadence.persistence.cassandra.port" (list $ $store) | quote }}
+            - name: CASSANDRA_KEYSPACE
+              value: {{ $storeConfig.cassandra.keyspace }}
+            {{- if $storeConfig.cassandra.user }}
+            - name: CASSANDRA_USER
+              value: {{ $storeConfig.cassandra.user }}
+            {{- end }}
+            {{- if $storeConfig.cassandra.password }}
+            - name: CASSANDRA_PASSWORD
+              value: {{ $storeConfig.cassandra.password }}
+            {{- end }}
+            {{- end }}
+            {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
+            - name: SQL_DRIVER
+              value: {{ include "cadence.persistence.sql.driver" (list $ $store) }}
+            - name: SQL_HOST
+              value: {{ include "cadence.persistence.sql.host" (list $ $store) }}
+            - name: SQL_PORT
+              value: {{ include "cadence.persistence.sql.port" (list $ $store) | quote }}
+            - name: SQL_DATABASE
+              value: {{ $storeConfig.sql.database }}
+            - name: SQL_USER
+              value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
+            - name: SQL_PASSWORD
+              value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
+            {{- end }}
+        {{- end }}
+        {{- else }}
+          []
+        {{- end }}
+      containers:
+        {{- range $store := (list "default" "visibility") }}
+        {{- $storeConfig := index $.Values.server.config.persistence $store }}
+        - name: {{ $store }}-schema
+          image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
+          imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
+          args: ["cadence-{{ include "cadence.persistence.driver" (list $ $store) }}-tool", "setup-schema", "-v", "0.0"]
+          env:
+            - name: PATH
+              value: "/cadence:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
+            - name: CASSANDRA_HOST
+              value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
+            - name: CASSANDRA_PORT
+              value: {{ include "cadence.persistence.cassandra.port" (list $ $store) | quote }}
+            - name: CASSANDRA_KEYSPACE
+              value: {{ $storeConfig.cassandra.keyspace }}
+            {{- if $storeConfig.cassandra.user }}
+            - name: CASSANDRA_USER
+              value: {{ $storeConfig.cassandra.user }}
+            {{- end }}
+            {{- if $storeConfig.cassandra.password }}
+            - name: CASSANDRA_PASSWORD
+              value: {{ $storeConfig.cassandra.password }}
+            {{- end }}
+            {{- end }}
+            {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
+            - name: SQL_DRIVER
+              value: {{ include "cadence.persistence.sql.driver" (list $ $store) }}
+            - name: SQL_HOST
+              value: {{ include "cadence.persistence.sql.host" (list $ $store) }}
+            - name: SQL_PORT
+              value: {{ include "cadence.persistence.sql.port" (list $ $store) | quote }}
+            - name: SQL_DATABASE
+              value: {{ $storeConfig.sql.database }}
+            - name: SQL_USER
+              value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
+            - name: SQL_PASSWORD
+              value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
+            {{- end }}
+        {{- end }}
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "cadence.fullname" . }}-schema-update
+  labels:
+    app.kubernetes.io/name: {{ include "cadence.name" . }}
+    helm.sh/chart: {{ include "cadence.chart" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
+  annotations:
+    {{- if or .Values.cassandra.enabled .Values.mysql.enabled }}
+    "helm.sh/hook": post-install,pre-upgrade
+    {{- else }}
+    "helm.sh/hook": pre-install,pre-upgrade
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  backoffLimit: 10
+  template:
+    metadata:
+      name: {{ include "cadence.fullname" . | trunc 42 | trimSuffix "-" }}-schema-update
+      labels:
+        app.kubernetes.io/name: {{ include "cadence.name" . }}
+        helm.sh/chart: {{ include "cadence.chart" . }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: {{ .Chart.Name }}
+    spec:
+      restartPolicy: "OnFailure"
+      initContainers:
+        {{- if .Values.cassandra.enabled }}
+        - name: check-cassandra-service
+          image: busybox
+          command: ['sh', '-c', 'until nslookup {{ include "cassandra.host" $ }}; do echo waiting for cassandra service; sleep 1; done;']
+        - name: check-cassandra
+          image: "{{ .Values.cassandra.image.repo }}:{{ .Values.cassandra.image.tag }}"
+          imagePullPolicy: {{ .Values.cassandra.image.pullPolicy }}
+          command: ['sh', '-c', 'until cqlsh {{ include "cassandra.host" $ }} {{ .Values.cassandra.config.ports.cql }} -e "SHOW VERSION"; do echo waiting for cassandra to start; sleep 1; done;']
+        {{- else if .Values.mysql.enabled }}
+        - name: check-mysql-service
+          image: busybox
+          command: ['sh', '-c', 'until nslookup {{ include "mysql.host" $ }}; do echo waiting for mysql service; sleep 1; done;']
+        - name: check-mysql-port
+          image: busybox
+          command: ['sh', '-c', 'until echo STATUS | nc -w 2 {{ include "mysql.host" $ }} {{ .Values.mysql.service.port }}; do echo waiting for mysql to start; sleep 1; done;']
+        {{- else }}
+          []
+        {{- end }}
+      containers:
+        {{- range $store := (list "default" "visibility") }}
+        {{- $storeConfig := index $.Values.server.config.persistence $store }}
+        - name: {{ $store }}-schema
+          image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
+          imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
+          {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
+          # args: ["cadence-cassandra-tool", "update-schema", "-d", "/cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned"]
+          args: ['sh', '-c', 'cadence-cassandra-tool update-schema -d /cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned || true']
+          {{- end }}
+          {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
+          {{- if eq (include "cadence.persistence.sql.driver" (list $ $store)) "mysql" }}
+          # args: ["cadence-sql-tool", "update-schema", "-d", "/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned"]
+          args: ['sh', '-c', 'cadence-sql-tool update-schema -d /cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned || true']
+          {{- end }}
+          {{- end }}
+          env:
+            - name: PATH
+              value: "/cadence:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
+            - name: CASSANDRA_HOST
+              value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
+            - name: CASSANDRA_PORT
+              value: {{ include "cadence.persistence.cassandra.port" (list $ $store) | quote }}
+            - name: CASSANDRA_KEYSPACE
+              value: {{ $storeConfig.cassandra.keyspace }}
+            {{- if $storeConfig.cassandra.user }}
+            - name: CASSANDRA_USER
+              value: {{ $storeConfig.cassandra.user }}
+            {{- end }}
+            {{- if $storeConfig.cassandra.password }}
+            - name: CASSANDRA_PASSWORD
+              value: {{ $storeConfig.cassandra.password }}
+            {{- end }}
+            {{- end }}
+            {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
+            - name: SQL_DRIVER
+              value: {{ include "cadence.persistence.sql.driver" (list $ $store) }}
+            - name: SQL_HOST
+              value: {{ include "cadence.persistence.sql.host" (list $ $store) }}
+            - name: SQL_PORT
+              value: {{ include "cadence.persistence.sql.port" (list $ $store) | quote }}
+            - name: SQL_DATABASE
+              value: {{ $storeConfig.sql.database }}
+            - name: SQL_USER
+              value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
+            - name: SQL_PASSWORD
+              value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
+            {{- end }}
+        {{- end }}
