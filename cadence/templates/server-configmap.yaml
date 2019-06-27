@@ -135,3 +135,4 @@ data:
 
     publicClient:
       hostPort: "127.0.0.1:7933"
+      DNSPort: "{{ include "cadence.fullname" . }}-frontend:{{ .Values.server.frontend.service.port }}"

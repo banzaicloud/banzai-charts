@@ -34,7 +34,7 @@ server:
 
   config:
     logLevel: "debug,info"
-    numHistoryShards: 4
+    numHistoryShards: 1000
     persistence:
       default:
         driver: "" # cassandra or sql
