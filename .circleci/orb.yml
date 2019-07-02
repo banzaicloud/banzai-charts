@@ -183,7 +183,6 @@ commands:
             mkdir -p "<< parameters.tgz-dir >>"
 
             helm package \
-                --dependency-update \
                 --destination '<< parameters.tgz-dir >>' \
                 "${charts_dir}/${chart_name}"
 
@@ -222,6 +221,9 @@ jobs:
         default: /workspace/tgz
         description: Directory of chart tgz
         type: string
+      skip-dependency-update:
+        type: boolean
+        default: false
     steps:
       - checkout
       - setup-repositories:
@@ -229,8 +231,11 @@ jobs:
           add-extra-repositories: << parameters.add-extra-repositories >>
       - check-parameters:
           charts-dir: << parameters.charts-dir >>
-      - update-dependencies:
-          charts-dir: << parameters.charts-dir >>
+      - unless:
+          condition: << parameters.skip-dependency-update >>
+          steps:
+            - update-dependencies:
+                charts-dir: << parameters.charts-dir >>
       - lint:
           charts-dir: << parameters.charts-dir >>
       - build:
@@ -255,12 +260,18 @@ jobs:
         default: []
         description: Steps to add extra repositories
         type: steps
+      skip-dependency-update:
+        type: boolean
+        default: false
     steps:
       - checkout
       - setup-repositories:
           chartmuseum-url: << parameters.chartmuseum-url >>
           add-extra-repositories: << parameters.add-extra-repositories >>
-      - update-dependencies:
-          charts-dir: << parameters.charts-dir >>
+      - unless:
+          condition: << parameters.skip-dependency-update >>
+          steps:
+            - update-dependencies:
+                charts-dir: << parameters.charts-dir >>
       - lint:
           charts-dir: << parameters.charts-dir >>
