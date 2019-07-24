@@ -37,6 +37,8 @@ spec:
       {{- end }}
 
     spec:
+      hostAliases:
+        {{- toYaml .Values.hostAliases | nindent 8 }}
       initContainers:
       {{- if .Values.mysql.enabled  }}
       - name: check-db-service

@@ -32,6 +32,8 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | quote }}
 
     spec:
+      hostAliases:
+        {{- toYaml (default .Values.hostAliases .Values.worker.hostAliases) | nindent 8 }}
       containers:
       - name: pipeline
         image: {{ default .Values.image.repository .Values.worker.image.repository }}:{{ default .Values.image.tag .Values.worker.image.tag }}
