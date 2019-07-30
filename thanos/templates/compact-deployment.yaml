@@ -69,7 +69,7 @@ spec:
       volumes:
       - name: {{ .Values.compact.dataVolume.name }}
       {{- if .Values.compact.dataVolume.backend }}
-        {{ toYaml .Values.compact.dataVolume.backend | nindent 9 }}
+        {{ toYaml .Values.compact.dataVolume.backend | nindent 8 }}
       {{- else }}
         emptyDir: {}
       {{- end }}
