@@ -5,9 +5,17 @@
 replicaCount: 1
 # Upgrade strategy
 strategy: {}
+
+## Additional entries to the hosts
+hostAliases: []
+#  - ip: "127.0.0.1"
+#    hostnames:
+#      - "foo.local"
+#      - "bar.local"
+
 image:
   repository: banzaicloud/pipeline
-  tag: 0.21.1
+  tag: 0.27.2
   pullPolicy: IfNotPresent
 
 resources:
@@ -20,6 +28,13 @@ worker:
   replicaCount: 1
   # Upgrade strategy
   strategy: {}
+  ## Additional entries to the hosts
+  ## configuration is taken from the root level if not specified otherwise
+  hostAliases: []
+#    - ip: "127.0.0.1"
+#      hostnames:
+#        - "foo.local"
+#        - "bar.local"
   # Image configuration is taken from the root level if not specified otherwise
   image: {}
     # repository: banzaicloud/pipeline
@@ -143,7 +158,7 @@ configuration:
   helm:
    retryAttemp: 30
    retrySleepSeconds: 15
-   tillerVersion: "v2.13.1"
+   tillerVersion: "v2.14.2"
    path: "/cache/helm"
 
    #helm repo URLs

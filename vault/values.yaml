@@ -8,10 +8,16 @@ image:
   repository: vault
   tag: 1.1.2
   pullPolicy: IfNotPresent
+dockerizeImage:
+  repository: jwilder/dockerize
+  tag: latest
+  pullPolicy: IfNotPresent
 service:
   name: vault
   type: ClusterIP
   port: 8200
+  ## Force load balancer IP
+  # loadBalancerIP: 1.2.3.4
   # annotations:
   #   cloud.google.com/load-balancer-type: "Internal"
 ingress:
@@ -73,7 +79,7 @@ vault:
   # passing a MySQL secret. The three fields required are a secretName indicating
   # the name of the Kuberentes secret (created outside of this chart), secretKey
   # in this secret and envName which will be the name of the env var in the containers.
-  secretEnvs: []
+  envSecrets: []
     # - secretName: mysql
     #   secretKey: mysql-username
     #   envName: "MYSQL_USERNAME"
@@ -161,7 +167,7 @@ vault:
 unsealer:
   image:
     repository: banzaicloud/bank-vaults
-    tag: 0.4.15
+    tag: 0.4.18
     pullPolicy: IfNotPresent
   args: [
       "--mode",
@@ -186,6 +192,10 @@ unsealer:
       prometheus.io/port: "9091"
 
 statsd:
+  image:
+    repository: prom/statsd-exporter
+    tag: latest
+    pullPolicy: IfNotPresent
   metrics:
     enabled: true
     port: 9102

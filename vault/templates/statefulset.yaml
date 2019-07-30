@@ -9,8 +9,9 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  strategy:
+  updateStrategy:
     type: {{ .Values.strategy.type }}
+  serviceName: {{ template "vault.fullname" . }}
   selector:
     matchLabels:
       app: {{ template "vault.name" . }}
@@ -26,8 +27,8 @@ spec:
     spec:
       initContainers:
       - name: vault-config
-        image: "jwilder/dockerize:latest"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        image: "{{ .Values.dockerizeImage.repository }}:{{ .Values.dockerizeImage.tag }}"
+        imagePullPolicy: {{ .Values.dockerizeImage.pullPolicy }}
         args:
           - "-delims"
           - "[[:]]"
@@ -214,8 +215,8 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
       - name: prometheus-statsd-exporter
-        image: "prom/statsd-exporter:latest"
-        imagePullPolicy: IfNotPresent
+        image: "{{ .Values.statsd.image.repository }}:{{ .Values.statsd.image.tag }}"
+        imagePullPolicy: {{ .Values.statsd.image.pullPolicy }}
         args: ["--statsd.mapping-config=/tmp/statsd-mapping.conf"]
         ports:
         - containerPort: {{ .Values.statsd.metrics.port }}
@@ -255,7 +256,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
-        {{- end }}        
+        {{- end }}
         {{- range .Values.vault.customSecrets }}
         - name: {{ .secretName }}
           secret:
