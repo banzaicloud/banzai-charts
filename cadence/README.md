@@ -19,7 +19,7 @@ This chart bootstraps a [Cadence](https://github.com/uber/cadence) and a [Cadenc
 ## Prerequisites
 
 - Kubernetes 1.7+ with Beta APIs enabled
-- Cadence 0.5.9+
+- Cadence 0.6.0+
 
 
 ## Installing the Chart

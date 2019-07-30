@@ -3,9 +3,8 @@ fullnameOverride: ""
 
 server:
   image:
-    # repository: ubercadence/server
-    repository: banzaicloud/cadence-server
-    tag: 0.5.9
+    repository: ubercadence/server
+    tag: 0.6.0
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)

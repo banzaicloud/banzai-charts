@@ -1,9 +1,4 @@
 server:
-  image:
-    # repository: ubercadence/server
-    # repository: banzaicloud/cadence-server
-    repository: ubercadence/longer
-    tag: 0.5.10
   podAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/port: '9090'
