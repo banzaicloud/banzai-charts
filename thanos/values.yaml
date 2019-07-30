@@ -59,6 +59,8 @@ compact:
   dataVolume:
     name: data
     backend: {}
+      # persistentVolumeClaim:
+      #   claimName: compact-data-volume
 
 cluster:
   address: 0.0.0.0
