@@ -53,10 +53,14 @@ spec:
           containerPort: {{ .Values.cluster.port }}
         resources:
           {{ toYaml .Values.query.resources | nindent 10 }}
+        {{- if .Values.query.livenessProbe }}
         livenessProbe:
           {{ toYaml .Values.query.livenessProbe | nindent 10 }}
+        {{- end }}
+        {{- if .Values.query.readinessProbe }}
         readinessProbe:
           {{ toYaml .Values.query.readinessProbe | nindent 10 }}
+        {{- end }}
       securityContext:
         {{ toYaml .Values.query.securityContext | nindent 8 }}
 {{ end }}
