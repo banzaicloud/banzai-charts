@@ -45,6 +45,8 @@ helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" -
 | query.grpc.port | Enable grpc port (data plane) | 10902 |
 | query.logLevel | Log level| debug |
 | query.resources | Resources of the pods | {} |
+| query.livenessProbe  | Liveness probe for query port  | {}  |
+| query.readinessProbe  | Readiness probe for query port  | {}  |
 | query.securityContext | Manage securityContext of query pods | {} |
 | compact.monitoring.enabled | Enable prometheus scraping endpoint | true |
 | compact.http.port | Enable http port (includes /metrics) | 10902 |
