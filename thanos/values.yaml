@@ -56,6 +56,9 @@ compact:
   logLevel: debug
   securityContext: {}
   resources: {}
+  dataVolume:
+    name: data
+    backend: {}
 
 cluster:
   address: 0.0.0.0
