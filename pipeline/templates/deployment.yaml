@@ -54,6 +54,8 @@ spec:
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
+        - name: PIPELINE_CONFIG_DIR
+          value: /config
         # Kubernetes environment variables
         - name: KUBERNETES_RELEASE_NAME
           value: {{ .Release.Name | quote }}
@@ -163,7 +165,7 @@ spec:
 
         volumeMounts:
         - name: config-volume
-          mountPath: /root/config/
+          mountPath: /config
 
         - mountPath: /statestore
           name: statestore
