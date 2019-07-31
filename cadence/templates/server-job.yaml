@@ -58,12 +58,12 @@ spec:
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
           # args: ["cadence-cassandra-tool", "create", "-k", "{{ $storeConfig.cassandra.keyspace }}"]
-          args: ['sh', '-c', 'cadence-cassandra-tool create -k {{ $storeConfig.cassandra.keyspace }} || true']
+          args: ['sh', '-c', 'cadence-cassandra-tool create -k {{ $storeConfig.cassandra.keyspace }}']
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
           {{- if eq (include "cadence.persistence.sql.driver" (list $ $store)) "mysql" }}
           # args: ["cadence-sql-tool", "create", "--db", "{{ $storeConfig.sql.database }}"]
-          args: ['sh', '-c', 'cadence-sql-tool create --db {{ $storeConfig.sql.database }} || true']
+          args: ['sh', '-c', 'cadence-sql-tool create --db {{ $storeConfig.sql.database }}']
           {{- end }}
           {{- end }}
           env:
@@ -208,12 +208,12 @@ spec:
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
           # args: ["cadence-cassandra-tool", "update-schema", "-d", "/cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned"]
-          args: ['sh', '-c', 'cadence-cassandra-tool update-schema -d /cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned || true']
+          args: ['sh', '-c', 'cadence-cassandra-tool update-schema -d /cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned']
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
           {{- if eq (include "cadence.persistence.sql.driver" (list $ $store)) "mysql" }}
           # args: ["cadence-sql-tool", "update-schema", "-d", "/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned"]
-          args: ['sh', '-c', 'cadence-sql-tool update-schema -d /cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned || true']
+          args: ['sh', '-c', 'cadence-sql-tool update-schema -d /cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned']
           {{- end }}
           {{- end }}
           env:
