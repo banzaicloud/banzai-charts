@@ -29,6 +29,14 @@ query:
     port: 10902
   logLevel: debug
   resources: {}
+  livenessProbe: {}
+    # httpGet:
+    #   path: /-/healthy
+    #   port: 10902
+  readinessProbe: {}
+    # httpGet:
+    #   path: "/-/ready"
+    #   port: 10902
 
   ingress:
     enabled: false
