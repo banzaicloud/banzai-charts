@@ -62,13 +62,17 @@ spec:
         - name: {{ .Values.objstore.provider }}
           mountPath: /credentials
         {{- end }}
-        - name: data
+        - name: {{ .Values.compact.dataVolume.name }}
           mountPath: /var/thanos/store
         resources:
           {{ toYaml .Values.compact.resources | nindent 10 }}
       volumes:
-      - name: data
+      - name: {{ .Values.compact.dataVolume.name }}
+      {{- if .Values.compact.dataVolume.backend }}
+        {{ toYaml .Values.compact.dataVolume.backend | nindent 8 }}
+      {{- else }}
         emptyDir: {}
+      {{- end }}
       - name: config-volume
         secret:
           secretName: {{ include "thanos.fullname" . }}

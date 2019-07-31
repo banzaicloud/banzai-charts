@@ -13,7 +13,6 @@ workflows:
   static-checks:
     jobs:
       - helm/lint-chart:
-          context: helm
           charts-dir: '.'
           add-extra-repositories: *helm_repositories
           filters:

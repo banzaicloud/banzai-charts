@@ -40,13 +40,15 @@ spec:
         imagePullPolicy: {{ default .Values.image.pullPolicy .Values.worker.image.pullPolicy }}
         command: ["/worker"]
         env:
+        - name: PIPELINE_CONFIG_DIR
+          value: /config
         # Database related section
         - name: PIPELINE_DATABASE_HOST
           value: {{ include "pipeline.database.host" . }}
         - name: PIPELINE_DATABASE_PORT
           value: {{ include "pipeline.database.port" . | quote }}
         - name: PIPELINE_DATABASE_TLS
-          value: {{ include "pipeline.database.tls" . }}
+          value: {{ include "pipeline.database.tls" . | quote }}
         - name: PIPELINE_DATABASE_DBNAME
           value: {{ include "pipeline.database.name" . }}
         - name: PIPELINE_DATABASE_USER
@@ -107,7 +109,7 @@ spec:
 
         volumeMounts:
         - name: config-volume
-          mountPath: /root/config/
+          mountPath: /config
 
       {{- if .Values.vault.tlsSecret }}
         - name: vault-tls
