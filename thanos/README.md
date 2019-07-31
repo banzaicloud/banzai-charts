@@ -39,6 +39,7 @@ helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" -
 | store.logLevel | Log level | debug |
 | store.resources | Resources of the pods | {} |
 | store.securityContext | Manage securityContext of store pods | {} |
+| store.certSecretName  | Existing secret name with TLS certs mount to the /etc/certs path  |  "" |
 | query.replicaCount | Pod replica count| 1 |
 | query.monitoring.enabled | | true |
 | query.http.port | Enable http port (includes /metrics) | 10901 |
@@ -46,7 +47,7 @@ helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" -
 | query.logLevel | Log level| debug |
 | query.resources | Resources of the pods | {} |
 | query.securityContext | Manage securityContext of query pods | {} |
-| query.certSecretName  | Secret name to mount a secret with TLS cert to the /etc/certs path  |  "" |
+| query.certSecretName  | Existing secret name with TLS certs mount to the /etc/certs path |  "" |
 | compact.monitoring.enabled | Enable prometheus scraping endpoint | true |
 | compact.http.port | Enable http port (includes /metrics) | 10902 |
 | compact.logLevel | Log level | DEBUG |
