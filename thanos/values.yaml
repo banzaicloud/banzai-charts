@@ -16,6 +16,7 @@ store:
   logLevel: debug
   securityContext: {}
   resources: {}
+  certSecretName: ""
 
 query:
   enabled: true
