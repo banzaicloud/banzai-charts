@@ -9,7 +9,6 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  serviceName: {{ include "thanos.name" . }}-store
   replicas: {{ .Values.store.replicaCount}}
   selector:
     matchLabels:
