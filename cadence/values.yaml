@@ -33,7 +33,10 @@ server:
 
   config:
     logLevel: "debug,info"
+
+    # IMPORTANT: This value cannot be changed, once it's set.
     numHistoryShards: 1000
+
     persistence:
       default:
         driver: "" # cassandra or sql
