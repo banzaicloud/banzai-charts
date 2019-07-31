@@ -45,6 +45,7 @@ query:
     #      - chart-example.local
 
   securityContext: {}
+  certSecretName: ""
 
 compact:
   enabled: true
