@@ -46,6 +46,8 @@ helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" -
 | query.grpc.port | Enable grpc port (data plane) | 10902 |
 | query.logLevel | Log level| debug |
 | query.resources | Resources of the pods | {} |
+| query.livenessProbe  | Liveness probe for query port  | {}  |
+| query.readinessProbe  | Readiness probe for query port  | {}  |
 | query.securityContext | Manage securityContext of query pods | {} |
 | query.certSecretName  | Existing secret name with TLS certs mount to the /etc/certs path |  "" |
 | compact.monitoring.enabled | Enable prometheus scraping endpoint | true |
@@ -53,6 +55,8 @@ helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" -
 | compact.logLevel | Log level | DEBUG |
 | compact.resources | Resources of the pods | {} |
 | compact.securityContext | Manage securityContext of compact pods | {} |
+| compact.dataVolume.name | The data volume name  |  "data" |
+| compact.dataVolume.backend | Data backend volume (i.e persistentVolumeClaim, emptyDir etc.)| {}  |
 | cluster.address | Binding address for cluster discovery | 0.0.0.0 |
 | cluster.port | Binding port for cluster discovery | 10900 |
 | objstore.provider | Supported providers: `gcs` (soon s3) | gcs |

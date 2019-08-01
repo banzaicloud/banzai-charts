@@ -31,6 +31,14 @@ query:
   logLevel: debug
   resources: {}
   extraArgs: {}
+  livenessProbe: {}
+    # httpGet:
+    #   path: /-/healthy
+    #   port: 10902
+  readinessProbe: {}
+    # httpGet:
+    #   path: "/-/ready"
+    #   port: 10902
 
   ingress:
     enabled: false
@@ -60,6 +68,11 @@ compact:
   securityContext: {}
   resources: {}
   extraArgs: {}
+  dataVolume:
+    name: data
+    backend: {}
+      # persistentVolumeClaim:
+      #   claimName: compact-data-volume
 
 cluster:
   address: 0.0.0.0
