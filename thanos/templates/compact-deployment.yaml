@@ -51,6 +51,9 @@ spec:
         - "--sync-delay=30m"
         - "--data-dir=/var/thanos/store"
         - "--wait"
+        {{- range $key, $value := .Values.compact.extraArgs }}
+        - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+        {{- end }}
         ports:
         - name: monitoring
           containerPort: {{ .Values.compact.http.port }}

@@ -30,6 +30,7 @@ query:
     port: 10902
   logLevel: debug
   resources: {}
+  extraArgs: {}
 
   ingress:
     enabled: false
@@ -58,6 +59,7 @@ compact:
   logLevel: debug
   securityContext: {}
   resources: {}
+  extraArgs: {}
 
 cluster:
   address: 0.0.0.0
