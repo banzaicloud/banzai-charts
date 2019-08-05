@@ -153,6 +153,11 @@ However you can decide to apply the same replica count to each service (just lik
 See the configuration reference bellow for details.
 
 
+## Recommended setup
+
+
+
+
 ## Configuration
 
 The following table lists the configurable parameters of the chart and their default values.
@@ -162,8 +167,8 @@ Global options overridable per service are marked with an asterisk.
 |-----------------------------------------------|--------------------------------------------------|------------------------------|
 | `nameOverride`                                | Override name of the application                 | ``                           |
 | `fullnameOverride`                            | Override full name of the application            | ``                           |
-| `server.image.repository`                     | Server image repository                          | `banzaicloud/cadence-server` |
-| `server.image.tag`                            | Server image tag                                 | `0.5.9`                      |
+| `server.image.repository`                     | Server image repository                          | `ubercadence/server`         |
+| `server.image.tag`                            | Server image tag                                 | `0.6.0`                      |
 | `server.image.pullPolicy`                     | Server image pull policy                         | `IfNotPresent`               |
 | `server.replicaCount`*                        | Server replica count                             | `1`                          |
 | `server.metrics.prometheus.timerType`*        | Prometheus timer type                            | `histogram`                  |
@@ -200,6 +205,8 @@ Global options overridable per service are marked with an asterisk.
 | `web.nodeSelector`                            | Node labels for pod assignment                   | `{}`                         |
 | `web.tolerations`                             | Toleration labels for pod assignment             | `[]`                         |
 | `web.affinity`                                | Affinity settings for pod assignment             | `{}`                         |
+| `schema.setup`                                | Create database or keyspace                      | `true`                       |
+| `schema.update`                               | Update schema                                    | `true`                       |
 | `cassandra.enabled`                           | Install Cassandra cluster                        | `true`                       |
 | `cassandra.config.cluster_size`               | Cassandra cluster node number                    | `1`                          |
 | `mysql.enabled`                               | Install MySQL                                    | `false`                      |

@@ -1,3 +1,4 @@
+{{- if .Values.schema.setup }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -146,6 +147,8 @@ spec:
         {{- end }}
 
 ---
+{{- end }}
+{{- if .Values.schema.update }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -250,3 +253,4 @@ spec:
               value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
             {{- end }}
         {{- end }}
+{{- end }}

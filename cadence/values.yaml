@@ -182,6 +182,9 @@ web:
 
   affinity: {}
 
+schema:
+  setup: true
+  update: true
 
 cassandra:
   enabled: true
