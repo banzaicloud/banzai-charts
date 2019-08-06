@@ -1,3 +1,3 @@
-To verify that cadence has started, run:
+To verify that Cadence has started, run:
 
   kubectl --namespace={{ .Release.Namespace }} get pods -l "app.kubernetes.io/instance={{ .Release.Name }}"

@@ -4,7 +4,7 @@ fullnameOverride: ""
 server:
   image:
     repository: ubercadence/server
-    tag: 0.6.0
+    tag: 0.7.1
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
@@ -48,6 +48,7 @@ server:
           consistency: One
           user: ""
           password: ""
+          existingSecret: ""
 
         sql:
           driver: "" # mysql
@@ -56,6 +57,7 @@ server:
           database: cadence
           user: ""
           password: ""
+          existingSecret: ""
 
       visibility:
         driver: "" # cassandra or sql
@@ -67,6 +69,7 @@ server:
           consistency: One
           user: ""
           password: ""
+          existingSecret: ""
 
         sql:
           driver: "" # mysql
@@ -75,6 +78,7 @@ server:
           database: cadence_visibility
           user: ""
           password: ""
+          existingSecret: ""
 
   frontend:
     # replicaCount: 1
@@ -139,7 +143,7 @@ web:
 
   image:
     repository: ubercadence/web
-    tag: 3.3.1
+    tag: 3.3.2
     pullPolicy: IfNotPresent
 
   service:
@@ -203,8 +207,6 @@ mysql:
   service:
     port: 3306
   mysqlUser: cadence
-  # TODO: support secrets
-  mysqlPassword: cadence
   initializationFiles:
     user.sql: |-
       GRANT ALL PRIVILEGES ON *.* TO 'cadence'@'%';

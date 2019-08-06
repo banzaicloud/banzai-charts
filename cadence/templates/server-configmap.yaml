@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/part-of: {{ .Chart.Name }}
 data:
-  production.yaml: |-
+  config_template.yaml: |-
     log:
       stdout: true
       level: {{ .Values.server.config.logLevel | quote }}
@@ -28,7 +28,7 @@ data:
             keyspace: {{ .Values.server.config.persistence.default.cassandra.keyspace }}
             consistency: {{ .Values.server.config.persistence.default.cassandra.consistency }}
             user: {{ .Values.server.config.persistence.default.cassandra.user }}
-            password: {{ .Values.server.config.persistence.default.cassandra.password }}
+            password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list . "default")) "sql" }}
           sql:
@@ -37,7 +37,7 @@ data:
             connectAddr: "{{ include "cadence.persistence.sql.host" (list . "default") }}:{{ include "cadence.persistence.sql.port" (list . "default") }}"
             connectProtocol: "tcp"
             user: {{ include "cadence.persistence.sql.user" (list . "default") }}
-            password: {{ include "cadence.persistence.sql.password" (list . "default") }}
+            password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
           {{- end }}
         visibility:
           {{- if eq (include "cadence.persistence.driver" (list . "visibility")) "cassandra" }}
@@ -47,7 +47,7 @@ data:
             keyspace: {{ .Values.server.config.persistence.visibility.cassandra.keyspace }}
             consistency: {{ .Values.server.config.persistence.visibility.cassandra.consistency }}
             user: {{ .Values.server.config.persistence.visibility.cassandra.user }}
-            password: {{ .Values.server.config.persistence.visibility.cassandra.password }}
+            password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list . "visibility")) "sql" }}
           sql:
@@ -56,7 +56,7 @@ data:
             connectAddr: "{{ include "cadence.persistence.sql.host" (list . "visibility") }}:{{ include "cadence.persistence.sql.port" (list . "visibility") }}"
             connectProtocol: "tcp"
             user: {{ include "cadence.persistence.sql.user" (list . "visibility") }}
-            password: {{ include "cadence.persistence.sql.password" (list . "visibility") }}
+            password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}
           {{- end }}
 
     ringpop:
@@ -134,5 +134,4 @@ data:
       status: "disabled"
 
     publicClient:
-      hostPort: "127.0.0.1:7933"
-      DNSPort: "{{ include "cadence.fullname" . }}-frontend:{{ .Values.server.frontend.service.port }}"
+      hostPort: "{{ include "cadence.fullname" . }}-frontend:{{ .Values.server.frontend.service.port }}"

@@ -66,10 +66,19 @@ spec:
         - name: {{ $.Chart.Name }}-{{ $service }}
           image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
-          args: ['cadence-server', '--root', '/etc/cadence', '--env', 'production', 'start', '--services', '{{ $service }}']
           env:
-            - name: PATH
-              value: "/cadence:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            - name: SERVICES
+              value: {{ $service }}
+            - name: CADENCE_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cadence.persistence.secretName" (list $ "default") }}
+                  key: {{ include "cadence.persistence.secretKey" (list $ "default") }}
+            - name: CADENCE_VISIBILITY_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cadence.persistence.secretName" (list $ "visibility") }}
+                  key: {{ include "cadence.persistence.secretKey" (list $ "visibility") }}
           ports:
             - name: rpc
               containerPort: {{ include (printf "cadence.%s.internalPort" $service) $ }}
@@ -87,7 +96,8 @@ spec:
               port: rpc
           volumeMounts:
             - name: config
-              mountPath: /etc/cadence/config/
+              mountPath: /etc/cadence/config/config_template.yaml
+              subPath: config_template.yaml
           resources:
             {{- toYaml (default $.Values.server.resources $serviceValues.resources) | nindent 12 }}
       volumes:

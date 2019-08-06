@@ -107,6 +107,32 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- end -}}
 {{- end -}}
 
+{{- define "cadence.persistence.cassandra.secretName" -}}
+{{- $global := index . 0 -}}
+{{- $store := index . 1 -}}
+{{- $storeConfig := index $global.Values.server.config.persistence $store -}}
+{{- if $storeConfig.cassandra.existingSecret -}}
+{{- $storeConfig.cassandra.existingSecret -}}
+{{- else if $storeConfig.cassandra.password -}}
+{{- printf "%s-%s-store" (include "cadence.fullname" $global) $store -}}
+{{- else -}}
+{{/* Cassandra password is optional, but we will create an empty secret for it */}}
+{{- printf "%s-%s-store" (include "cadence.fullname" $global) $store -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "cadence.persistence.cassandra.secretKey" -}}
+{{- $global := index . 0 -}}
+{{- $store := index . 1 -}}
+{{- $storeConfig := index $global.Values.server.config.persistence $store -}}
+{{- if or $storeConfig.sql.existingSecret $storeConfig.sql.password -}}
+{{- print "password" -}}
+{{- else -}}
+{{/* Cassandra password is optional, but we will create an empty secret for it */}}
+{{- print "password" -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "cadence.persistence.sql.driver" -}}
 {{- $global := index . 0 -}}
 {{- $store := index . 1 -}}
@@ -166,10 +192,54 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- if $storeConfig.sql.password -}}
 {{- $storeConfig.sql.password -}}
 {{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
+{{- if or $global.Values.schema.setup $global.Values.schema.update -}}
+{{- required "Please specify password for MySQL chart" $global.Values.mysql.mysqlPassword -}}
+{{- else -}}
 {{- $global.Values.mysql.mysqlPassword -}}
+{{- end -}}
 {{- else -}}
 {{- required (printf "Please specify sql password for %s store" $store) $storeConfig.sql.password -}}
 {{- end -}}
+{{- end -}}
+
+{{- define "cadence.persistence.sql.secretName" -}}
+{{- $global := index . 0 -}}
+{{- $store := index . 1 -}}
+{{- $storeConfig := index $global.Values.server.config.persistence $store -}}
+{{- if $storeConfig.sql.existingSecret -}}
+{{- $storeConfig.sql.existingSecret -}}
+{{- else if $storeConfig.sql.password -}}
+{{- printf "%s-%s-store" (include "cadence.fullname" $global) $store -}}
+{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
+{{- include "call-nested" (list $global "mysql" "mysql.secretName") -}}
+{{- else -}}
+{{- required (printf "Please specify sql password or existing secret for %s store" $store) $storeConfig.sql.existingSecret -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "cadence.persistence.sql.secretKey" -}}
+{{- $global := index . 0 -}}
+{{- $store := index . 1 -}}
+{{- $storeConfig := index $global.Values.server.config.persistence $store -}}
+{{- if or $storeConfig.sql.existingSecret $storeConfig.sql.password -}}
+{{- print "password" -}}
+{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
+{{- print "mysql-password" -}}
+{{- else -}}
+{{- fail (printf "Please specify sql password or existing secret for %s store" $store) -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "cadence.persistence.secretName" -}}
+{{- $global := index . 0 -}}
+{{- $store := index . 1 -}}
+{{- include (printf "cadence.persistence.%s.secretName" (include "cadence.persistence.driver" (list $global $store))) (list $global $store) -}}
+{{- end -}}
+
+{{- define "cadence.persistence.secretKey" -}}
+{{- $global := index . 0 -}}
+{{- $store := index . 1 -}}
+{{- include (printf "cadence.persistence.%s.secretKey" (include "cadence.persistence.driver" (list $global $store))) (list $global $store) -}}
 {{- end -}}
 
 {{/*

@@ -112,8 +112,6 @@ spec:
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
           args: ["cadence-{{ include "cadence.persistence.driver" (list $ $store) }}-tool", "setup-schema", "-v", "0.0"]
           env:
-            - name: PATH
-              value: "/cadence:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
             - name: CASSANDRA_HOST
               value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
@@ -210,18 +208,16 @@ spec:
           image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
-          # args: ["cadence-cassandra-tool", "update-schema", "-d", "/cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned"]
-          args: ['sh', '-c', 'cadence-cassandra-tool update-schema -d /cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned']
+          # args: ["cadence-cassandra-tool", "update-schema", "-d", "/etc/cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned"]
+          args: ['sh', '-c', 'cadence-cassandra-tool update-schema -d /etc/cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned']
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
           {{- if eq (include "cadence.persistence.sql.driver" (list $ $store)) "mysql" }}
-          # args: ["cadence-sql-tool", "update-schema", "-d", "/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned"]
-          args: ['sh', '-c', 'cadence-sql-tool update-schema -d /cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned']
+          # args: ["cadence-sql-tool", "update-schema", "-d", "/etc/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned"]
+          args: ['sh', '-c', 'cadence-sql-tool update-schema -d /etc/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned']
           {{- end }}
           {{- end }}
           env:
-            - name: PATH
-              value: "/cadence:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
             - name: CASSANDRA_HOST
               value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
