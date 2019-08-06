@@ -1,6 +1,6 @@
 name: pvc-operator
-version: 0.0.8
-appVersion: 0.0.5
+version: 0.0.9
+appVersion: 0.0.6
 description: A Helm chart for pvc-operator
 home: https://banzaicloud.com
 sources:
