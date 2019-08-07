@@ -45,12 +45,9 @@ spec:
         - "compact"
         - "--log.level={{ .Values.compact.logLevel }}"
         - "--objstore.config-file=/etc/config/{{ .Values.objstore.configFile }}"
-        - "--retention.resolution-raw=30d"
-        - "--retention.resolution-5m=120d"
-        - "--retention.resolution-1h=10y"
-        - "--sync-delay=30m"
         - "--data-dir=/var/thanos/store"
         - "--wait"
+        {{ toYaml .Values.compact.extraArgs | nindent 10 }}
         ports:
         - name: monitoring
           containerPort: {{ .Values.compact.http.port }}

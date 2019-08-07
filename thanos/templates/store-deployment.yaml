@@ -47,16 +47,21 @@ spec:
         - "--data-dir=/var/thanos/store"
         - "--log.level={{ .Values.store.logLevel }}"
         - "--grpc-address=0.0.0.0:{{ .Values.store.grpc.port }}"
+        {{- if .Values.cluster.enabled }}
         - "--cluster.address={{ .Values.cluster.address }}:{{ .Values.cluster.port}}"
         - "--cluster.peers={{ include "thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.cluster.port }}"
+        {{- end }}
         - "--objstore.config-file=/etc/config/{{ .Values.objstore.configFile }}"
+        {{ toYaml .Values.store.extraArgs | nindent 10 }}
         ports:
         - name: monitoring
           containerPort: {{ .Values.store.http.port }}
         - name: grpc
           containerPort: {{ .Values.store.grpc.port }}
+        {{- if .Values.cluster.enabled }}
         - name: cluster
           containerPort: {{ .Values.cluster.port }}
+        {{- end }}
         volumeMounts:
         - name: config-volume
           mountPath: /etc/config

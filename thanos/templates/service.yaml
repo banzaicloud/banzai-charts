@@ -1,3 +1,4 @@
+{{- if .Values.cluster.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -16,3 +17,4 @@ spec:
     targetPort: cluster
   selector:
     thanos-peer: "true"
+{{- end }}

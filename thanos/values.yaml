@@ -16,6 +16,7 @@ store:
   logLevel: debug
   securityContext: {}
   resources: {}
+  extraArgs: []
 
 query:
   enabled: true
@@ -29,6 +30,7 @@ query:
     port: 10902
   logLevel: debug
   resources: {}
+  extraArgs: []
 
   ingress:
     enabled: false
@@ -56,8 +58,14 @@ compact:
   logLevel: debug
   securityContext: {}
   resources: {}
+  extraArgs:
+    - "--retention.resolution-raw=30d"
+    - "--retention.resolution-5m=120d"
+    - "--retention.resolution-1h=10y"
+    - "--sync-delay=30m"
 
 cluster:
+  enabled: true
   address: 0.0.0.0
   port: 10900
 
