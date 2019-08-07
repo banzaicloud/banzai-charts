@@ -54,6 +54,8 @@ spec:
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
+        - name: PIPELINE_CONFIG_DIR
+          value: /config
         # Kubernetes environment variables
         - name: KUBERNETES_RELEASE_NAME
           value: {{ .Release.Name | quote }}
@@ -65,7 +67,7 @@ spec:
         - name: PIPELINE_DATABASE_PORT
           value: {{ include "pipeline.database.port" . | quote }}
         - name: PIPELINE_DATABASE_TLS
-          value: {{ include "pipeline.database.tls" . }}
+          value: {{ include "pipeline.database.tls" . | quote }}
         - name: PIPELINE_DATABASE_DBNAME
           value: {{ include "pipeline.database.name" . }}
         - name: PIPELINE_DATABASE_USER
@@ -163,7 +165,7 @@ spec:
 
         volumeMounts:
         - name: config-volume
-          mountPath: /root/config/
+          mountPath: /config
 
         - mountPath: /statestore
           name: statestore

@@ -3,6 +3,7 @@ appVersion: 0.1.0
 description: A Helm chart for Thanos for Prometheus long term storage
 name: thanos
 version: 0.2.2
+version: 0.2.5
 maintainers:
 - name: Banzai Cloud
   email: info@banzaicloud.com

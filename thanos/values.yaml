@@ -31,6 +31,14 @@ query:
   logLevel: debug
   resources: {}
   extraArgs: []
+  livenessProbe: {}
+    # httpGet:
+    #   path: /-/healthy
+    #   port: 10902
+  readinessProbe: {}
+    # httpGet:
+    #   path: "/-/ready"
+    #   port: 10902
 
   ingress:
     enabled: false
@@ -63,6 +71,11 @@ compact:
     - "--retention.resolution-5m=120d"
     - "--retention.resolution-1h=10y"
     - "--sync-delay=30m"
+  dataVolume:
+    name: data
+    backend: {}
+      # persistentVolumeClaim:
+      #   claimName: compact-data-volume
 
 cluster:
   enabled: true
