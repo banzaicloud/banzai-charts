@@ -52,7 +52,9 @@ spec:
         - "--cluster.peers={{ include "thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.cluster.port }}"
         {{- end }}
         - "--objstore.config-file=/etc/config/{{ .Values.objstore.configFile }}"
-        {{ toYaml .Values.store.extraArgs | nindent 10 }}
+        {{- if .Values.store.extraArgs }}
+        {{ toYaml .Values.store.extraArgs | nindent 8 }}
+        {{- end }}
         ports:
         - name: monitoring
           containerPort: {{ .Values.store.http.port }}

@@ -47,7 +47,9 @@ spec:
         - "--objstore.config-file=/etc/config/{{ .Values.objstore.configFile }}"
         - "--data-dir=/var/thanos/store"
         - "--wait"
-        {{ toYaml .Values.compact.extraArgs | nindent 10 }}
+        {{- if .Values.compact.extraArgs }}
+        {{ toYaml .Values.compact.extraArgs | nindent 8 }}
+        {{- end }}
         ports:
         - name: monitoring
           containerPort: {{ .Values.compact.http.port }}

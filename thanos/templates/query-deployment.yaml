@@ -46,7 +46,9 @@ spec:
         - "--grpc-address=0.0.0.0:{{ .Values.query.grpc.port }}"
         - "--query.replica-label={{ .Values.replicaLabelName }}"
         - "--http-address=0.0.0.0:{{ .Values.query.http.port }}"
-        {{ toYaml .Values.query.extraArgs | nindent 10 }}
+        {{- if .Values.query.extraArgs }}
+        {{ toYaml .Values.query.extraArgs | nindent 8 }}
+        {{- end }}
         ports:
         - name: http
           containerPort: {{ .Values.query.http.port}}
