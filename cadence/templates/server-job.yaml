@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "cadence.fullname" . }}-schema-setup
+  name: {{ include "cadence.componentname" (list . "schema-setup") }}
   labels:
     app.kubernetes.io/name: {{ include "cadence.name" . }}
     helm.sh/chart: {{ include "cadence.chart" . }}
@@ -23,7 +23,7 @@ spec:
   backoffLimit: 10
   template:
     metadata:
-      name: {{ include "cadence.fullname" . | trunc 42 | trimSuffix "-" }}-schema-setup
+      name: {{ include "cadence.componentname" (list . "schema-setup") }}
       labels:
         app.kubernetes.io/name: {{ include "cadence.name" . }}
         helm.sh/chart: {{ include "cadence.chart" . }}
@@ -150,7 +150,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "cadence.fullname" . }}-schema-update
+  name: {{ include "cadence.componentname" (list . "schema-update") }}
   labels:
     app.kubernetes.io/name: {{ include "cadence.name" . }}
     helm.sh/chart: {{ include "cadence.chart" . }}
@@ -171,7 +171,7 @@ spec:
   backoffLimit: 10
   template:
     metadata:
-      name: {{ include "cadence.fullname" . | trunc 42 | trimSuffix "-" }}-schema-update
+      name: {{ include "cadence.componentname" (list . "schema-update") }}
       labels:
         app.kubernetes.io/name: {{ include "cadence.name" . }}
         helm.sh/chart: {{ include "cadence.chart" . }}

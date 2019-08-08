@@ -63,10 +63,10 @@ data:
       name: cadence
       bootstrapMode: dns
       bootstrapHosts:
-        - {{ include "cadence.fullname" . }}-frontend-headless:{{ .Values.server.frontend.service.port }}
-        - {{ include "cadence.fullname" . }}-history-headless:{{ .Values.server.history.service.port }}
-        - {{ include "cadence.fullname" . }}-matching-headless:{{ .Values.server.matching.service.port }}
-        - {{ include "cadence.fullname" . }}-worker-headless:{{ .Values.server.worker.service.port }}
+        - {{ include "cadence.componentname" (list . "frontend-headless") }}:{{ .Values.server.frontend.service.port }}
+        - {{ include "cadence.componentname" (list . "history-headless") }}:{{ .Values.server.history.service.port }}
+        - {{ include "cadence.componentname" (list . "matching-headless") }}:{{ .Values.server.matching.service.port }}
+        - {{ include "cadence.componentname" (list . "worker-headless") }}:{{ .Values.server.worker.service.port }}
       maxJoinDuration: 30s
 
     services:
@@ -134,4 +134,4 @@ data:
       status: "disabled"
 
     publicClient:
-      hostPort: "{{ include "cadence.fullname" . }}-frontend:{{ .Values.server.frontend.service.port }}"
+      hostPort: "{{ include "cadence.componentname" (list . "frontend") }}:{{ .Values.server.frontend.service.port }}"

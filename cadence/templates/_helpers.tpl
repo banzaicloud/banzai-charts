@@ -32,6 +32,17 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Create a default fully qualified component name from the full app name and a component name.
+We truncate the full name at 63 - 1 (last dash) - len(component name) chars because some Kubernetes name fields are limited to this (by the DNS naming spec)
+and we want to make sure that the component is included in the name.
+*/}}
+{{- define "cadence.componentname" -}}
+{{- $global := index . 0 -}}
+{{- $component := index . 1 | trimPrefix "-" -}}
+{{- printf "%s-%s" (include "cadence.fullname" $global | trunc (sub 62 (len $component) | int) | trimSuffix "-" ) $component | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Call nested templates.
 Source: https://stackoverflow.com/a/52024583/3027614
 */}}
@@ -114,10 +125,10 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- if $storeConfig.cassandra.existingSecret -}}
 {{- $storeConfig.cassandra.existingSecret -}}
 {{- else if $storeConfig.cassandra.password -}}
-{{- printf "%s-%s-store" (include "cadence.fullname" $global) $store -}}
+{{- include "cadence.componentname" (list $global (printf "%s-store" $store)) -}}
 {{- else -}}
 {{/* Cassandra password is optional, but we will create an empty secret for it */}}
-{{- printf "%s-%s-store" (include "cadence.fullname" $global) $store -}}
+{{- include "cadence.componentname" (list $global (printf "%s-store" $store)) -}}
 {{- end -}}
 {{- end -}}
 
@@ -209,7 +220,7 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- if $storeConfig.sql.existingSecret -}}
 {{- $storeConfig.sql.existingSecret -}}
 {{- else if $storeConfig.sql.password -}}
-{{- printf "%s-%s-store" (include "cadence.fullname" $global) $store -}}
+{{- include "cadence.componentname" (list $global (printf "%s-store" $store)) -}}
 {{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
 {{- include "call-nested" (list $global "mysql" "mysql.secretName") -}}
 {{- else -}}

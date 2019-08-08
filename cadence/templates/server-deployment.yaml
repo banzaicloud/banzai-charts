@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "cadence.fullname" $ }}-{{ $service }}
+  name: {{ include "cadence.componentname" (list $ $service) }}
   labels:
     app.kubernetes.io/name: {{ include "cadence.name" $ }}
     helm.sh/chart: {{ include "cadence.chart" $ }}

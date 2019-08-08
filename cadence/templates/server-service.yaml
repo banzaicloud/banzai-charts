@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "cadence.fullname" . }}-frontend
+  name: {{ include "cadence.componentname" (list . "frontend") }}
   labels:
     app.kubernetes.io/name: {{ include "cadence.name" . }}
     helm.sh/chart: {{ include "cadence.chart" . }}
@@ -28,7 +28,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "cadence.fullname" $ }}-{{ $service }}-headless
+  name: {{ include "cadence.componentname" (list $ (printf "%s-headless" $service)) }}
   labels:
     app.kubernetes.io/name: {{ include "cadence.name" $ }}
     helm.sh/chart: {{ include "cadence.chart" $ }}
