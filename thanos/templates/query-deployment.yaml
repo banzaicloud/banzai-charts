@@ -44,9 +44,6 @@ spec:
         - "--cluster.peers={{ include "thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.cluster.port }}"
         - "--query.replica-label={{ .Values.replicaLabelName }}"
         - "--http-address=0.0.0.0:{{ .Values.query.http.port }}"
-        {{- range $key, $value := .Values.query.extraArgs }}
-        - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
-        {{- end }}
         ports:
         - name: http
           containerPort: {{ .Values.query.http.port}}

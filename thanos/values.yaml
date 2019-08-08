@@ -30,7 +30,6 @@ query:
     port: 10902
   logLevel: debug
   resources: {}
-  extraArgs: {}
   livenessProbe: {}
     # httpGet:
     #   path: /-/healthy
@@ -67,7 +66,6 @@ compact:
   logLevel: debug
   securityContext: {}
   resources: {}
-  extraArgs: {}
   dataVolume:
     name: data
     backend: {}
