@@ -68,8 +68,6 @@ spec:
           {{- end }}
           {{- end }}
           env:
-            - name: PATH
-              value: "/cadence:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
             - name: CASSANDRA_HOST
               value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
