@@ -73,6 +73,11 @@ spec:
         {{- end }}
         - name: data
           mountPath: /var/thanos/store
+        {{- if .Values.store.certSecretName }}
+        - mountPath: /etc/certs
+          name: {{ .Values.store.certSecretName }}
+          readOnly: true
+        {{- end }}
         resources:
           {{ toYaml .Values.store.resources | nindent 10 }}
       volumes:
@@ -90,6 +95,12 @@ spec:
             - key: google.json
               path: google.json
     {{- end }}
+      {{- if .Values.store.certSecretName }}
+      - name: {{ .Values.store.certSecretName }}
+        secret:
+          defaultMode: 420
+          secretName: {{ .Values.store.certSecretName }}
+      {{- end }}
       securityContext:
         {{ toYaml .Values.store.securityContext | nindent 8 }}
 {{- end }}

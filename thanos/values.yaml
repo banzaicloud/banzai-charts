@@ -17,6 +17,7 @@ store:
   securityContext: {}
   resources: {}
   extraArgs: []
+  certSecretName: ""
 
 query:
   enabled: true
@@ -55,6 +56,7 @@ query:
     #      - chart-example.local
 
   securityContext: {}
+  certSecretName: ""
 
 compact:
   enabled: true
