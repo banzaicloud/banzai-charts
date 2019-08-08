@@ -61,6 +61,7 @@ spec:
         - mountPath: /etc/certs
           name: {{ .Values.query.certSecretName }}
           readOnly: true
+        {{- end }}
         {{- if .Values.query.livenessProbe }}
         livenessProbe:
           {{ toYaml .Values.query.livenessProbe | nindent 10 }}
