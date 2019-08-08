@@ -39,18 +39,25 @@ spec:
         args:
         - "query"
         - "--log.level={{ .Values.query.logLevel }}"
-        - "--grpc-address=0.0.0.0:{{ .Values.query.grpc.port }}"
+        {{- if .Values.cluster.enabled }}
         - "--cluster.address={{ .Values.cluster.address }}:{{ .Values.cluster.port}}"
         - "--cluster.peers={{ include "thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.cluster.port }}"
+        {{- end }}
+        - "--grpc-address=0.0.0.0:{{ .Values.query.grpc.port }}"
         - "--query.replica-label={{ .Values.replicaLabelName }}"
         - "--http-address=0.0.0.0:{{ .Values.query.http.port }}"
+        {{- if .Values.query.extraArgs }}
+        {{ toYaml .Values.query.extraArgs | nindent 8 }}
+        {{- end }}
         ports:
         - name: http
           containerPort: {{ .Values.query.http.port}}
         - name: grpc
           containerPort: {{ .Values.query.grpc.port }}
+        {{- if .Values.cluster.enabled }}
         - name: cluster
           containerPort: {{ .Values.cluster.port }}
+        {{- end }}
         resources:
           {{ toYaml .Values.query.resources | nindent 10 }}
         {{- if .Values.query.certSecretName }}
