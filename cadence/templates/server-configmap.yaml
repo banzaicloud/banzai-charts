@@ -59,11 +59,9 @@ data:
             {{- if .Values.server.config.persistence.default.sql.maxQPS }}
             maxQPS: {{ .Values.server.config.persistence.default.sql.maxQPS }}
             {{- end }}
-            {{- if .Values.server.config.persistence.default.sql.attributes }}
+            {{- if .Values.server.config.persistence.default.sql.connectAttributes }}
             connectAttributes:
-            {{- range $key, $value := .Values.server.config.persistence.default.sql.attributes }}
-              {{ $key }}: {{ $value }}
-            {{- end }}
+            {{- toYaml .Values.server.config.persistence.default.sql.connectAttributes | nindent 14 }}
             {{- end }}
           {{- end }}
         visibility:
@@ -105,11 +103,9 @@ data:
             {{- if .Values.server.config.persistence.visibility.sql.maxQPS }}
             maxQPS: {{ .Values.server.config.persistence.visibility.sql.maxQPS }}
             {{- end }}
-            {{- if .Values.server.config.persistence.visibility.sql.attributes }}
+            {{- if .Values.server.config.persistence.visibility.sql.connectAttributes }}
             connectAttributes:
-            {{- range $key, $value := .Values.server.config.persistence.visibility.sql.attributes }}
-              {{ $key }}: {{ $value }}
-            {{- end }}
+            {{- toYaml .Values.server.config.persistence.visibility.sql.connectAttributes | nindent 14 }}
             {{- end }}
           {{- end }}
 
