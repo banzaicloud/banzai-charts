@@ -37,6 +37,7 @@ metadata:
     app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: {{ $service }}
     app.kubernetes.io/part-of: {{ $.Chart.Name }}
+    app.kubernetes.io/headless: 'true'
   annotations:
     # Use this annotation in addition to the actual field below because the
     # annotation will stop being respected soon but the field is broken in
@@ -52,6 +53,10 @@ spec:
       targetPort: rpc
       protocol: TCP
       name: rpc
+    - port: 9090
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
   selector:
     app.kubernetes.io/name: {{ include "cadence.name" $ }}
     app.kubernetes.io/instance: {{ $.Release.Name }}

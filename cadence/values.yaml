@@ -10,12 +10,18 @@ server:
   # Global default settings (can be overridden per service)
   replicaCount: 1
   metrics:
+    # Annotate pods directly with Prometheus annotations.
+    # Use this if you installed Prometheus from a Helm chart.
+    annotations:
+      enabled: false
+    # Enable Prometheus ServiceMonitor
+    # Use this if you installed the Prometheus Operator (https://github.com/coreos/prometheus-operator).
+    serviceMonitor:
+      enabled: false
+      interval: 30s
     prometheus:
       timerType: histogram
   podAnnotations: {}
-    # Annotation to enable Prometheus scrape functionality.
-    # prometheus.io/scrape: 'true'
-    # prometheus.io/port: '9090'
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -104,6 +110,10 @@ server:
       type: ClusterIP
       port: 7933
     metrics:
+      annotations: {}
+        # enabled: false
+      serviceMonitor: {}
+        # enabled: false
       prometheus: {}
         # timerType: histogram
     podAnnotations: {}
@@ -118,6 +128,10 @@ server:
       # type: ClusterIP
       port: 7934
     metrics:
+      annotations: {}
+        # enabled: false
+      serviceMonitor: {}
+        # enabled: false
       prometheus: {}
         # timerType: histogram
     podAnnotations: {}
@@ -132,6 +146,10 @@ server:
       # type: ClusterIP
       port: 7935
     metrics:
+      annotations: {}
+        # enabled: false
+      serviceMonitor: {}
+        # enabled: false
       prometheus: {}
         # timerType: histogram
     podAnnotations: {}
@@ -146,6 +164,10 @@ server:
       # type: ClusterIP
       port: 7939
     metrics:
+      annotations: {}
+        # enabled: false
+      serviceMonitor: {}
+        # enabled: false
       prometheus: {}
         # timerType: histogram
     podAnnotations: {}
