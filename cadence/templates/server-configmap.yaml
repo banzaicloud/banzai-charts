@@ -5,94 +5,124 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ include "cadence.name" . }}
     helm.sh/chart: {{ include "cadence.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
 data:
-{{- if semverCompare "<= 0.5.5" .Values.server.image.tag }}
-  docker_template.yaml: |-
-{{- else }}
-  docker_template_cassandra.yaml: |-
-{{- end }}
+  config_template.yaml: |-
     log:
       stdout: true
-      level: "${LOG_LEVEL}"
+      level: {{ .Values.server.config.logLevel | quote }}
 
     persistence:
-      defaultStore: cass-default
-      visibilityStore: cass-visibility
-      numHistoryShards: ${NUM_HISTORY_SHARDS}
+      defaultStore: default
+      visibilityStore: visibility
+      numHistoryShards: {{ .Values.server.config.numHistoryShards }}
       datastores:
-        cass-default:
+        default:
+          {{- if eq (include "cadence.persistence.driver" (list . "default")) "cassandra" }}
           cassandra:
-            hosts: "${CASSANDRA_SEEDS}"
-            keyspace: "${KEYSPACE}"
-            consistency: "${CASSANDRA_CONSISTENCY}"
-        cass-visibility:
+            hosts: {{ include "cadence.persistence.cassandra.hosts" (list . "default") }}
+            port: {{ include "cadence.persistence.cassandra.port" (list . "default") }}
+            keyspace: {{ .Values.server.config.persistence.default.cassandra.keyspace }}
+            consistency: {{ .Values.server.config.persistence.default.cassandra.consistency }}
+            user: {{ .Values.server.config.persistence.default.cassandra.user }}
+            password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
+          {{- end }}
+          {{- if eq (include "cadence.persistence.driver" (list . "default")) "sql" }}
+          sql:
+            driverName: {{ include "cadence.persistence.sql.driver" (list . "default") }}
+            databaseName: {{ .Values.server.config.persistence.default.sql.database }}
+            connectAddr: "{{ include "cadence.persistence.sql.host" (list . "default") }}:{{ include "cadence.persistence.sql.port" (list . "default") }}"
+            connectProtocol: "tcp"
+            user: {{ include "cadence.persistence.sql.user" (list . "default") }}
+            password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
+          {{- end }}
+        visibility:
+          {{- if eq (include "cadence.persistence.driver" (list . "visibility")) "cassandra" }}
           cassandra:
-            hosts: "${CASSANDRA_SEEDS}"
-            keyspace: "${VISIBILITY_KEYSPACE}"
-            consistency: "${CASSANDRA_CONSISTENCY}"
+            hosts: {{ include "cadence.persistence.cassandra.hosts" (list . "visibility") }}
+            port: {{ include "cadence.persistence.cassandra.port" (list . "visibility") }}
+            keyspace: {{ .Values.server.config.persistence.visibility.cassandra.keyspace }}
+            consistency: {{ .Values.server.config.persistence.visibility.cassandra.consistency }}
+            user: {{ .Values.server.config.persistence.visibility.cassandra.user }}
+            password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}
+          {{- end }}
+          {{- if eq (include "cadence.persistence.driver" (list . "visibility")) "sql" }}
+          sql:
+            driverName: {{ include "cadence.persistence.sql.driver" (list . "visibility") }}
+            databaseName: {{ .Values.server.config.persistence.visibility.sql.database }}
+            connectAddr: "{{ include "cadence.persistence.sql.host" (list . "visibility") }}:{{ include "cadence.persistence.sql.port" (list . "visibility") }}"
+            connectProtocol: "tcp"
+            user: {{ include "cadence.persistence.sql.user" (list . "visibility") }}
+            password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}
+          {{- end }}
 
     ringpop:
       name: cadence
-      bootstrapMode: hosts
-      bootstrapHosts: ${RINGPOP_SEEDS_JSON_ARRAY}
+      bootstrapMode: dns
+      bootstrapHosts:
+        - {{ include "cadence.componentname" (list . "frontend-headless") }}:{{ .Values.server.frontend.service.port }}
+        - {{ include "cadence.componentname" (list . "history-headless") }}:{{ .Values.server.history.service.port }}
+        - {{ include "cadence.componentname" (list . "matching-headless") }}:{{ .Values.server.matching.service.port }}
+        - {{ include "cadence.componentname" (list . "worker-headless") }}:{{ .Values.server.worker.service.port }}
       maxJoinDuration: 30s
 
     services:
       frontend:
         rpc:
-          port: {{ .Values.server.frontend.service.port }}
-          bindOnIP: {{ .Values.server.frontend.bindOnIP }}
+          port: {{ include "cadence.frontend.internalPort" . }}
+          bindOnIP: "0.0.0.0"
         metrics:
           tags:
             type: frontend
           prometheus:
-            timerType: {{ .Values.server.frontend.prometheus.timerType }}
-            listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.frontend.prometheus.port }}
-
-      matching:
-        rpc:
-          port: {{ .Values.server.matching.service.port }}
-          bindOnIP: {{ .Values.server.matching.bindOnIP }}
-        metrics:
-          tags:
-            type: matching
-          prometheus:
-            timerType: {{ .Values.server.matching.prometheus.timerType }}
-            listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.matching.prometheus.port }}
+            timerType: {{ default .Values.server.metrics.prometheus.timerType .Values.server.frontend.metrics.prometheus.timerType }}
+            listenAddress: "0.0.0.0:9090"
 
       history:
         rpc:
-          port: {{ .Values.server.history.service.port }}
-          bindOnIP: {{ .Values.server.history.bindOnIP }}
+          port: {{ include "cadence.history.internalPort" . }}
+          bindOnIP: "0.0.0.0"
         metrics:
           tags:
             type: history
           prometheus:
-            timerType: {{ .Values.server.history.prometheus.timerType }}
-            listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.history.prometheus.port }}
+            timerType: {{ default .Values.server.metrics.prometheus.timerType .Values.server.history.metrics.prometheus.timerType }}
+            listenAddress: "0.0.0.0:9090"
+
+      matching:
+        rpc:
+          port: {{ include "cadence.matching.internalPort" . }}
+          bindOnIP: "0.0.0.0"
+        metrics:
+          tags:
+            type: matching
+          prometheus:
+            timerType: {{ default .Values.server.metrics.prometheus.timerType .Values.server.matching.metrics.prometheus.timerType }}
+            listenAddress: "0.0.0.0:9090"
 
       worker:
         rpc:
-          port: {{ .Values.server.worker.service.port }}
-          bindOnIP: {{ .Values.server.worker.bindOnIP }}
+          port: {{ include "cadence.worker.internalPort" . }}
+          bindOnIP: "0.0.0.0"
         metrics:
           tags:
             type: worker
           prometheus:
-            timerType: {{ .Values.server.worker.prometheus.timerType }}
-            listenAddress: {{ .Values.server.frontend.bindOnIP }}:{{ .Values.server.worker.prometheus.port }}
+            timerType: {{ default .Values.server.metrics.prometheus.timerType .Values.server.worker.metrics.prometheus.timerType }}
+            listenAddress: "0.0.0.0:9090"
 
-    clustersInfo:
+    clusterMetadata:
       enableGlobalDomain: false
       failoverVersionIncrement: 10
       masterClusterName: "active"
       currentClusterName: "active"
-      clusterInitialFailoverVersion:
-        active: 0
-      clusterAddress:
+      clusterInformation:
         active:
+          enabled: true
+          initialFailoverVersion: 0
           rpcName: "cadence-frontend"
           rpcAddress: "127.0.0.1:7933"
 
@@ -101,20 +131,7 @@ data:
       toDC: ""
 
     archival:
-      enableArchival: true
-      blobstore:
-        storeDirectory: "/tmp/blobstore/"
-        defaultBucket:
-          name: "cadence-development"
-          owner: "cadence"
-          retentionDays: 10
-        customBuckets:
-          - name: "custom-bucket-1"
-            owner: "custom-owner-1"
-            retentionDays: 10
-          - name: "custom-bucket-2"
-            owner: "custom-owner-2"
-            retentionDays: 5
-    
+      status: "disabled"
+
     publicClient:
-      hostPort: "127.0.0.1:{{ .Values.server.frontend.service.port }}"
+      hostPort: "{{ include "cadence.componentname" (list . "frontend") }}:{{ .Values.server.frontend.service.port }}"

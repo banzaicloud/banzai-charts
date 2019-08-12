@@ -1,5 +1,9 @@
 dependencies:
   - name: cassandra
-    version: ^0.10.4
+    version: ^0.13.1
     repository: https://kubernetes-charts-incubator.storage.googleapis.com/
     condition: cassandra.enabled
+  - name: mysql
+    version: ^1.2.0
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    condition: mysql.enabled

@@ -1,0 +1,18 @@
+image:
+  tag: 3.11.3
+livenessProbe:
+  initialDelaySeconds: 0
+readinessProbe:
+  initialDelaySeconds: 0
+config:
+  cluster_size: 1
+  num_tokens: 0
+  max_heap_size: 512M
+  heap_new_size: 128M
+  seed_size: 0
+env:
+  JVM_OPTS: |-
+    -Dcassandra.skip_wait_for_gossip_to_settle=0
+    -Dcassandra.initial_token=0
+  persistence:
+    enabled: true

@@ -1,94 +1,61 @@
-{{- if .Values.server.frontend.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "cadence.fullname" . }}-frontend
+  name: {{ include "cadence.componentname" (list . "frontend") }}
   labels:
     app.kubernetes.io/name: {{ include "cadence.name" . }}
     helm.sh/chart: {{ include "cadence.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
 spec:
   type: {{ .Values.server.frontend.service.type }}
   ports:
     - port: {{ .Values.server.frontend.service.port }}
-      targetPort: {{ .Values.server.frontend.service.port }}
+      targetPort: rpc
       protocol: TCP
-      name: frontend
+      name: rpc
   selector:
     app.kubernetes.io/name: {{ include "cadence.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
+    app.kubernetes.io/component: frontend
 
 ---
-
-{{- if .Values.server.matching.enabled -}}
+{{- range $service := (list "frontend" "matching" "history" "worker") }}
+{{- $serviceValues := index $.Values.server $service -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "cadence.fullname" . }}-matching
+  name: {{ include "cadence.componentname" (list $ (printf "%s-headless" $service)) }}
   labels:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}
-    helm.sh/chart: {{ include "cadence.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "cadence.name" $ }}
+    helm.sh/chart: {{ include "cadence.chart" $ }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: {{ $service }}
+    app.kubernetes.io/part-of: {{ $.Chart.Name }}
+  annotations:
+    # Use this annotation in addition to the actual field below because the
+    # annotation will stop being respected soon but the field is broken in
+    # some versions of Kubernetes:
+    # https://github.com/kubernetes/kubernetes/issues/58662
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
 spec:
-  type: {{ .Values.server.matching.service.type }}
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
   ports:
-    - port: {{ .Values.server.matching.service.port }}
-      targetPort: {{ .Values.server.matching.service.port }}
+    - port: {{ $serviceValues.service.port }}
+      targetPort: rpc
       protocol: TCP
-      name: matching
+      name: rpc
   selector:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
+    app.kubernetes.io/name: {{ include "cadence.name" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: {{ $service }}
 
 ---
-
-{{- if .Values.server.history.enabled -}}
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "cadence.fullname" . }}-history
-  labels:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}
-    helm.sh/chart: {{ include "cadence.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-spec:
-  type: {{ .Values.server.history.service.type }}
-  ports:
-    - port: {{ .Values.server.history.service.port }}
-      targetPort: {{ .Values.server.history.service.port }}
-      protocol: TCP
-      name: history
-  selector:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
----
-
-{{- if .Values.server.worker.enabled -}}
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "cadence.fullname" . }}-worker
-  labels:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}
-    helm.sh/chart: {{ include "cadence.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-spec:
-  type: {{ .Values.server.worker.service.type }}
-  ports:
-    - port: {{ .Values.server.worker.service.port }}
-      targetPort: {{ .Values.server.worker.service.port }}
-      protocol: TCP
-      name: worker
-  selector:
-    app.kubernetes.io/name: {{ include "cadence.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-

@@ -1,0 +1,10 @@
+  imageTag: "5.7.26"
+  mysqlUser: cadence
+  mysqlPassword: cadence
+  initializationFiles:
+    cadence.sql: |-
+      CREATE DATABASE IF NOT EXISTS cadence;
+      GRANT ALL PRIVILEGES ON cadence.* TO 'cadence'@'%';
+
+      CREATE DATABASE IF NOT EXISTS cadence_visibility;
+      GRANT ALL PRIVILEGES ON cadence_visibility.* TO 'cadence'@'%';

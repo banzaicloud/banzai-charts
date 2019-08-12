@@ -1,0 +1,54 @@
+server:
+  podAnnotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9090'
+
+  config:
+    persistence:
+      default:
+        driver: "" # cassandra or sql
+
+        cassandra:
+          hosts: []
+          # port: 9042
+          keyspace: cadence
+          consistency: One
+          user: ""
+          password: ""
+
+        sql:
+          driver: "" # mysql
+          host: ""
+          # port: 3306
+          database: cadence
+          user: ""
+          password: ""
+
+      visibility:
+        driver: "" # cassandra or sql
+
+        cassandra:
+          hosts: []
+          # port: 9042
+          keyspace: cadence_visibility
+          consistency: One
+          user: ""
+          password: ""
+
+        sql:
+          driver: "" # mysql
+          host: ""
+          # port: 3306
+          database: cadence_visibility
+          user: ""
+          password: ""
+
+schema:
+  setup: false
+  update: false
+
+cassandra:
+  enabled: false
+
+mysql:
+  enabled: false
