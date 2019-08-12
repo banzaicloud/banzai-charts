@@ -25,18 +25,9 @@ data:
           cassandra:
             hosts: {{ include "cadence.persistence.cassandra.hosts" (list . "default") }}
             port: {{ include "cadence.persistence.cassandra.port" (list . "default") }}
-            keyspace: {{ .Values.server.config.persistence.default.cassandra.keyspace }}
-            consistency: {{ .Values.server.config.persistence.default.cassandra.consistency }}
-            user: {{ .Values.server.config.persistence.default.cassandra.user }}
             password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
-            {{- if .Values.server.config.persistence.default.cassandra.datacenter }}
-            datacenter: {{ .Values.server.config.persistence.default.cassandra.datacenter | quote }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.default.cassandra.maxQPS }}
-            maxQPS: {{ .Values.server.config.persistence.default.cassandra.maxQPS }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.default.cassandra.maxConns }}
-            maxConns: {{ .Values.server.config.persistence.default.cassandra.maxConns }}
+            {{- with (omit .Values.server.config.persistence.default.cassandra "hosts" "port" "password" "existingSecret") }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list . "default")) "sql" }}
@@ -47,21 +38,8 @@ data:
             connectProtocol: "tcp"
             user: {{ include "cadence.persistence.sql.user" (list . "default") }}
             password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
-            {{- if .Values.server.config.persistence.default.sql.maxConns }}
-            maxConns: {{ .Values.server.config.persistence.default.sql.maxConns }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.default.sql.maxIdleConns }}
-            maxIdleConns: {{ .Values.server.config.persistence.default.sql.maxIdleConns }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.default.sql.maxConnLifetime }}
-            maxConnLifetime: {{ .Values.server.config.persistence.default.sql.maxConnLifetime | quote }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.default.sql.maxQPS }}
-            maxQPS: {{ .Values.server.config.persistence.default.sql.maxQPS }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.default.sql.connectAttributes }}
-            connectAttributes:
-            {{- toYaml .Values.server.config.persistence.default.sql.connectAttributes | nindent 14 }}
+            {{- with (omit .Values.server.config.persistence.default.sql "driver" "driverName" "host" "port" "connectAddr" "connectProtocol" "database" "databaseName" "user" "password" "existingSecret") }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}
         visibility:
@@ -69,18 +47,9 @@ data:
           cassandra:
             hosts: {{ include "cadence.persistence.cassandra.hosts" (list . "visibility") }}
             port: {{ include "cadence.persistence.cassandra.port" (list . "visibility") }}
-            keyspace: {{ .Values.server.config.persistence.visibility.cassandra.keyspace }}
-            consistency: {{ .Values.server.config.persistence.visibility.cassandra.consistency }}
-            user: {{ .Values.server.config.persistence.visibility.cassandra.user }}
             password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}
-            {{- if .Values.server.config.persistence.visibility.cassandra.datacenter }}
-            datacenter: {{ .Values.server.config.persistence.visibility.cassandra.datacenter | quote }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.visibility.cassandra.maxQPS }}
-            maxQPS: {{ .Values.server.config.persistence.visibility.cassandra.maxQPS }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.visibility.cassandra.maxConns }}
-            maxConns: {{ .Values.server.config.persistence.visibility.cassandra.maxConns }}
+            {{- with (omit .Values.server.config.persistence.visibility.cassandra "hosts" "port" "password" "existingSecret") }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list . "visibility")) "sql" }}
@@ -91,21 +60,8 @@ data:
             connectProtocol: "tcp"
             user: {{ include "cadence.persistence.sql.user" (list . "visibility") }}
             password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}
-            {{- if .Values.server.config.persistence.visibility.sql.maxConns }}
-            maxConns: {{ .Values.server.config.persistence.visibility.sql.maxConns }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.visibility.sql.maxIdleConns }}
-            maxIdleConns: {{ .Values.server.config.persistence.visibility.sql.maxIdleConns }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.visibility.sql.maxConnLifetime }}
-            maxConnLifetime: {{ .Values.server.config.persistence.visibility.sql.maxConnLifetime | quote }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.visibility.sql.maxQPS }}
-            maxQPS: {{ .Values.server.config.persistence.visibility.sql.maxQPS }}
-            {{- end }}
-            {{- if .Values.server.config.persistence.visibility.sql.connectAttributes }}
-            connectAttributes:
-            {{- toYaml .Values.server.config.persistence.visibility.sql.connectAttributes | nindent 14 }}
+            {{- with (omit .Values.server.config.persistence.visibility.sql "driver" "driverName" "host" "port" "connectAddr" "connectProtocol" "database" "databaseName" "user" "password" "existingSecret") }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}
 
