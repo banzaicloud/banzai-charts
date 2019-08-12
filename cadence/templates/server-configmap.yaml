@@ -29,6 +29,15 @@ data:
             consistency: {{ .Values.server.config.persistence.default.cassandra.consistency }}
             user: {{ .Values.server.config.persistence.default.cassandra.user }}
             password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
+            {{- if .Values.server.config.persistence.default.cassandra.datacenter }}
+            datacenter: {{ .Values.server.config.persistence.default.cassandra.datacenter | quote }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.default.cassandra.maxQPS }}
+            maxQPS: {{ .Values.server.config.persistence.default.cassandra.maxQPS }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.default.cassandra.maxConns }}
+            maxConns: {{ .Values.server.config.persistence.default.cassandra.maxConns }}
+            {{- end }}
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list . "default")) "sql" }}
           sql:
@@ -38,6 +47,24 @@ data:
             connectProtocol: "tcp"
             user: {{ include "cadence.persistence.sql.user" (list . "default") }}
             password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
+            {{- if .Values.server.config.persistence.default.sql.maxConns }}
+            maxConns: {{ .Values.server.config.persistence.default.sql.maxConns }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.default.sql.maxIdleConns }}
+            maxIdleConns: {{ .Values.server.config.persistence.default.sql.maxIdleConns }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.default.sql.maxConnLifetime }}
+            maxConnLifetime: {{ .Values.server.config.persistence.default.sql.maxConnLifetime | quote }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.default.sql.maxQPS }}
+            maxQPS: {{ .Values.server.config.persistence.default.sql.maxQPS }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.default.sql.attributes }}
+            connectAttributes:
+            {{- range $key, $value := .Values.server.config.persistence.default.sql.attributes }}
+              {{ $key }}: {{ $value }}
+            {{- end }}
+            {{- end }}
           {{- end }}
         visibility:
           {{- if eq (include "cadence.persistence.driver" (list . "visibility")) "cassandra" }}
@@ -48,6 +75,15 @@ data:
             consistency: {{ .Values.server.config.persistence.visibility.cassandra.consistency }}
             user: {{ .Values.server.config.persistence.visibility.cassandra.user }}
             password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}
+            {{- if .Values.server.config.persistence.visibility.cassandra.datacenter }}
+            datacenter: {{ .Values.server.config.persistence.visibility.cassandra.datacenter | quote }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.visibility.cassandra.maxQPS }}
+            maxQPS: {{ .Values.server.config.persistence.visibility.cassandra.maxQPS }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.visibility.cassandra.maxConns }}
+            maxConns: {{ .Values.server.config.persistence.visibility.cassandra.maxConns }}
+            {{- end }}
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list . "visibility")) "sql" }}
           sql:
@@ -57,6 +93,24 @@ data:
             connectProtocol: "tcp"
             user: {{ include "cadence.persistence.sql.user" (list . "visibility") }}
             password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}
+            {{- if .Values.server.config.persistence.visibility.sql.maxConns }}
+            maxConns: {{ .Values.server.config.persistence.visibility.sql.maxConns }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.visibility.sql.maxIdleConns }}
+            maxIdleConns: {{ .Values.server.config.persistence.visibility.sql.maxIdleConns }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.visibility.sql.maxConnLifetime }}
+            maxConnLifetime: {{ .Values.server.config.persistence.visibility.sql.maxConnLifetime | quote }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.visibility.sql.maxQPS }}
+            maxQPS: {{ .Values.server.config.persistence.visibility.sql.maxQPS }}
+            {{- end }}
+            {{- if .Values.server.config.persistence.visibility.sql.attributes }}
+            connectAttributes:
+            {{- range $key, $value := .Values.server.config.persistence.visibility.sql.attributes }}
+              {{ $key }}: {{ $value }}
+            {{- end }}
+            {{- end }}
           {{- end }}
 
     ringpop:
