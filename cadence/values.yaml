@@ -45,10 +45,10 @@ server:
           hosts: []
           # port: 9042
           keyspace: cadence
-          consistency: One
           user: ""
           password: ""
           existingSecret: ""
+          consistency: One
           # datacenter: "us-east-1a"
           # maxQPS: 1000
           # maxConns: 2
@@ -75,10 +75,10 @@ server:
           hosts: []
           # port: 9042
           keyspace: cadence_visibility
-          consistency: One
           user: ""
           password: ""
           existingSecret: ""
+          consistency: One
           # datacenter: "us-east-1a"
           # maxQPS: 1000
           # maxConns: 2
