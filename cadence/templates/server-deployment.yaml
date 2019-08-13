@@ -31,6 +31,10 @@ spec:
         app.kubernetes.io/part-of: {{ $.Chart.Name }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/server-configmap.yaml") $ | sha256sum }}
+        {{- if (default $.Values.server.metrics.annotations.enabled $serviceValues.metrics.annotations.enabled) }}
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9090'
+        {{- end }}
         {{- with (default $.Values.server.podAnnotations $serviceValues.podAnnotations) }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

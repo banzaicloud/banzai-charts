@@ -154,10 +154,16 @@ As of 0.5.8 Cadence exports Prometheus metrics. The chart supports annotating Ca
 so that Prometheus can scrape them:
 
 ```bash
-$ helm install -f values/values.prom.yaml banzaicloud-stable/cadence
+$ helm install --set server.metrics.annotations.enabled=true banzaicloud-stable/cadence
 ```
 
-Note that you can annotate each service separately if you want. See the configuration reference bellow.
+Alternatively, you can enable ServiceMonitor when using [Prometheus Operator](https://github.com/coreos/prometheus-operator):
+
+```bash
+$ helm install --set server.metrics.serviceMonitor.enabled=true banzaicloud-stable/cadence
+```
+
+Note that you can enable monitoring for each service separately. See the configuration reference bellow.
 
 
 ## Scaling Cadence
@@ -192,53 +198,57 @@ The reason behind this limitation is that migrations are executed as helm hooks,
 The following table lists the configurable parameters of the chart and their default values.
 Global options overridable per service are marked with an asterisk.
 
-| Parameter                                     | Description                                      | Default                      |
-|-----------------------------------------------|--------------------------------------------------|------------------------------|
-| `nameOverride`                                | Override name of the application                 | ``                           |
-| `fullnameOverride`                            | Override full name of the application            | ``                           |
-| `server.image.repository`                     | Server image repository                          | `ubercadence/server`         |
-| `server.image.tag`                            | Server image tag                                 | `0.7.1`                      |
-| `server.image.pullPolicy`                     | Server image pull policy                         | `IfNotPresent`               |
-| `server.replicaCount`*                        | Server replica count                             | `1`                          |
-| `server.metrics.prometheus.timerType`*        | Prometheus timer type                            | `histogram`                  |
-| `server.podAnnotations`*                      | Server pod annotations                           | `{}`                         |
-| `server.resources`*                           | Server CPU/Memory resource requests/limits       | `{}`                         |
-| `server.nodeSelector`*                        | Node labels for pod assignment                   | `{}`                         |
-| `server.tolerations`*                         | Toleration labels for pod assignment             | `[]`                         |
-| `server.affinity`*                            | Affinity settings for pod assignment             | `{}`                         |
-| `server.config.logLevel`                      | Server log level                                 | `debug,info`                 |
-| `server.config.numHistoryShards`              | Number of history shards                         | `1000`                       |
-| `server.config.persistence.[store].driver`    | Connection driver                                | `cassandra`                  |
-| `server.config.persistence.[store].cassandra` | Cassandra connection details (see `values.yaml`) | `{}`                         |
-| `server.config.persistence.[store].sql`       | SQL connection details (see `values.yaml`)       | `{}`                         |
-| `server.[service].service.type`               | `[service]` service type                         | `ClusterIP`                  |
-| `server.[service].service.port`               | `[service]` service port                         | `7933/7934/7935/7939`        |
-| `server.[service].prometheus.timerType`       | `[service]` Prometheus timer type                | ``                           |
-| `server.[service].podAnnotations`             | `[service]` pod annotations                      | `{}`                         |
-| `server.[service].resources`                  | `[service]` CPU/Memory resource requests/limits  | `{}`                         |
-| `server.[service].nodeSelector`               | `[service]` Node labels for pod assignment       | `{}`                         |
-| `server.[service].tolerations`                | `[service]` Toleration labels for pod assignment | `[]`                         |
-| `server.[service].affinity`                   | `[service]` Affinity settings for pod assignment | `{}`                         |
-| `web.enabled`                                 | Enable WebUI service                             | `true`                       |
-| `web.replicaCount`                            | Number of WebUI service Replicas                 | `1`                          |
-| `web.image.repository`                        | WebUI image repository                           | `ubercadence/web`            |
-| `web.image.tag`                               | WebUI image tag                                  | `3.3.2`                      |
-| `web.image.pullPolicy`                        | WebUI image pull policy                          | `IfNotPresent`               |
-| `web.service.type`                            | WebUI service type                               | `ClusterIP`                  |
-| `web.service.port`                            | WebUI service port                               | `80`                         |
-| `web.ingress.enabled`                         | Enable WebUI Ingress                             | `false`                      |
-| `web.ingress.annotations`                     | WebUI Ingress annotations                        | `{}`                         |
-| `web.ingress.hosts`                           | WebUI Ingress hosts                              | `/`                          |
-| `web.ingress.tls`                             | WebUI Ingress tls config                         | `[]`                         |
-| `web.resources`                               | WebUI CPU/Memory resource requests/limits        | `{}`                         |
-| `web.nodeSelector`                            | Node labels for pod assignment                   | `{}`                         |
-| `web.tolerations`                             | Toleration labels for pod assignment             | `[]`                         |
-| `web.affinity`                                | Affinity settings for pod assignment             | `{}`                         |
-| `schema.setup`                                | Create database or keyspace                      | `true`                       |
-| `schema.update`                               | Update schema                                    | `true`                       |
-| `cassandra.enabled`                           | Install Cassandra cluster                        | `true`                       |
-| `cassandra.config.cluster_size`               | Cassandra cluster node number                    | `1`                          |
-| `mysql.enabled`                               | Install MySQL                                    | `false`                      |
+| Parameter                                         | Description                                           | Default               |
+|---------------------------------------------------|-------------------------------------------------------|-----------------------|
+| `nameOverride`                                    | Override name of the application                      | ``                    |
+| `fullnameOverride`                                | Override full name of the application                 | ``                    |
+| `server.image.repository`                         | Server image repository                               | `ubercadence/server`  |
+| `server.image.tag`                                | Server image tag                                      | `0.7.1`               |
+| `server.image.pullPolicy`                         | Server image pull policy                              | `IfNotPresent`        |
+| `server.replicaCount`*                            | Server replica count                                  | `1`                   |
+| `server.metrics.annotations.enabled`*             | Annotate pods with Prometheus annotations             | `false`               |
+| `server.metrics.serviceMonitor.enabled`*          | Enable Prometheus ServiceMonitor                      | `false`               |
+| `server.metrics.prometheus.timerType`*            | Prometheus timer type                                 | `histogram`           |
+| `server.podAnnotations`*                          | Server pod annotations                                | `{}`                  |
+| `server.resources`*                               | Server CPU/Memory resource requests/limits            | `{}`                  |
+| `server.nodeSelector`*                            | Node labels for pod assignment                        | `{}`                  |
+| `server.tolerations`*                             | Toleration labels for pod assignment                  | `[]`                  |
+| `server.affinity`*                                | Affinity settings for pod assignment                  | `{}`                  |
+| `server.config.logLevel`                          | Server log level                                      | `debug,info`          |
+| `server.config.numHistoryShards`                  | Number of history shards                              | `1000`                |
+| `server.config.persistence.[store].driver`        | Connection driver                                     | `cassandra`           |
+| `server.config.persistence.[store].cassandra`     | Cassandra connection details (see `values.yaml`)      | `{}`                  |
+| `server.config.persistence.[store].sql`           | SQL connection details (see `values.yaml`)            | `{}`                  |
+| `server.[service].service.type`                   | `[service]` service type                              | `ClusterIP`           |
+| `server.[service].service.port`                   | `[service]` service port                              | `7933/7934/7935/7939` |
+| `server.[service].metrics.annotations.enabled`    | Annotate `[service]` pods with Prometheus annotations | ``                    |
+| `server.[service].metrics.serviceMonitor.enabled` | Enable Prometheus ServiceMonitor for `[service]`      | ``                    |
+| `server.[service].metrics.prometheus.timerType`   | `[service]` Prometheus timer type                     | ``                    |
+| `server.[service].podAnnotations`                 | `[service]` pod annotations                           | `{}`                  |
+| `server.[service].resources`                      | `[service]` CPU/Memory resource requests/limits       | `{}`                  |
+| `server.[service].nodeSelector`                   | `[service]` Node labels for pod assignment            | `{}`                  |
+| `server.[service].tolerations`                    | `[service]` Toleration labels for pod assignment      | `[]`                  |
+| `server.[service].affinity`                       | `[service]` Affinity settings for pod assignment      | `{}`                  |
+| `web.enabled`                                     | Enable WebUI service                                  | `true`                |
+| `web.replicaCount`                                | Number of WebUI service Replicas                      | `1`                   |
+| `web.image.repository`                            | WebUI image repository                                | `ubercadence/web`     |
+| `web.image.tag`                                   | WebUI image tag                                       | `3.3.2`               |
+| `web.image.pullPolicy`                            | WebUI image pull policy                               | `IfNotPresent`        |
+| `web.service.type`                                | WebUI service type                                    | `ClusterIP`           |
+| `web.service.port`                                | WebUI service port                                    | `80`                  |
+| `web.ingress.enabled`                             | Enable WebUI Ingress                                  | `false`               |
+| `web.ingress.annotations`                         | WebUI Ingress annotations                             | `{}`                  |
+| `web.ingress.hosts`                               | WebUI Ingress hosts                                   | `/`                   |
+| `web.ingress.tls`                                 | WebUI Ingress tls config                              | `[]`                  |
+| `web.resources`                                   | WebUI CPU/Memory resource requests/limits             | `{}`                  |
+| `web.nodeSelector`                                | Node labels for pod assignment                        | `{}`                  |
+| `web.tolerations`                                 | Toleration labels for pod assignment                  | `[]`                  |
+| `web.affinity`                                    | Affinity settings for pod assignment                  | `{}`                  |
+| `schema.setup`                                    | Create database or keyspace                           | `true`                |
+| `schema.update`                                   | Update schema                                         | `true`                |
+| `cassandra.enabled`                               | Install Cassandra cluster                             | `true`                |
+| `cassandra.config.cluster_size`                   | Cassandra cluster node number                         | `1`                   |
+| `mysql.enabled`                                   | Install MySQL                                         | `false`               |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
