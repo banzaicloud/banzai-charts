@@ -21,25 +21,61 @@ store:
 
 query:
   enabled: true
-  # annotations:
-  replicaCount: 1
-  monitoring:
-    enabled: true
-  grpc:
-    port: 10901
-  http:
-    port: 10902
+  # Prefix for API and UI endpoints. This allows thanos UI to be served on a sub-path.
+  # This option is analogous to --web.route-prefix of Promethus.
+  webRoutePrefix: ""
+  # Static prefix for all HTML links and redirect
+  #  URLs in the UI query web interface. Actual
+  #  endpoints are still served on / or the
+  #  web.route-prefix. This allows thanos UI to be
+  #  served behind a reverse proxy that strips a URL
+  #  sub-path.
+  webExternalPrefix: ""
+  # Name of HTTP request header used for dynamic prefixing of UI links and redirects.
+  # This option is ignored if web.external-prefix argument is set. Security risk: enable this
+  # option only if a reverse proxy in front of thanos is resetting the header. The --web.prefix-header=X-Forwarded-Prefix option
+  # can be useful, for example, if Thanos UI is served via Traefik reverse proxy with PathPrefixStrip option enabled, which sends the
+  # stripped prefix value in X-Forwarded-Prefix header. This allows thanos UI to be served on a sub-path
+  webPrefixHeader: ""
+  # https://github.com/improbable-eng/thanos/issues/1015
+  storeDNSResolver: miekgdns
+  # Enable DNS discovery for stores
+  storeDNSDiscovery: true
+  # Addresses of statically configured store API servers (repeatable).
+  # The scheme may be prefixed with 'dns+' or 'dnssrv+' to detect store API servers through respective DNS lookups.
+  stores: []
+  #  - "dnssrv+_grpc._tcp.<service>.<namespace>.svc.cluster.local"
+  #
+  # Log filtering level.
   logLevel: debug
-  resources: {}
+  # Add extra environment variables to compact
+  extraEnv: []
+  # - name: ENV
+  #   value: value
+  #
+  # Add extra arguments to the compact service
   extraArgs: []
-  livenessProbe: {}
-    # httpGet:
-    #   path: /-/healthy
-    #   port: 10902
-  readinessProbe: {}
-    # httpGet:
-    #   path: "/-/ready"
-    #   port: 10902
+  # - "--extraargs=extravalue"
+  #
+  #
+  replicaCount: 1
+  # The grpc endpoint to communicate with other components
+  grpc:
+    # grpc listen port number
+    port: 10901
+    # Service definition for query grpc service
+    service:
+      # Annotations to query grpc service
+      annotations: {}
+  # The http endpoint to communicate with other components
+  http:
+    # http listen port number
+    port: 10902
+    # Service definition for query http service
+    service:
+      type: ClusterIP
+      # Annotations to query http service
+      annotations: {}
 
   ingress:
     enabled: false
@@ -55,8 +91,57 @@ query:
     #    hosts:
     #      - chart-example.local
 
-  securityContext: {}
   certSecretName: ""
+  labels:
+  #  cluster: example
+  #
+  # Extra annotations for compact pod template
+  annotations: {}
+  #  example.com: default
+  #
+  # Add extra labels to compact deployment
+  deploymentLabels: {}
+  #  extraLabel: extraLabelValue
+  #
+  # Add extra annotations to compact deployment
+  deploymentAnnotations: {}
+  #  extraAnnotation: extraAnnotationValue
+  #
+  # Enable metrics collecting for compat service
+  metrics:
+    # This is the Prometheus annotation type scraping configuration
+    annotations:
+      enabled: false
+    # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
+    serviceMonitor:
+      enabled: false
+
+  # Optional securityContext
+  securityContext: {}
+  resources: {}
+  #  limits:
+  #    cpu: 2000m
+  #    memory: 16Gi
+  #  requests:
+  #    cpu: 1000m
+  #    memory: 4Gi
+  #
+  # Node tolerations for server scheduling to nodes with taints
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  tolerations: []
+  # - key: "key"
+  #   operator: "Equal|Exists"
+  #   value: "value"
+  #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+  #
+  # Node labels for compact pod assignment
+  # Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  #
+  nodeSelector: {}
+  #
+  # Pod affinity
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  affinity: {}
 
 compact:
   enabled: true
@@ -93,19 +178,19 @@ compact:
     #  persistentVolumeClaim:
     #    claimName: compact-data-volume
   # Extra labels for compact pod template
-  labels:
+  labels: {}
   #  cluster: example
   #
   # Extra annotations for compact pod template
-  annotations:
+  annotations: {}
   #  example.com: default
   #
   # Add extra labels to compact deployment
-  deploymentLabels:
+  deploymentLabels: {}
   #  extraLabel: extraLabelValue
   #
   # Add extra annotations to compact deployment
-  deploymentAnnotations:
+  deploymentAnnotations: {}
   #  extraAnnotation: extraAnnotationValue
   #
   # Enable metrics collecting for compat service
