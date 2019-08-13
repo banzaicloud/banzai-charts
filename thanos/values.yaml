@@ -144,12 +144,6 @@ compact:
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
 
-
-cluster:
-  enabled: true
-  address: 0.0.0.0
-  port: 10900
-
 objstore:
   provider: gcs
   configFile: bucket.yaml
