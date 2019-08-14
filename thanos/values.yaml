@@ -5,7 +5,55 @@ image:
 
 store:
   enabled: true
-  # annotations:
+  # Maximum size of items held in the index cache.
+  indexCacheSize: 250MB
+  # Maximum size of concurrently allocatable bytes for chunks.
+  chunkPoolSize: 2GB
+  # Maximum amount of samples returned via a single series call. 0 means no limit.
+  # NOTE: for efficiency we take 120 as the number of samples in chunk (it cannot be bigger than that),
+  # so the actual number of samples might be lower, even though the maximum could be hit.
+  grpcSeriesSampleLimit: 0
+  # Maximum number of concurrent Series calls.
+  grpcSeriesMaxConcurrency: 20
+  # Repeat interval for syncing the blocks between local and remote view.
+  syncBlockDuration: 3m
+  # Number of goroutines to use when syncing blocks from object storage.
+  blockSyncConcurrency: 20
+  #
+  logLevel: debug
+  # Add extra environment variables to compact
+  extraEnv: []
+  # - name: ENV
+  #   value: value
+  #
+  # Add extra arguments to the compact service
+  extraArgs: []
+  # - "--extraargs=extravalue"
+  #
+  #
+  labels:
+  #  cluster: example
+  #
+  # Extra annotations for compact pod template
+  annotations: {}
+  #  example.com: default
+  #
+  # Add extra labels to compact deployment
+  deploymentLabels: {}
+  #  extraLabel: extraLabelValue
+  #
+  # Add extra annotations to compact deployment
+  deploymentAnnotations: {}
+  #  extraAnnotation: extraAnnotationValue
+  # Enable metrics collecting for compat service
+  metrics:
+    # This is the Prometheus annotation type scraping configuration
+    annotations:
+      enabled: false
+    # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
+    serviceMonitor:
+      enabled: false
+
   replicaCount: 1
   monitoring:
     enabled: true
@@ -13,10 +61,8 @@ store:
     port: 10902
   grpc:
     port: 10901
-  logLevel: debug
   securityContext: {}
   resources: {}
-  extraArgs: []
   certSecretName: ""
 
 query:
