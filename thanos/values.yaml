@@ -30,6 +30,7 @@ store:
   extraArgs: []
   # - "--extraargs=extravalue"
   #
+  replicaCount: 1
   #
   labels:
   #  cluster: example
@@ -53,17 +54,49 @@ store:
     # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
     serviceMonitor:
       enabled: false
-
-  replicaCount: 1
-  monitoring:
-    enabled: true
-  http:
-    port: 10902
+  # The grpc endpoint to communicate with other components
   grpc:
+    # grpc listen port number
     port: 10901
+    # Service definition for query grpc service
+    service:
+      # Annotations to query grpc service
+      annotations: {}
+  # The http endpoint to communicate with other components
+  http:
+    # http listen port number
+    port: 10902
+    # Service definition for query http service
+    service:
+      type: ClusterIP
+      # Annotations to query http service
+      annotations: {}
+  # Optional securityContext
   securityContext: {}
   resources: {}
-  certSecretName: ""
+  #  limits:
+  #    cpu: 2000m
+  #    memory: 16Gi
+  #  requests:
+  #    cpu: 1000m
+  #    memory: 4Gi
+  #
+  # Node tolerations for server scheduling to nodes with taints
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  tolerations: []
+  # - key: "key"
+  #   operator: "Equal|Exists"
+  #   value: "value"
+  #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+  #
+  # Node labels for compact pod assignment
+  # Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  #
+  nodeSelector: {}
+  #
+  # Pod affinity
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  affinity: {}
 
 query:
   enabled: true
