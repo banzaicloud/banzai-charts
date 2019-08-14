@@ -45,7 +45,9 @@ spec:
         - "--log.level={{ .Values.query.logLevel }}"
         - "--grpc-address=0.0.0.0:{{ .Values.query.grpc.port }}"
         - "--http-address=0.0.0.0:{{ .Values.query.http.port }}"
+        {{- if .Values.query.replicaLabel }}
         - "--query.replica-label={{ .Values.query.replicaLabel }}"
+        {{- end }}
         {{- if .Values.query.webRoutePrefix }}
         - "--web.route-prefix={{ .Values.query.webRoutePrefix }}"
         {{- end }}
