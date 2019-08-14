@@ -361,31 +361,51 @@ bucket:
   enabled: true
   # Log filtering level.
   logLevel: info
-  # Compact service listening http port
+  # The http endpoint to communicate with other components
   http:
+    # http listen port number
     port: 8080
-  # Add extra environment variables to compact
+    # Service definition for query http service
+    service:
+      type: ClusterIP
+      # Annotations to query http service
+      annotations: {}
+    # Set up ingress for the http service
+    ingress:
+      enabled: false
+      annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+  # Add extra environment variables to bucket
   extraEnv:
   # - name: ENV
   #   value: value
   #
-  # Add extra arguments to the compact service
+  # Add extra arguments to the bucket service
   extraArgs:
   # - "--extraargs=extravalue"
   #
-  # Extra labels for compact pod template
+  # Extra labels for bucket pod template
   labels: {}
   #  cluster: example
   #
-  # Extra annotations for compact pod template
+  # Extra annotations for bucket pod template
   annotations: {}
   #  example.com: default
   #
-  # Add extra labels to compact deployment
+  # Add extra labels to bucket deployment
   deploymentLabels: {}
   #  extraLabel: extraLabelValue
   #
-  # Add extra annotations to compact deployment
+  # Add extra annotations to bucket deployment
   deploymentAnnotations: {}
 
   # Optional securityContext
@@ -406,7 +426,7 @@ bucket:
   #   value: "value"
   #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
   #
-  # Node labels for compact pod assignment
+  # Node labels for bucket pod assignment
   # Ref: https://kubernetes.io/docs/user-guide/node-selection/
   #
   nodeSelector: {}
@@ -434,7 +454,7 @@ objstore: {}
   #       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
   #       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thanos%40gitpods.iam.gserviceaccount.com"
   #     }
-  ####
+  #
   # type: S3
   # config:
   #   bucket: ""
@@ -453,7 +473,7 @@ objstore: {}
   #   trace:
   #     enable: false
   #   part_size: 0
-  ####
+  #
   # type: AZURE
   # config:
   #   storage_account: ""
