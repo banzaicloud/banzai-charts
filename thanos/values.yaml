@@ -357,10 +357,67 @@ compact:
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
 
+bucket:
+  enabled: true
+  # Log filtering level.
+  logLevel: info
+  # Compact service listening http port
+  http:
+    port: 8080
+  # Add extra environment variables to compact
+  extraEnv:
+  # - name: ENV
+  #   value: value
+  #
+  # Add extra arguments to the compact service
+  extraArgs:
+  # - "--extraargs=extravalue"
+  #
+  # Extra labels for compact pod template
+  labels: {}
+  #  cluster: example
+  #
+  # Extra annotations for compact pod template
+  annotations: {}
+  #  example.com: default
+  #
+  # Add extra labels to compact deployment
+  deploymentLabels: {}
+  #  extraLabel: extraLabelValue
+  #
+  # Add extra annotations to compact deployment
+  deploymentAnnotations: {}
+
+  # Optional securityContext
+  securityContext: {}
+  resources: {}
+  #  limits:
+  #    cpu: 2000m
+  #    memory: 16Gi
+  #  requests:
+  #    cpu: 1000m
+  #    memory: 4Gi
+  #
+  # Node tolerations for server scheduling to nodes with taints
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  tolerations: []
+  # - key: "key"
+  #   operator: "Equal|Exists"
+  #   value: "value"
+  #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+  #
+  # Node labels for compact pod assignment
+  # Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  #
+  nodeSelector: {}
+  #
+  # Pod affinity
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  affinity: {}
+
 # This is the general backend configuration. Please se the examples below to configurate object store.
 # More information can be found at thanos github repositoriy: https://github.com/thanos-io/thanos/blob/master/docs/storage.md
 objstore: {}
-  ####
   # type: GCS
   # config:
   #   bucket: "thanos"
@@ -375,8 +432,8 @@ objstore: {}
   #       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
   #       "token_uri": "https://oauth2.googleapis.com/token",
   #       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  #     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thanos%40gitpods.iam.gserviceaccount.com"
-  #   }
+  #       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thanos%40gitpods.iam.gserviceaccount.com"
+  #     }
   ####
   # type: S3
   # config:
