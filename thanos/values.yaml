@@ -357,8 +357,50 @@ compact:
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
 
-objstore:
-  provider: gcs
-  configFile: bucket.yaml
-  config: ""
-  gcsCredentials: ""
+# This is the general backend configuration. Please se the examples below to configurate object store.
+# More information can be found at thanos github repositoriy: https://github.com/thanos-io/thanos/blob/master/docs/storage.md
+objstore: {}
+  ####
+  # type: GCS
+  # config:
+  #   bucket: "thanos"
+  #   service_account: |-
+  #     {
+  #       "type": "service_account",
+  #       "project_id": "project",
+  #       "private_key_id": "abcdefghijklmnopqrstuvwxyz12345678906666",
+  #       "private_key": "-----BEGIN PRIVATE KEY-----\...\n-----END PRIVATE KEY-----\n",
+  #       "client_email": "project@thanos.iam.gserviceaccount.com",
+  #       "client_id": "123456789012345678901",
+  #       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  #       "token_uri": "https://oauth2.googleapis.com/token",
+  #       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  #     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thanos%40gitpods.iam.gserviceaccount.com"
+  #   }
+  ####
+  # type: S3
+  # config:
+  #   bucket: ""
+  #   endpoint: ""
+  #   region: ""
+  #   access_key: ""
+  #   insecure: false
+  #   signature_version2: false
+  #   encrypt_sse: false
+  #   secret_key: ""
+  #   put_user_metadata: {}
+  #   http_config:
+  #     idle_conn_timeout: 0s
+  #     response_header_timeout: 0s
+  #     insecure_skip_verify: false
+  #   trace:
+  #     enable: false
+  #   part_size: 0
+  ####
+  # type: AZURE
+  # config:
+  #   storage_account: ""
+  #   storage_account_key: ""
+  #   container: ""
+  #   endpoint: ""
+  #   max_retries: 0
