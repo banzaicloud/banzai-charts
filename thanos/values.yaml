@@ -19,8 +19,8 @@ store:
   syncBlockDuration: 3m
   # Number of goroutines to use when syncing blocks from object storage.
   blockSyncConcurrency: 20
-  #
-  logLevel: debug
+  # Log filtering level.
+  logLevel: info
   # Add extra environment variables to compact
   extraEnv: []
   # - name: ENV
@@ -30,9 +30,10 @@ store:
   extraArgs: []
   # - "--extraargs=extravalue"
   #
+  # Number of replicas running from store component
   replicaCount: 1
-  #
-  labels:
+  # Extra labels for store pod template
+  labels: {}
   #  cluster: example
   #
   # Extra annotations for compact pod template
@@ -58,18 +59,18 @@ store:
   grpc:
     # grpc listen port number
     port: 10901
-    # Service definition for query grpc service
+    # Service definition for store grpc service
     service:
-      # Annotations to query grpc service
+      # Annotations to store grpc service
       annotations: {}
   # The http endpoint to communicate with other components
   http:
     # http listen port number
     port: 10902
-    # Service definition for query http service
+    # Service definition for store http service
     service:
       type: ClusterIP
-      # Annotations to query http service
+      # Annotations to store http service
       annotations: {}
   # Optional securityContext
   securityContext: {}
@@ -126,7 +127,7 @@ query:
   #  - "dnssrv+_grpc._tcp.<service>.<namespace>.svc.cluster.local"
   #
   # Log filtering level.
-  logLevel: debug
+  logLevel: info
   # Add extra environment variables to compact
   extraEnv: []
   # - name: ENV
@@ -136,7 +137,7 @@ query:
   extraArgs: []
   # - "--extraargs=extravalue"
   #
-  #
+  # Number of replicas running from query component
   replicaCount: 1
   # The grpc endpoint to communicate with other components
   grpc:
@@ -171,7 +172,8 @@ query:
     #      - chart-example.local
 
   certSecretName: ""
-  labels:
+  # Extra labels for query pod template
+  labels: {}
   #  cluster: example
   #
   # Extra annotations for compact pod template
@@ -238,7 +240,7 @@ compact:
   # Number of goroutines to use when compacting groups.
   blockSyncConcurrency: 1
   # Log filtering level.
-  logLevel: debug
+  logLevel: info
   # Compact service listening http port
   http:
     port: 10902
