@@ -59,19 +59,48 @@ store:
   grpc:
     # grpc listen port number
     port: 10901
-    # Service definition for store grpc service
+    # Service definition for query grpc service
     service:
-      # Annotations to store grpc service
+      # Annotations to query grpc service
       annotations: {}
+    # Set up ingress for the grpc service
+    ingress:
+      enabled: false
+      annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
   # The http endpoint to communicate with other components
   http:
     # http listen port number
     port: 10902
-    # Service definition for store http service
+    # Service definition for query http service
     service:
       type: ClusterIP
-      # Annotations to store http service
+      # Annotations to query http service
       annotations: {}
+    # Set up ingress for the http service
+    ingress:
+      enabled: false
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
   # Optional securityContext
   securityContext: {}
   resources: {}
@@ -101,6 +130,9 @@ store:
 
 query:
   enabled: true
+  # Label to treat as a replica indicator along which data is deduplicated.
+  # Still you will be able to query without deduplication using 'dedup=false' parameter.
+  replicaLabel: ""
   # Prefix for API and UI endpoints. This allows thanos UI to be served on a sub-path.
   # This option is analogous to --web.route-prefix of Promethus.
   webRoutePrefix: ""
@@ -147,6 +179,21 @@ query:
     service:
       # Annotations to query grpc service
       annotations: {}
+    # Set up ingress for the grpc service
+    ingress:
+      enabled: false
+      annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
   # The http endpoint to communicate with other components
   http:
     # http listen port number
@@ -156,20 +203,20 @@ query:
       type: ClusterIP
       # Annotations to query http service
       annotations: {}
-
-  ingress:
-    enabled: false
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-    labels: {}
-    path: /
-    hosts:
-      - chart-example.local
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
+    # Set up ingress for the http service
+    ingress:
+      enabled: false
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
 
   certSecretName: ""
   # Extra labels for query pod template
@@ -315,5 +362,3 @@ objstore:
   configFile: bucket.yaml
   config: ""
   gcsCredentials: ""
-
-replicaLabelName: replica
