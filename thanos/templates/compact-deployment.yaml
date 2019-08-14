@@ -23,11 +23,14 @@ spec:
       app.kubernetes.io/component: compact
   template:
     metadata:
-      labels: {{ with  .Values.compact.labels }}{{ toYaml . | nindent 8 }}{{ end }}
+      labels:
         app.kubernetes.io/name: {{ include "thanos.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: compact
-      annotations: {{ with  .Values.compact.annotations }}{{ toYaml . | nindent 8 }}{{ end }}
+  {{ with  .Values.compact.labels }}{{ toYaml . | indent 8 }}{{ end }}
+      {{- with  .Values.compact.annotations }}
+      annotations: {{ toYaml . | nindent 8 }}
+      {{- end }}
       {{- if .Values.compact.metrics.annotations.enabled  }}
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.compact.http.port }}"
