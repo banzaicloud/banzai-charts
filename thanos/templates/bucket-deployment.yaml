@@ -43,6 +43,15 @@ spec:
           - "--log.level={{ .Values.bucket.logLevel }}"
           - "--listen=0.0.0.0:{{ .Values.bucket.http.port }}"
           - "--objstore.config-file=/etc/config/object-store.yaml"
+          {{- if .Values.bucket.refresh }}
+          - "--refresh={{ .Values.bucket.refresh }}"
+          {{- end }}
+          {{- if .Values.bucket.timeout }}
+          - "--timeout={{ .Values.bucket.timeout }}"
+          {{- end }}
+          {{- if .Values.bucket.label }}
+          - "--label={{ .Values.bucket.label }}"
+          {{- end }}
           {{ with .Values.bucket.extraArgs }}{{ toYaml . | nindent 8 }}{{- end }}
         ports:
           - name: http

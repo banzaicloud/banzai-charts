@@ -361,6 +361,12 @@ bucket:
   enabled: true
   # Log filtering level.
   logLevel: info
+  # Refresh interval to download metadata from remote storage
+  refresh: 30m
+  # Timeout to download metadata from remote storage
+  timeout: 5m
+  # Prometheus label to use as timeline title
+  label: ""
   # The http endpoint to communicate with other components
   http:
     # http listen port number
