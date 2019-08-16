@@ -21,6 +21,7 @@ Things that we are improving in near future:
 - [ ] Automatic TLS generation for communicating between in-cluster components
 - [ ] Support for tracing configuration
 - [ ] Grafana dashboards
+- [ ] Informative NOTES.txt
 
 ## Architecture
 
@@ -31,13 +32,12 @@ This Chart will install a complete [Thanos](https://github.com/improbable-eng/th
 Add Banzai Cloud repository:
 
 ```bash
-$ helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
-$ helm repo update
+$ helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com
 ```
 
 ## Storage examples
 
-### Example GCS configuration for object-store.yaml
+### Example GCS configuration for `object-store.yaml`
 ```
 type: GCS
   config:
@@ -57,7 +57,7 @@ type: GCS
       }
 ```
 
-### Example S3 configuration for object-store.yaml
+### Example S3 configuration for `object-store.yaml`
 This is an example configuration using thanos with S3. Check endpoints here: https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 
 ```   
@@ -81,7 +81,7 @@ config:
   part_size: 0
 ```
 
-### Example Azure configuration for object-store.yaml
+### Example Azure configuration for `object-store.yaml`
 
 ```
 type: AZURE
