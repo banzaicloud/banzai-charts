@@ -17,7 +17,7 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - port: 10901
+    - port: {{ .Values.sidecar.grpc.port }}
       protocol: TCP
       targetPort: grpc
       name: grpc
