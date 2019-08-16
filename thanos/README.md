@@ -68,36 +68,61 @@ helm install banzaicloud-stable/thanos --set objstore.bucketName="test-bucket" -
 ### Example GCS configuration
 ```
 objstore:
-  provider: gcs
-  gcsCredentials: <base64encodedjson>
-  configFile: "bucket.yaml"
-  config: |-
-    type: GCS
+  type: GCS
     config:
-      bucket: ""
-
+      bucket: "thanos"
+      service_account: |-
+        {
+          "type": "service_account",
+          "project_id": "project",
+          "private_key_id": "abcdefghijklmnopqrstuvwxyz12345678906666",
+          "private_key": "-----BEGIN PRIVATE KEY-----\...\n-----END PRIVATE KEY-----\n",
+          "client_email": "project@thanos.iam.gserviceaccount.com",
+          "client_id": "123456789012345678901",
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://oauth2.googleapis.com/token",
+          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+          "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thanos%40gitpods.iam.gserviceaccount.com"
+        }
 ```
 
 ### Example S3 configuration
 This is an example configuration using thanos with S3. Check endpoints here: https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 
+```   
+objstore:
+  type: S3
+  config:
+    bucket: ""
+    endpoint: ""
+    region: ""
+    access_key: ""
+    insecure: false
+    signature_version2: false
+    encrypt_sse: false
+    secret_key: ""
+    put_user_metadata: {}
+    http_config:
+      idle_conn_timeout: 0s
+      response_header_timeout: 0s
+      insecure_skip_verify: false
+    trace:
+      enable: false
+    part_size: 0
+```
+
+### Example Azure configuration
+
 ```
 objstore:
-  provider: amazon
-  configFile: "bucket.yaml"
-  config: |-
-    type: S3
-    config:
-      endpoint: ""
-      bucket: ""
-      access_key: ""
-      secret_key: ""
+  type: AZURE
+  config:
+    storage_account: ""
+    storage_account_key: ""
+    container: ""
+    endpoint: ""
+    max_retries: 0
 ```
-
-
-## Upcoming features
-- Support S3
-- Add override options to custom configuration and secrets
 
 ## Contributing
 Contributions are very welcome!
