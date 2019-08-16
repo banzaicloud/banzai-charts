@@ -496,7 +496,10 @@ sidecar:
 
 # This is the general backend configuration. Please se the examples below to configurate object store.
 # More information can be found at thanos github repositoriy: https://github.com/thanos-io/thanos/blob/master/docs/storage.md
-objstore: {}
+# Text representation of the configuration
+objstoreFile: ""
+# YAML representation of the configuration. It's mutually exclusive with objstoreFile.
+objstore:
   # type: GCS
   # config:
   #   bucket: "thanos"

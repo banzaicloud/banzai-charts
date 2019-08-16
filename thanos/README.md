@@ -35,73 +35,92 @@ $ helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/bran
 $ helm repo update
 ```
 
-
 ## Storage examples
 
-### Example GCS configuration
+### Example GCS configuration for object-store.yaml
 ```
-objstore:
-  type: GCS
-    config:
-      bucket: "thanos"
-      service_account: |-
-        {
-          "type": "service_account",
-          "project_id": "project",
-          "private_key_id": "abcdefghijklmnopqrstuvwxyz12345678906666",
-          "private_key": "-----BEGIN PRIVATE KEY-----\...\n-----END PRIVATE KEY-----\n",
-          "client_email": "project@thanos.iam.gserviceaccount.com",
-          "client_id": "123456789012345678901",
-          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-          "token_uri": "https://oauth2.googleapis.com/token",
-          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-          "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thanos%40gitpods.iam.gserviceaccount.com"
-        }
+type: GCS
+  config:
+    bucket: "thanos"
+    service_account: |-
+      {
+        "type": "service_account",
+        "project_id": "project",
+        "private_key_id": "abcdefghijklmnopqrstuvwxyz12345678906666",
+        "private_key": "-----BEGIN PRIVATE KEY-----\...\n-----END PRIVATE KEY-----\n",
+        "client_email": "project@thanos.iam.gserviceaccount.com",
+        "client_id": "123456789012345678901",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thanos%40gitpods.iam.gserviceaccount.com"
+      }
 ```
 
-### Example S3 configuration
+### Example S3 configuration for object-store.yaml
 This is an example configuration using thanos with S3. Check endpoints here: https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 
 ```   
-objstore:
-  type: S3
-  config:
-    bucket: ""
-    endpoint: ""
-    region: ""
-    access_key: ""
-    insecure: false
-    signature_version2: false
-    encrypt_sse: false
-    secret_key: ""
-    put_user_metadata: {}
-    http_config:
-      idle_conn_timeout: 0s
-      response_header_timeout: 0s
-      insecure_skip_verify: false
-    trace:
-      enable: false
-    part_size: 0
+type: S3
+config:
+  bucket: ""
+  endpoint: ""
+  region: ""
+  access_key: ""
+  insecure: false
+  signature_version2: false
+  encrypt_sse: false
+  secret_key: ""
+  put_user_metadata: {}
+  http_config:
+    idle_conn_timeout: 0s
+    response_header_timeout: 0s
+    insecure_skip_verify: false
+  trace:
+    enable: false
+  part_size: 0
 ```
 
-### Example Azure configuration
+### Example Azure configuration for object-store.yaml
 
 ```
-objstore:
-  type: AZURE
-  config:
-    storage_account: ""
-    storage_account_key: ""
-    container: ""
-    endpoint: ""
+type: AZURE
+config:
+  storage_account: ""
+  storage_account_key: ""
+  container: ""
+  endpoint: ""
     max_retries: 0
 ```
 Create the Service Account and Bucket at Google cloud.
 
 Install the chart:
 ```bash
-helm install banzaicloud-stable/thanos -f my-values.yaml --set-file objstore=object-store.yaml
+helm install banzaicloud-stable/thanos -f my-values.yaml --set-file objstoreFile=object-store.yaml
 
+```
+
+## Install prometheus-operator
+
+Extra configuration for prometheus operator.
+
+> Note: Prometheus-operator and Thanos **MUST** be in the same namespace.
+
+```yaml
+prometheus:
+  prometheusSpec:
+    thanos:
+      image: improbable/thanos:v0.6.0
+      version: v0.6.0
+      objectStorageConfig:
+        name: thanos
+        key: object-store.yaml
+```
+
+Install prometheus-operator
+
+```bash
+helm install stable/prometheus-operator -f thanos-sidecar.yaml
 ```
 
 # Configuration
@@ -114,7 +133,8 @@ This section describes the values available
 | image.repository | Thanos image repository and name | improbable/thanos |
 | image.tag | Thanos image tag | master-2018-10-29-8f247d6 |
 | image.pullPolicy | Image Kubernetes pull policy | IfNotPresent |
-| objstore | Configuration for the backend object storage | {} |
+| objstore | Configuration for the backend object storage in yaml format. Mutually exclusive with objstoreFile. | {} |
+| objstoreFile | Configuration for the backend object storage in string format. Mutually exclusive with objstore. | "" |
 
 ## Common settings for all components
 
