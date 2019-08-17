@@ -446,6 +446,11 @@ bucket:
 sidecar:
   # NOTE: This is only the service references for the sidecar
   enabled: true
+  # Enable metrics collecting for compat service
+  metrics:
+    # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
+    serviceMonitor:
+      enabled: false
   # The grpc endpoint to communicate with other components
   grpc:
     # grpc listen port number
