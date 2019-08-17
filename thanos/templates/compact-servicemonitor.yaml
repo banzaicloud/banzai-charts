@@ -22,7 +22,7 @@ spec:
       - {{ .Release.Namespace }}
   endpoints:
     - port: http
-      interval: {{ .Values.compact.metrics.serviceMonitor.interval | default "15" }}
+      interval: {{ .Values.compact.metrics.serviceMonitor.interval | default "15s" }}
       {{- with .Values.compact.metrics.serviceMonitor.relabellings }}
       metricRelabelings: {{ toYaml . | nindent 8 }}
       {{- end }}

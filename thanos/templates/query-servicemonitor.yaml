@@ -22,7 +22,7 @@ spec:
       - {{ .Release.Namespace }}
   endpoints:
     - port: http
-      interval: {{ .Values.query.metrics.serviceMonitor.interval | default "15" }}
+      interval: {{ .Values.query.metrics.serviceMonitor.interval | default "15s" }}
       {{- with .Values.query.metrics.serviceMonitor.relabellings }}
       metricRelabelings: {{ toYaml . | nindent 8 }}
       {{- end }}
