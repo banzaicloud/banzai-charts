@@ -1,8 +1,8 @@
 apiVersion: v1
 description: A Helm chart for anchore-policy-validator admission controller
 name: anchore-policy-validator
-version: 0.4.2
-appVersion: 0.3.3
+version: 0.4.3
+appVersion: 0.3.4
 keywords:
  - analysis
  - "anchore-policy-validator"
