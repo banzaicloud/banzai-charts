@@ -94,10 +94,16 @@ config:
 ```
 Create the Service Account and Bucket at Google cloud.
 
-Install the chart:
+#### Install the chart:
 ```bash
-helm install banzaicloud-stable/thanos -f my-values.yaml --set-file objstoreFile=object-store.yaml
+helm install banzaicloud-stable/thanos --name thanos -f my-values.yaml --set-file objstoreFile=object-store.yaml
 
+```
+
+Visit the Bucket browser
+```bash
+kubectl port-forward svc/thanos-bucket 8080 &
+open http://localhost:8080
 ```
 
 ## Install prometheus-operator
@@ -131,7 +137,7 @@ This section describes the values available
 |Name|Description| Default Value|
 |----|-----------|--------------|
 | image.repository | Thanos image repository and name | improbable/thanos |
-| image.tag | Thanos image tag | master-2018-10-29-8f247d6 |
+| image.tag | Thanos image tag | v0.6.0 |
 | image.pullPolicy | Image Kubernetes pull policy | IfNotPresent |
 | objstore | Configuration for the backend object storage in yaml format. Mutually exclusive with objstoreFile. | {} |
 | objstoreFile | Configuration for the backend object storage in string format. Mutually exclusive with objstore. | "" |
