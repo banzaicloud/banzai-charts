@@ -2,75 +2,80 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "thanos.fullname" . }}-store
+  name: {{ include "thanos.componentname" (list $ "store") }}
   labels:
-    app: {{ include "thanos.name" . }}-store
-    chart: {{ include "thanos.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ include "thanos.name" . }}
+    helm.sh/chart: {{ include "thanos.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: store
+  {{ with .Values.store.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end }}
+  {{- with .Values.store.deploymentAnnotations }}
+annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
 spec:
-  replicas: {{ .Values.store.replicaCount}}
+  replicas: {{ .Values.store.replicas | default 1 }}
   selector:
     matchLabels:
-      app: {{ include "thanos.name" . }}-store
-      release: "{{ .Release.Name }}"
-      heritage: "{{ .Release.Service }}"
-      thanos-peer: "true"
+      app.kubernetes.io/name: {{ include "thanos.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: store
   template:
     metadata:
-      labels:
-        app: {{ include "thanos.name" . }}-store
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
-        thanos-peer: "true"
-      annotations:
-      {{- with .Values.store.annotations }}
-{{ toYaml . | indent 8 }}
+      labels: {{ with  .Values.store.labels }}{{ toYaml . | nindent 8 }}{{ end }}
+        app.kubernetes.io/name: {{ include "thanos.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: store
+      {{- with  .Values.store.annotations }}
+      annotations: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.store.monitoring.enabled  }}
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.store.http.port }}"
-      {{ end }}
+      {{- if .Values.store.metrics.annotations.enabled  }}
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.store.http.port }}"
+      {{- end }}
     spec:
       containers:
       - name: thanos-store
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{ if eq .Values.objstore.provider "gcs" }}
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /credentials/google.json
-        {{- end }}
         args:
         - "store"
         - "--data-dir=/var/thanos/store"
         - "--log.level={{ .Values.store.logLevel }}"
+        - "--http-address=0.0.0.0:{{ .Values.store.http.port }}"
         - "--grpc-address=0.0.0.0:{{ .Values.store.grpc.port }}"
-        {{- if .Values.cluster.enabled }}
-        - "--cluster.address={{ .Values.cluster.address }}:{{ .Values.cluster.port}}"
-        - "--cluster.peers={{ include "thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.cluster.port }}"
+        - "--objstore.config-file=/etc/config/object-store.yaml"
+        {{- if .Values.store.indexCacheSize }}
+        - "--index-cache-size={{ .Values.store.indexCacheSize }}"
         {{- end }}
-        - "--objstore.config-file=/etc/config/{{ .Values.objstore.configFile }}"
+        {{- if .Values.store.chunkPoolSize }}
+        - "--chunk-pool-size={{ .Values.store.chunkPoolSize }}"
+        {{- end }}
+        {{- if .Values.store.grpcSeriesSampleLimit }}
+        - "--store.grpc.series-sample-limit={{ .Values.store.grpcSeriesSampleLimit }}"
+        {{- end }}
+        {{- if .Values.store.grpcSeriesMaxConcurrency }}
+        - "--store.grpc.series-max-concurrency={{ .Values.store.grpcSeriesMaxConcurrency }}"
+        {{- end }}
+        {{- if .Values.store.syncBlockDuration }}
+        - "--sync-block-duration={{ .Values.store.syncBlockDuration }}"
+        {{- end }}
+        {{- if .Values.store.blockSyncConcurrency }}
+        - "--block-sync-concurrency={{ .Values.store.blockSyncConcurrency }}"
+        {{- end }}
         {{- if .Values.store.extraArgs }}
         {{ toYaml .Values.store.extraArgs | nindent 8 }}
         {{- end }}
         ports:
-        - name: monitoring
+        - name: http
           containerPort: {{ .Values.store.http.port }}
         - name: grpc
           containerPort: {{ .Values.store.grpc.port }}
-        {{- if .Values.cluster.enabled }}
-        - name: cluster
-          containerPort: {{ .Values.cluster.port }}
-        {{- end }}
         volumeMounts:
         - name: config-volume
           mountPath: /etc/config
           readOnly: true
-        {{ if eq .Values.objstore.provider "gcs" }}
-        - name: {{ .Values.objstore.provider }}
-          mountPath: /credentials
-        {{- end }}
         - name: data
           mountPath: /var/thanos/store
         {{- if .Values.store.certSecretName }}
@@ -86,21 +91,22 @@ spec:
       - name: config-volume
         secret:
           secretName: {{ include "thanos.fullname" . }}
-    {{- if eq .Values.objstore.provider "gcs" }}
-      - name: {{ .Values.objstore.provider }}
-        secret:
-          defaultMode: 420
-          secretName: {{ include "thanos.fullname" . }}-gcs
-          items:
-            - key: google.json
-              path: google.json
-    {{- end }}
       {{- if .Values.store.certSecretName }}
       - name: {{ .Values.store.certSecretName }}
         secret:
           defaultMode: 420
           secretName: {{ .Values.store.certSecretName }}
       {{- end }}
-      securityContext:
-        {{ toYaml .Values.store.securityContext | nindent 8 }}
+      {{- with .Values.compact.securityContext }}
+      securityContext: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.compact.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.compact.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.compact.tolerations }}
+      tolerations: {{ toYaml . | nindent 8 }}
+      {{- end }}
 {{- end }}
