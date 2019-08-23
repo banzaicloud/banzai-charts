@@ -257,9 +257,6 @@ configuration:
     clusterAutoscalerChartVersion: 0.12.3
     hpaOperatorChartVersion: 0.0.10
 
-  servicemesh:
-    istioOperatorChartVersion: 0.0.3
-
   spotguide:
     allowPrereleases: false
     allowPrivateRepos: false
