@@ -37,7 +37,7 @@ spec:
               serviceName: {{ include "thanos.componentname" (list $ "query") }}-http
               servicePort: {{ $.Values.query.http.port }}
   {{- end }}
-{{- end -}}
+{{- end }}
 
 ---
 
@@ -80,4 +80,4 @@ spec:
               serviceName: {{ include "thanos.componentname" (list $ "query") }}-grpc
               servicePort: {{ $.Values.query.http.port }}
   {{- end }}
-{{- end -}}
+{{- end }}
