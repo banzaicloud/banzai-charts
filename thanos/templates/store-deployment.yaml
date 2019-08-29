@@ -15,7 +15,7 @@ metadata:
 annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.store.replicas | default 1 }}
+  replicas: {{ .Values.store.replicaCount | default 1 }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "thanos.name" . }}
