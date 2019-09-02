@@ -227,7 +227,6 @@ configuration:
       - storagetier
 
   eks:
-    templateLocation: https://raw.githubusercontent.com/banzaicloud/pipeline/master/templates/eks
     ASGFulfillmentTimeout: 10m
 
   gke:
