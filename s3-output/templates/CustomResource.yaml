@@ -54,3 +54,7 @@ spec:
           value: "{{ .Values.region }}"
         - name: path
           value: "{{ .Values.path }}"
+        - name: bufferTimeKey
+          value: "{{ .Values.bufferTimeKey }}"
+        - name: bufferTimeWait
+          value: "{{ .Values.bufferTimeWait }}"
