@@ -5,7 +5,7 @@ metadata:
 spec:
   input:
     label:
-      app: "*"
+      app: "{{ .Values.appPattern }}"
       app.kubernetes.io/name: {{ include "s3-output.name" . }}
       helm.sh/chart: {{ include "s3-output.chart" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}

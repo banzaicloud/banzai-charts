@@ -16,6 +16,9 @@ bufferTimeKey: 3600
 # time to wait before flushing buffer
 bufferTimeWait: 10m
 
+# app to target
+appPattern: "*"
+
 awsCredentialsAccess:
   enabled: false
   secret:
