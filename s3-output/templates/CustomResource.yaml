@@ -52,3 +52,5 @@ spec:
           value: "{{ .Values.bucketName }}"
         - name: s3_region
           value: "{{ .Values.region }}"
+        - name: path
+          value: "{{ .Values.path }}"

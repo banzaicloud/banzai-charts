@@ -7,6 +7,9 @@ bucketName: ""
 # S3 bucket region
 region: "us-west-1"
 
+# path to log under. must have trailing slash
+path: "logs/${tag}/%Y/%m/%d/"
+
 awsCredentialsAccess:
   enabled: false
   secret:
