@@ -108,4 +108,7 @@ spec:
       {{- with .Values.compact.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
       {{- end }}
+      {{- with  .Values.query.serviceAccount }}
+      serviceAccountName: "{{ . }}"
+      {{- end }}
 {{ end }}

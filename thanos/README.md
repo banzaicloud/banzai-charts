@@ -60,7 +60,7 @@ type: GCS
 ### Example S3 configuration for `object-store.yaml`
 This is an example configuration using thanos with S3. Check endpoints here: https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 
-```   
+```
 type: S3
 config:
   bucket: ""
@@ -179,20 +179,21 @@ These setting applicable to nearly all components.
 ## Store
 
 These values are just samples, for more fine-tuning please check the values.yaml.
- 
+
 |Name|Description| Default Value|
 |----|-----------|--------------|
 | store.enabled | Enable component | true |
 | store.replicaCount | Pod replica count | 1 |
 | store.logLevel | Log level | info |
-| store.indexCacheSize | Maximum size of items held in the index cache. | 250MB | 
+| store.indexCacheSize | Maximum size of items held in the index cache. | 250MB |
 | store.chunkPoolSize | Maximum size of concurrently allocatable bytes for chunks. | 2GB |
 | store.grpcSeriesSampleLimit | Maximum amount of samples returned via a single series call. 0 means no limit. NOTE: for efficiency we take 120 as the number of samples in chunk (it cannot be bigger than that), so the actual number of samples might be lower, even though the maximum could be hit. | 0 |
 | store.grpcSeriesMaxConcurrency | Maximum number of concurrent Series calls. | 20 |
 | store.syncBlockDuration |Repeat interval for syncing the blocks between local and remote view. | 3m |
 | store.blockSyncConcurrency | Number of goroutines to use when syncing blocks from object storage. | 20 |
 | store.extraEnv | Add extra environment variables | [] |
-| store.extraArgs |Add extra arguments | [] |
+| store.extraArgs | Add extra arguments | [] |
+| store.serviceAccount | Name of the Kubernetes service account to use | "" |
 
 
 ## Query
@@ -212,6 +213,7 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | query.stores | Addresses of statically configured store API servers (repeatable). The scheme may be prefixed with 'dns+' or 'dnssrv+' to detect store API servers through respective DNS lookups. | [] |
 | query.extraEnv | Add extra environment variables | [] |
 | query.extraArgs |Add extra arguments | [] |
+| query.serviceAccount | Name of the Kubernetes service account to use | "" |
 
 
 ## Compact
@@ -221,6 +223,7 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | compact.enabled | Enable component | true |
 | compact.replicaCount | Pod replica count | 1 |
 | compact.logLevel | Log level | info |
+| compact.serviceAccount | Name of the Kubernetes service account to use | "" |
 |consistencyDelay | Minimum age of fresh (non-compacted) blocks before they are being processed. Malformed blocks older than the maximum of consistency-delay and 30m0s will be removed.| 30m |
 | retentionResolutionRaw | How long to retain raw samples in bucket. 0d - disables this retention | 30d |
 | retentionResolution5m | How long to retain samples of resolution 1 (5 minutes) in bucket. 0d - disables this retention | 120d |
@@ -238,6 +241,7 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | bucket.timeout | Timeout to download metadata from remote storage | 5m |
 | bucket.label | Prometheus label to use as timeline title | "" |
 | bucket.http.port | Listening port for bucket web | 8080 |
+| bucket.serviceAccount | Name of the Kubernetes service account to use | "" |
 
 ## Sidecar
 
