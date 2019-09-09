@@ -134,6 +134,7 @@ configuration:
 
   # CICD
   cicd:
+    enabled: false
     url: http://cicd:8000
   # Github
   github:
