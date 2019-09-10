@@ -4,15 +4,15 @@ kind: Service
 metadata:
   name: {{ include "thanos.componentname" (list $ "query") }}-grpc
   {{- with .Values.query.grpc.service.annotations }}
-annotations: {{ toYaml . | nindent 4 }}
+  annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
-labels:
-  app.kubernetes.io/name: {{ include "thanos.name" . }}
-  helm.sh/chart: {{ include "thanos.chart" . }}
-  app.kubernetes.io/instance: {{ .Release.Name }}
-  app.kubernetes.io/managed-by: {{ .Release.Service }}
-  app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
-  app.kubernetes.io/component: query
+  labels:
+    app.kubernetes.io/name: {{ include "thanos.name" . }}
+    helm.sh/chart: {{ include "thanos.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: query
 spec:
   type: ClusterIP
   clusterIP: None
@@ -33,15 +33,15 @@ kind: Service
 metadata:
   name: {{ include "thanos.componentname" (list $ "query") }}-http
   {{- with .Values.query.http.service.annotations }}
-annotations: {{ toYaml .| nindent 4 }}
+  annotations: {{ toYaml .| nindent 4 }}
   {{- end }}
-labels:
-  app.kubernetes.io/name: {{ include "thanos.name" . }}
-  helm.sh/chart: {{ include "thanos.chart" . }}
-  app.kubernetes.io/instance: {{ .Release.Name }}
-  app.kubernetes.io/managed-by: {{ .Release.Service }}
-  app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
-  app.kubernetes.io/component: query
+  labels:
+    app.kubernetes.io/name: {{ include "thanos.name" . }}
+    helm.sh/chart: {{ include "thanos.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: query
 spec:
   type: {{ .Values.query.http.service.type }}
   {{- if .Values.query.http.service.externalTrafficPolicy }}

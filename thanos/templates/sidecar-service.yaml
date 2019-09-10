@@ -4,15 +4,15 @@ kind: Service
 metadata:
   name: {{ include "thanos.componentname" (list $ "sidecar") }}-grpc
   {{- with .Values.sidecar.grpc.service.annotations }}
-annotations: {{ toYaml . | nindent 4 }}
+  annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
-labels:
-  app.kubernetes.io/name: {{ include "thanos.name" . }}
-  helm.sh/chart: {{ include "thanos.chart" . }}
-  app.kubernetes.io/instance: {{ .Release.Name }}
-  app.kubernetes.io/managed-by: {{ .Release.Service }}
-  app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
-  app.kubernetes.io/component: sidecar
+  labels:
+    app.kubernetes.io/name: {{ include "thanos.name" . }}
+    helm.sh/chart: {{ include "thanos.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: sidecar
 spec:
   type: ClusterIP
   clusterIP: None
@@ -31,15 +31,15 @@ kind: Service
 metadata:
   name: {{ include "thanos.componentname" (list $ "sidecar") }}-http
   {{- with .Values.sidecar.http.service.annotations }}
-annotations: {{ toYaml .| nindent 4 }}
+  annotations: {{ toYaml .| nindent 4 }}
   {{- end }}
-labels:
-  app.kubernetes.io/name: {{ include "thanos.name" . }}
-  helm.sh/chart: {{ include "thanos.chart" . }}
-  app.kubernetes.io/instance: {{ .Release.Name }}
-  app.kubernetes.io/managed-by: {{ .Release.Service }}
-  app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
-  app.kubernetes.io/component: sidecar
+  labels:
+    app.kubernetes.io/name: {{ include "thanos.name" . }}
+    helm.sh/chart: {{ include "thanos.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: sidecar
 spec:
   type: {{ .Values.sidecar.http.service.type }}
   {{- if .Values.sidecar.http.service.externalTrafficPolicy }}

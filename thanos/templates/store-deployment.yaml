@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/component: store
   {{ with .Values.store.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end }}
   {{- with .Values.store.deploymentAnnotations }}
-annotations: {{ toYaml . | nindent 4 }}
+  annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.store.replicaCount | default 1 }}
