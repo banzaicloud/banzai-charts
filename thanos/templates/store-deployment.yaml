@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: store
-  {{ with .Values.store.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end }}
+{{ with .Values.store.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end }}
   {{- with .Values.store.deploymentAnnotations }}
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -23,7 +23,8 @@ spec:
       app.kubernetes.io/component: store
   template:
     metadata:
-      labels: {{ with  .Values.store.labels }}{{ toYaml . | nindent 8 }}{{ end }}
+      labels: 
+{{ with .Values.store.labels }}{{ toYaml . | indent 8 }}{{ end }}
         app.kubernetes.io/name: {{ include "thanos.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: store

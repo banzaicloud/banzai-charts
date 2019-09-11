@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: store
+{{ with .Values.store.metrics.serviceMonitor.labels }}{{ toYaml . | indent 4 }}{{ end }}
 spec:
   jobLabel: thanos-store
   selector:

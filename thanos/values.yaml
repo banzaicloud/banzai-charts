@@ -55,6 +55,8 @@ store:
     # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
     serviceMonitor:
       enabled: false
+      # Labels for prometheus-operator to find servicemonitor
+      labels: {}
   # The grpc endpoint to communicate with other components
   grpc:
     # grpc listen port number
@@ -63,6 +65,8 @@ store:
     service:
       # Annotations to query grpc service
       annotations: {}
+      # Labels to query grpc service
+      labels: {}
     # Set up ingress for the grpc service
     ingress:
       enabled: false
@@ -87,6 +91,8 @@ store:
       type: ClusterIP
       # Annotations to query http service
       annotations: {}
+      # Labels to query http service
+      labels: {}
     # Set up ingress for the http service
     ingress:
       enabled: false
@@ -182,6 +188,8 @@ query:
     service:
       # Annotations to query grpc service
       annotations: {}
+      # labels to query grpc service
+      labels: {}
     # Set up ingress for the grpc service
     ingress:
       enabled: false
@@ -207,6 +215,8 @@ query:
       type: ClusterIP
       # Annotations to query http service
       annotations: {}
+      # Labels to query http service
+      labels: {}
     # Set up ingress for the http service
     ingress:
       enabled: false
@@ -240,6 +250,8 @@ query:
   #  extraAnnotation: extraAnnotationValue
   #
   # Enable metrics collecting for compat service
+
+
   metrics:
     # This is the Prometheus annotation type scraping configuration
     annotations:
@@ -247,6 +259,8 @@ query:
     # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
     serviceMonitor:
       enabled: false
+      # Labels for prometheus-operator to find servicemonitor
+      labels: {}
 
   # Optional securityContext
   securityContext: {}
@@ -295,6 +309,8 @@ compact:
   # Compact service listening http port
   http:
     port: 10902
+    service:
+      labels: {}
   # Add extra environment variables to compact
   extraEnv:
   # - name: ENV
@@ -333,6 +349,8 @@ compact:
     # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
     serviceMonitor:
       enabled: false
+      # Labels for prometheus-operator to find servicemonitor
+      labels: {}
   serviceAccount: ""
 
   # Optional securityContext
@@ -381,6 +399,8 @@ bucket:
       type: ClusterIP
       # Annotations to query http service
       annotations: {}
+      # Labels to query http service
+      labels: {}
     # Set up ingress for the http service
     ingress:
       enabled: false
@@ -455,6 +475,8 @@ sidecar:
     # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
     serviceMonitor:
       enabled: false
+      # Labels for prometheus-operator to find servicemonitor
+      labels: {}
   # The grpc endpoint to communicate with other components
   grpc:
     # grpc listen port number
@@ -463,6 +485,8 @@ sidecar:
     service:
       # Annotations to query grpc service
       annotations: {}
+      # Labels to query grpc service
+      labels: {}
     # Set up ingress for the grpc service
     ingress:
       enabled: false
@@ -487,6 +511,8 @@ sidecar:
       type: ClusterIP
       # Annotations to query http service
       annotations: {}
+      # Labels to query http service
+      labels: {}
     # Set up ingress for the http service
     ingress:
       enabled: false

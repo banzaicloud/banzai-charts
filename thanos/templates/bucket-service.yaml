@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: bucket
+{{ with .Values.bucket.http.service.labels }}{{ toYaml . | indent 4 }}{{ end }}
 spec:
   ports:
     - port: {{ .Values.bucket.http.port }}
