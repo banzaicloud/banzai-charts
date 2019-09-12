@@ -3,6 +3,9 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "bucket") }}
+  {{- with .Values.bucket.http.ingress.annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
   labels:
     app.kubernetes.io/name: {{ include "thanos.name" . }}
     helm.sh/chart: {{ include "thanos.chart" . }}
@@ -11,10 +14,7 @@ metadata:
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: bucket
   {{- if .Values.bucket.http.ingress.labels }}
-  {{ toYaml .Values.ingress.http.labels | indent 4 }}
-  {{- end }}
-  {{- with .Values.bucket.http.ingress.annotations }}
-  annotations: {{ toYaml . | nindent 4 }}
+{{ toYaml .Values.bucket.http.ingress.labels | indent 4 }}
   {{- end }}
 spec:
   {{- if .Values.bucket.http.ingress.tls }}
