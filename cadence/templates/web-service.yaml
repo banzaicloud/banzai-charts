@@ -25,6 +25,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+      {{- if hasKey .Values.web.service "nodePort" }}
+      nodePort: {{ .Values.web.service.nodePort }}
+      {{- end }}
   selector:
     app.kubernetes.io/name: {{ include "cadence.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
