@@ -229,6 +229,7 @@ Global options overridable per service are marked with an asterisk.
 | `server.[service].nodeSelector`                   | `[service]` Node labels for pod assignment            | `{}`                  |
 | `server.[service].tolerations`                    | `[service]` Toleration labels for pod assignment      | `[]`                  |
 | `server.[service].affinity`                       | `[service]` Affinity settings for pod assignment      | `{}`                  |
+| `server.frontend.service.nodePort`                | frontend service nodePort, if service type is NodePort| ``                    |
 | `web.enabled`                                     | Enable WebUI service                                  | `true`                |
 | `web.replicaCount`                                | Number of WebUI service Replicas                      | `1`                   |
 | `web.image.repository`                            | WebUI image repository                                | `ubercadence/web`     |
@@ -236,6 +237,7 @@ Global options overridable per service are marked with an asterisk.
 | `web.image.pullPolicy`                            | WebUI image pull policy                               | `IfNotPresent`        |
 | `web.service.type`                                | WebUI service type                                    | `ClusterIP`           |
 | `web.service.port`                                | WebUI service port                                    | `80`                  |
+| `web.service.nodePort`                            | WebUI service nodePort, if service type is NodePort   | ``                    |
 | `web.ingress.enabled`                             | Enable WebUI Ingress                                  | `false`               |
 | `web.ingress.annotations`                         | WebUI Ingress annotations                             | `{}`                  |
 | `web.ingress.hosts`                               | WebUI Ingress hosts                                   | `/`                   |
