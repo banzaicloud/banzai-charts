@@ -17,6 +17,9 @@ spec:
       targetPort: rpc
       protocol: TCP
       name: rpc
+      {{- if hasKey .Values.server.frontend.service "nodePort" }}
+      nodePort: {{ .Values.server.frontend.service.nodePort }}
+      {{- end }}
   selector:
     app.kubernetes.io/name: {{ include "cadence.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
