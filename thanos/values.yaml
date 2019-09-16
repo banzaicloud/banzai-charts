@@ -180,6 +180,14 @@ query:
   #
   # Number of replicas running from query component
   replicaCount: 1
+
+  # Enable podDisruptionBudget for query component
+  podDisruptionBudget:
+    enabled: false
+      # minAvailable and maxUnavailable can't be used simultaneous. Choose one.
+    minAvailable: 1
+    #  maxUnavailable: 50%
+
   # The grpc endpoint to communicate with other components
   grpc:
     # grpc listen port number
@@ -438,6 +446,13 @@ bucket:
   #
   # Add extra annotations to bucket deployment
   deploymentAnnotations: {}
+
+  # Enable podDisruptionBudget for query component
+  podDisruptionBudget:
+    enabled: false
+      # minAvailable and maxUnavailable can't be used simultaneous. Choose one.
+    minAvailable: 1
+    #  maxUnavailable: 50%
 
   # Optional securityContext
   securityContext: {}
