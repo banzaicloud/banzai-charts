@@ -390,6 +390,8 @@ compact:
 
 bucket:
   enabled: true
+  # Number of replicas running from bucket component
+  replicaCount: 1
   # Log filtering level.
   logLevel: info
   # Refresh interval to download metadata from remote storage
