@@ -180,7 +180,13 @@ query:
   #
   # Number of replicas running from query component
   replicaCount: 1
-
+  # Enable HPA for query component
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
   # Enable podDisruptionBudget for query component
   podDisruptionBudget:
     enabled: false
