@@ -96,16 +96,16 @@ spec:
           defaultMode: 420
           secretName: {{ .Values.query.certSecretName }}
       {{- end }}
-      {{- with .Values.compact.securityContext }}
+      {{- with .Values.query.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.compact.nodeSelector }}
+      {{- with .Values.query.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.compact.affinity }}
+      {{- with .Values.query.affinity }}
       affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.compact.tolerations }}
+      {{- with .Values.query.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
       {{- end }}
       {{- with  .Values.query.serviceAccount }}
