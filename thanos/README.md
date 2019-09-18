@@ -212,7 +212,15 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | query.sidecarDNSDiscovery | Enable DNS discovery for sidecars (this is for the chart built-in sidecar service) | true |
 | query.stores | Addresses of statically configured store API servers (repeatable). The scheme may be prefixed with 'dns+' or 'dnssrv+' to detect store API servers through respective DNS lookups. | [] |
 | query.extraEnv | Add extra environment variables | [] |
-| query.extraArgs |Add extra arguments | [] |
+| query.extraArgs | Add extra arguments | [] |
+| query.podDisruptionBudget.enabled | Enabled and config podDisruptionBudget resource for this component | false |
+| query.podDisruptionBudget.minAvailable | Minimum number of available query pods for PodDisruptionBudget | 1 |
+| query.podDisruptionBudget.maxUnavailable | Maximum number of unavailable query pods for PodDisruptionBudget | [] |
+| query.autoscaling.enabled | Enabled and config horizontalPodAutoscaling resource for this component | false |
+| query.autoscaling.minReplicas |	If autoscaling enabled, this field sets minimum replica count |	2 |
+| query.autoscaling.maxReplicas |	If autoscaling enabled, this field sets maximum replica count |	3 |
+| query.autoscaling.targetCPUUtilizationPercentage | 	Target CPU utilization percentage to scale | 50 |
+| query.autoscaling.targetMemoryUtilizationPercentage |	Target memory utilization percentage to scale 50 |
 | query.serviceAccount | Name of the Kubernetes service account to use | "" |
 
 
@@ -236,12 +244,16 @@ These values are just samples, for more fine-tuning please check the values.yaml
 |Name|Description| Default Value|
 |----|-----------|--------------|
 | bucket.enabled | Enable component | true |
+| bucket.replicaCount | Pod replica count | 1 |
 | bucket.logLevel | Log level | info |
 | bucket.refresh | Refresh interval to download metadata from remote storage | 30m |
 | bucket.timeout | Timeout to download metadata from remote storage | 5m |
 | bucket.label | Prometheus label to use as timeline title | "" |
 | bucket.http.port | Listening port for bucket web | 8080 |
 | bucket.serviceAccount | Name of the Kubernetes service account to use | "" |
+| bucket.podDisruptionBudget.enabled | Enabled and config podDisruptionBudget resource for this component | false |
+| bucket.podDisruptionBudget.minAvailable | Minimum number of available query pods for PodDisruptionBudget | 1 |
+| bucket.podDisruptionBudget.maxUnavailable | Maximum number of unavailable query pods for PodDisruptionBudget | [] |
 
 ## Sidecar
 
