@@ -52,8 +52,8 @@ spec:
             value: {{ .Values.externalAnchore.anchorePass }}
           - name: ANCHORE_ENGINE_URL
             value: {{ .Values.externalAnchore.anchoreHost }}
-          - name: WEBHOOK_SELECTOR
-            value: {{ default "exclude" .Values.webhookSelector }}
+          - name: NAMESPACE_SELECTOR
+            value: {{ default "exclude" .Values.namespaceSelector }}
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false

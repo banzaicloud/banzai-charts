@@ -18,7 +18,7 @@ externalAnchore:
   anchorePass: ""
 resources: {}
 
-webhookSelector: ""
+namespaceSelector: ""
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
