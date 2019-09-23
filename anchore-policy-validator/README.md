@@ -51,4 +51,4 @@ The following tables lists configurable parameters of the anchore-policy-validat
 |externalAnchore.anchorePass          |external anchore-engine password             |""                                        |
 |rbac.enabled                         |enable RBAC                                  |true                                      |
 |rbac.psp.enabled                     |add PSP resources if enabled                 |false                                     |
-|webhookSelector                      |webHookConfig namespaceSelector behaviour    |"" (exclude)                              |
+|namespaceSelector                    |webHookConfig namespaceSelector behaviour    |"" (exclude)                              |
