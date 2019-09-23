@@ -5,7 +5,7 @@ apiService:
   version: v1beta1
 image:
   repository: banzaicloud/anchore-image-validator
-  tag: 0.3.4
+  tag: 0.3.6
   pullPolicy: IfNotPresent
 service:
   name: anchoreimagecheck
@@ -17,6 +17,8 @@ externalAnchore:
   anchoreUser: ""
   anchorePass: ""
 resources: {}
+
+webhookSelector: ""
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
