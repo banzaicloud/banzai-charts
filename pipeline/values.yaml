@@ -175,7 +175,7 @@ configuration:
    grafanaAdminUsername: admin
 
   loggingOperator:
-    chartVersion: ""
+    chartVersion: 0.3.3
     imageTag: 0.1.2
 
   # DNS service settings
