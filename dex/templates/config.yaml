@@ -22,16 +22,18 @@ data:
         database: {{ .Values.postgresql.postgresqlDatabase }}
         user: {{ .Values.postgresql.postgresqlUsername }}
         password: {{ .Values.postgresql.postgresqlPassword }}
+        ssl:
+          mode: {{ default "disable" .Values.config.storage.config.ssl.mode }}
         {{- else if .Values.cloudsql.enabled }}
         host: {{ default "localhost:5432" .Values.config.storage.config.host }}
         database: {{ .Values.config.storage.config.database }}
         user: {{ .Values.config.storage.config.user }}
         password: {{ .Values.config.storage.config.password }}
+        ssl:
+          mode: {{ default "disable" .Values.config.storage.config.ssl.mode }}
         {{- else }}
 {{ toYaml .Values.config.storage.config | indent 8 }}
         {{- end }}
-        ssl:
-          mode: {{ default "disable" .Values.config.storage.config.ssl.mode }}
     logger:
       level: {{ default "debug" .Values.config.logger.level }}
     web:
