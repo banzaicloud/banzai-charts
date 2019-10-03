@@ -176,7 +176,7 @@ configuration:
 
   loggingOperator:
     chartVersion: 0.3.3
-    imageTag: 0.1.2
+    imageTag: 1.0.0
 
   # DNS service settings
   dns:
