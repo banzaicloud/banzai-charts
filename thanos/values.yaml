@@ -1,6 +1,6 @@
 image:
-  repository: improbable/thanos
-  tag: v0.6.0
+  repository: quay.io/thanos/thanos
+  tag: v0.8.0
   pullPolicy: IfNotPresent
 
 store:

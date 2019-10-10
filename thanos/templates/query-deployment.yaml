@@ -91,6 +91,10 @@ spec:
           httpGet:
             path: /-/healthy
             port: http
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: http
       {{- if .Values.query.certSecretName }}
       volumes:
       - name: {{ .Values.query.certSecretName }}
