@@ -23,7 +23,7 @@ spec:
       app.kubernetes.io/component: store
   template:
     metadata:
-      labels: 
+      labels:
 {{ with .Values.store.labels }}{{ toYaml . | indent 8 }}{{ end }}
         app.kubernetes.io/name: {{ include "thanos.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -84,6 +84,14 @@ spec:
           name: {{ .Values.store.certSecretName }}
           readOnly: true
         {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /-/healthy
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: http
         resources:
           {{ toYaml .Values.store.resources | nindent 10 }}
       volumes:
