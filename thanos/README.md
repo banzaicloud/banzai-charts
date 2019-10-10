@@ -136,8 +136,8 @@ This section describes the values available
 ## General
 |Name|Description| Default Value|
 |----|-----------|--------------|
-| image.repository | Thanos image repository and name | improbable/thanos |
-| image.tag | Thanos image tag | v0.6.0 |
+| image.repository | Thanos image repository and name | 'quay.io/thanos/thanos'   **For Thanos version 0.6.0 or older change this to 'improbable/thanos'** |
+| image.tag | Thanos image tag | v0.8.0 |
 | image.pullPolicy | Image Kubernetes pull policy | IfNotPresent |
 | objstore | Configuration for the backend object storage in yaml format. Mutually exclusive with objstoreFile. | {} |
 | objstoreFile | Configuration for the backend object storage in string format. Mutually exclusive with objstore. | "" |
