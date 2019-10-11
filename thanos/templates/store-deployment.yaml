@@ -84,14 +84,14 @@ spec:
           name: {{ .Values.store.certSecretName }}
           readOnly: true
         {{- end }}
+        {{- if .Values.store.livenessProbe }}
         livenessProbe:
-          httpGet:
-            path: /-/healthy
-            port: http
+        {{ toYaml .Values.store.livenessProbe | nindent 8 }}
+        {{- end }}
+        {{- if .Values.store.readinessProbe }}
         readinessProbe:
-          httpGet:
-            path: /-/ready
-            port: http
+        {{ toYaml .Values.store.readinessProbe | nindent 8 }}
+        {{- end }}
         resources:
           {{ toYaml .Values.store.resources | nindent 10 }}
       volumes:

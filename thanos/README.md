@@ -194,6 +194,8 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | store.extraEnv | Add extra environment variables | [] |
 | store.extraArgs | Add extra arguments | [] |
 | store.serviceAccount | Name of the Kubernetes service account to use | "" |
+| store.livenessProbe  | Set up liveness probe for store available for Thanos v0.8.0+) |  {} |
+| store.readinessProbe  | Set up readinessProbe for store (available for Thanos v0.8.0+) | {}  |
 
 
 ## Query
