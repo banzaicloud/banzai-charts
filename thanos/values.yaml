@@ -138,6 +138,12 @@ store:
   # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe: {}
   readinessProbe: {}
+  # Setting time timePartioning will create multipale store deployments based on the number of partions
+  # See https://thanos.io/components/store.md/#time-based-partioning
+  timePartioning:
+    - min: ""
+      max: ""
+
 
 query:
   enabled: true
