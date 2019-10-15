@@ -207,12 +207,12 @@ Example - This will create 3 stores:
 timePartioning:
   # One store for data older than 6 weeks
   - min: ""
-    max: 6w
+    max: -6w
   # One store for data newer than 6 weeks and older than 2 weeks
-  - min: 6w
-    max: 2w
+  - min: -6w
+    max: -2w
   # One store for data newer than 2 weeks
-  - min: 2w
+  - min: -2w
     max: ""
 ```
 
