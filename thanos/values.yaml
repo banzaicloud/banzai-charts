@@ -1,6 +1,6 @@
 image:
-  repository: improbable/thanos
-  tag: v0.6.0
+  repository: quay.io/thanos/thanos
+  tag: v0.8.1
   pullPolicy: IfNotPresent
 
 store:
@@ -134,6 +134,10 @@ store:
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
   serviceAccount: ""
+  # set up store readinessProbe & livenessProbe
+  # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+  livenessProbe: {}
+  readinessProbe: {}
 
 query:
   enabled: true

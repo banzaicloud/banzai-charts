@@ -136,8 +136,8 @@ This section describes the values available
 ## General
 |Name|Description| Default Value|
 |----|-----------|--------------|
-| image.repository | Thanos image repository and name | improbable/thanos |
-| image.tag | Thanos image tag | v0.6.0 |
+| image.repository | Thanos image repository and name | 'quay.io/thanos/thanos'   **For Thanos version 0.6.0 or older change this to 'improbable/thanos'** |
+| image.tag | Thanos image tag | v0.8.1 |
 | image.pullPolicy | Image Kubernetes pull policy | IfNotPresent |
 | objstore | Configuration for the backend object storage in yaml format. Mutually exclusive with objstoreFile. | {} |
 | objstoreFile | Configuration for the backend object storage in string format. Mutually exclusive with objstore. | "" |
@@ -194,6 +194,8 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | store.extraEnv | Add extra environment variables | [] |
 | store.extraArgs | Add extra arguments | [] |
 | store.serviceAccount | Name of the Kubernetes service account to use | "" |
+| store.livenessProbe  | Set up liveness probe for store available for Thanos v0.8.0+) |  {} |
+| store.readinessProbe  | Set up readinessProbe for store (available for Thanos v0.8.0+) | {}  |
 
 
 ## Query

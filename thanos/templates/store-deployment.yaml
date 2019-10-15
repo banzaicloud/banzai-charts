@@ -23,7 +23,7 @@ spec:
       app.kubernetes.io/component: store
   template:
     metadata:
-      labels: 
+      labels:
 {{ with .Values.store.labels }}{{ toYaml . | indent 8 }}{{ end }}
         app.kubernetes.io/name: {{ include "thanos.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -83,6 +83,14 @@ spec:
         - mountPath: /etc/certs
           name: {{ .Values.store.certSecretName }}
           readOnly: true
+        {{- end }}
+        {{- if .Values.store.livenessProbe }}
+        livenessProbe:
+        {{ toYaml .Values.store.livenessProbe | nindent 8 }}
+        {{- end }}
+        {{- if .Values.store.readinessProbe }}
+        readinessProbe:
+        {{ toYaml .Values.store.readinessProbe | nindent 8 }}
         {{- end }}
         resources:
           {{ toYaml .Values.store.resources | nindent 10 }}
