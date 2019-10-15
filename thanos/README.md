@@ -196,7 +196,7 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | store.serviceAccount | Name of the Kubernetes service account to use | "" |
 | store.livenessProbe  | Set up liveness probe for store available for Thanos v0.8.0+) |  {} |
 | store.readinessProbe  | Set up readinessProbe for store (available for Thanos v0.8.0+) | {}  |
-| timePartioning   |  list of min/max time for store partions. See more details below. Setting this will create mutlipale thanos store deployments based on the number of items in the list  | [min: "", max: ""] |
+| timePartioning   |  list of min/max time for store partitions. See more details below. Setting this will create mutlipale thanos store deployments based on the number of items in the list  | [{min: "", max: ""}] |
 
 ### Store time partions
 Thanos store supports partition based on time.
