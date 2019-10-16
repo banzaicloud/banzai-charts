@@ -95,13 +95,6 @@ spec:
           name: {{ $root.Values.store.certSecretName }}
           readOnly: true
         {{- end }}
-        {{- if $root.Values.store.livenessProbe }}
-        livenessProbe:
-        {{ toYaml $root.Values.store.livenessProbe | nindent 8 }}
-        {{- end }}
-        {{- if $root.Values.store.readinessProbe }}
-        readinessProbe:
-        {{ toYaml $root.Values.store.readinessProbe | nindent 8 }}
         {{- if .Values.store.livenessProbe }}
         livenessProbe:
         {{ toYaml .Values.store.livenessProbe | nindent 8 }}
