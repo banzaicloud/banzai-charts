@@ -45,7 +45,7 @@ spec:
       - name: thanos-store
         image: "{{ $root.Values.image.repository }}:{{ $root.Values.image.tag }}"
         imagePullPolicy: {{ $root.Values.image.pullPolicy }}
-        env: {{- with .Values.store.extraEnv }}{{ toYaml . | nindent 8 }}{{- end }}
+        env: {{- with $root.Values.store.extraEnv }}{{ toYaml . | nindent 8 }}{{- end }}
         args:
         - "store"
         - "--data-dir=/var/thanos/store"
