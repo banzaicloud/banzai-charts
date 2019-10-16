@@ -152,6 +152,7 @@ These setting applicable to nearly all components.
 | $component.annotations | Additional annotations to the Pod | {} |
 | $component.deploymentLabels | Additional labels to the deployment | {} |
 | $component.deploymentAnnotations | Additional annotations to the deployment | {} |
+| $component.extraEnv | Add extra environment variables | [] |
 | $component.metrics.annotations.enabled | Prometheus annotation for component | false |
 | $component.metrics.serviceMonitor.enabled | Prometheus ServiceMonitor definition for component | false |
 | $component.securityContext | SecurityContext for Pod | {} |
