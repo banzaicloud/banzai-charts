@@ -133,5 +133,6 @@ spec:
       {{- with  $root.Values.store.serviceAccount }}
       serviceAccountName: "{{ . }}"
       {{- end }}
+---
 {{- end }}
 {{- end }}
