@@ -116,8 +116,8 @@ Extra configuration for prometheus operator.
 prometheus:
   prometheusSpec:
     thanos:
-      image: improbable/thanos:v0.6.0
-      version: v0.6.0
+      image: improbable/thanos:v0.8.1
+      version: v0.8.1
       objectStorageConfig:
         name: thanos
         key: object-store.yaml

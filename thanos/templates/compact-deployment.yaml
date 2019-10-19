@@ -40,7 +40,9 @@ spec:
       - name: thanos-compact
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        env: {{- with .Values.compact.extraEnv }}{{ toYaml . | nindent 8 }}{{- end }}
+        {{- with .Values.compact.extraEnv }}
+        env: {{ toYaml . | nindent 8 }}
+        {{- end }}
         args:
         - "compact"
         - "--log.level={{ .Values.compact.logLevel }}"
