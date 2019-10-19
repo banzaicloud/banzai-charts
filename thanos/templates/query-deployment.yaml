@@ -42,6 +42,7 @@ spec:
       - name: thanos-query
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env: {{- with .Values.query.extraEnv }}{{ toYaml . | nindent 8 }}{{- end }}
         args:
         - "query"
         - "--log.level={{ .Values.query.logLevel }}"
