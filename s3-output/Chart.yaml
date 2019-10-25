@@ -1,7 +1,7 @@
 apiVersion: v1
 description: S3 output helper chart for logging operator
 name: s3-output
-version: 0.0.6
+version: 0.0.7
 appVersion: 0.0.1
 maintainers:
 - name: Banzai Cloud
