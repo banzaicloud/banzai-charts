@@ -45,7 +45,8 @@ The following table lists the configurable parameters of the Prometheus Adapter 
 | `nodeSelector`                  | Node labels for pod assignment                                                  | `{}`                                        |
 | `prometheus.url`                | Url of where we can find the Prometheus service                                 | `http://prometheus.default.svc`             |
 | `rbac.create`                   | If true, create & use RBAC resources                                            | `true`                                      |
-| `resources`                     | CPU/Memory resource requests/limits                                             | `{}`                                        |                                                                                                        
+| `rbac.hpa_bindings_enabled`     | Create cluter role bindings for HPA (might alreas by created by another app)    | `true`                                      |
+| `resources`                     | CPU/Memory resource requests/limits                                             | `{}`                                        | 
 | `service.annotations`           | Annotations to add to the service                                               | `{}`                                        |
 | `service.port`                  | Service port to expose                                                          | `443`                                       |
 | `service.internalPort`          | Service internal port                                                           | `6443`                                      |
