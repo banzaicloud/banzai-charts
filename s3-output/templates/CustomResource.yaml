@@ -5,7 +5,7 @@ metadata:
 spec:
   input:
     label:
-      app: "*"
+      app: "{{ .Values.appPattern }}"
       app.kubernetes.io/name: {{ include "s3-output.name" . }}
       helm.sh/chart: {{ include "s3-output.chart" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
@@ -52,3 +52,9 @@ spec:
           value: "{{ .Values.bucketName }}"
         - name: s3_region
           value: "{{ .Values.region }}"
+        - name: path
+          value: "{{ .Values.path }}"
+        - name: bufferTimeKey
+          value: "{{ .Values.bufferTimeKey }}"
+        - name: bufferTimeWait
+          value: "{{ .Values.bufferTimeWait }}"

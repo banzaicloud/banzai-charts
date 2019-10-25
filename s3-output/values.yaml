@@ -7,6 +7,18 @@ bucketName: ""
 # S3 bucket region
 region: "us-west-1"
 
+# path to log under. must have trailing slash
+path: "logs/${tag}/%Y/%m/%d/"
+
+# slice of time to log per chunk
+bufferTimeKey: 3600
+
+# time to wait before flushing buffer
+bufferTimeWait: 10m
+
+# app to target
+appPattern: "*"
+
 awsCredentialsAccess:
   enabled: false
   secret:
