@@ -352,6 +352,19 @@ compact:
     backend: {}
     #  persistentVolumeClaim:
     #    claimName: compact-data-volume
+  # Create the specified persistentVolumeClaim in case persistentVolumeClaim is
+  # used for the dataVolume.backend above and needs to be created.
+  persistentVolumeClaim: {}
+  #  name: compact-data-volume
+  #  spec:
+  #    storageClassName: ""
+  #    accessModes: ["ReadWriteOnce"]
+  #    resources:
+  #      requests:
+  #        storage: 100Gi
+  #    selector: {}
+  #    volumeName: ""
+  #    volumeMode: ""
   # Extra labels for compact pod template
   labels: {}
   #  cluster: example

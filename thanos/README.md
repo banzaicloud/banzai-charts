@@ -262,6 +262,8 @@ timePartioning:
 | retentionResolution1h | How long to retain samples of resolution 2 (1 hour) in bucket. 0d - disables this retention | 1y |
 | compactConcurrency | Number of goroutines to use when syncing block metadata from object storage. | 20 |
 | blockSyncConcurrency | Number of goroutines to use when compacting groups. | 1 |
+| dataVolume.backend | Data volume for the compactor to store temporary data defaults to emptyDir. | {} |
+| persistentVolumeClaim | Create the specified persistentVolumeClaim in case persistentVolumeClaim is used for the dataVolume.backend above and needs to be created. | {} |
 
 ## Bucket
 
