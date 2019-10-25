@@ -21,12 +21,12 @@ store:
   blockSyncConcurrency: 20
   # Log filtering level.
   logLevel: info
-  # Add extra environment variables to compact
+  # Add extra environment variables to store
   extraEnv: []
   # - name: ENV
   #   value: value
   #
-  # Add extra arguments to the compact service
+  # Add extra arguments to the store service
   extraArgs: []
   # - "--extraargs=extravalue"
   #
@@ -36,15 +36,15 @@ store:
   labels: {}
   #  cluster: example
   #
-  # Extra annotations for compact pod template
+  # Extra annotations for store pod template
   annotations: {}
   #  example.com: default
   #
-  # Add extra labels to compact deployment
+  # Add extra labels to store deployment
   deploymentLabels: {}
   #  extraLabel: extraLabelValue
   #
-  # Add extra annotations to compact deployment
+  # Add extra annotations to store deployment
   deploymentAnnotations: {}
   #  extraAnnotation: extraAnnotationValue
   # Enable metrics collecting for compat service
@@ -125,7 +125,7 @@ store:
   #   value: "value"
   #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
   #
-  # Node labels for compact pod assignment
+  # Node labels for store pod assignment
   # Ref: https://kubernetes.io/docs/user-guide/node-selection/
   #
   nodeSelector: {}
@@ -182,12 +182,12 @@ query:
   serviceDiscoveryInterval: 5m
   # Log filtering level.
   logLevel: info
-  # Add extra environment variables to compact
+  # Add extra environment variables to query
   extraEnv: []
   # - name: ENV
   #   value: value
   #
-  # Add extra arguments to the compact service
+  # Add extra arguments to the query service
   extraArgs: []
   # - "--extraargs=extravalue"
   #
@@ -264,15 +264,15 @@ query:
   labels: {}
   #  cluster: example
   #
-  # Extra annotations for compact pod template
+  # Extra annotations for query pod template
   annotations: {}
   #  example.com: default
   #
-  # Add extra labels to compact deployment
+  # Add extra labels to query deployment
   deploymentLabels: {}
   #  extraLabel: extraLabelValue
   #
-  # Add extra annotations to compact deployment
+  # Add extra annotations to query deployment
   deploymentAnnotations: {}
   #  extraAnnotation: extraAnnotationValue
   #
@@ -307,7 +307,7 @@ query:
   #   value: "value"
   #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
   #
-  # Node labels for compact pod assignment
+  # Node labels for query pod assignment
   # Ref: https://kubernetes.io/docs/user-guide/node-selection/
   #
   nodeSelector: {}
@@ -423,12 +423,12 @@ bucket:
   http:
     # http listen port number
     port: 8080
-    # Service definition for query http service
+    # Service definition for bucket http service
     service:
       type: ClusterIP
-      # Annotations to query http service
+      # Annotations to bucket http service
       annotations: {}
-      # Labels to query http service
+      # Labels to bucket http service
       labels: {}
     # Set up ingress for the http service
     ingress:
@@ -468,7 +468,7 @@ bucket:
   # Add extra annotations to bucket deployment
   deploymentAnnotations: {}
 
-  # Enable podDisruptionBudget for query component
+  # Enable podDisruptionBudget for bucket component
   podDisruptionBudget:
     enabled: false
       # minAvailable and maxUnavailable can't be used simultaneous. Choose one.
@@ -517,11 +517,11 @@ sidecar:
   grpc:
     # grpc listen port number
     port: 10901
-    # Service definition for query grpc service
+    # Service definition for bucket grpc service
     service:
-      # Annotations to query grpc service
+      # Annotations to bucket grpc service
       annotations: {}
-      # Labels to query grpc service
+      # Labels to bucket grpc service
       labels: {}
     # Set up ingress for the grpc service
     ingress:
@@ -542,12 +542,12 @@ sidecar:
   http:
     # http listen port number
     port: 10902
-    # Service definition for query http service
+    # Service definition for bucket http service
     service:
       type: ClusterIP
-      # Annotations to query http service
+      # Annotations to bucket http service
       annotations: {}
-      # Labels to query http service
+      # Labels to bucket http service
       labels: {}
     # Set up ingress for the http service
     ingress:
