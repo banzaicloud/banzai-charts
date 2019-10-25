@@ -56,7 +56,7 @@ metadata:
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: query
     {{- if .Values.query.grpc.ingress.labels }}
-  {{ toYaml .Values.grpc.ingress.labels | indent 4 }}
+  {{ toYaml .Values.query.grpc.ingress.labels | indent 4 }}
     {{- end }}
     {{- with .Values.query.grpc.ingress.annotations }}
   annotations: {{ toYaml . | nindent 4 }}
