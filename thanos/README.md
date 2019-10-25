@@ -256,14 +256,14 @@ timePartioning:
 | compact.replicaCount | Pod replica count | 1 |
 | compact.logLevel | Log level | info |
 | compact.serviceAccount | Name of the Kubernetes service account to use | "" |
-|consistencyDelay | Minimum age of fresh (non-compacted) blocks before they are being processed. Malformed blocks older than the maximum of consistency-delay and 30m0s will be removed.| 30m |
-| retentionResolutionRaw | How long to retain raw samples in bucket. 0d - disables this retention | 30d |
-| retentionResolution5m | How long to retain samples of resolution 1 (5 minutes) in bucket. 0d - disables this retention | 120d |
-| retentionResolution1h | How long to retain samples of resolution 2 (1 hour) in bucket. 0d - disables this retention | 1y |
-| compactConcurrency | Number of goroutines to use when syncing block metadata from object storage. | 20 |
-| blockSyncConcurrency | Number of goroutines to use when compacting groups. | 1 |
-| dataVolume.backend | Data volume for the compactor to store temporary data defaults to emptyDir. | {} |
-| persistentVolumeClaim | Create the specified persistentVolumeClaim in case persistentVolumeClaim is used for the dataVolume.backend above and needs to be created. | {} |
+| compact.consistencyDelay | Minimum age of fresh (non-compacted) blocks before they are being processed. Malformed blocks older than the maximum of consistency-delay and 30m0s will be removed.| 30m |
+| compact.retentionResolutionRaw | How long to retain raw samples in bucket. 0d - disables this retention | 30d |
+| compact.retentionResolution5m | How long to retain samples of resolution 1 (5 minutes) in bucket. 0d - disables this retention | 120d |
+| compact.retentionResolution1h | How long to retain samples of resolution 2 (1 hour) in bucket. 0d - disables this retention | 1y |
+| compact.compactConcurrency | Number of goroutines to use when syncing block metadata from object storage. | 20 |
+| compact.blockSyncConcurrency | Number of goroutines to use when compacting groups. | 1 |
+| compact.dataVolume.backend | Data volume for the compactor to store temporary data defaults to emptyDir. | {} |
+| compact.persistentVolumeClaim | Create the specified persistentVolumeClaim in case persistentVolumeClaim is used for the dataVolume.backend above and needs to be created. | {} |
 
 ## Bucket
 
