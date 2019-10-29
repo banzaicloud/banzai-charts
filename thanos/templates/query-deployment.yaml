@@ -53,6 +53,9 @@ spec:
         {{- if .Values.query.replicaLabel }}
         - "--query.replica-label={{ .Values.query.replicaLabel }}"
         {{- end }}
+        {{- if .Values.query.autoDownsampling }}
+        - "--query.auto-downsampling"
+        {{- end }}
         {{- if .Values.query.webRoutePrefix }}
         - "--web.route-prefix={{ .Values.query.webRoutePrefix }}"
         {{- end }}

@@ -149,6 +149,8 @@ query:
   # Label to treat as a replica indicator along which data is deduplicated.
   # Still you will be able to query without deduplication using 'dedup=false' parameter.
   replicaLabel: ""
+  # Enable --query.auto-downsampling option for query.
+  autoDownsampling: false
   # Prefix for API and UI endpoints. This allows thanos UI to be served on a sub-path.
   # This option is analogous to --web.route-prefix of Promethus.
   webRoutePrefix: ""
