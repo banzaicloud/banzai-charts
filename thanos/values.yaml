@@ -518,6 +518,191 @@ bucket:
   affinity: {}
   serviceAccount: ""
 
+rule:
+  enabled: true
+  # Labels to be applied to all generated metrics (repeated). Similar to external labels for
+  # Prometheus, used to identify ruler and its blocks as unique source.
+  ruleLabels: {}
+  # Minimum amount of time to wait before resending an alert to Alertmanager.
+  resendDelay: ""
+  # The default evaluation interval to use.
+  evalInterval: ""
+  # Block duration for TSDB block.
+  tsdbBlockDuration: ""
+  # Block retention time on local disk.
+  tsdbRetention: ""
+  # Prefix for API and UI endpoints. This allows thanos UI to be served on a sub-path.
+  # This option is analogous to --web.route-prefix of Promethus.
+  webRoutePrefix: ""
+  # Static prefix for all HTML links and redirect
+  # URLs in the UI web interface. Actual
+  #  endpoints are still served on / or the
+  # web.route-prefix. This allows thanos UI to be
+  # served behind a reverse proxy that strips a URL sub-path.
+  webExternalPrefix: ""
+  # Name of HTTP request header used for dynamic prefixing of UI links and redirects.
+  # This option is ignored if web.external-prefix argument is set. Security risk: enable this
+  # option only if a reverse proxy in front of thanos is resetting the header. The --web.prefix-header=X-Forwarded-Prefix option
+  # can be useful, for example, if Thanos UI is served via Traefik reverse proxy with PathPrefixStrip option enabled, which sends the
+  # stripped prefix value in X-Forwarded-Prefix header. This allows thanos UI to be served on a sub-path
+  webPrefixHeader: ""
+  # Enable DNS discovery for stores
+  queryDNSDiscovery: true
+  # Alertmanager replica URLs to push firing alerts. Ruler claims success if push to at
+  # least one alertmanager from discovered succeeds. The scheme may be prefixed with
+  # 'dns+' or 'dnssrv+' to detect Alertmanager IPs  through respective DNS lookups. The port
+  # defaults to 9093 or the SRV record's value. The URL path is used as a prefix for the regular
+  # Alertmanager API path.
+  alertmanagers: []
+  # Timeout for sending alerts to alertmanager
+  alertmanagersSendTimeout: ""
+  # The external Thanos Query URL that would be set in all alerts 'Source' field
+  alertQueryUrl: ""
+  # Labels by name to drop before sending to alertmanager. This allows alert to be
+  # deduplicated on replica label (repeated). Similar Prometheus alert relabelling
+  alerLabelDrop: []
+  # Override rules file
+  ruleOverrideName: ""
+  # Rule files for rule
+  alertmanagerFiles: {}
+  # Log filtering level.
+  logLevel: info
+  # Add extra environment variables to rule
+  extraEnv: []
+  # - name: ENV
+  #   value: value
+  #
+  # Add extra arguments to the rule service
+  extraArgs: []
+  # - "--extraargs=extravalue"
+  #
+  # Number of replicas running from rule component
+  replicaCount: 1
+  # Enable HPA for rule component
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+  # Enable podDisruptionBudget for rule component
+  podDisruptionBudget:
+    enabled: false
+    # minAvailable and maxUnavailable can't be used simultaneous. Choose one.
+    minAvailable: 1
+    #  maxUnavailable: 50%
+
+  # The grpc endpoint to communicate with other components
+  grpc:
+    # grpc listen port number
+    port: 10901
+    # Service definition for rule grpc service
+    service:
+      # Annotations to rule grpc service
+      annotations: {}
+      # labels to rule grpc service
+      labels: {}
+    # Set up ingress for the grpc service
+    ingress:
+      enabled: false
+      annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+  serviceAccount: ""
+
+  # The http endpoint to communicate with other components
+  http:
+    gracePeriod: 5s
+    # http listen port number
+    port: 10902
+    # Service definition for rule http service
+    service:
+      type: ClusterIP
+      # Annotations to rule http service
+      annotations: {}
+      # Labels to rule http service
+      labels: {}
+    # Set up ingress for the http service
+    ingress:
+      enabled: false
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+  certSecretName: ""
+  # Extra labels for rule pod template
+  labels: {}
+  #  cluster: example
+  #
+  # Extra annotations for rule pod template
+  annotations: {}
+  #  example.com: default
+  #
+  # Add extra labels to rule deployment
+  statefulsetLabels: {}
+  #  extraLabel: extraLabelValue
+  #
+  # Add extra annotations to rule deployment
+  statefulsetAnnotations: {}
+  #  extraAnnotation: extraAnnotationValue
+  #
+  # Enable metrics collecting for compat service
+
+
+  metrics:
+    # This is the Prometheus annotation type scraping configuration
+    annotations:
+      enabled: false
+    # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
+    serviceMonitor:
+      enabled: false
+      # Labels for prometheus-operator to find servicemonitor
+      labels: {}
+
+  # Optional securityContext
+  securityContext: {}
+  resources: {}
+  #  limits:
+  #    cpu: 2000m
+  #    memory: 16Gi
+  #  requests:
+  #    cpu: 1000m
+  #    memory: 4Gi
+  #
+  # Node tolerations for server scheduling to nodes with taints
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  tolerations: []
+  # - key: "key"
+  #   operator: "Equal|Exists"
+  #   value: "value"
+  #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+  #
+  # Node labels for rule pod assignment
+  # Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  #
+  nodeSelector: {}
+  #
+  # Pod affinity
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  affinity: {}
+
+
 sidecar:
   # NOTE: This is only the service references for the sidecar
   enabled: true
