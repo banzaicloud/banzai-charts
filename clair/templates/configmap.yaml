@@ -17,7 +17,7 @@ data:
           {{- if .Values.config.postgresURI }}
           source: "{{ .Values.config.postgresURI }}"
           {{ else }}
-          source: "postgres://{{ .Values.postgresql.postgresUser }}:{{ .Values.postgresql.postgresPassword }}@{{ template "postgresql.fullname" . }}:5432/{{ .Values.postgresql.postgresDatabase }}?sslmode=disable"
+          source: "postgres://{{ .Values.postgresql.postgresqlUsername }}:{{ .Values.postgresql.postgresqlPassword }}@{{ template "postgresql.fullname" . }}:5432/postgres?sslmode=disable"
           {{ end }}
 
           # Number of elements kept in the cache
