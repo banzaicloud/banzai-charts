@@ -5,9 +5,9 @@ replicaCount: 1
 logLevel: info
 insecureTls: false
 image:
-  repository: quay.io/coreos/clair-git
-  tag: latest
-  pullPolicy: Always
+  repository: quay.io/coreos/clair
+  tag: v2.0.9
+  pullPolicy: IfNotPresent
 service:
   name: clair
   type: LoadBalancer
@@ -66,9 +66,8 @@ postgresql:
   memory: 1Gi
 # These values are hardcoded until Helm supports secrets.
 # For more info see: https://github.com/kubernetes/helm/issues/2196
-  postgresUser: clair
-  postgresPassword: clair
-  postgresDatabase: clair
+  postgresqlUsername: postgres
+  postgresqlPassword: clair
 
   persistence:
     size: 10Gi
