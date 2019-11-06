@@ -173,6 +173,8 @@ query:
   storeDNSDiscovery: true
   # Enable DNS discovery for sidecars (this is for the chart built-in sidecar service)
   sidecarDNSDiscovery: true
+  # Enable DNS discovery for queries
+  ruleDNSDiscovery: false
   # Addresses of statically configured store API servers (repeatable).
   # The scheme may be prefixed with 'dns+' or 'dnssrv+' to detect store API servers through respective DNS lookups.
   stores: []

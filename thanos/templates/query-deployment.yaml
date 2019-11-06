@@ -74,6 +74,9 @@ spec:
         {{- if .Values.query.sidecarDNSDiscovery }}
         - "--store=dnssrv+_grpc._tcp.{{ include "thanos.componentname" (list $ "sidecar") }}-grpc.{{ .Release.Namespace }}.svc.cluster.local"
         {{- end  }}
+        {{- if .Values.query.ruleDNSDiscovery }}
+        - "--store=dnssrv+_grpc._tcp.{{ include "thanos.componentname" (list $ "rule") }}-grpc.{{ .Release.Namespace }}.svc.cluster.local"
+        {{- end  }}
         {{- range .Values.query.stores }}
         - "--store={{ . }}"
         {{- end }}
