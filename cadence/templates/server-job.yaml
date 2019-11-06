@@ -18,7 +18,9 @@ metadata:
     "helm.sh/hook": pre-install
     {{- end }}
     "helm.sh/hook-weight": "0"
+    {{- if not .Values.debug }}
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    {{- end }}
 spec:
   backoffLimit: 10
   template:
@@ -164,7 +166,9 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade
     {{- end }}
     "helm.sh/hook-weight": "1"
+    {{- if not .Values.debug }}
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    {{- end }}
 spec:
   backoffLimit: 10
   template:
