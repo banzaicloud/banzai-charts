@@ -9,11 +9,11 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: rule
-  name: {{ include "thanos.fullname" . }}
+  name: {{ include "thanos.fullname" . }}-rules
 data:
   {{- $root := . -}}
   {{- range $key, $value := .Values.alertmanagerFiles }}
   {{ $key }}: |
   {{ toYaml $value | default "{}" | indent 4 }}
     {{- end -}}
-    {{- end -}}
+{{- end -}}

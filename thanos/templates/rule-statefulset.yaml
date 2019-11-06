@@ -29,83 +29,83 @@ spec:
         app.kubernetes.io/name: {{ include "thanos.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: rule
-    containers:
-    - name: thanos-rule
-      image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-      imagePullPolicy: {{ .Values.image.pullPolicy }}
-      {{- with .Values.rule.extraEnv }}
-      env: {{ toYaml . | nindent 8 }}
-      {{- end }}
-      args:
-      - "rule"
-      - "--data-dir=/var/thanos/store"
-      - "--log.level={{ .Values.rule.logLevel }}"
-      - "--http-address=0.0.0.0:{{ .Values.rule.http.port }}"
-      - "--http-grace-period={{ .Values.rule.http.gracePeriod }}"
-      - "--grpc-address=0.0.0.0:{{ .Values.rule.grpc.port }}"
-      - "--objstore.config-file=/etc/config/object-store.yaml"
-      - "--rule-file=/etc/rules/*.yaml"
-      {{- range $key, $val := .Values.rule.ruleLabels }}
-      - "--label={{ $key }}={{ $val | quote }}"
-      {{- end }}
-      {{- if .Values.rule.resendDelay }}
-      - "--resend-delay={{ .Values.rule.resendDelay }}"
-      {{- end }}
-      {{- if .Values.rule.evalInterval }}
-      - "--eval-interval={{ .Values.rule.evalInterval }}"
-      {{- end }}
-      {{- if .Values.rule.tsdbBlockDuration }}
-      - "--tsdb.block-duration={{ .Values.rule.tsdbBlockDuration }}"
-      {{- end }}
-      {{- if .Values.rule.tsdbRetention }}
-      - "--tsdb.retention={{ .Values.rule.tsdbRetention }}"
-      {{- end }}
-      {{- if .Values.rule.webRoutePrefix }}
-      - "--web.route-prefix={{ .Values.rule.webRoutePrefix }}"
-      {{- end }}
-      {{- if .Values.rule.webExternalPrefix }}
-      - "--web.external-prefix={{ .Values.rule.webExternalPrefix }}"
-      {{- end }}
-      {{- if .Values.rule.webPrefixHeader }}
-      - "--web.prefix-header={{ .Values.rule.webPrefixHeader }}"
-      {{- end }}
-      {{- if .Values.rule.queryDNSDiscovery }}
-      - "--query=dnssrv+_grpc._tcp.{{ include "thanos.componentname" (list $ "query") }}-grpc.{{ .Release.Namespace }}.svc.cluster.local"
-      {{- end  }}
-      {{- range .Values.rule.alertmanagers }}
-      - "--alertmanagers.url={{ . }}"
-      {{- end  }}
-      {{- if .Values.rule.alertmanagersSendTimeout }}
-      - "--alertmanagers.send-timeout={{ .Values.rule.alertmanagersSendTimeout }}"
-      {{- end }}
-      {{- if .Values.rule.alertQueryUrl }}
-      - "--alert.query-url={{ .Values.rule.alertQueryUrl }}"
-      {{- end }}
-      {{- range .Values.rule.alerLabelDrop }}
-      - "--alert.label-drop={{ . }}"
-      {{- end  }}
-      {{- if .Values.rule.extraArgs }}
-      {{- toYaml .Values.rule.extraArgs | nindent 10 }}
-      {{- end }}
-      ports:
-      - name: http
-        containerPort: {{ .Values.rule.http.port }}
-      - name: grpc
-        containerPort: {{ .Values.rule.grpc.port }}
-      volumeMounts:
-      - name: rule-volume
-        mountPath: /etc/rules
-        readOnly: true
-      - name: config-volume
-        mountPath: /etc/config
-        readOnly: true
-      - name: data
-        mountPath: /var/thanos/store
-      {{- if .Values.rule.certSecretName }}
-      - mountPath: /etc/certs
-        name: {{ .Values.rule.certSecretName }}
-        readOnly: true
-      {{- end }}
+    spec:
+      containers:
+      - name: thanos-rule
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- with .Values.rule.extraEnv }}
+        env: {{ toYaml . | nindent 8 }}
+        {{- end }}
+        args:
+        - "rule"
+        - "--data-dir=/var/thanos/store"
+        - "--log.level={{ .Values.rule.logLevel }}"
+        - "--http-address=0.0.0.0:{{ .Values.rule.http.port }}"
+        - "--grpc-address=0.0.0.0:{{ .Values.rule.grpc.port }}"
+        - "--objstore.config-file=/etc/config/object-store.yaml"
+        - "--rule-file=/etc/rules/*.yaml"
+        {{- range $key, $val := .Values.rule.ruleLabels }}
+        - "--label={{ $key }}={{ $val | quote }}"
+        {{- end }}
+        {{- if .Values.rule.resendDelay }}
+        - "--resend-delay={{ .Values.rule.resendDelay }}"
+        {{- end }}
+        {{- if .Values.rule.evalInterval }}
+        - "--eval-interval={{ .Values.rule.evalInterval }}"
+        {{- end }}
+        {{- if .Values.rule.tsdbBlockDuration }}
+        - "--tsdb.block-duration={{ .Values.rule.tsdbBlockDuration }}"
+        {{- end }}
+        {{- if .Values.rule.tsdbRetention }}
+        - "--tsdb.retention={{ .Values.rule.tsdbRetention }}"
+        {{- end }}
+        {{- if .Values.rule.webRoutePrefix }}
+        - "--web.route-prefix={{ .Values.rule.webRoutePrefix }}"
+        {{- end }}
+        {{- if .Values.rule.webExternalPrefix }}
+        - "--web.external-prefix={{ .Values.rule.webExternalPrefix }}"
+        {{- end }}
+        {{- if .Values.rule.webPrefixHeader }}
+        - "--web.prefix-header={{ .Values.rule.webPrefixHeader }}"
+        {{- end }}
+        {{- if .Values.rule.queryDNSDiscovery }}
+        - "--query=dnssrv+_grpc._tcp.{{ include "thanos.componentname" (list $ "query") }}-grpc.{{ .Release.Namespace }}.svc.cluster.local"
+        {{- end  }}
+        {{- range .Values.rule.alertmanagers }}
+        - "--alertmanagers.url={{ . }}"
+        {{- end  }}
+        {{- if .Values.rule.alertmanagersSendTimeout }}
+        - "--alertmanagers.send-timeout={{ .Values.rule.alertmanagersSendTimeout }}"
+        {{- end }}
+        {{- if .Values.rule.alertQueryUrl }}
+        - "--alert.query-url={{ .Values.rule.alertQueryUrl }}"
+        {{- end }}
+        {{- range .Values.rule.alerLabelDrop }}
+        - "--alert.label-drop={{ . }}"
+        {{- end  }}
+        {{- if .Values.rule.extraArgs }}
+        {{- toYaml .Values.rule.extraArgs | nindent 8 }}
+        {{- end }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.rule.http.port }}
+        - name: grpc
+          containerPort: {{ .Values.rule.grpc.port }}
+        volumeMounts:
+        - name: rule-volume
+          mountPath: /etc/rules
+          readOnly: true
+        - name: config-volume
+          mountPath: /etc/config
+          readOnly: true
+        - name: data
+          mountPath: /var/thanos/store
+        {{- if .Values.rule.certSecretName }}
+        - mountPath: /etc/certs
+          name: {{ .Values.rule.certSecretName }}
+          readOnly: true
+        {{- end }}
       volumes:
       - name: data
         emptyDir: {}
@@ -113,8 +113,8 @@ spec:
         secret:
           secretName: {{ include "thanos.fullname" . }}
       - name: rule-volume
-        secret:
-          configMap: {{ include "thanos.fullname" . }}
+        configMap:
+          name: {{ include "thanos.fullname" . }}-rules
       secretName: {{ include "thanos.fullname" . }}
       {{- if .Values.rule.livenessProbe }}
       livenessProbe: {{ toYaml .Values.rule.livenessProbe | nindent 8 }}
@@ -122,7 +122,7 @@ spec:
       {{- if .Values.rule.readinessProbe }}
       readinessProbe: {{ toYaml .Values.rule.readinessProbe | nindent 8 }}
       {{- end }}
-      resources: {{ toYaml .Values.rule.resources | nindent 10 }}
+      resources: {{ toYaml .Values.rule.resources | nindent 8 }}
       {{- with .Values.rule.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
       {{- end }}

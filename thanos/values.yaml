@@ -519,7 +519,7 @@ bucket:
   serviceAccount: ""
 
 rule:
-  enabled: true
+  enabled: false
   # Labels to be applied to all generated metrics (repeated). Similar to external labels for
   # Prometheus, used to identify ruler and its blocks as unique source.
   ruleLabels: {}
@@ -620,7 +620,6 @@ rule:
 
   # The http endpoint to communicate with other components
   http:
-    gracePeriod: 5s
     # http listen port number
     port: 10902
     # Service definition for rule http service

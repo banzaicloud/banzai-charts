@@ -10,7 +10,7 @@ sources:
   - https://github.com/thanos-io/thanos
   - https://github.com/banzaicloud/banzai-charts/tree/master/thanos
 version: 0.3.8
-icon: https://raw.githubusercontent.com/thanos-io/thanos/master/website/static/Thanos-logo_full.svg
+icon: https://raw.githubusercontent.com/thanos-io/thanos/master/docs/img/Thanos-logo_fullmedium.png
 maintainers:
 - name: Banzai Cloud
   email: info@banzaicloud.com
