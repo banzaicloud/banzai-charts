@@ -1,0 +1,42 @@
+{{ if .Values.ingress.enabled }}
+{{ $fullName := include "loki.fullname" . }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "loki.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "loki.name" . }}
+    chart: {{ template "loki.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    {{- with .Values.ingress.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+spec:
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+      - {{ . | quote }}
+      {{- end }}
+      {{- if .secretName }}
+      secretName: {{ .secretName }}
+      {{- end}}
+    {{- end }}
+  {{- end }}
+  rules:
+  {{- range .Values.ingress.hosts }}
+  {{- $url := splitList "/" . }}
+  - host: {{ first $url }}
+    http:
+      paths:
+        - path: /{{ rest $url | join "/" }}
+          backend:
+            serviceName: {{ $fullName }}
+            servicePort: http-metrics
+  {{- end }}
+{{ end }}
