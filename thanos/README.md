@@ -261,8 +261,8 @@ timePartioning:
 | compact.retentionResolutionRaw | How long to retain raw samples in bucket. 0d - disables this retention | 30d |
 | compact.retentionResolution5m | How long to retain samples of resolution 1 (5 minutes) in bucket. 0d - disables this retention | 120d |
 | compact.retentionResolution1h | How long to retain samples of resolution 2 (1 hour) in bucket. 0d - disables this retention | 1y |
-| compact.compactConcurrency | Number of goroutines to use when syncing block metadata from object storage. | 20 |
-| compact.blockSyncConcurrency | Number of goroutines to use when compacting groups. | 1 |
+| compact.blockSyncConcurrency | Number of goroutines to use when syncing block metadata from object storage. | 20 |
+| compact.compactConcurrency | Number of goroutines to use when compacting groups. | 1 |
 | compact.dataVolume.backend | Data volume for the compactor to store temporary data defaults to emptyDir. | {} |
 | compact.persistentVolumeClaim | Create the specified persistentVolumeClaim in case persistentVolumeClaim is used for the dataVolume.backend above and needs to be created. | {} |
 
