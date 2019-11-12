@@ -1,8 +1,0 @@
-dependencies:
-- name: metrics-server
-  version: 0.0.7
-  repository: https://kubernetes-charts.banzaicloud.com
-  condition: metricsServer.enabled
-- name: kube-metrics-adapter
-  version: 0.0.4
-  repository: https://kubernetes-charts.banzaicloud.com
