@@ -1,4 +1,5 @@
 {{ if .Values.ingress.enabled }}
+{{- $path := .Values.ingress.path -}}
 {{ $fullName := include "loki.fullname" . }}
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -29,14 +30,22 @@ spec:
     {{- end }}
   {{- end }}
   rules:
+  {{- if .Values.ingress.hosts }}
   {{- range .Values.ingress.hosts }}
-  {{- $url := splitList "/" . }}
-  - host: {{ first $url }}
+  - host: {{ . }}
     http:
       paths:
-        - path: /{{ rest $url | join "/" }}
+        - path: {{ $path }}
           backend:
             serviceName: {{ $fullName }}
             servicePort: http-metrics
-  {{- end }}
+  {{- end -}}
+  {{- else }}
+    - http:
+        paths:
+          - path: {{ $path }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: http-metrics
+  {{- end -}}
 {{ end }}

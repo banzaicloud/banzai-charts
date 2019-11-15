@@ -147,8 +147,8 @@ ingress:
   # kubernetes.io/tls-acme: "true"
   labels: {}
   path: "/"
-  hosts:
-    - "/"
+  hosts: []
+    # - example.com
   tls: []
 
 service:
