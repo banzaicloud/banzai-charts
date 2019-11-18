@@ -54,6 +54,10 @@ config:
         period: 168h
   server:
     http_listen_port: 3100
+    # following setting borrowed from https://github.com/cortexproject/cortex/blob/master/docs/single-process-config.yaml
+    grpc_server_max_recv_msg_size: 104857600
+    grpc_server_max_send_msg_size: 104857600
+    grpc_server_max_concurrent_streams: 1000
   storage_config:
     boltdb:
       directory: /data/loki/index
