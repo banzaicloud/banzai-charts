@@ -80,6 +80,9 @@ spec:
         {{- range .Values.query.stores }}
         - "--store={{ . }}"
         {{- end }}
+        {{- range .Values.query.serviceDiscoveryFiles }}
+        - "--store.sd-files={{ . }}"
+        {{- end }}
         {{- range .Values.query.serviceDiscoveryFileConfigMaps }}
         - "--store.sd-files=/etc/query/{{ . }}/*.yaml"
         - "--store.sd-files=/etc/query/{{ . }}/*.yml"
