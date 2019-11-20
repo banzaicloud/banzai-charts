@@ -234,7 +234,7 @@ timePartioning:
 | query.storeDNSDiscovery | Enable DNS discovery for stores | true |
 | query.sidecarDNSDiscovery | Enable DNS discovery for sidecars (this is for the chart built-in sidecar service) | true |
 | query.stores | Addresses of statically configured store API servers (repeatable). The scheme may be prefixed with 'dns+' or 'dnssrv+' to detect store API servers through respective DNS lookups. | [] |
-| query.serviceDiscoveryFiles | Path to files that contains addresses of store API servers. The path can be a glob pattern (repeatable). | [] |
+| query.serviceDiscoveryFileConfigMaps | Names of configmaps that contain addresses of store API servers, used for file service discovery. | [] |
 | query.serviceDiscoveryInterval | Refresh interval to re-read file SD files. It is used as a resync fallback. | 5m |
 | query.extraEnv | Add extra environment variables | [] |
 | query.extraArgs | Add extra arguments | [] |
