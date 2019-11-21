@@ -141,6 +141,8 @@ This section describes the values available
 | image.pullPolicy | Image Kubernetes pull policy | IfNotPresent |
 | objstore | Configuration for the backend object storage in yaml format. Mutually exclusive with objstoreFile. | {} |
 | objstoreFile | Configuration for the backend object storage in string format. Mutually exclusive with objstore. | "" |
+| objstoreSecret.useExistingSecret | Whether to skip secret creation in favor of an existing one | false |
+| objstoreSecret.secretName | The existing secret name | "" |
 
 ## Common settings for all components
 
