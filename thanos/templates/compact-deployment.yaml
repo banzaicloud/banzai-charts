@@ -76,7 +76,11 @@ spec:
       {{- end }}
       - name: config-volume
         secret:
+          {{- if .Values.objstoreSecret.useExistingSecret }}
+          secretName: "{{ .Values.objstoreSecret.secretName }}"
+          {{- else }}
           secretName: {{ include "thanos.fullname" . }}
+          {{- end }}
       {{- with .Values.compact.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
       {{- end }}
