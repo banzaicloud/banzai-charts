@@ -332,9 +332,9 @@ compact:
   # How long to retain samples of resolution 2 (1 hour) in bucket. 0d - disables this retention
   retentionResolution1h: 1y
   # Number of goroutines to use when syncing block metadata from object storage.
-  compactConcurrency: 20
+  blockSyncConcurrency: 20
   # Number of goroutines to use when compacting groups.
-  blockSyncConcurrency: 1
+  compactConcurrency: 1
   # Log filtering level.
   logLevel: info
   # Compact service listening http port
