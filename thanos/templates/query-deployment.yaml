@@ -83,6 +83,11 @@ spec:
         {{- range .Values.query.serviceDiscoveryFiles }}
         - "--store.sd-files={{ . }}"
         {{- end }}
+        {{- range .Values.query.serviceDiscoveryFileConfigMaps }}
+        - "--store.sd-files=/etc/query/{{ . }}/*.yaml"
+        - "--store.sd-files=/etc/query/{{ . }}/*.yml"
+        - "--store.sd-files=/etc/query/{{ . }}/*.json"
+        {{- end }}
         {{- if .Values.query.serviceDiscoveryInterval }}
         - "--store.sd-interval={{ .Values.query.serviceDiscoveryInterval }}"
         {{- end }}
@@ -96,8 +101,12 @@ spec:
           containerPort: {{ .Values.query.grpc.port }}
         resources:
           {{ toYaml .Values.query.resources | nindent 10 }}
-        {{- if .Values.query.certSecretName }}
         volumeMounts:
+        {{- range .Values.query.serviceDiscoveryFileConfigMaps }}
+        - mountPath: /etc/query/{{ . }}
+          name: {{ . }}
+        {{- end }}
+        {{- if .Values.query.certSecretName }}
         - mountPath: /etc/certs
           name: {{ .Values.query.certSecretName }}
           readOnly: true
@@ -110,8 +119,14 @@ spec:
           httpGet:
             path: /-/ready
             port: http
-      {{- if .Values.query.certSecretName }}
       volumes:
+      {{- range .Values.query.serviceDiscoveryFileConfigMaps }}
+      - name: {{ . }}
+        configMap:
+          defaultMode: 420
+          name: {{ . }}
+      {{- end }}
+      {{- if .Values.query.certSecretName }}
       - name: {{ .Values.query.certSecretName }}
         secret:
           defaultMode: 420
