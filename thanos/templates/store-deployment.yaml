@@ -113,7 +113,11 @@ spec:
         emptyDir: {}
       - name: config-volume
         secret:
+          {{- if $root.Values.objstoreSecretOverride }}
+          secretName: "{{ $root.Values.objstoreSecretOverride }}"
+          {{- else }}
           secretName: {{ include "thanos.fullname" $root }}
+          {{- end }}
       {{- if $root.Values.store.certSecretName }}
       - name: {{ $root.Values.store.certSecretName }}
         secret:
