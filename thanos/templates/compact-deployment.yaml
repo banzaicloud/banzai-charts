@@ -76,8 +76,8 @@ spec:
       {{- end }}
       - name: config-volume
         secret:
-          {{- if .Values.objstoreSecret.useExistingSecret }}
-          secretName: "{{ .Values.objstoreSecret.secretName }}"
+          {{- if .Values.objstoreSecretOverride }}
+          secretName: "{{ .Values.objstoreSecretOverride }}"
           {{- else }}
           secretName: {{ include "thanos.fullname" . }}
           {{- end }}

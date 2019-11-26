@@ -139,10 +139,9 @@ This section describes the values available
 | image.repository | Thanos image repository and name | 'quay.io/thanos/thanos'   **For Thanos version 0.6.0 or older change this to 'improbable/thanos'** |
 | image.tag | Thanos image tag | v0.8.1 |
 | image.pullPolicy | Image Kubernetes pull policy | IfNotPresent |
-| objstore | Configuration for the backend object storage in yaml format. Mutually exclusive with objstoreFile. | {} |
-| objstoreFile | Configuration for the backend object storage in string format. Mutually exclusive with objstore. | "" |
-| objstoreSecret.useExistingSecret | Whether to skip secret creation in favor of an existing one | false |
-| objstoreSecret.secretName | The existing secret name | "" |
+| objstore | Configuration for the backend object storage in yaml format. Mutually exclusive with other objstore options. | {} |
+| objstoreFile | Configuration for the backend object storage in string format. Mutually exclusive with other objstore options. | "" |
+| objstoreSecretOverride | Configuration for the backend object storage in an existing secret. Mutually exclusive with other objstore options.  | "" |
 
 ## Common settings for all components
 
