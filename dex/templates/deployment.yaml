@@ -74,6 +74,10 @@ spec:
           name: config
         - mountPath: /etc/dex/tls/https/server
           name: https-tls
+        {{- if .Values.extraSecrets }}
+        - mountPath: /etc/dex/secrets
+          name: secrets
+        {{- end }}
         {{- if .Values.extraVolumeMounts }}
         {{ toYaml .Values.extraVolumeMounts | nindent 8 }}
         {{- end }}
@@ -89,7 +93,13 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ default (printf "%s-tls" (include "dex.fullname" . )) .Values.certs.tlsName | quote }}
-      {{- if ne (len .Values.extraVolumes) 0 }}
+      {{- if .Values.extraSecrets }}
+      - name: secrets
+        secret:
+          defaultMode: 420
+          secretName: {{ printf "%s-secrets" (include "dex.fullname" . ) | quote }}
+      {{- end }}
+      {{- if .Values.extraVolumes }}
       {{ toYaml .Values.extraVolumes | nindent 6 }}
       {{- end }}
 

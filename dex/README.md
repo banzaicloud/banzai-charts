@@ -34,6 +34,9 @@ The following tables lists configurable parameters of the dex chart and their de
 |certs.tlsName                        |tls secret name                              |dex-web-server-tls                        |
 |certs.caName                         |CA secret name                               |dex-web-server-ca                         |
 |env                                  |environment variables                        |[]                                        |
+|extraSecrets                         |extra secret files                           |{}                                        |
+|extraVolumes                         |extra pod volumes                            |[]                                        |
+|extraVolumeMounts                    |extra pod volume mounts                      |[]                                        |
 |rbac.create                          |RBAC resources should be created             |true                                      |
 |serviceAccount.create                |serviceAccount should be created             |true                                      |
 |serviceAccount.name                  |name of the ServiceAccount to use            |default                                   |
