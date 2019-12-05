@@ -78,6 +78,6 @@ spec:
         - path: {{ $.Values.store.grpc.ingress.path }}
           backend:
             serviceName: {{ include "thanos.componentname" (list $ "store") }}-grpc
-            servicePort: {{ $.Values.store.http.port }}
+            servicePort: {{ $.Values.store.grpc.port }}
   {{- end }}
 {{- end }}
