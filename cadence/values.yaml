@@ -231,8 +231,12 @@ web:
   affinity: {}
 
 schema:
-  setup: true
-  update: true
+  setup:
+    enabled: true
+    backoffLimit: 100
+  update:
+    enabled: true
+    backoffLimit: 100
 
 cassandra:
   enabled: true
