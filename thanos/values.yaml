@@ -32,6 +32,24 @@ store:
   #
   # Number of replicas running from store component
   replicaCount: 1
+  # Data volume for the thanos-store to store temporary data defaults to emptyDir
+  dataVolume:
+    backend: {}
+    #  persistentVolumeClaim:
+    #    claimName: store-data-volume
+  # Create the specified persistentVolumeClaim in case persistentVolumeClaim is
+  # used for the dataVolume.backend above and needs to be created.
+  persistentVolumeClaim: {}
+  #  name: store-data-volume
+  #  spec:
+  #    storageClassName: ""
+  #    accessModes: ["ReadWriteOnce"]
+  #    resources:
+  #      requests:
+  #        storage: 100Gi
+  #    selector: {}
+  #    volumeName: ""
+  #    volumeMode: ""
   # Extra labels for store pod template
   labels: {}
   #  cluster: example

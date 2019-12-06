@@ -110,7 +110,11 @@ spec:
           {{ toYaml $root.Values.store.resources | nindent 10 }}
       volumes:
       - name: data
+      {{- if $root.Values.store.dataVolume.backend }}
+        {{ toYaml $root.Values.store.dataVolume.backend | nindent 8 }}
+      {{- else }}
         emptyDir: {}
+      {{- end }}
       - name: config-volume
         secret:
           {{- if $root.Values.objstoreSecretOverride }}
