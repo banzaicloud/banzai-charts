@@ -97,7 +97,7 @@ $ helm install -f values/values.cassandra.yaml banzaicloud-stable/cadence
 Alternatively, install the chart with manual migrations. Follow the steps in [migrations.md](migrations.md).
 
 ```bash
-$ helm install -f values/values.cassandra.yaml --set schema.setup=false --set schema.update=false banzaicloud-stable/cadence
+$ helm install -f values/values.cassandra.yaml --set schema.setup.enabled=false --set schema.update.enabled=false banzaicloud-stable/cadence
 ```
 
 
@@ -144,7 +144,7 @@ $ helm install -f values/values.mysql.yaml banzaicloud-stable/cadence
 Alternatively, install the chart with manual migrations. Follow the steps in [migrations.md](migrations.md).
 
 ```bash
-$ helm install -f values/values.mysql.yaml --set schema.setup=false --set schema.update=false banzaicloud-stable/cadence
+$ helm install -f values/values.mysql.yaml --set schema.setup.enabled=false --set schema.update.enabled=false banzaicloud-stable/cadence
 ```
 
 
@@ -246,8 +246,10 @@ Global options overridable per service are marked with an asterisk.
 | `web.nodeSelector`                                | Node labels for pod assignment                        | `{}`                  |
 | `web.tolerations`                                 | Toleration labels for pod assignment                  | `[]`                  |
 | `web.affinity`                                    | Affinity settings for pod assignment                  | `{}`                  |
-| `schema.setup`                                    | Create database or keyspace                           | `true`                |
-| `schema.update`                                   | Update schema                                         | `true`                |
+| `schema.setup.enabled`                            | Create database or keyspace                           | `true`                |
+| `schema.setup.backoffLimit`                       | Create database job back off limit                    | `100`                 |
+| `schema.update.enabled`                           | Update schema                                         | `true`                |
+| `schema.update.backoffLimit`                      | Update schema job back off limit                      | `100`                 |
 | `cassandra.enabled`                               | Install Cassandra cluster                             | `true`                |
 | `cassandra.config.cluster_size`                   | Cassandra cluster node number                         | `1`                   |
 | `mysql.enabled`                                   | Install MySQL                                         | `false`               |

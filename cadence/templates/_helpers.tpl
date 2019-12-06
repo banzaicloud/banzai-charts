@@ -203,7 +203,7 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- if $storeConfig.sql.password -}}
 {{- $storeConfig.sql.password -}}
 {{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
-{{- if or $global.Values.schema.setup $global.Values.schema.update -}}
+{{- if or $global.Values.schema.setup.enabled $global.Values.schema.update.enabled -}}
 {{- required "Please specify password for MySQL chart" $global.Values.mysql.mysqlPassword -}}
 {{- else -}}
 {{- $global.Values.mysql.mysqlPassword -}}

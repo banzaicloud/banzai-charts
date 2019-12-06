@@ -1,4 +1,4 @@
-{{- if .Values.schema.setup }}
+{{- if .Values.schema.setup.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -22,7 +22,7 @@ metadata:
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
     {{- end }}
 spec:
-  backoffLimit: 10
+  backoffLimit: {{ .Values.schema.setup.backoffLimit }}
   template:
     metadata:
       name: {{ include "cadence.componentname" (list . "schema-setup") }}
@@ -146,7 +146,7 @@ spec:
 
 ---
 {{- end }}
-{{- if .Values.schema.update }}
+{{- if .Values.schema.update.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -170,7 +170,7 @@ metadata:
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
     {{- end }}
 spec:
-  backoffLimit: 10
+  backoffLimit: {{ .Values.schema.update.backoffLimit }}
   template:
     metadata:
       name: {{ include "cadence.componentname" (list . "schema-update") }}
