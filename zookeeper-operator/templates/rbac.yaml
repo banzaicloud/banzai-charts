@@ -68,6 +68,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ template "zookeeper-operator.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: "{{ template "zookeeper-operator.fullname" . }}"
     chart: "{{ include "zookeeper-operator.chart" . }}"
