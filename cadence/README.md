@@ -235,6 +235,7 @@ Global options overridable per service are marked with an asterisk.
 | `web.image.repository`                            | WebUI image repository                                | `ubercadence/web`     |
 | `web.image.tag`                                   | WebUI image tag                                       | `3.3.2`               |
 | `web.image.pullPolicy`                            | WebUI image pull policy                               | `IfNotPresent`        |
+| `web.service.annotations`                         | WebUI service annotations                             | `{}`                  |
 | `web.service.type`                                | WebUI service type                                    | `ClusterIP`           |
 | `web.service.port`                                | WebUI service port                                    | `80`                  |
 | `web.service.nodePort`                            | WebUI service nodePort, if service type is NodePort   | ``                    |
