@@ -277,3 +277,40 @@ MySQL host.
 {{- define "mysql.host" -}}
 {{- printf "%s.%s.svc.cluster.local" (include "call-nested" (list . "mysql" "mysql.fullname")) .Release.Namespace -}}
 {{- end -}}
+
+{{/* Elasticsearch options.
+*/}}
+{{- define "cadence.advancedpersistence" -}}
+{{- if .Values.elasticsearch.enabled -}}
+{{- print "es-visibility" -}}
+{{- else -}}
+{{- print "" -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "cadence.elasticsearch.host" -}}
+{{- if (and (include "cadence.advancedpersistence" .) .Values.elasticsearch.host) -}}
+{{- print .Values.elasticsearch.host -}}
+{{- else if (include "cadence.advancedpersistence" . ) -}}
+{{- fail (print "Missing Elasticsearch host") -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "cadence.elasticsearch.scheme" -}}
+{{- if (and (include "cadence.advancedpersistence" .) .Values.elasticsearch.scheme) -}}
+{{- print .Values.elasticsearch.scheme -}}
+{{- else if (include "cadence.advancedpersistence" . ) -}}
+{{- fail (print "Missing Elasticsearch scheme") -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "cadence.elasticsearch.indices" -}}
+{{- if (and (include "cadence.advancedpersistence" .) .Values.elasticsearch.indices) -}}
+{{- if (lt (len .Values.elasticsearch.indices) 1) -}}
+{{- fail (print "Must have at least 1 Elasticsearch index") -}}
+{{- end -}}
+{{- .Values.elasticsearch.indices | toYaml -}}
+{{- else if (include "cadence.advancedpersistence" . ) -}}
+{{- fail (print "Missing Elasticsearch indices") -}}
+{{- end -}}
+{{- end -}}

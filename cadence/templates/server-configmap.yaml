@@ -19,6 +19,9 @@ data:
       defaultStore: default
       visibilityStore: visibility
       numHistoryShards: {{ .Values.server.config.numHistoryShards }}
+      {{- if ( include "cadence.advancedpersistence" . ) }}
+      advancedVisibilityStore: {{ include  "cadence.advancedpersistence" . }}
+      {{- end }}
       datastores:
         default:
           {{- if eq (include "cadence.persistence.driver" (list . "default")) "cassandra" }}
@@ -64,6 +67,16 @@ data:
             {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}
+
+        {{- if (include "cadence.advancedpersistence" .) }}
+        es-visiblity:
+          elasticsearch:
+            url:
+              host: {{ (include "cadence.elasticsearch.host" .) }}
+              scheme: {{ (include "cadence.elasticsearch.scheme" .) }}
+            indices:
+              {{ include "cadence.elasticsearch.indices" . }}
+        {{- end }}
 
     ringpop:
       name: cadence

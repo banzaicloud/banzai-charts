@@ -258,3 +258,10 @@ mysql:
   initializationFiles:
     user.sql: |-
       GRANT ALL PRIVILEGES ON *.* TO 'cadence'@'%';
+
+elasticsearch:
+  enabled: true
+  host: localhost:443
+  scheme: http
+  indices:
+    visibility: cadence-visibility
