@@ -79,7 +79,7 @@ data:
       frontend:
         rpc:
           port: {{ include "cadence.frontend.internalPort" . }}
-          bindOnIP: "0.0.0.0"
+          bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
             type: frontend
@@ -90,7 +90,7 @@ data:
       history:
         rpc:
           port: {{ include "cadence.history.internalPort" . }}
-          bindOnIP: "0.0.0.0"
+          bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
             type: history
@@ -101,7 +101,7 @@ data:
       matching:
         rpc:
           port: {{ include "cadence.matching.internalPort" . }}
-          bindOnIP: "0.0.0.0"
+          bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
             type: matching
@@ -112,7 +112,7 @@ data:
       worker:
         rpc:
           port: {{ include "cadence.worker.internalPort" . }}
-          bindOnIP: "0.0.0.0"
+          bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
             type: worker
