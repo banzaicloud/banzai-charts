@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: {{ .Chart.Name }}
 {{- with .Values.web.service.annotations }}
   annotations:
-    {{- toYaml . | indent 4 }}
+{{ toYaml . | indent 4 }}
 {{- end }}
 spec:
 {{- with .Values.web.service.loadBalancerIP }}
