@@ -116,8 +116,8 @@ Extra configuration for prometheus operator.
 prometheus:
   prometheusSpec:
     thanos:
-      image: quay.io/thanos/thanos:v0.8.1
-      version: v0.8.1
+      image: quay.io/thanos/thanos
+      version: v0.9.0
       objectStorageConfig:
         name: thanos
         key: object-store.yaml
@@ -137,7 +137,7 @@ This section describes the values available
 |Name|Description| Default Value|
 |----|-----------|--------------|
 | image.repository | Thanos image repository and name | 'quay.io/thanos/thanos'   **For Thanos version 0.6.0 or older change this to 'improbable/thanos'** |
-| image.tag | Thanos image tag | v0.8.1 |
+| image.tag | Thanos image tag | v0.9.0 |
 | image.pullPolicy | Image Kubernetes pull policy | IfNotPresent |
 | objstore | Configuration for the backend object storage in yaml format. Mutually exclusive with other objstore options. | {} |
 | objstoreFile | Configuration for the backend object storage in string format. Mutually exclusive with other objstore options. | "" |
