@@ -116,7 +116,7 @@ Extra configuration for prometheus operator.
 prometheus:
   prometheusSpec:
     thanos:
-      image: quay.io/thanos/thanos
+      image: quay.io/thanos/thanos:v0.9.0
       version: v0.9.0
       objectStorageConfig:
         name: thanos
