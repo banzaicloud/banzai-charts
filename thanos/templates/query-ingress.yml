@@ -82,6 +82,6 @@ spec:
           - path: {{ $.Values.query.grpc.ingress.path }}
             backend:
               serviceName: {{ include "thanos.componentname" (list $ "query") }}-grpc
-              servicePort: {{ $.Values.query.http.port }}
+              servicePort: {{ $.Values.query.grpc.port }}
   {{- end }}
 {{- end }}
