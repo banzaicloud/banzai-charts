@@ -193,6 +193,34 @@ The default Cassandra store is installed without password, but for MySQL to work
 The reason behind this limitation is that migrations are executed as helm hooks, which needs the credentials before MySQL is even started.
 
 
+## Port forwarding to Cadence frontend
+
+As of version 0.5.1 of this chart service (frontend, history, matching, worker) pods use the [pod IP as bind address](https://github.com/banzaicloud/banzai-charts/pull/997).
+
+This is a limitation of how Cadence cluster membership works and is required for scaling Cadence components.
+
+Unfortunately, this change caused `kubectl port-forward` directly to Cadence pods to stop working.
+
+If you need to port forward to any of the components (eg. to create a domain), you can use a `socat` sidecar container
+(for example by installing and configuring the [stable/socat-tunneller](https://hub.helm.sh/charts/stable/socat-tunneller) chart):
+
+```bash
+helm install stable/socat-tunneller --name cadence-frontend-tunnel --set tunnel.host=cadence-frontend --set tunnel.port=7933 --set nameOverride=cadence-frontend-tunnel
+```
+
+Then you can port-forward to this tunnel:
+
+```bash
+kubectl port-forward svc/cadence-frontend-tunnel 7933:7933
+```
+
+and create a domain:
+
+```bash
+docker run --rm ubercadence/cli:master --address host.docker.internal:7933 --domain samples-domain domain register --global_domain false
+```
+
+
 ## Configuration
 
 The following table lists the configurable parameters of the chart and their default values.
