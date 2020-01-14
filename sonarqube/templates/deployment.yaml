@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "sonarqube.fullname" . }}
@@ -9,6 +9,9 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "sonarqube.name" . }}
   template:
     metadata:
       labels:
@@ -75,14 +78,14 @@ spec:
             {{- end }}
             - name: SONARQUBE_JDBC_USERNAME
               {{- if eq .Values.database.type "postgresql" }}
-              value: {{ .Values.postgresql.postgresUser | quote }}
+              value: {{ .Values.postgresql.postgresqlUser | quote }}
               {{- end }}
             - name: SONARQUBE_JDBC_PASSWORD
               valueFrom:
                 secretKeyRef:
                   {{- if eq .Values.database.type "postgresql" }}
                   name: {{- if .Values.postgresql.enabled }} {{ template "postgresql.fullname" .}} {{- else }} {{ template "sonarqube.fullname" . }} {{- end }}
-                  key: postgres-password
+                  key: postgresql-password
                   {{- end }}
             - name: SONARQUBE_JDBC_URL
               {{- if eq .Values.database.type "postgresql" }}
