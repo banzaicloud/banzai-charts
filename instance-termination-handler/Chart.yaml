@@ -2,7 +2,7 @@ name: instance-termination-handler
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.4
+version: 0.0.5
 description: Instance Termination Handler Helm chart for Kubernetes
 keywords:
 - spot

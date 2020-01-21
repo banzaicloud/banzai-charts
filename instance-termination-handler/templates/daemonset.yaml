@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: "{{ template "instance-termination-handler.fullname" . }}"
@@ -8,6 +8,12 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+  selector:
+    matchLabels:
+      heritage: "{{ .Release.Service }}"
+      release: "{{ .Release.Name }}"
+      app: {{ template "instance-termination-handler.name" . }}
+      component: "{{ template "instance-termination-handler.fullname" . }}"
   template:
     metadata:
       labels:
