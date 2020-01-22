@@ -3,10 +3,12 @@ kind: ConfigMap
 metadata:
   name: "{{ template "hollowtrees.fullname" . }}"
   labels:
-    app: "{{ template "hollowtrees.name" . }}"
-    chart: "{{ template "hollowtrees.chart" . }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ template "hollowtrees.name" . }}
+    helm.sh/chart: {{ template "hollowtrees.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
 data:
   config.yaml: |-
     global:

@@ -1,8 +1,10 @@
+apiVersion: v1
 name: hollowtrees
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.4
+version: 0.0.5
+AppVersion: 0.0.1
 description: Hollowtrees Helm chart for Kubernetes
 keywords:
 - autoscaling
@@ -13,3 +15,4 @@ keywords:
 maintainers:
 - name: Banzai Cloud
   email: info@banzaicloud.com
+icon: https://banzaicloud.com/img/banzai-cloud-logo.png

@@ -3,10 +3,12 @@ kind: Service
 metadata:
   name: {{ template "hollowtrees.fullname" . }}
   labels:
-    app: "{{ template "hollowtrees.name" . }}"
-    chart: "{{ template "hollowtrees.chart" . }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: {{ include "hollowtrees.name" . }}
+    helm.sh/chart: {{ include "hollowtrees.chart" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
 spec:
   type: {{ .Values.service.type }}
   ports:
