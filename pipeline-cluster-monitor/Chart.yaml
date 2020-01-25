@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Monitoring chart to deploy on clusters managed by Banzai Cloud Pipeline
 name: pipeline-cluster-monitor
-version: 0.1.17
+version: 0.1.18
 keywords:
   - pipeline
   - cluster
