@@ -1,5 +1,0 @@
-secret:
-  name: oss-secret
-bucket:
-  name: logging-test
-  region: eu-west-1
