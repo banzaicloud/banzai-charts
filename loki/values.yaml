@@ -222,3 +222,14 @@ extraPorts: []
 
 # Extra env variables to pass to the loki container
 env: []
+
+# Enable grafana datasource configmap
+grafanaDatasource:
+  label: grafana_datasource
+  enabled: true
+  sources:
+  - name: Loki
+    type: loki
+    url: "" # when empty use current Loki deployment as URL
+    access: proxy
+    isDefault: false
