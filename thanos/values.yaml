@@ -738,11 +738,11 @@ sidecar:
   grpc:
     # grpc listen port number
     port: 10901
-    # Service definition for bucket grpc service
+    # Service definition for sidecar grpc service
     service:
-      # Annotations to bucket grpc service
+      # Annotations to sidecar grpc service
       annotations: {}
-      # Labels to bucket grpc service
+      # Labels to sidecar grpc service
       labels: {}
     # Set up ingress for the grpc service
     ingress:
@@ -763,12 +763,12 @@ sidecar:
   http:
     # http listen port number
     port: 10902
-    # Service definition for bucket http service
+    # Service definition for sidecar http service
     service:
       type: ClusterIP
-      # Annotations to bucket http service
+      # Annotations to sidecar http service
       annotations: {}
-      # Labels to bucket http service
+      # Labels to sidecar http service
       labels: {}
     # Set up ingress for the http service
     ingress:
