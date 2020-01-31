@@ -740,6 +740,8 @@ sidecar:
     port: 10901
     # Service definition for sidecar grpc service
     service:
+      # External IPs assigned to sidecar grpc service
+      externalIPs: []
       # Annotations to sidecar grpc service
       annotations: {}
       # Labels to sidecar grpc service
