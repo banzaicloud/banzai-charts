@@ -1,10 +1,15 @@
 name: dex
-version: 0.1.0
-appVersion: 0.4.2
-description: dexidp Dex
-keywords:
-- dex
-- oidc
+version: 0.2.0
+appVersion: 0.5.0
+description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable Connectors
 icon: https://raw.githubusercontent.com/dexidp/dex/master/Documentation/logos/dex-glyph-color.png
+apiVersion: v1
+home: https://github.com/dexidp/dex
 source:
-- https://github.com/dexidp/dex
+  - https://github.com/dexidp/dex
+keywords:
+  - dex
+  - oidc
+maintainers:
+  - name: Banzai Cloud
+    email: info@banzaicloud.com
