@@ -27,8 +27,6 @@ spec:
   {{- end }}
 {{- end }}
   rules:
-  {{- $exampleAppEnabled := .Values.exampleApp.enabled }}
-  {{- $redirectURI := splitList "/" .Values.exampleApp.redirectURI }}
   {{- range .Values.ingress.hosts }}
   {{- $url := splitList "/" . }}
     - host: {{ first $url }}
@@ -38,19 +36,5 @@ spec:
             backend:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
-{{- if $exampleAppEnabled }}
-          - path: /
-            backend:
-              serviceName: {{ $serviceName }}-example
-              servicePort: 5555
-          - path: /login
-            backend:
-              serviceName: {{ $serviceName }}-example
-              servicePort: 5555
-          - path: /{{ slice $redirectURI 3 | join "/" }}
-            backend:
-              serviceName: {{ $serviceName }}-example
-              servicePort: 5555
-{{- end }}
   {{- end}}
 {{- end }}
