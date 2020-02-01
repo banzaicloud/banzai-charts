@@ -9,5 +9,5 @@ Also if you enabled external metrics:
   
 Wait till deployment is done by:
 
-  
-kubectl -n {{ template "kube-metrics-adapter.fullname" . }} rollout status deployment kube-metrics-adapter
+  kubectl -n {{ .Release.Namespace }} rollout status deployment {{ template "helm.fullname" . }}
+
