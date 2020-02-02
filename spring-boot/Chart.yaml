@@ -2,7 +2,7 @@ name: spring-boot
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.3
+version: 0.0.4
 description: Run the simple spring-boot application
 keywords:
 - java
