@@ -16,6 +16,7 @@ metadata:
 {{ with .Values.sidecar.grpc.service.labels }}{{ toYaml . | indent 4 }}{{ end }}
 spec:
   type: ClusterIP
+  externalIPs: {{- toYaml .Values.sidecar.grpc.service.externalIPs | nindent 4 }}
   clusterIP: None
   ports:
     - port: {{ .Values.sidecar.grpc.port }}
