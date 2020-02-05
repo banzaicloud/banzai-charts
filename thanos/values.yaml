@@ -586,7 +586,19 @@ rule:
   # Override rules file
   ruleOverrideName: ""
   # Rule files for rule
-  alertmanagerFiles: {}
+  ruleFiles:
+    alerting_rules.yml: {}
+    # groups:
+    #   - name: Instances
+    #     rules:
+    #       - alert: InstanceDown
+    #         expr: up == 0
+    #         for: 5m
+    #         labels:
+    #           severity: page
+    #         annotations:
+    #           description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.'
+    #           summary: 'Instance {{ $labels.instance }} down'
   # Log filtering level.
   logLevel: info
   # Add extra environment variables to rule
