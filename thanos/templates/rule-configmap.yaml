@@ -12,8 +12,8 @@ metadata:
   name: {{ include "thanos.fullname" . }}-rules
 data:
   {{- $root := . -}}
-  {{- range $key, $value := .Values.alertmanagerFiles }}
+  {{- range $key, $value := .Values.rule.ruleFiles }}
   {{ $key }}: |
-  {{ toYaml $value | default "{}" | indent 4 }}
-    {{- end -}}
+{{ toYaml $value | default "{}" | indent 4 }}
+  {{- end -}}
 {{- end -}}
