@@ -250,6 +250,25 @@ timePartioning:
 | query.autoscaling.targetMemoryUtilizationPercentage |	Target memory utilization percentage to scale 50 |
 | query.serviceAccount | Name of the Kubernetes service account to use | "" |
 
+## Rule
+|Name|Description| Default Value|
+|----|-----------|--------------|
+| rule.enabled | Enable component | false |
+| rule.ruleLabels | Labels to be applied to all generated metrics (repeated). Similar to external labels for Prometheus, used to identify ruler and its blocks as unique source. | {} |
+| rule.resendDelay | Minimum amount of time to wait before resending an alert to Alertmanager. | "" |
+| rule.evalInterval | The default evaluation interval to use. | "" |
+| rule.tsdbBlockDuration | Block duration for TSDB block. | "" |
+| rule.tsdbRetention | Block retention time on local disk. | "" |
+| rule.webRoutePrefix |Prefix for API and UI endpoints. This allows thanos UI to be served on a sub-path. This option is analogous to --web.route-prefix of Promethus. | "" |
+| rule.webExternalPrefix |Static prefix for all HTML links and redirect URLs in the UI query web interface. Actual endpoints are still served on / or the web.route-prefix. This allows thanos UI to be served behind a reverse proxy that strips a URL sub-path | "" |
+| rule.webPrefixHeader | Name of HTTP request header used for dynamic prefixing of UI links and redirects. This option is ignored if web.external-prefix argument is set. Security risk: enable this option only if a reverse proxy in front of thanos is resetting the header. The --web.prefix-header=X-Forwarded-Prefix option can be useful, for example, if Thanos UI is served via Traefik reverse proxy with PathPrefixStrip option enabled, which sends the stripped prefix value in X-Forwarded-Prefix header. This allows thanos UI to be served on a sub-path | "" |
+| rule.queryDNSDiscovery | Enable DNS discovery for query insances | true |
+| rule.alertmanagers |   # Alertmanager replica URLs to push firing alerts. Ruler claims success if push to at least one alertmanager from discovered succeeds. The scheme may be prefixed with 'dns+' or 'dnssrv+' to detect Alertmanager IPs  through respective DNS lookups. The port defaults to 9093 or the SRV record's value. The URL path is used as a prefix for the regular Alertmanager API path. | []] |
+| rule.alertmanagersSendTimeout | Timeout for sending alerts to alertmanagert | "" |
+| rule.alertQueryUrl |The external Thanos Query URL that would be set in all alerts 'Source' field | "" |
+| rule.alertLabelDrop | Labels by name to drop before sending to alertmanager. This allows alert to be deduplicated on replica label (repeated). Similar Prometheus alert relabelling | [] |
+| rule.ruleOverrideName | Override rules file with custom configmap | "" |
+| rule.ruleFiles | See example in values.yaml | {}" |
 
 ## Compact
 

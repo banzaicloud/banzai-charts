@@ -83,7 +83,7 @@ spec:
         {{- if .Values.rule.alertQueryUrl }}
         - "--alert.query-url={{ .Values.rule.alertQueryUrl }}"
         {{- end }}
-        {{- range .Values.rule.alerLabelDrop }}
+        {{- range .Values.rule.alertLabelDrop }}
         - "--alert.label-drop={{ . }}"
         {{- end  }}
         {{- if .Values.rule.extraArgs }}
