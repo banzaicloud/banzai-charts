@@ -72,7 +72,7 @@ spec:
         - "--web.prefix-header={{ .Values.rule.webPrefixHeader }}"
         {{- end }}
         {{- if .Values.rule.queryDNSDiscovery }}
-        - "--query=dnssrv+_grpc._tcp.{{ include "thanos.componentname" (list $ "query") }}-grpc.{{ .Release.Namespace }}.svc.cluster.local"
+        - "--query=dnssrv+_grpc._tcp.{{ include "thanos.componentname" (list $ "query") }}-http.{{ .Release.Namespace }}.svc.cluster.local"
         {{- end  }}
         {{- range .Values.rule.alertmanagers }}
         - "--alertmanagers.url={{ . }}"
