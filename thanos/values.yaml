@@ -582,7 +582,7 @@ rule:
   alertQueryUrl: ""
   # Labels by name to drop before sending to alertmanager. This allows alert to be
   # deduplicated on replica label (repeated). Similar Prometheus alert relabelling
-  alerLabelDrop: []
+  alertLabelDrop: []
   # Override rules file
   ruleOverrideName: ""
   # Rule files for rule
