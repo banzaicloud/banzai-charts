@@ -33,7 +33,7 @@ spec:
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app.kubernetes.io/component: store
         app.kubernetes.io/partition: "{{ $index }}"
-      {{- if or .Values.store.annotations .Values.store.metrics.annotations.enabled }}
+      {{- if or $root.Values.store.annotations $root.Values.store.metrics.annotations.enabled }}
       annotations:
       {{- end }}
       {{- with  $root.Values.store.annotations }}{{ toYaml . | nindent 8 }}{{- end }}
