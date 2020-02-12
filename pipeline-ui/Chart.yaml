@@ -1,10 +1,11 @@
+apiVersion: v1
 name: pipeline-ui
+version: 1.2.0
+appVersion: 0.28.0
+description: Helm chart for Kubernetes. Provides the Graphical User Interface for Pipeline PaaS
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts/
-appVersion: "0.14.0"
-version: 1.1.4
-description: Helm chart for Kubernetes. Provides the Graphical User Interface for Pipeline PaaS
 keywords:
   - pipeline-ui
 maintainers:
