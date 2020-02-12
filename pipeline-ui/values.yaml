@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/pipeline-web
-  tag: 0.14.0
+  tag: 0.28.0
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -66,26 +66,4 @@ googleAnalyticsTrackingID: ""
 
 extraEnvs: []
 
-featureSet:
-  createIssue: false
-  menuSpotguides: false
-  menuCICD: false
-  menuStorage: false
-  menuFederation: false
-  menuServiceMesh: false
-  menuDisasterRecovery: false
-  menuSecurityScan: false
-  menuAuthProviders: false
-  menuRegistry: false
-  menuGroupApplication: false
-  menuGroupInfrastructure: false
-  menuGroupSecurity: false
-  menuGroupIntegration: false
-  notConfiguredProviders: false
-  monitoring: false
-  logging: false
-  advancedNetwork: false
-  nodePoolLabeling: false
-  horizontalPodAutoscaler: false
-  onDemandNodeAffinity: false
-  azurePKE: false
+featureSet: {}
