@@ -33,9 +33,10 @@ spec:
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app.kubernetes.io/component: store
         app.kubernetes.io/partition: "{{ $index }}"
-      {{- with  $root.Values.store.annotations }}
-      annotations: {{ toYaml . | nindent 8 }}
+      {{- if or $root.Values.store.annotations $root.Values.store.metrics.annotations.enabled }}
+      annotations:
       {{- end }}
+      {{- with  $root.Values.store.annotations }}{{ toYaml . | nindent 8 }}{{- end }}
       {{- if $root.Values.store.metrics.annotations.enabled  }}
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ $root.Values.store.http.port }}"

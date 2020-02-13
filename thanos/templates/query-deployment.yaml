@@ -30,9 +30,10 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: query
 {{ with  .Values.query.labels }}{{ toYaml . | indent 8 }}{{ end }}
-      {{- with  .Values.query.annotations }}
-      annotations: {{ toYaml . | nindent 8 }}
+      {{- if or .Values.query.annotations .Values.query.metrics.annotations.enabled }}
+      annotations:
       {{- end }}
+      {{- with  .Values.query.annotations }}{{ toYaml . | nindent 8 }}{{- end }}
       {{- if .Values.query.metrics.annotations.enabled  }}
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.query.http.port }}"
