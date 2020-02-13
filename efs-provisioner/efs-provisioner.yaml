@@ -46,7 +46,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: efs-provisioner
 spec:
@@ -92,7 +92,7 @@ spec:
             path: /
 ---
 kind: StorageClass
-apiVersion: storage.k8s.io/v1beta1
+apiVersion: storage.k8s.io/v1
 metadata:
   name: aws-efs
 provisioner: example.com/aws-efs
