@@ -739,6 +739,8 @@ rule:
 sidecar:
   # NOTE: This is only the service references for the sidecar
   enabled: true
+  selector:
+    app: prometheus
   # Enable metrics collecting for compat service
   metrics:
     # Enable ServiceMonitor https://github.com/coreos/prometheus-operator

@@ -307,7 +307,8 @@ timePartioning:
 
 |Name|Description| Default Value|
 |----|-----------|--------------|
-| sidecar.enabled | NOTE: This is only the service references for the sidecar. It will create a service looking for `app: prometheus` labels| true |
+| sidecar.enabled | NOTE: This is only the service references for the sidecar. | true |
+| sidecar.selector | Pod label selector to match sidecar services on. | `{"app": "prometheus"}` |
 
 ## Contributing
 Contributions are very welcome!
