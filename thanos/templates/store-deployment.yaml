@@ -53,6 +53,7 @@ spec:
         - "store"
         - "--data-dir=/var/thanos/store"
         - "--log.level={{ $root.Values.store.logLevel }}"
+        - "--log.format={{ $root.Values.store.logFormat }}"
         - "--http-address=0.0.0.0:{{ $root.Values.store.http.port }}"
         - "--grpc-address=0.0.0.0:{{ $root.Values.store.grpc.port }}"
         - "--objstore.config-file=/etc/config/object-store.yaml"

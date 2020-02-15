@@ -187,6 +187,7 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | store.enabled | Enable component | true |
 | store.replicaCount | Pod replica count | 1 |
 | store.logLevel | Log level | info |
+| store.logFormat | Log format to use. Possible options: logfmt or json. | logfmt |
 | store.indexCacheSize | Maximum size of items held in the index cache. | 250MB |
 | store.chunkPoolSize | Maximum size of concurrently allocatable bytes for chunks. | 2GB |
 | store.grpcSeriesSampleLimit | Maximum amount of samples returned via a single series call. 0 means no limit. NOTE: for efficiency we take 120 as the number of samples in chunk (it cannot be bigger than that), so the actual number of samples might be lower, even though the maximum could be hit. | 0 |
@@ -226,6 +227,7 @@ timePartioning:
 | query.enabled | Enable component | true |
 | query.replicaCount | Pod replica count | 1 |
 | query.logLevel | Log level | info |
+| query.logFormat | Log format to use. Possible options: logfmt or json. | logfmt |
 | query.replicaLabel | Label to treat as a replica indicator along which data is deduplicated. Still you will be able to query without deduplication using 'dedup=false' parameter. | "" |
 | query.autoDownsampling | Enable --query.auto-downsampling option for query. | false |
 | query.webRoutePrefix |Prefix for API and UI endpoints. This allows thanos UI to be served on a sub-path. This option is analogous to --web.route-prefix of Promethus. | "" |
@@ -254,6 +256,8 @@ timePartioning:
 |Name|Description| Default Value|
 |----|-----------|--------------|
 | rule.enabled | Enable component | false |
+| rule.logLevel | Log level | info |
+| rule.logFormat | Log format to use. Possible options: logfmt or json. | logfmt |
 | rule.ruleLabels | Labels to be applied to all generated metrics (repeated). Similar to external labels for Prometheus, used to identify ruler and its blocks as unique source. | {} |
 | rule.resendDelay | Minimum amount of time to wait before resending an alert to Alertmanager. | "" |
 | rule.evalInterval | The default evaluation interval to use. | "" |
@@ -277,6 +281,7 @@ timePartioning:
 | compact.enabled | Enable component | true |
 | compact.replicaCount | Pod replica count | 1 |
 | compact.logLevel | Log level | info |
+| compact.logFormat | Log format to use. Possible options: logfmt or json. | logfmt |
 | compact.serviceAccount | Name of the Kubernetes service account to use | "" |
 | compact.consistencyDelay | Minimum age of fresh (non-compacted) blocks before they are being processed. Malformed blocks older than the maximum of consistency-delay and 30m0s will be removed.| 30m |
 | compact.retentionResolutionRaw | How long to retain raw samples in bucket. 0d - disables this retention | 30d |
@@ -294,6 +299,7 @@ timePartioning:
 | bucket.enabled | Enable component | true |
 | bucket.replicaCount | Pod replica count | 1 |
 | bucket.logLevel | Log level | info |
+| bucket.logFormat | Log format to use. Possible options: logfmt or json. | logfmt |
 | bucket.refresh | Refresh interval to download metadata from remote storage | 30m |
 | bucket.timeout | Timeout to download metadata from remote storage | 5m |
 | bucket.label | Prometheus label to use as timeline title | "" |

@@ -49,6 +49,7 @@ spec:
         args:
         - "query"
         - "--log.level={{ .Values.query.logLevel }}"
+        - "--log.format={{ .Values.query.logFormat }}"
         - "--grpc-address=0.0.0.0:{{ .Values.query.grpc.port }}"
         - "--http-address=0.0.0.0:{{ .Values.query.http.port }}"
         {{- if .Values.query.replicaLabel }}
