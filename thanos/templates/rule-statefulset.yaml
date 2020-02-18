@@ -43,6 +43,7 @@ spec:
         - "rule"
         - "--data-dir=/var/thanos/store"
         - "--log.level={{ .Values.rule.logLevel }}"
+        - "--log.format={{ .Values.rule.logFormat }}"
         - "--http-address=0.0.0.0:{{ .Values.rule.http.port }}"
         - "--grpc-address=0.0.0.0:{{ .Values.rule.grpc.port }}"
         - "--objstore.config-file=/etc/config/object-store.yaml"

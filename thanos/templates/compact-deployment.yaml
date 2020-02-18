@@ -47,6 +47,7 @@ spec:
         args:
         - "compact"
         - "--log.level={{ .Values.compact.logLevel }}"
+        - "--log.format={{ .Values.compact.logFormat }}"
         - "--http-address=0.0.0.0:{{ .Values.compact.http.port }}"
         - "--objstore.config-file=/etc/config/object-store.yaml"
         - "--data-dir=/var/thanos/compact"

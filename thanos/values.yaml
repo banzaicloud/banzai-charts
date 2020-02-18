@@ -21,6 +21,8 @@ store:
   blockSyncConcurrency: 20
   # Log filtering level.
   logLevel: info
+  # Log format to use. Possible options: logfmt or json.
+  logFormat: logfmt
   # Add extra environment variables to store
   extraEnv: []
   # - name: ENV
@@ -206,6 +208,8 @@ query:
   serviceDiscoveryInterval: 5m
   # Log filtering level.
   logLevel: info
+  # Log format to use. Possible options: logfmt or json.
+  logFormat: logfmt
   # Add extra environment variables to query
   extraEnv: []
   # - name: ENV
@@ -357,6 +361,8 @@ compact:
   compactConcurrency: 1
   # Log filtering level.
   logLevel: info
+  # Log format to use. Possible options: logfmt or json.
+  logFormat: logfmt
   # Compact service listening http port
   http:
     port: 10902
@@ -450,6 +456,8 @@ bucket:
   replicaCount: 1
   # Log filtering level.
   logLevel: info
+  # Log format to use. Possible options: logfmt or json.
+  logFormat: logfmt
   # Refresh interval to download metadata from remote storage
   refresh: 30m
   # Timeout to download metadata from remote storage
@@ -601,6 +609,8 @@ rule:
     #           summary: 'Instance {{ $labels.instance }} down'
   # Log filtering level.
   logLevel: info
+  # Log format to use. Possible options: logfmt or json.
+  logFormat: logfmt
   # Add extra environment variables to rule
   extraEnv: []
   # - name: ENV
