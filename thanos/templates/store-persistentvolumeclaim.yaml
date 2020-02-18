@@ -1,4 +1,4 @@
-{{- if .Values.store.persistentVolumeClaim }}
+{{- if and .Values.store.enabled .Values.store.persistentVolumeClaim }}
 {{- $pvc := .Values.store.persistentVolumeClaim -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
