@@ -24,7 +24,7 @@ spec:
       targetPort: grpc
       name: grpc
   selector:
-    app: prometheus
+    {{ toYaml .Values.sidecar.selector | nindent 4 }}
 
 ---
 
@@ -54,5 +54,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: prometheus
+    {{ toYaml .Values.sidecar.selector | nindent 4 }}
 {{- end }}
