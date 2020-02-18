@@ -1,7 +1,8 @@
 version: 2.1
 
 orbs:
-  helm: banzaicloud/helm@0.0.4
+  helm: banzaicloud/helm@0.0.6
+  helm2: banzaicloud/helm@0.0.5
 
 helm-repositories: &helm_repositories
   - run: helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
@@ -12,7 +13,17 @@ workflows:
   version: 2
   static-checks:
     jobs:
+      - helm2/lint-chart:
+          name: Lint (Helm 2)
+          charts-dir: '.'
+          add-extra-repositories: *helm_repositories
+          filters:
+            tags:
+              ignore: /.*/
+  helm-3-lint:
+    jobs:
       - helm/lint-chart:
+          name: Lint (Helm 3)
           charts-dir: '.'
           add-extra-repositories: *helm_repositories
           filters:
