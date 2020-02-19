@@ -1,0 +1,21 @@
+{{- if .Values.grafanaDatasource.enabled }}
+{{- $svcURL := printf "http://%s.%s.svc.cluster.local:%v" (include "loki.fullname" .) .Release.Namespace .Values.config.server.http_listen_port }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "loki.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+labels:
+  {{ .Values.grafanaDatasource.label }}: "1"
+data:
+  datasource.yaml: |-
+    apiVersion: 1
+    datasources:
+{{- range .Values.grafanaDatasource.sources }}
+    - name: {{ .name }}
+      type: {{ .type }}
+      url: {{ $svcURL}}
+      access: {{ .access }}
+      isDefault: {{ .isDefault }}
+{{- end }}
+{{- end }}
