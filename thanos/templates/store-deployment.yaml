@@ -38,8 +38,8 @@ spec:
       {{- end }}
       {{- with  $root.Values.store.annotations }}{{ toYaml . | nindent 8 }}{{- end }}
       {{- if $root.Values.store.metrics.annotations.enabled  }}
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ $root.Values.store.http.port }}"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ $root.Values.store.http.port }}"
       {{- end }}
     spec:
       containers:
