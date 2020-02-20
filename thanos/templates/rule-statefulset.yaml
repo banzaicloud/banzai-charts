@@ -114,7 +114,11 @@ spec:
         emptyDir: {}
       - name: config-volume
         secret:
+          {{- if .Values.objstoreSecretOverride }}
+          secretName: "{{ .Values.objstoreSecretOverride }}"
+          {{- else }}
           secretName: {{ include "thanos.fullname" . }}
+          {{- end }}
       - name: rule-volume
         configMap:
           name: {{ include "thanos.fullname" . }}-rules
