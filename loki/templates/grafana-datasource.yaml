@@ -5,8 +5,8 @@ kind: ConfigMap
 metadata:
   name: {{ include "loki.fullname" . }}
   namespace: {{ .Release.Namespace }}
-labels:
-  {{ .Values.grafanaDatasource.label }}: "1"
+  labels:
+    {{ .Values.grafanaDatasource.label }}: "1"
 data:
   datasource.yaml: |-
     apiVersion: 1
