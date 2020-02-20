@@ -8,7 +8,7 @@ metadata:
   labels:
     {{ .Values.grafanaDatasource.label }}: "1"
 data:
-  datasource.yaml: |-
+  loki.yaml: |-
     apiVersion: 1
     datasources:
 {{- range .Values.grafanaDatasource.sources }}
