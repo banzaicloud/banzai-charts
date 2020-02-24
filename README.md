@@ -27,4 +27,4 @@ Clusters created with Pipeline will add this Helm repo as `banzaicloud-stable` a
 
 ## Where to find us
 
-For issues and support join the (#banzai-charts) room in the [Banzai Cloud Community](https://slack.banzaicloud.io/).
+For issues and support join the (#banzai-charts) room in the [Banzai Cloud Community](https://pages.banzaicloud.com/invite-slack).
