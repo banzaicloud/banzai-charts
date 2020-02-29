@@ -764,6 +764,9 @@ sidecar:
     port: 10901
     # Service definition for sidecar grpc service
     service:
+      type: ClusterIP
+      # The node port number to use when the service type is set as 'NodePort'
+      nodePort: 31901
       # External IPs assigned to sidecar grpc service
       externalIPs: []
       # Annotations to sidecar grpc service
