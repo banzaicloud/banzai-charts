@@ -15,11 +15,16 @@ metadata:
     app.kubernetes.io/component: sidecar
 {{ with .Values.sidecar.grpc.service.labels }}{{ toYaml . | indent 4 }}{{ end }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.sidecar.grpc.service.type }}
   externalIPs: {{- toYaml .Values.sidecar.grpc.service.externalIPs | nindent 4 }}
+  {{- if eq .Values.sidecar.grpc.service.type "ClusterIP" }}
   clusterIP: None
+  {{- end }}
   ports:
     - port: {{ .Values.sidecar.grpc.port }}
+      {{- if eq .Values.sidecar.grpc.service.type "NodePort" }}
+      nodePort: {{ .Values.sidecar.grpc.service.nodePort }}
+      {{- end }}
       protocol: TCP
       targetPort: grpc
       name: grpc
