@@ -819,7 +819,7 @@ objstoreSecretOverride: ""
 # Text representation of the configuration
 objstoreFile: ""
 # YAML representation of the configuration. It's mutually exclusive with objstoreFile.
-objstore:
+objstore: {}
   # type: GCS
   # config:
   #   bucket: "thanos"
