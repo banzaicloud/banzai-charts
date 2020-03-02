@@ -118,6 +118,12 @@ spec:
       - name: rule-volume
         configMap:
           name: {{ include "thanos.fullname" . }}-rules
+      {{- if .Values.rule.certSecretName }}
+      - name: {{ .Values.rule.certSecretName }}
+        secret:
+          defaultMode: 420
+          secretName: {{ .Values.rule.certSecretName }}
+      {{- end }}
       {{- if .Values.rule.livenessProbe }}
       livenessProbe: {{ toYaml .Values.rule.livenessProbe | nindent 8 }}
       {{- end }}
