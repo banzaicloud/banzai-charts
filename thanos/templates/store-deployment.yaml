@@ -19,6 +19,9 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ $root.Values.store.replicaCount | default 1 }}
+  {{- with  $root.Values.store.strategy }}
+  strategy: {{ toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "thanos.name" $root }}

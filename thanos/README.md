@@ -154,6 +154,8 @@ These setting applicable to nearly all components.
 | $component.deploymentLabels | Additional labels to the deployment | {} |
 | $component.deploymentAnnotations | Additional annotations to the deployment | {} |
 | $component.extraEnv | Add extra environment variables | [] |
+| $component.strategy | Kubernetes [deployment update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) object | {} |
+| $component.updateStrategy | Kubernetes [statefulset update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) object | {} |
 | $component.metrics.annotations.enabled | Prometheus annotation for component | false |
 | $component.metrics.serviceMonitor.enabled | Prometheus ServiceMonitor definition for component | false |
 | $component.securityContext | SecurityContext for Pod | {} |

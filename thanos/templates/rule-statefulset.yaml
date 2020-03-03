@@ -18,6 +18,9 @@ spec:
   {{- if not .Values.rule.autoscaling.enabled }}
   replicas: {{ .Values.rule.replicaCount | default 1 }}
   {{- end }}
+  {{- with  .Values.rule.updateStrategy }}
+  updateStrategy: {{ toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "thanos.name" . }}

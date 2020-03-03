@@ -34,6 +34,8 @@ store:
   #
   # Number of replicas running from store component
   replicaCount: 1
+  # Kubernetes deployment strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
   # Data volume for the thanos-store to store temporary data defaults to emptyDir
   dataVolume:
     backend: {}
@@ -221,6 +223,8 @@ query:
   #
   # Number of replicas running from query component
   replicaCount: 1
+  # Kubernetes deployment strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
   # Enable HPA for query component
   autoscaling:
     enabled: false
@@ -377,6 +381,8 @@ compact:
   extraArgs:
   # - "--extraargs=extravalue"
   #
+  # Kubernetes deployment strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
   # Data volume for the compactor to store temporary data defaults to emptyDir
   dataVolume:
     backend: {}
@@ -498,6 +504,8 @@ bucket:
   extraArgs:
   # - "--extraargs=extravalue"
   #
+  # Kubernetes deployment strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
   # Extra labels for bucket pod template
   labels: {}
   #  cluster: example
@@ -622,6 +630,8 @@ rule:
   #
   # Number of replicas running from rule component
   replicaCount: 1
+  # Kubernetes update strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  updateStrategy: {}
   # Enable HPA for rule component
   autoscaling:
     enabled: false
