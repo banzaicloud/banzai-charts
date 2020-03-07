@@ -90,7 +90,7 @@ config:
   storage_account_key: ""
   container: ""
   endpoint: ""
-    max_retries: 0
+  max_retries: 0
 ```
 Create the Service Account and Bucket at Google cloud.
 
