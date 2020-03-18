@@ -9,12 +9,12 @@ helm install --name dex banzaicloud-stable/dex
 
 ## Configuration
 
-The following tables lists configurable parameters of the dex chart and their default values.
+The following table lists configurable parameters of the dex chart and their default values.
 
 |               Parameter             |                Description                  |                  Default                 |
 | ----------------------------------- | ------------------------------------------- | -----------------------------------------|
-|image                                |dex image                                    |quay.io/dexidp/dex                        |
-|imageTag                             |image tag                                    |master                                    |
+|image                                |dex image                                    |banzaicloud/dex-shim                        |
+|imageTag                             |image tag                                    |0.6.0                                    |
 |imagePullPolicy                      |image pull policy                            |IfNotPresent                              |
 |replicas                             |number of replicas                           |1                                         |
 |postgresql.enabled                   |deploy postgresql                            |true                                      |
