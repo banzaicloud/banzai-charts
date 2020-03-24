@@ -52,6 +52,7 @@ The following table lists configurable parameters of the dex chart and their def
 |config.staticClients                 |client config (use config file see below)    |[]                                        |
 |config.connectors                    |connectors config (use config file see below)|[]                                        |
 |nodeSelector                         |nodeselector                                 |{}                                        |
+|affinity                             |affinity                                     |{}                                        |
 |ingress.enabled                      |ingress enabled                              |false                                     |
 |ingress.annotations                  |ingress annotations                          |{}                                        |
 |ingress.hosts                        |ingress hosts                                |["/"]                                     |
