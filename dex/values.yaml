@@ -104,7 +104,14 @@ config:
 
 nodeSelector: {}
 
-affinity: {}
+affinity: |
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+        matchLabels:
+          app: {{ template "dex.name" . }}
+          release: {{ .Release.Name }}
+        topologyKey: failure-domain.beta.kubernetes.io/zone
 
 ingress:
   enabled: false

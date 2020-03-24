@@ -30,7 +30,7 @@ spec:
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 10 }}
       affinity:
-        {{- toYaml .Values.affinity | nindent 10 }}
+        {{- tpl .Values.affinity . | nindent 8 }}
       containers:
       {{- if .Values.cloudsql.enabled  }}
       - name: cloudsql-proxy
