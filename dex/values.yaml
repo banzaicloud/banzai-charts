@@ -104,6 +104,8 @@ config:
 
 nodeSelector: {}
 
+affinity: {}
+
 ingress:
   enabled: false
   annotations: {}
