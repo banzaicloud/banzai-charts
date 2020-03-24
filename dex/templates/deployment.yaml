@@ -29,8 +29,10 @@ spec:
       serviceAccountName: {{ template "dex.serviceAccountName" . }}
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 10 }}
+      {{- with .Values.affinity }}
       affinity:
-        {{- tpl .Values.affinity . | nindent 8 }}
+        {{- tpl . $ | nindent 8 }}
+      {{- end }}
       containers:
       {{- if .Values.cloudsql.enabled  }}
       - name: cloudsql-proxy
