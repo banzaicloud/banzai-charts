@@ -122,9 +122,11 @@ An example affinity config that distributes pods accross AWS availability zones:
 affinity: |
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-        matchLabels:
-          app: {{ template "dex.name" . }}
-          release: {{ .Release.Name }}
-        topologyKey: failure-domain.beta.kubernetes.io/zone
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app: {{ template "dex.name" . }}
+              release: {{ .Release.Name }}
+            topologyKey: failure-domain.beta.kubernetes.io/zone
 ```
