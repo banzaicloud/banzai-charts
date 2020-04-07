@@ -40,21 +40,21 @@ $ helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com
 ### Example GCS configuration for `object-store.yaml`
 ```
 type: GCS
-  config:
-    bucket: "thanos"
-    service_account: |-
-      {
-        "type": "service_account",
-        "project_id": "project",
-        "private_key_id": "abcdefghijklmnopqrstuvwxyz12345678906666",
-        "private_key": "-----BEGIN PRIVATE KEY-----\...\n-----END PRIVATE KEY-----\n",
-        "client_email": "project@thanos.iam.gserviceaccount.com",
-        "client_id": "123456789012345678901",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thanos%40gitpods.iam.gserviceaccount.com"
-      }
+config:
+  bucket: "thanos"
+  service_account: |-
+    {
+      "type": "service_account",
+      "project_id": "project",
+      "private_key_id": "abcdefghijklmnopqrstuvwxyz12345678906666",
+      "private_key": "-----BEGIN PRIVATE KEY-----\...\n-----END PRIVATE KEY-----\n",
+      "client_email": "project@thanos.iam.gserviceaccount.com",
+      "client_id": "123456789012345678901",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thanos%40gitpods.iam.gserviceaccount.com"
+    }
 ```
 
 ### Example S3 configuration for `object-store.yaml`
