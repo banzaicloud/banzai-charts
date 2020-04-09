@@ -761,6 +761,7 @@ sidecar:
   enabled: true
   selector:
     app: prometheus
+    component: server
   # Enable metrics collecting for compat service
   metrics:
     # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
