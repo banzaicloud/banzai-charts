@@ -20,6 +20,11 @@ spec:
         app: {{ template "spot-config-webhook.name" . }}
         release: {{ .Release.Name }}
     spec:
+      {{- if and .Values.rbac.enabled .Values.rbac.psp.enabled }}
+      securityContext:
+        runAsUser: 65534
+        fsGroup: 65534
+      {{- end }}
       serviceAccountName: {{ template "spot-config-webhook.fullname" . }}
       volumes:
       - name: serving-cert
@@ -53,9 +58,6 @@ spec:
           - name: SPOT_SCHEDULER_NAME
             value: {{ .Values.webhook.schedulerName }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          securityContext:
-            runAsUser: 65534
-            allowPrivilegeEscalation: false
           ports:
             - containerPort: {{ .Values.service.internalPort }}
           readinessProbe:
@@ -71,8 +73,6 @@ spec:
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
-            runAsUser: 65534
-            fsGroup: 65534
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}

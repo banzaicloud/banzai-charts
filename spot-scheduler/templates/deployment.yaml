@@ -22,6 +22,11 @@ spec:
         release: {{ .Release.Name }}
         component: scheduler
     spec:
+      {{- if and .Values.rbac.enabled .Values.rbac.psp.enabled }}
+      securityContext:
+        runAsUser: 65534
+        fsGroup: 65534
+      {{- end }}
       serviceAccountName: {{ template "spot-scheduler.fullname" . }}
       containers:
       - name: {{ .Chart.Name }}
@@ -47,8 +52,6 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
-          runAsUser: 65534
-          fsGroup: 65534
         resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}

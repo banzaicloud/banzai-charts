@@ -21,9 +21,14 @@ spec:
         heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
     spec:
-{{- if .Values.rbac.enabled }}
+      {{- if .Values.rbac.enabled }}
       serviceAccountName: {{ template "pvc-operator.fullname" . }}
-{{- end }}
+      {{- end }}
+      {{- if and .Values.rbac.enabled .Values.rbac.psp.enabled }}
+      securityContext:
+        runAsUser: 65534
+        fsGroup: 65534
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -46,17 +51,15 @@ spec:
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
-            runAsUser: 65534
-            fsGroup: 65534
-    {{- if .Values.nodeSelector }}
+      {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
-    {{- end }}
-    {{- if .Values.tolerations }}
+      {{- end }}
+      {{- if .Values.tolerations }}
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
-    {{- end }}
-    {{- if .Values.affinity }}
+      {{- end }}
+      {{- if .Values.affinity }}
       affinity:
 {{ toYaml .Values.affinity | indent 8 }}
-    {{- end }}
+      {{- end }}
