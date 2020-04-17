@@ -1,3 +1,4 @@
+apiVersion: v1
 name: ht-k8s-action-plugin
 home: https://banzaicloud.com
 sources:

@@ -1,3 +1,4 @@
+apiVersion: v1
 name: kubernetes-dashboard
 version: 0.9.2
 appVersion: 1.10.0

@@ -1,3 +1,4 @@
+apiVersion: v1
 name: zeppelin
 version: 0.0.18
 description: A Helm chart for Kubernetes

@@ -1,3 +1,4 @@
+apiVersion: v1
 name: satellite
 version: 0.0.2
 description: A Helm chart for satellite

@@ -1,3 +1,4 @@
+apiVersion: v1
 name: spark-hs
 version: 0.2.2
 description: A Helm chart for Spark HS in Kubernetes
