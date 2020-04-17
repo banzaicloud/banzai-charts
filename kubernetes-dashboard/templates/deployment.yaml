@@ -40,6 +40,11 @@ spec:
     {{ toYaml .Values.labels | indent 4 }}
     {{- end }}
     spec:
+      {{- if and .Values.rbac.enabled .Values.rbac.psp.enabled }}
+      securityContext:
+        runAsUser: 65534
+        fsGroup: 65534
+      {{- end }}
       serviceAccountName: {{ template "kubernetes-dashboard.serviceAccountName" . }}
       containers:
       - name: {{ .Chart.Name }}
@@ -70,8 +75,6 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
-          runAsUser: 65534
-          fsGroup: 65534          
         resources:
 {{ toYaml .Values.resources | indent 10 }}
     {{- if .Values.nodeSelector }}

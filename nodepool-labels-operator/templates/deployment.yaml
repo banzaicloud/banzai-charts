@@ -28,6 +28,11 @@ spec:
       - name: config-volume
         configMap:
           name: {{ include "nodepool-labels-operator.fullname" . }}
+      {{- if and .Values.rbac.enabled .Values.rbac.psp.enabled }}
+      securityContext:
+        runAsUser: 65534
+        fsGroup: 65534
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -55,8 +60,6 @@ spec:
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
-            runAsUser: 65534
-            fsGroup: 65534
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
