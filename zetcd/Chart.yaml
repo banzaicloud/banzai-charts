@@ -1,3 +1,4 @@
+apiVersion: v1
 name: zetcd
 home: https://github.com/coreos/zetcd
 version: 0.1.1

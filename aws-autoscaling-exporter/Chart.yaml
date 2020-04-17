@@ -1,3 +1,4 @@
+apiVersion: v1
 name: aws-autoscaling-exporter
 home: https://banzaicloud.com
 sources:

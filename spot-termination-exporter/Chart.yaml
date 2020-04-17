@@ -1,3 +1,4 @@
+apiVersion: v1
 name: spot-termination-exporter
 home: https://banzaicloud.com
 sources:

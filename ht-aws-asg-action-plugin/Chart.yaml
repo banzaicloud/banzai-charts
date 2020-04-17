@@ -1,3 +1,4 @@
+apiVersion: v1
 name: ht-aws-asg-action-plugin
 home: https://banzaicloud.com
 sources:

@@ -1,3 +1,4 @@
+apiVersion: v1
 name: aws-spot-price-history-poller
 home: https://banzaicloud.com
 sources:
