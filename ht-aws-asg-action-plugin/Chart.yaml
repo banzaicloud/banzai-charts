@@ -3,7 +3,7 @@ name: ht-aws-asg-action-plugin
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.3
+version: 0.0.4
 description: Hollowtrees action ASG plugin Helm chart for Kubernetes
 keywords:
 - autoscaling

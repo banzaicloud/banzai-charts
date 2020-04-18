@@ -3,7 +3,7 @@ name: aws-spot-price-history-poller
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.3
+version: 0.0.4
 description: AWS Spot Price History Poller
 maintainers:
 - name: Banzai Cloud
