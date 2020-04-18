@@ -3,7 +3,7 @@ name: spot-recommender
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.3
+version: 0.0.4
 description: A Spot Recommender Helm chart for Kubernetes
 keywords:
 - spot

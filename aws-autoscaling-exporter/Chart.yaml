@@ -3,7 +3,7 @@ name: aws-autoscaling-exporter
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.0.3
+version: 0.0.4
 description: An aws autoscaling exporter Helm chart for Kubernetes
 maintainers:
 - name: Banzai Cloud
