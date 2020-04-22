@@ -165,6 +165,7 @@ These setting applicable to nearly all components.
 | $component.affinity | [Pod affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity) | {} |
 | $component.grpc.port | grpc listen port number | 10901 |
 | $component.grpc.service.annotations | Service definition for grpc service | {} |
+| $component.grpc.service.matchLabels | Pod label selector to match grpc service on. | `{}` |
 | $component.grpc.ingress.enabled | Set up ingress for the grpc service | false |
 | $component.grpc.ingress.annotations | Add annotations to ingress | {} |
 | $component.grpc.ingress.labels | Add labels to ingress | {} |
@@ -173,6 +174,7 @@ These setting applicable to nearly all components.
 | $component.grpc.ingress.tls | Ingress TLS configuration | [] |
 | $component.http.port | http listen port number | 10902 |
 | $component.http.service.annotations | Service definition for http service | {} |
+| $component.http.service.matchLabels | Pod label selector to match http service on. | `{}` |
 | $component.http.ingress.enabled | Set up ingress for the http service | false |
 | $component.http.ingress.annotations | Add annotations to ingress | {} |
 | $component.http.ingress.labels | Add labels to ingress | {} |
