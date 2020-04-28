@@ -28,6 +28,7 @@ spec:
       app.kubernetes.io/instance: {{ $.Release.Name }}
       app.kubernetes.io/component: store
       app.kubernetes.io/partition: "{{ $index }}"
+{{ with $root.Values.store.deploymentMatchLabels }}{{ toYaml . | indent 4 }}{{ end }}
   template:
     metadata:
       labels:

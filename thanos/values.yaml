@@ -69,7 +69,10 @@ store:
   # Add extra annotations to store deployment
   deploymentAnnotations: {}
   #  extraAnnotation: extraAnnotationValue
-  # Enable metrics collecting for compat service
+  #
+  # Add extra selector matchLabels to store deployment
+  deploymentMatchLabels: {}
+  # Enable metrics collecting for store service
   metrics:
     # This is the Prometheus annotation type scraping configuration
     annotations:
@@ -316,9 +319,10 @@ query:
   deploymentAnnotations: {}
   #  extraAnnotation: extraAnnotationValue
   #
-  # Enable metrics collecting for compat service
-
-
+  # Add extra selector matchLabels to query deployment
+  deploymentMatchLabels: {}
+  #
+  # Enable metrics collecting for query service
   metrics:
     # This is the Prometheus annotation type scraping configuration
     annotations:
@@ -427,7 +431,10 @@ compact:
   deploymentAnnotations: {}
   #  extraAnnotation: extraAnnotationValue
   #
-  # Enable metrics collecting for compat service
+  # Add extra selector matchLabels to compact deployment
+  deploymentMatchLabels: {}
+  #
+  # Enable metrics collecting for compact service
   metrics:
     # This is the Prometheus annotation type scraping configuration
     annotations:
@@ -532,6 +539,9 @@ bucket:
   #
   # Add extra annotations to bucket deployment
   deploymentAnnotations: {}
+  #
+  # Add extra selector matchLabels to bucket deployment
+  deploymentMatchLabels: {}
 
   # Enable podDisruptionBudget for bucket component
   podDisruptionBudget:
@@ -731,9 +741,10 @@ rule:
   statefulsetAnnotations: {}
   #  extraAnnotation: extraAnnotationValue
   #
-  # Enable metrics collecting for compat service
-
-
+  #
+  # Add extra selector matchLabels to rule deployment
+  statefulsetMatchLabels: {}
+  # Enable metrics collecting for rule service
   metrics:
     # This is the Prometheus annotation type scraping configuration
     annotations:
@@ -777,7 +788,7 @@ sidecar:
   enabled: true
   selector:
     app: prometheus
-  # Enable metrics collecting for compat service
+  # Enable metrics collecting for sidecar service
   metrics:
     # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
     serviceMonitor:
