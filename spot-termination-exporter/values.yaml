@@ -60,5 +60,7 @@ tolerations: []
 
 affinity: {}
 
+priorityClassName: ""
+
 securityContext: {}
   # runAsUser: 65534
