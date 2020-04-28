@@ -8,7 +8,10 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-
+  selector:
+    matchLabels:
+      app: {{ template "spotTerminationexporter.fullname" . }}
+      component: "{{ template "spotTerminationexporter.fullname" . }}"
   template:
     metadata:
       labels:
