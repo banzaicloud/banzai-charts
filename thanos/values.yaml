@@ -625,7 +625,7 @@ rule:
   ruleOverrideName: ""
   # Rule files for rule
   ruleFiles:
-    alerting_rules.yml: {}
+    alerting_rules.yaml: {}
     # groups:
     #   - name: Instances
     #     rules:
