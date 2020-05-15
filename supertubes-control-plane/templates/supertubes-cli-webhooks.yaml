@@ -1,0 +1,53 @@
+{{- $tlsCrt := "" }}
+{{- $tlsKey := "" }}
+{{- $caCrt := "" }}
+{{- if .Values.webhook.certs.generate }}
+{{- $ca := genCA "svc-cat-ca" 3650 }}
+{{- $svcName := include "supertubes-control-plane.fullname" . }}
+{{- $cn := printf "%s.%s.svc" $svcName .Release.Namespace }}
+{{- $altName1 := printf "%s.cluster.local" $cn }}
+{{- $altName2 := printf "%s" $cn }}
+{{- $server := genSignedCert $cn nil (list $altName1 $altName2) 365 $ca }}
+{{- $tlsCrt = b64enc $server.Cert }}
+{{- $tlsKey = b64enc $server.Key }}
+{{- $caCrt =  b64enc $ca.Cert }}
+{{- else }}
+{{- $tlsCrt = required "Required when certificate.generate is false" .Values.certificate.server.tls.crt }}
+{{- $tlsKey = required "Required when certificate.generate is false" .Values.certificate.server.tls.key }}
+{{- $caCrt = required "Required when certificate.generate is false" .Values.certificate.ca.crt }}
+{{- end }}
+{{- $major := .Capabilities.KubeVersion.Major -}}
+{{- $minor := .Capabilities.KubeVersion.Minor -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.webhook.certs.secret }}
+  namespace: {{ .Release.Namespace }}
+data:
+  tls.crt: {{ $tlsCrt }}
+  tls.key: {{ $tlsKey }}
+  ca.crt:  {{ $caCrt }}
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ template "supertubes-control-plane.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+webhooks:
+- name: singleton-vapplicationmanifest.{{ template "supertubes-control-plane.fullname" . }}.admission.banzaicloud.io
+  clientConfig:
+    caBundle: {{ $caCrt }}
+    service:
+      name: {{ template "supertubes-control-plane.fullname" . }}
+      namespace: {{ .Release.Namespace }}
+      path: /singleton-validate-supertubes-banzaicloud-io-v1beta1-applicationmanifest
+  failurePolicy: Fail
+  rules:
+  - apiGroups:
+    - supertubes.banzaicloud.io
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    resources:
+    - applicationmanifests

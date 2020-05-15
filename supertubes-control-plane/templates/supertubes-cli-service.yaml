@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "supertubes-control-plane.labels" . | nindent 4 }}
+  name: {{ include "supertubes-control-plane.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- if and .Values.prometheusMetrics.enabled (not .Values.prometheusMetrics.authProxy.enabled) }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/scheme: http
+  {{- end }}
+spec:
+  ports:
+    - name: https
+      port: 8443
+      targetPort: https
+    - name: webhook-server
+      port: 443
+      targetPort: webhook-server
+    {{- if and .Values.prometheusMetrics.enabled (not .Values.prometheusMetrics.authProxy.enabled) }}
+    - name: metrics
+      port: 8080
+    {{- end}}
+  selector:
+    app: {{ include "supertubes-control-plane.name" . }}
+    {{- include "supertubes-control-plane.selectorLabels" . | nindent 4 }}

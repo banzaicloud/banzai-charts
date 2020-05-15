@@ -1,0 +1,44 @@
+# Default values for supertubes-control-plane.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+crd:
+  create: true
+
+webhook:
+  certs:
+    generate: true
+    secret: "supertubes-manifest-controller-serving-cert"
+
+rbac:
+  create: true
+
+operator:
+  leaderElection:
+    namespace: default
+  image:
+    repository: banzaicloud/supertubes-manifest-controller
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+prometheusMetrics:
+  enabled: true
+  authProxy:
+    enabled: true
+    image:
+      repository: gcr.io/kubebuilder/kube-rbac-proxy
+      tag: v0.5.0
+      pullPolicy: IfNotPresent

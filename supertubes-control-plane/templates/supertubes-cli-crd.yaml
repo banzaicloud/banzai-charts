@@ -1,0 +1,190 @@
+{{- if .Values.crd.create }}
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.2.5
+  creationTimestamp: null
+  name: applicationmanifests.supertubes.banzaicloud.io
+spec:
+  group: supertubes.banzaicloud.io
+  names:
+    kind: ApplicationManifest
+    listKind: ApplicationManifestList
+    plural: applicationmanifests
+    singular: applicationmanifest
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      description: ApplicationManifest is the Schema for the applicationmanifests
+        API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: ApplicationManifestSpec defines the desired state of ApplicationManifest
+          properties:
+            istioOperator:
+              properties:
+                createDefaultMesh:
+                  type: boolean
+                enabled:
+                  type: boolean
+                namespace:
+                  type: string
+                valuesOverride:
+                  type: string
+              required:
+                - enabled
+                - namespace
+              type: object
+            kafkaMinion:
+              properties:
+                enabled:
+                  type: boolean
+                valuesOverride:
+                  type: string
+              required:
+                - enabled
+              type: object
+            kafkaOperator:
+              properties:
+                enabled:
+                  type: boolean
+                namespace:
+                  type: string
+                valuesOverride:
+                  type: string
+              required:
+                - enabled
+                - namespace
+              type: object
+            monitoring:
+              properties:
+                grafanaDashboards:
+                  properties:
+                    enabled:
+                      type: boolean
+                    label:
+                      type: string
+                  required:
+                    - enabled
+                    - label
+                  type: object
+                prometheusOperator:
+                  properties:
+                    enabled:
+                      type: boolean
+                    namespace:
+                      type: string
+                    valuesOverride:
+                      type: string
+                  required:
+                    - enabled
+                    - namespace
+                  type: object
+              type: object
+            supertubes:
+              properties:
+                enabled:
+                  type: boolean
+                namespace:
+                  type: string
+                valuesOverride:
+                  type: string
+              required:
+                - enabled
+                - namespace
+              type: object
+            zookeeperOperator:
+              properties:
+                createDefaultCluster:
+                  type: boolean
+                enabled:
+                  type: boolean
+                namespace:
+                  type: string
+                valuesoverride:
+                  type: string
+              required:
+                - enabled
+                - namespace
+              type: object
+          type: object
+        status:
+          description: ApplicationManifestStatus defines the observed state of ApplicationManifest
+          properties:
+            components:
+              properties:
+                istioOperator:
+                  properties:
+                    meshStatus:
+                      type: string
+                    meshStatusMessage:
+                      type: string
+                    message:
+                      type: string
+                    status:
+                      type: string
+                  type: object
+                kafkaOperator:
+                  properties:
+                    message:
+                      type: string
+                    status:
+                      type: string
+                  type: object
+                monitoring:
+                  properties:
+                    message:
+                      type: string
+                    status:
+                      type: string
+                  type: object
+                supertubes:
+                  properties:
+                    message:
+                      type: string
+                    status:
+                      type: string
+                  type: object
+                zookeeperOperator:
+                  properties:
+                    clusterStatus:
+                      type: string
+                    clusterStatusMessage:
+                      type: string
+                    message:
+                      type: string
+                    status:
+                      type: string
+                  type: object
+              type: object
+            status:
+              type: string
+          type: object
+      type: object
+  version: v1beta1
+  versions:
+    - name: v1beta1
+      served: true
+      storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+{{- end}}
