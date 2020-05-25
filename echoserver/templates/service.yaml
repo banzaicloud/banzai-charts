@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo
+  labels:
+    app: echo
+    {{ include "echo-server.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: tcp
+    port: 80
+    targetPort: 8080
+  selector:
+    app: echo
+  type: {{ .Values.serviceType }}
