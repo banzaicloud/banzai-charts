@@ -25,6 +25,9 @@ server:
       interval: 30s
     prometheus:
       timerType: histogram
+    statsd: {}
+      #   hostPort: localhost:8125
+
   podAnnotations: {}
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -120,6 +123,8 @@ server:
         # enabled: false
       prometheus: {}
         # timerType: histogram
+      statsd: {}
+      #   hostPort: localhost:8125
     podAnnotations: {}
     resources: {}
     nodeSelector: {}
@@ -138,6 +143,8 @@ server:
         # enabled: false
       prometheus: {}
         # timerType: histogram
+      statsd: {}
+      #   hostPort: localhost:8125
     podAnnotations: {}
     resources: {}
     nodeSelector: {}
@@ -156,6 +163,8 @@ server:
         # enabled: false
       prometheus: {}
         # timerType: histogram
+      statsd: {}
+      #   hostPort: localhost:8125
     podAnnotations: {}
     resources: {}
     nodeSelector: {}
@@ -174,6 +183,8 @@ server:
         # enabled: false
       prometheus: {}
         # timerType: histogram
+      statsd: {}
+      #   hostPort: localhost:8125
     podAnnotations: {}
     resources: {}
     nodeSelector: {}
