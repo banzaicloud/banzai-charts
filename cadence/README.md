@@ -237,6 +237,7 @@ Global options overridable per service are marked with an asterisk.
 | `server.metrics.annotations.enabled`*             | Annotate pods with Prometheus annotations             | `false`               |
 | `server.metrics.serviceMonitor.enabled`*          | Enable Prometheus ServiceMonitor                      | `false`               |
 | `server.metrics.prometheus.timerType`*            | Prometheus timer type                                 | `histogram`           |
+| `server.metrics.statsd.hostPort`*                 | Statsd daemon host and port                           | ``                    |
 | `server.podAnnotations`*                          | Server pod annotations                                | `{}`                  |
 | `server.resources`*                               | Server CPU/Memory resource requests/limits            | `{}`                  |
 | `server.nodeSelector`*                            | Node labels for pod assignment                        | `{}`                  |
@@ -252,6 +253,7 @@ Global options overridable per service are marked with an asterisk.
 | `server.[service].metrics.annotations.enabled`    | Annotate `[service]` pods with Prometheus annotations | ``                    |
 | `server.[service].metrics.serviceMonitor.enabled` | Enable Prometheus ServiceMonitor for `[service]`      | ``                    |
 | `server.[service].metrics.prometheus.timerType`   | `[service]` Prometheus timer type                     | ``                    |
+| `server.[service].metrics.statsd.hostPort`        | `[service]` Statsd daemon host and port               | ``                    |
 | `server.[service].podAnnotations`                 | `[service]` pod annotations                           | `{}`                  |
 | `server.[service].resources`                      | `[service]` CPU/Memory resource requests/limits       | `{}`                  |
 | `server.[service].nodeSelector`                   | `[service]` Node labels for pod assignment            | `{}`                  |
