@@ -129,7 +129,11 @@ spec:
           {{- end }}
       - name: rule-volume
         configMap:
+          {{- if empty .Values.rule.ruleOverrideName -}}
           name: {{ include "thanos.fullname" . }}-rules
+          {{- else }}
+          name: {{ .Values.rule.ruleOverrideName }}
+          {{- end }}
       {{- if .Values.rule.certSecretName }}
       - name: {{ .Values.rule.certSecretName }}
         secret:
