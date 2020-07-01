@@ -86,11 +86,11 @@ data:
           prometheus:
             timerType: {{ default .Values.server.metrics.prometheus.timerType .Values.server.frontend.metrics.prometheus.timerType }}
             listenAddress: "0.0.0.0:9090"
-          {{- if or .Values.server.metrics.statsd .Values.server.frontend.metrics.statsd }}
-            statsd:
-              hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.frontend.metrics.statsd.hostPort | quote }}
-              prefix: "cadence.frontend"
-          {{- end}}
+        {{- if or .Values.server.metrics.statsd .Values.server.frontend.metrics.statsd }}
+          statsd:
+            hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.frontend.metrics.statsd.hostPort | quote }}
+            prefix: "cadence.frontend"
+        {{- end}}
 
       history:
         rpc:
@@ -102,11 +102,11 @@ data:
           prometheus:
             timerType: {{ default .Values.server.metrics.prometheus.timerType .Values.server.history.metrics.prometheus.timerType }}
             listenAddress: "0.0.0.0:9090"
-          {{- if or .Values.server.metrics.statsd .Values.server.history.metrics.statsd }}
-            statsd:
-              hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.history.metrics.statsd.hostPort | quote }}
-              prefix: "cadence.history"
-          {{- end}}
+        {{- if or .Values.server.metrics.statsd .Values.server.history.metrics.statsd }}
+          statsd:
+            hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.history.metrics.statsd.hostPort | quote }}
+            prefix: "cadence.history"
+        {{- end}}
 
       matching:
         rpc:
@@ -118,11 +118,11 @@ data:
           prometheus:
             timerType: {{ default .Values.server.metrics.prometheus.timerType .Values.server.matching.metrics.prometheus.timerType }}
             listenAddress: "0.0.0.0:9090"
-          {{- if or .Values.server.metrics.statsd .Values.server.matching.metrics.statsd }}
-            statsd:
-              hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.matching.metrics.statsd.hostPort | quote }}
-              prefix: "cadence.matching"
-          {{- end}}
+        {{- if or .Values.server.metrics.statsd .Values.server.matching.metrics.statsd }}
+          statsd:
+            hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.matching.metrics.statsd.hostPort | quote }}
+            prefix: "cadence.matching"
+        {{- end}}
 
       worker:
         rpc:
@@ -134,11 +134,11 @@ data:
           prometheus:
             timerType: {{ default .Values.server.metrics.prometheus.timerType .Values.server.worker.metrics.prometheus.timerType }}
             listenAddress: "0.0.0.0:9090"
-          {{- if or .Values.server.metrics.statsd .Values.server.worker.metrics.statsd }}
-            statsd:
-              hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.worker.metrics.statsd.hostPort | quote }}
-              prefix: "cadence.worker"
-          {{- end}}
+        {{- if or .Values.server.metrics.statsd .Values.server.worker.metrics.statsd }}
+          statsd:
+            hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.worker.metrics.statsd.hostPort | quote }}
+            prefix: "cadence.worker"
+        {{- end}}
 
     clusterMetadata:
       enableGlobalDomain: false
