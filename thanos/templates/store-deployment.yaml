@@ -106,11 +106,11 @@ spec:
         {{- end }}
         {{- if $root.Values.store.livenessProbe }}
         livenessProbe:
-        {{ toYaml $root.Values.store.livenessProbe | nindent 8 }}
+        {{ toYaml $root.Values.store.livenessProbe | nindent 10 }}
         {{- end }}
         {{- if $root.Values.store.readinessProbe }}
         readinessProbe:
-        {{ toYaml $root.Values.store.readinessProbe | nindent 8 }}
+        {{ toYaml $root.Values.store.readinessProbe | nindent 10 }}
         {{- end }}
         resources:
           {{ toYaml $root.Values.store.resources | nindent 10 }}
