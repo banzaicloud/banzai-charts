@@ -26,13 +26,15 @@ crd:
 watchNamespace: ""
 
 resources: {}
-  # limits:
-  #   cpu: 2
-  #   memory: 256Mi
-  # requests:
-  #   cpu: 1
-  #   memory: 128Mi
+#   limits:
+#     cpu: 2
+#     memory: 256Mi
+#   requests:
+#     cpu: 1
+#     memory: 128Mi
 
 nodeSelector: {}
+
 tolerations: []
+
 affinity: {}

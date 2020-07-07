@@ -40,10 +40,10 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
 {{- with .Values.affinity }}
-     affinity:
+      affinity:
 {{ toYaml . | indent 8 }}
 {{- end }}
 {{- with .Values.tolerations }}
-     tolerations:
+      tolerations:
 {{ toYaml . | indent 8 }}
 {{- end }}
