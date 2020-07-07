@@ -2,58 +2,48 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "zookeeper-operator.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels:
-    app: "{{ template "zookeeper-operator.fullname" . }}"
-    chart: "{{ include "zookeeper-operator.chart" . }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ template "zookeeper-operator.fullname" . }}
-      release: {{ .Release.Name }}
+      name: {{ template "zookeeper-operator.fullname" . }}
   template:
     metadata:
       labels:
-        app: "{{ template "zookeeper-operator.fullname" . }}"
-        chart: "{{ include "zookeeper-operator.chart" . }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
+        name: {{ template "zookeeper-operator.fullname" . }}
+        component: zookeeper-operator
     spec:
-{{- if .Values.rbac.enabled }}
-      serviceAccountName: {{ template "zookeeper-operator.fullname" . }}
-{{- end }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        ports:
-        - containerPort: 60000
-          name: metrics
-        env:
-        - name: WATCH_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: OPERATOR_NAME
-          value: {{ template "zookeeper-operator.fullname" . }}
-        resources:
+        - name: {{ template "zookeeper-operator.fullname" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 6000
+              name: metrics
+          command:
+            - zookeeper-operator
+          env:
+            - name: WATCH_NAMESPACE
+              value: "{{ .Values.watchNamespace }}"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: {{ template "zookeeper-operator.fullname" . }}
+          resources:
 {{ toYaml .Values.resources | indent 12 }}
-    {{- with .Values.nodeSelector }}
+{{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
+{{- end }}
+{{- with .Values.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
+{{- end }}
+{{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
-    {{- end }}
+{{- end }}
