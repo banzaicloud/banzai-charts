@@ -25,10 +25,14 @@ crd:
 # Default: "" == Watch ALL namespaces
 watchNamespace: ""
 
-+resources: {}
+resources: {}
   # limits:
   #   cpu: 2
   #   memory: 256Mi
   # requests:
   #   cpu: 1
   #   memory: 128Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
