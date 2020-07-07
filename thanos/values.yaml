@@ -175,9 +175,12 @@ store:
 
 query:
   enabled: true
-  # Label to treat as a replica indicator along which data is deduplicated.
+  # Labels to treat as a replica indicator along which data is deduplicated.
   # Still you will be able to query without deduplication using 'dedup=false' parameter.
-  replicaLabel: ""
+  replicaLabels: []
+  # - replica
+  # - prometheus_replica
+  #
   # Enable --query.auto-downsampling option for query.
   autoDownsampling: false
   # Prefix for API and UI endpoints. This allows thanos UI to be served on a sub-path.

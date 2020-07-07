@@ -56,8 +56,8 @@ spec:
         - "--log.format={{ .Values.query.logFormat }}"
         - "--grpc-address=0.0.0.0:{{ .Values.query.grpc.port }}"
         - "--http-address=0.0.0.0:{{ .Values.query.http.port }}"
-        {{- if .Values.query.replicaLabel }}
-        - "--query.replica-label={{ .Values.query.replicaLabel }}"
+        {{- range .Values.query.replicaLabels }}
+        - "--query.replica-label={{ . }}"
         {{- end }}
         {{- if .Values.query.autoDownsampling }}
         - "--query.auto-downsampling"
