@@ -177,7 +177,7 @@ query:
   enabled: true
   # Labels to treat as a replica indicator along which data is deduplicated.
   # Still you will be able to query without deduplication using 'dedup=false' parameter.
-  replicaLabel: []
+  replicaLabels: []
   # - replica
   # - prometheus_replica
   #
