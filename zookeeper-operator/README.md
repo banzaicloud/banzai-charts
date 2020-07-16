@@ -2,7 +2,7 @@
 
 [Zookeeper](https://zookeeper.apache.org/) is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
 
-This chart installs [Zookeeper Operator](https://github.com/pravega/zookeeper-operator), which can install Zookeeper 3.5 cluster.
+This chart installs [Zookeeper Operator](https://github.com/pravega/zookeeper-operator), which can install Zookeeper 3.6 cluster.
 
 ## Chart Details
 
@@ -17,7 +17,7 @@ $ helm install banzaicloud-stable/zookeeper-operator
 
 ## Configuration
 
-The following tables lists the configurable parameters of the Zookeeper Oparator chart and their default values.
+The following tables lists the configurable parameters of the Zookeeper Operator chart and their default values.
 
 | Parameter | Required | Description | Default value |
 | --------- | -------- | ----------- | ------------- |

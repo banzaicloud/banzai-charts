@@ -1,40 +1,22 @@
-# Default values for zookeeper-operator.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
+affinity: {}
+crd:
+  create: true
 image:
+  pullPolicy: IfNotPresent
   repository: pravega/zookeeper-operator
   tag: 0.2.8-rc0
-  pullPolicy: IfNotPresent
-
-## Install RBAC roles and bindings
+nodeSelector: {}
 rbac:
   create: true
-
-## Service account names and whether to create them
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 serviceAccount:
   create: true
   name: zookeeper-operator
-
-# Whether to create custom resource
-crd:
-  create: true
-
-#
-# Specifies which namespace the Operator should watch for new ClusterResource resources
-# Default: "" == Watch ALL namespaces
-watchNamespace: ""
-
-resources: {}
-#   limits:
-#     cpu: 2
-#     memory: 256Mi
-#   requests:
-#     cpu: 1
-#     memory: 128Mi
-
-nodeSelector: {}
-
 tolerations: []
-
-affinity: {}
+watchNamespace: ""
