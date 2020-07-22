@@ -85,6 +85,9 @@ config:
   frontend:
     theme: ""
 
+  oauth2:
+    skipApprovalScreen: false
+
   storage:
     type: ""
     config:
