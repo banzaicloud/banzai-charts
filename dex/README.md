@@ -41,6 +41,7 @@ The following table lists configurable parameters of the dex chart and their def
 |serviceAccount.create                |serviceAccount should be created             |true                                      |
 |serviceAccount.name                  |name of the ServiceAccount to use            |default                                   |
 |config.issuer                        |issuer url                                   |http://127.0.0.1:5556/dex                 |
+|config.oauth2                        |oauth2 setting                               |{ skipApprovalScreen: false }             |
 |config.logger.level                  |logger level                                 |debug                                     |
 |config.web.http                      |dex host and port                            |0.0.0.0:5556                              |
 |config.storage.type                  |storage type                                 |postgresql                                |

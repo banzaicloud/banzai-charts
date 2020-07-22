@@ -10,6 +10,8 @@ metadata:
 data:
   config.yaml: |-
     issuer: {{ .Values.config.issuer }}
+    oauth2:
+{{ toYaml .Values.config.oauth2 | indent 6 }}
     storage:
       {{- if or .Values.postgresql.enabled .Values.cloudsql.enabled }}
       type: postgres
