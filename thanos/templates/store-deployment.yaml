@@ -97,7 +97,7 @@ spec:
         - name: config-volume
           mountPath: /etc/config
           readOnly: true
-        - name: data-{{ $index }}
+        - name: data
           mountPath: /var/thanos/store
         {{- if $root.Values.store.certSecretName }}
         - mountPath: /etc/certs
@@ -115,7 +115,7 @@ spec:
         resources:
           {{ toYaml $root.Values.store.resources | nindent 10 }}
       volumes:
-      - name: data-{{ $index }}
+      - name: data
       {{- if $root.Values.store.dataVolume.backend }}
         persistentVolumeClaim:
           claimName: {{ $root.Values.store.dataVolume.backend.persistentVolumeClaim.claimName }}-{{ $index }}
