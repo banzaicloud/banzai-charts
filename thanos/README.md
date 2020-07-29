@@ -232,7 +232,7 @@ timePartioning:
 | query.replicaCount | Pod replica count | 1 |
 | query.logLevel | Log level | info |
 | query.logFormat | Log format to use. Possible options: logfmt or json. | logfmt |
-| query.replicaLabel | Labels to treat as a replica indicator along which data is deduplicated. Still you will be able to query without deduplication using 'dedup=false' parameter. | [] |
+| query.replicaLabels | Labels to treat as a replica indicator along which data is deduplicated. Still you will be able to query without deduplication using 'dedup=false' parameter. | [] |
 | query.autoDownsampling | Enable --query.auto-downsampling option for query. | false |
 | query.webRoutePrefix |Prefix for API and UI endpoints. This allows thanos UI to be served on a sub-path. This option is analogous to --web.route-prefix of Promethus. | "" |
 | query.webExternalPrefix |Static prefix for all HTML links and redirect URLs in the UI query web interface. Actual endpoints are still served on / or the web.route-prefix. This allows thanos UI to be served behind a reverse proxy that strips a URL sub-path | "" |
