@@ -64,7 +64,7 @@ spec:
           args: ['sh', '-c', 'cadence-cassandra-tool create -k {{ $storeConfig.cassandra.keyspace }}']
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
-          {{- if eq (include "cadence.persistence.sql.driver" (list $ $store)) "mysql" }}
+          {{- if eq (include "cadence.persistence.sql.pluginName" (list $ $store)) "mysql" }}
           # args: ["cadence-sql-tool", "create", "--db", "{{ $storeConfig.sql.database }}"]
           args: ['sh', '-c', 'cadence-sql-tool create --db {{ $storeConfig.sql.database }}']
           {{- end }}
@@ -87,8 +87,8 @@ spec:
             {{- end }}
             {{- end }}
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
-            - name: SQL_DRIVER
-              value: {{ include "cadence.persistence.sql.driver" (list $ $store) }}
+            - name: SQL_PLUGIN
+              value: {{ include "cadence.persistence.sql.pluginName" (list $ $store) }}
             - name: SQL_HOST
               value: {{ include "cadence.persistence.sql.host" (list $ $store) }}
             - name: SQL_PORT
@@ -129,8 +129,8 @@ spec:
             {{- end }}
             {{- end }}
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
-            - name: SQL_DRIVER
-              value: {{ include "cadence.persistence.sql.driver" (list $ $store) }}
+            - name: SQL_PLUGIN
+              value: {{ include "cadence.persistence.sql.pluginName" (list $ $store) }}
             - name: SQL_HOST
               value: {{ include "cadence.persistence.sql.host" (list $ $store) }}
             - name: SQL_PORT
@@ -214,7 +214,7 @@ spec:
           args: ['sh', '-c', 'cadence-cassandra-tool update-schema -d /etc/cadence/schema/cassandra/{{ include "cadence.persistence.schema" $store }}/versioned']
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
-          {{- if eq (include "cadence.persistence.sql.driver" (list $ $store)) "mysql" }}
+          {{- if eq (include "cadence.persistence.sql.pluginName" (list $ $store)) "mysql" }}
           # args: ["cadence-sql-tool", "update-schema", "-d", "/etc/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned"]
           args: ['sh', '-c', 'cadence-sql-tool update-schema -d /etc/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned']
           {{- end }}
@@ -237,8 +237,8 @@ spec:
             {{- end }}
             {{- end }}
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
-            - name: SQL_DRIVER
-              value: {{ include "cadence.persistence.sql.driver" (list $ $store) }}
+            - name: SQL_PLUGIN
+              value: {{ include "cadence.persistence.sql.pluginName" (list $ $store) }}
             - name: SQL_HOST
               value: {{ include "cadence.persistence.sql.host" (list $ $store) }}
             - name: SQL_PORT
