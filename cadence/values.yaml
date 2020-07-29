@@ -8,7 +8,7 @@ debug: false
 server:
   image:
     repository: ubercadence/server
-    tag: 0.11.0
+    tag: 0.13.0
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
@@ -198,7 +198,7 @@ web:
 
   image:
     repository: ubercadence/web
-    tag: 3.7.1
+    tag: 3.18.1
     pullPolicy: IfNotPresent
 
   service:
