@@ -32,13 +32,13 @@ data:
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list . "default")) "sql" }}
           sql:
-            driverName: {{ include "cadence.persistence.sql.driver" (list . "default") }}
+            pluginName: {{ include "cadence.persistence.sql.pluginName" (list . "default") }}
             databaseName: {{ .Values.server.config.persistence.default.sql.database }}
             connectAddr: "{{ include "cadence.persistence.sql.host" (list . "default") }}:{{ include "cadence.persistence.sql.port" (list . "default") }}"
             connectProtocol: "tcp"
             user: {{ include "cadence.persistence.sql.user" (list . "default") }}
             password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
-            {{- with (omit .Values.server.config.persistence.default.sql "driver" "driverName" "host" "port" "connectAddr" "connectProtocol" "database" "databaseName" "user" "password" "existingSecret") }}
+            {{- with (omit .Values.server.config.persistence.default.sql "pluginName" "host" "port" "connectAddr" "connectProtocol" "database" "databaseName" "user" "password" "existingSecret") }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}
@@ -54,13 +54,13 @@ data:
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list . "visibility")) "sql" }}
           sql:
-            driverName: {{ include "cadence.persistence.sql.driver" (list . "visibility") }}
+            pluginName: {{ include "cadence.persistence.sql.pluginName" (list . "visibility") }}
             databaseName: {{ .Values.server.config.persistence.visibility.sql.database }}
             connectAddr: "{{ include "cadence.persistence.sql.host" (list . "visibility") }}:{{ include "cadence.persistence.sql.port" (list . "visibility") }}"
             connectProtocol: "tcp"
             user: {{ include "cadence.persistence.sql.user" (list . "visibility") }}
             password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}
-            {{- with (omit .Values.server.config.persistence.visibility.sql "driver" "driverName" "host" "port" "connectAddr" "connectProtocol" "database" "databaseName" "user" "password" "existingSecret") }}
+            {{- with (omit .Values.server.config.persistence.visibility.sql "pluginName" "host" "port" "connectAddr" "connectProtocol" "database" "databaseName" "user" "password" "existingSecret") }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}

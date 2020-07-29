@@ -144,16 +144,16 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- end -}}
 {{- end -}}
 
-{{- define "cadence.persistence.sql.driver" -}}
+{{- define "cadence.persistence.sql.pluginName" -}}
 {{- $global := index . 0 -}}
 {{- $store := index . 1 -}}
 {{- $storeConfig := index $global.Values.server.config.persistence $store -}}
-{{- if $storeConfig.sql.driver -}}
-{{- $storeConfig.sql.driver -}}
+{{- if $storeConfig.sql.pluginName -}}
+{{- $storeConfig.sql.pluginName -}}
 {{- else if $global.Values.mysql.enabled -}}
 {{- print "mysql" -}}
 {{- else -}}
-{{- required (printf "Please specify sql driver for %s store" $store) $storeConfig.sql.host -}}
+{{- required (printf "Please specify sql plugin for %s store" $store) $storeConfig.sql.host -}}
 {{- end -}}
 {{- end -}}
 
@@ -163,7 +163,7 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- $storeConfig := index $global.Values.server.config.persistence $store -}}
 {{- if $storeConfig.sql.host -}}
 {{- $storeConfig.sql.host -}}
-{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
+{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.pluginName" (list $global $store)) "mysql")) -}}
 {{- include "mysql.host" $global -}}
 {{- else -}}
 {{- required (printf "Please specify sql host for %s store" $store) $storeConfig.sql.host -}}
@@ -176,7 +176,7 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- $storeConfig := index $global.Values.server.config.persistence $store -}}
 {{- if $storeConfig.sql.port -}}
 {{- $storeConfig.sql.port -}}
-{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
+{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.pluginName" (list $global $store)) "mysql")) -}}
 {{- $global.Values.mysql.service.port -}}
 {{- else -}}
 {{- required (printf "Please specify sql port for %s store" $store) $storeConfig.sql.port -}}
@@ -189,7 +189,7 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- $storeConfig := index $global.Values.server.config.persistence $store -}}
 {{- if $storeConfig.sql.user -}}
 {{- $storeConfig.sql.user -}}
-{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
+{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.pluginName" (list $global $store)) "mysql")) -}}
 {{- $global.Values.mysql.mysqlUser -}}
 {{- else -}}
 {{- required (printf "Please specify sql user for %s store" $store) $storeConfig.sql.user -}}
@@ -202,7 +202,7 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- $storeConfig := index $global.Values.server.config.persistence $store -}}
 {{- if $storeConfig.sql.password -}}
 {{- $storeConfig.sql.password -}}
-{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
+{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.pluginName" (list $global $store)) "mysql")) -}}
 {{- if or $global.Values.schema.setup.enabled $global.Values.schema.update.enabled -}}
 {{- required "Please specify password for MySQL chart" $global.Values.mysql.mysqlPassword -}}
 {{- else -}}
@@ -221,7 +221,7 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- $storeConfig.sql.existingSecret -}}
 {{- else if $storeConfig.sql.password -}}
 {{- include "cadence.componentname" (list $global (printf "%s-store" $store)) -}}
-{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
+{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.pluginName" (list $global $store)) "mysql")) -}}
 {{- include "call-nested" (list $global "mysql" "mysql.secretName") -}}
 {{- else -}}
 {{- required (printf "Please specify sql password or existing secret for %s store" $store) $storeConfig.sql.existingSecret -}}
@@ -234,7 +234,7 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- $storeConfig := index $global.Values.server.config.persistence $store -}}
 {{- if or $storeConfig.sql.existingSecret $storeConfig.sql.password -}}
 {{- print "password" -}}
-{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.driver" (list $global $store)) "mysql")) -}}
+{{- else if and $global.Values.mysql.enabled (and (eq (include "cadence.persistence.driver" (list $global $store)) "sql") (eq (include "cadence.persistence.sql.pluginName" (list $global $store)) "mysql")) -}}
 {{- print "mysql-password" -}}
 {{- else -}}
 {{- fail (printf "Please specify sql password or existing secret for %s store" $store) -}}

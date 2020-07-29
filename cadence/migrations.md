@@ -57,7 +57,7 @@ CASSANDRA_KEYSPACE=${VISIBILITY_KEYSPACE} cadence-cassandra-tool update-schema -
 Set up environment variables:
 
 ```bash
-export SQL_DRIVER=mysql
+export SQL_PLUGIN=mysql
 export SQL_HOST=docker.for.mac.host.internal
 export SQL_PORT=3306
 # Optionally:
