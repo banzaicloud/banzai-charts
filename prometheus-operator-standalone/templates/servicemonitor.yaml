@@ -1,0 +1,34 @@
+{{- if .Values.prometheusOperator.serviceMonitor.selfMonitor }}
+{{- if .Values.prometheusOperator.customResourceGroupRemap.enabled }}
+apiVersion: {{ .Values.prometheusOperator.customResourceGroupRemap.newGroup }}/v1
+{{- else }}
+apiVersion: monitoring.coreos.com/v1
+{{- end }}
+kind: ServiceMonitor
+metadata:
+  name: {{ template "prometheus-operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "prometheus-operator.labels" . | indent 4 }}
+spec:
+  endpoints:
+  - port: http
+    honorLabels: true
+    {{- if .Values.prometheusOperator.serviceMonitor.interval }}
+    interval: {{ .Values.prometheusOperator.serviceMonitor.interval }}
+    {{- end }}
+{{- if .Values.prometheusOperator.serviceMonitor.metricRelabelings }}
+    metricRelabelings:
+{{ tpl (toYaml .Values.prometheusOperator.serviceMonitor.metricRelabelings | indent 6) . }}
+{{- end }}
+{{- if .Values.prometheusOperator.serviceMonitor.relabelings }}
+    relabelings:
+{{ toYaml .Values.prometheusOperator.serviceMonitor.relabelings | indent 6 }}
+{{- end }}
+  selector:
+    matchLabels:
+{{ include "prometheus-operator.label-selectors" . | indent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}
