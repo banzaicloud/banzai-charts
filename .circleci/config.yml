@@ -43,6 +43,6 @@ workflows:
           add-extra-repositories: *helm_repositories
           filters:
             tags:
-              only: /\S+\/\d+.\d+.\d+(-.*)?/
+              only: /\S+\/\d+.\d+.\d+(?:-(?:dev|rc|banzai)\.\d+)?/
             branches:
               ignore: /.*/
