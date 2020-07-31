@@ -1,0 +1,116 @@
+{{- $kubeTargetVersion := default .Capabilities.KubeVersion.GitVersion .Values.kubeTargetVersionOverride }}
+{{- $namespace := .Release.Namespace  }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "prometheus-operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "prometheus-operator.labels" . | indent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+{{ include "prometheus-operator.label-selectors" . | indent 6 }}
+  template:
+    metadata:
+      labels:
+{{ include "prometheus-operator.labels" . | indent 8 }}
+{{- if .Values.prometheusOperator.podLabels }}
+{{ toYaml .Values.prometheusOperator.podLabels | indent 8 }}
+{{- end }}
+{{- if .Values.prometheusOperator.podAnnotations }}
+      annotations:
+{{ toYaml .Values.prometheusOperator.podAnnotations | indent 8 }}
+{{- end }}
+    spec:
+    {{- if .Values.prometheusOperator.priorityClassName }}
+      priorityClassName: {{ .Values.prometheusOperator.priorityClassName }}
+    {{- end }}
+      containers:
+        - name: {{ template "prometheus-operator.name" . }}
+          {{- if semverCompare ">= 1.16.0-0" $kubeTargetVersion }}
+          image: "{{ .Values.prometheusOperator.image.repository }}:{{ .Values.prometheusOperator.image.tag }}"
+          {{- else }}
+          {{/* Downgrade prometheus operator to support 1.15 */}}
+          image: "{{ .Values.prometheusOperator.image.repository }}:{{ .Values.prometheusOperator.image.tagFallback }}"
+          {{- end }}
+          imagePullPolicy: "{{ .Values.prometheusOperator.image.pullPolicy }}"
+          args:
+          {{- if semverCompare "< 1.16.0-0" $kubeTargetVersion }}
+          {{/* This is only valid for v0.38, v0.40 depricated this flag */}}
+            - --manage-crds=false
+          {{- end }}
+          {{- if .Values.prometheusOperator.customResourceGroupRemap.enabled }}
+            - --apiserver=http://127.0.0.1:6444
+          {{- end }}
+          {{- if .Values.prometheusOperator.logFormat }}
+            - --log-format={{ .Values.prometheusOperator.logFormat }}
+          {{- end }}
+          {{- if .Values.prometheusOperator.logLevel }}
+            - --log-level={{ .Values.prometheusOperator.logLevel }}
+          {{- end }}
+          {{- if .Values.prometheusOperator.denyNamespaces }}
+            - --deny-namespaces={{ .Values.prometheusOperator.denyNamespaces | join "," }}
+          {{- end }}
+          {{- with $.Values.prometheusOperator.namespaces }}
+          {{ $ns := .additional }}
+          {{- if .releaseNamespace }}
+          {{- $ns = append $ns $namespace }}
+          {{- end }}
+            - --namespaces={{ $ns | join "," }}
+          {{- end }}
+            - --logtostderr=true
+            - --localhost=127.0.0.1
+            {{- if .Values.prometheusOperator.prometheusConfigReloaderImage.sha }}
+            - --prometheus-config-reloader={{ .Values.prometheusOperator.prometheusConfigReloaderImage.repository }}:{{ .Values.prometheusOperator.prometheusConfigReloaderImage.tag }}@sha256:{{ .Values.prometheusOperator.prometheusConfigReloaderImage.sha }}
+            {{- else }}
+            - --prometheus-config-reloader={{ .Values.prometheusOperator.prometheusConfigReloaderImage.repository }}:{{ .Values.prometheusOperator.prometheusConfigReloaderImage.tag }}
+            {{- end }}
+            - --config-reloader-image={{ .Values.prometheusOperator.configmapReloadImage.repository }}:{{ semverCompare ">= 1.16.0-0" $kubeTargetVersion | ternary .Values.prometheusOperator.configmapReloadImage.tag .Values.prometheusOperator.configmapReloadImage.tagFallback }}
+            - --config-reloader-cpu={{ .Values.prometheusOperator.configReloaderCpu }}
+            - --config-reloader-memory={{ .Values.prometheusOperator.configReloaderMemory }}
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+{{ toYaml .Values.prometheusOperator.resources | indent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+{{- if .Values.prometheusOperator.customResourceGroupRemap.enabled }}
+        - name: k8sproxy
+          image: "{{ .Values.prometheusOperator.k8sProxy.image.repository }}:{{ .Values.prometheusOperator.k8sProxy.image.tag }}"
+          imagePullPolicy: "{{ .Values.prometheusOperator.k8sProxy.image.pullPolicy }}"
+          command:
+            - /proxy
+            - --listen=127.0.0.1:6444
+            - --map={{ .Values.prometheusOperator.customResourceGroupRemap.newGroup }}:monitoring.coreos.com
+            - --drop-annotations={{ .Values.prometheusOperator.customResourceGroupRemap.newGroup }}/v1/Prometheus/banzaicloud.io/managed-component
+          ports:
+            - containerPort: 6444
+              name: api
+          resources:
+{{ toYaml .Values.prometheusOperator.k8sProxy.resources | indent 12 }}
+{{- end }}
+{{- if .Values.prometheusOperator.securityContext }}
+      securityContext:
+{{ toYaml .Values.prometheusOperator.securityContext | indent 8 }}
+{{- end }}
+      serviceAccountName: {{ template "prometheus-operator.fullname" . }}
+{{- if .Values.prometheusOperator.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+{{- end }}
+    {{- with .Values.prometheusOperator.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.prometheusOperator.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.prometheusOperator.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

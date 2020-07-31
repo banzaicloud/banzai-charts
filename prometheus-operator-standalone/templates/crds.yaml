@@ -1,0 +1,12 @@
+{{- $kubeTargetVersion := default .Capabilities.KubeVersion.GitVersion .Values.kubeTargetVersionOverride }}
+{{- if .Values.prometheusOperator.createCustomResource -}}
+{{- $remapConfig := .Values.prometheusOperator.customResourceGroupRemap }}
+{{- range $path, $bytes := .Files.Glob "resources/*.yaml" }}
+{{- if $remapConfig.enabled }}
+{{ $.Files.Get $path | replace "monitoring.coreos.com" $remapConfig.newGroup }}
+{{- else }}
+{{ $.Files.Get $path }}
+{{- end }}
+---
+{{- end }}
+{{- end }}
