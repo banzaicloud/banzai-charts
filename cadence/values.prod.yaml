@@ -44,8 +44,10 @@ server:
           password: ""
 
 schema:
-  setup: false
-  update: false
+  setup:
+    enabled: false
+  update:
+    enabled: false
 
 cassandra:
   enabled: false
