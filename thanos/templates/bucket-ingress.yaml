@@ -17,7 +17,7 @@ metadata:
 {{ toYaml .Values.bucket.http.ingress.labels | indent 4 }}
   {{- end }}
 spec:
-  if {{ .Values.bucket.http.ingress.defaultBackend }}
+  {{ if .Values.bucket.http.ingress.defaultBackend }}
   backend:
     serviceName: {{ include "thanos.componentname" (list $ "bucket") }}
     servicePort: {{ $.Values.bucket.http.port }}
