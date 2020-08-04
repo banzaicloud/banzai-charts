@@ -97,6 +97,8 @@ store:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
       annotations: {}
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
@@ -125,6 +127,8 @@ store:
     # Set up ingress for the http service
     ingress:
       enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
@@ -264,6 +268,8 @@ query:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
       annotations: {}
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
@@ -293,6 +299,8 @@ query:
     # Set up ingress for the http service
     ingress:
       enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
@@ -506,6 +514,8 @@ bucket:
     # Set up ingress for the http service
     ingress:
       enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
       annotations: {}
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
@@ -686,6 +696,8 @@ rule:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
       annotations: {}
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
@@ -715,6 +727,8 @@ rule:
     # Set up ingress for the http service
     ingress:
       enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
@@ -816,6 +830,8 @@ sidecar:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
       annotations: {}
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
@@ -842,6 +858,8 @@ sidecar:
     # Set up ingress for the http service
     ingress:
       enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
