@@ -18,7 +18,7 @@ metadata:
   annotations: {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  if {{ .Values.sidecar.http.ingress.defaultBackend }}
+  {{- if .Values.sidecar.http.ingress.defaultBackend }}
   backend:
     serviceName: {{ include "thanos.componentname" (list $ "sidecar") }}-http
     servicePort: {{ $.Values.sidecar.http.port }}
@@ -67,7 +67,7 @@ metadata:
   annotations: {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  if {{ .Values.sidecar.grpc.ingress.defaultBackend }}
+  {{- if .Values.sidecar.grpc.ingress.defaultBackend }}
   backend:
     serviceName: {{ include "thanos.componentname" (list $ "sidecar") }}-grpc
     servicePort: {{ $.Values.sidecar.grpc.port }}
