@@ -167,6 +167,7 @@ These setting applicable to nearly all components.
 | $component.grpc.service.annotations | Service definition for grpc service | {} |
 | $component.grpc.service.matchLabels | Pod label selector to match grpc service on. | `{}` |
 | $component.grpc.ingress.enabled | Set up ingress for the grpc service | false |
+| $component.grpc.ingress.defaultBackend | Set up default backend for ingress | false |
 | $component.grpc.ingress.annotations | Add annotations to ingress | {} |
 | $component.grpc.ingress.labels | Add labels to ingress | {} |
 | $component.grpc.ingress.path | Ingress path | "/" |
@@ -175,7 +176,8 @@ These setting applicable to nearly all components.
 | $component.http.port | http listen port number | 10902 |
 | $component.http.service.annotations | Service definition for http service | {} |
 | $component.http.service.matchLabels | Pod label selector to match http service on. | `{}` |
-| $component.http.ingress.enabled | Set up ingress for the http service | false |
+| $component.http.ingress.enabled | Set up default backend for ingress | false |
+| $component.http.ingress.defaultBackend | Set up http service | false |
 | $component.http.ingress.annotations | Add annotations to ingress | {} |
 | $component.http.ingress.labels | Add labels to ingress | {} |
 | $component.http.ingress.path | Ingress path | "/" |
