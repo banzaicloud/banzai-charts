@@ -18,7 +18,7 @@ metadata:
   annotations: {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  if {{ .Values.query.http.ingress.defaultBackend }}
+  {{- if .Values.query.http.ingress.defaultBackend }}
   backend:
     serviceName: {{ include "thanos.componentname" (list $ "query") }}-http
     servicePort: {{ $.Values.query.http.port }}
@@ -67,7 +67,7 @@ metadata:
   annotations: {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  if {{ .Values.query.grpc.ingress.defaultBackend }}
+  {{- if .Values.query.grpc.ingress.defaultBackend }}
   backend:
     serviceName: {{ include "thanos.componentname" (list $ "query") }}-grpc
     servicePort: {{ $.Values.query.grpc.port }}
