@@ -1,20 +1,24 @@
+{{- $root := . }}
 {{- if and .Values.store.enabled .Values.store.persistentVolumeClaim }}
 {{- $pvc := .Values.store.persistentVolumeClaim -}}
+{{- range $index, $partion := .Values.store.timePartioning }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ $pvc.name }}
+  name: {{ $pvc.name }}-{{ $index }}
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/name: {{ include "thanos.name" $root }}
+    helm.sh/chart: {{ include "thanos.chart" $root }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+    app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: store
-{{ with .Values.store.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end -}}
-  {{- with .Values.store.deploymentAnnotations }}
-  annotations: {{ toYaml . | nindent 4 }}
+{{ with $root.Values.store.deploymentLabels }}{{ toYaml $root | indent 4 }}{{ end -}}
+  {{- with $root.Values.store.deploymentAnnotations }}
+  annotations: {{ toYaml $root | nindent 4 }}
   {{- end }}
 spec:
   {{- toYaml $pvc.spec | nindent 2 }}
+---
+{{- end }}
 {{- end }}

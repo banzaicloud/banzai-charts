@@ -117,7 +117,8 @@ spec:
       volumes:
       - name: data
       {{- if $root.Values.store.dataVolume.backend }}
-        {{ toYaml $root.Values.store.dataVolume.backend | nindent 8 }}
+        persistentVolumeClaim:
+          claimName: {{ $root.Values.store.dataVolume.backend.persistentVolumeClaim.claimName }}-{{ $index }}
       {{- else }}
         emptyDir: {}
       {{- end }}
