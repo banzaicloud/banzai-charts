@@ -45,6 +45,11 @@ prometheusOperator:
     # additional:
     # - kube-system
 
+  kubeletService: {}
+    # Namespace and service in which to maintain the kubelet service
+    # namespace:
+    # serviceName:
+
   ## Namespaces not to scope the interaction of the Prometheus Operator (deny list).
   ##
   denyNamespaces: []
