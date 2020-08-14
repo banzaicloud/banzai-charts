@@ -57,7 +57,7 @@ spec:
         - "--objstore.config-file=/etc/config/object-store.yaml"
         - "--rule-file=/etc/rules/*.yaml"
         {{- range $key, $val := .Values.rule.ruleLabels }}
-        - "--label={{ $key }}={{ $val | quote }}"
+        - '--label={{ $key }}={{ $val | quote }}'
         {{- end }}
         {{- if .Values.rule.resendDelay }}
         - "--resend-delay={{ .Values.rule.resendDelay }}"
@@ -129,7 +129,7 @@ spec:
           {{- end }}
       - name: rule-volume
         configMap:
-          {{- if empty .Values.rule.ruleOverrideName -}}
+          {{- if empty .Values.rule.ruleOverrideName }}
           name: {{ include "thanos.fullname" . }}-rules
           {{- else }}
           name: {{ .Values.rule.ruleOverrideName }}
