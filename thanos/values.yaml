@@ -176,10 +176,12 @@ store:
   timePartioning:
     - min: ""
       max: ""
-  
+  # Setting hashPartioning will create multiple store deployments based on the number of shards specified using the hashmod of the blocks
+  # See https://thanos.io/sharding.md/#relabelling
+  hashPartioning: {}
+    # shards:
   # InitContainers allows injecting specialized containers that run before app containers. This is meant to pre-configure and tune mounted volume permissions.
   initContainers: []
-
 query:
   enabled: true
   # Labels to treat as a replica indicator along which data is deduplicated.

@@ -1,7 +1,14 @@
 {{- $root := . }}
 {{- if and .Values.store.enabled .Values.store.persistentVolumeClaim }}
 {{- $pvc := .Values.store.persistentVolumeClaim -}}
-{{- range $index, $partion := .Values.store.timePartioning }}
+
+{{- $shards := int 0 }}
+{{- if .Values.store.hashPartioning }}
+  {{- $shards = int .Values.store.hashPartioning.shards }}
+{{- else }}
+  {{- $shards = len .Values.store.timePartioning }}
+{{- end }}
+{{- range $index, $_ := until $shards }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

@@ -1,6 +1,19 @@
 {{- $root := . }}
 {{ if .Values.store.enabled }}
-{{- range $index, $partion := .Values.store.timePartioning }}
+
+{{- $shards := int 0 }}
+{{- $timePartioning := false }}
+{{- $hashPartioning := false }}
+
+{{- if .Values.store.hashPartioning }}
+  {{- $shards = int .Values.store.hashPartioning.shards }}
+  {{- $hashPartioning = true }}
+{{- else }}
+  {{- $shards = len .Values.store.timePartioning }}
+  {{- $timePartioning = true }}
+{{- end }}
+
+{{- range $index, $_ := until $shards }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -83,12 +96,26 @@ spec:
         {{- if $root.Values.store.blockSyncConcurrency }}
         - "--block-sync-concurrency={{ $root.Values.store.blockSyncConcurrency }}"
         {{- end }}
+        {{- if $timePartioning }}
+        {{- $partion := (slice $root.Values.store.timePartioning  $index) | first }}
         {{- if $partion.max }}
         - "--max-time={{ $partion.max }}"
         {{- end}}
         {{- if $partion.min }}
         - "--min-time={{ $partion.min }}"
         {{- end}}
+        {{- end }}
+        {{- if $hashPartioning }}
+        - |
+          --selector.relabel-config=
+            - action: hashmod
+              source_labels: ["__block_id"]
+              target_label: shard
+              modulus: {{ $shards }}
+            - action: keep
+              source_labels: ["shard"]
+              regex: {{ $index }}
+        {{- end }}
         {{- if $root.Values.store.extraArgs }}
         {{ toYaml $root.Values.store.extraArgs | nindent 8 }}
         {{- end }}
