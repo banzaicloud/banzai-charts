@@ -189,7 +189,7 @@ query:
   # - prometheus_replica
   #
   # Enable --query.auto-downsampling option for query.
-  autoDownsampling: false
+  autoDownsampling: true
   # Prefix for API and UI endpoints. This allows thanos UI to be served on a sub-path.
   # This option is analogous to --web.route-prefix of Promethus.
   webRoutePrefix: ""
