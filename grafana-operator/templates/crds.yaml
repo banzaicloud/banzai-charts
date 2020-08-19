@@ -1,0 +1,12 @@
+{{- if .Values.createCustomResource -}}
+{{- $remapConfig := .Values.customResourceGroupRemap }}
+{{- range $path, $bytes := .Files.Glob "crds/*.yaml" }}
+{{- if $remapConfig.enabled }}
+{{ $.Files.Get $path | replace "integreatly.org" $remapConfig.newGroup }}
+{{- else }}
+{{ $.Files.Get $path }}
+{{- end }}
+---
+{{- end }}
+{{- end }}
+

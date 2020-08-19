@@ -1,0 +1,26 @@
+{{- if .Values.rbac.create }}
+{{- if or .Values.args.scanAllNamespaces  .Values.args.scanNamespaces}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "prometheus-operator.fullname" . }}
+  labels:
+{{ include "prometheus-operator.labels" . | indent 4 }}
+rules:
+- apiGroups:
+{{- if .Values.customResourceGroupRemap.enabled }}
+  - {{ .Values.customResourceGroupRemap.newGroup }}
+{{- else }}
+    - integreatly.org
+{{- end  }}
+  resources:
+    - grafanadashboards
+    - grafanadashboards/status
+  verbs: ['get', 'list', 'update', 'watch']
+- apiGroups:
+    - ""
+  resources:
+    - namespaces
+  verbs: ['get', 'list', 'watch']
+{{- end  }}
+{{- end  }}
