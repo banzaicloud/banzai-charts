@@ -176,6 +176,9 @@ store:
   timePartioning:
     - min: ""
       max: ""
+  
+  # InitContainers allows injecting specialized containers that run before app containers. This is meant to pre-configure and tune mounted volume permissions.
+  initContainers: []
 
 query:
   enabled: true

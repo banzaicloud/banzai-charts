@@ -46,6 +46,10 @@ spec:
         prometheus.io/port: "{{ $root.Values.store.http.port }}"
       {{- end }}
     spec:
+      {{- if $root.Values.store.initContainers }}
+      initContainers:
+{{ toYaml $root.Values.store.initContainers | indent 6 }}
+      {{- end }}
       containers:
       - name: thanos-store
         image: "{{ $root.Values.image.repository }}:{{ $root.Values.image.tag }}"
