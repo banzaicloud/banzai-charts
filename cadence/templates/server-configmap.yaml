@@ -157,7 +157,41 @@ data:
       toDC: ""
 
     archival:
-      status: "disabled"
+      history:
+        status: "enabled"
+        enableRead: true
+        provider:
+        {{- if eq .Values.archival.provider "filestore" }}
+          filestore:
+            fileMode: "0666"
+            dirMode: "0766"
+        {{- end }}
+        {{- if eq .Values.archival.provider "s3store" }}
+          s3store:
+            region: {{ .Values.archival.region | default "ap-south-1" | quote }}
+        {{- end }}
+      visibility:
+        status: "enabled"
+        enableRead: true
+        provider:
+        {{- if eq .Values.archival.provider "filestore" }}
+          filestore:
+            fileMode: "0666"
+            dirMode: "0766"
+        {{- end }}
+        {{- if eq .Values.archival.provider "s3store" }}
+          s3store:
+            region: {{ .Values.archival.region | default "ap-south-1" | quote }}
+        {{- end }}
+
+    domainDefaults:
+      archival:
+        history:
+          status: "disabled"
+          URI: {{ .Values.archival.historyURI | quote }}
+        visibility:
+          status: "disabled"
+          URI: {{ .Values.archival.visibilityURI | quote }}
 
     publicClient:
       hostPort: "{{ include "cadence.componentname" (list . "frontend") }}:{{ .Values.server.frontend.service.port }}"

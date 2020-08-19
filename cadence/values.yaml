@@ -269,3 +269,8 @@ mysql:
   initializationFiles:
     user.sql: |-
       GRANT ALL PRIVILEGES ON *.* TO 'cadence'@'%';
+
+archival:
+  provider: filestore
+  historyURI: "file:///tmp/cadence_archival/development"
+  visibilityURI: "file:///tmp/cadence_vis_archival/development"
