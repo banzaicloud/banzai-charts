@@ -52,9 +52,9 @@ spec:
           - grafana-operator
           args:
           - -grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
-          - -grafana-image-tag={{ .Values.grafana.image.tag | quote}}
+          - -grafana-image-tag={{ .Values.grafana.image.tag }}
           - -grafana-plugins-init-container-image={{ include "grafana-operator.pluginInit.baseImage" . }}
-          - -grafana-plugins-init-container-tag={{ .Values.grafanaPluginInit.image.tag | quote}}
+          - -grafana-plugins-init-container-tag={{ .Values.grafanaPluginInit.image.tag }}
           {{- if (and .Values.args.scanAllNamespaces (not .Values.args.scanNamespaces)) }}
           - --scan-all=True
           {{- else if .Values.args.scanNamespaces }}
