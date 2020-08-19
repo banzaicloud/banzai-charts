@@ -42,3 +42,14 @@ and we want to make sure that the component is included in the name.
 {{- $component := index . 1 | trimPrefix "-" -}}
 {{- printf "%s-%s" (include "thanos.fullname" $global | trunc (sub 62 (len $component) | int) | trimSuffix "-" ) $component | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Create a default name for service account if not provided.
+*/}}
+{{- define "thanos.query.serviceaccount" -}}
+{{- if .Values.query.rbac.enabled -}}
+{{- default (include "thanos.componentname" (list $ "query")) .Values.query.serviceAccount -}}
+{{- else -}}
+{{- printf "%s" .Values.query.serviceAccount -}}
+{{- end -}}
+{{- end -}}

@@ -258,6 +258,8 @@ timePartioning:
 | query.autoscaling.targetCPUUtilizationPercentage | 	Target CPU utilization percentage to scale | 50 |
 | query.autoscaling.targetMemoryUtilizationPercentage |	Target memory utilization percentage to scale 50 |
 | query.serviceAccount | Name of the Kubernetes service account to use | "" |
+| query.psp.enabled | Enable pod security policy, it also requires the `query.rbac.enabled` to be set to `true`. | false |
+| query.rbac.enabled | Enable RBAC to use the PSP | false |
 
 ## Rule
 |Name|Description| Default Value|

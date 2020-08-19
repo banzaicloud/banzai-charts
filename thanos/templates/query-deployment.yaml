@@ -150,7 +150,7 @@ spec:
       {{- with .Values.query.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with  .Values.query.serviceAccount }}
+      {{- with  (include "thanos.query.serviceaccount" . ) }}
       serviceAccountName: "{{ . }}"
       {{- end }}
 {{ end }}

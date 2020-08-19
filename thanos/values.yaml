@@ -286,6 +286,11 @@ query:
       #      - chart-example.local
   serviceAccount: ""
 
+  psp:
+    enabled: false
+  rbac:
+    enabled: false
+
   # The http endpoint to communicate with other components
   http:
     # http listen port number
