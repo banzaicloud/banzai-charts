@@ -132,6 +132,8 @@ prometheusOperator:
     #   replacement: $1
     #   action: replace
 
+    tlsConfig: {}
+
   ## Resource limits & requests
   ##
   resources: {}

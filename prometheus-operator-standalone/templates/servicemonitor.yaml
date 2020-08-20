@@ -13,6 +13,11 @@ metadata:
 spec:
   endpoints:
   - port: http
+{{- if .Values.prometheusOperator.serviceMonitor.tlsConfig }}
+    scheme: https
+    tlsConfig:
+{{ toYaml .Values.prometheusOperator.serviceMonitor.tlsConfig | indent 6 }}
+{{- end }}
     honorLabels: true
     {{- if .Values.prometheusOperator.serviceMonitor.interval }}
     interval: {{ .Values.prometheusOperator.serviceMonitor.interval }}
