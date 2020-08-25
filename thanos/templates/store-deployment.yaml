@@ -121,7 +121,7 @@ spec:
       volumes:
       - name: data
       {{- if $root.Values.store.dataVolume.backend }}
-        {{- if $root.store.persistentVolumeClaim }}
+        {{- if $root.Values.store.persistentVolumeClaim }}
         persistentVolumeClaim:
           claimName: {{ $root.Values.store.dataVolume.backend.persistentVolumeClaim.claimName }}-{{ $index }}
         {{- else }}
