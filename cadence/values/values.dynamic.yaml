@@ -1,0 +1,5 @@
+dynamicConfig:
+  values:
+    frontend.enableClientVersionCheck:
+      - value: true
+        constraints: {}
