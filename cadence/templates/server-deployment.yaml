@@ -106,6 +106,9 @@ spec:
             - name: config
               mountPath: /etc/cadence/config/config_template.yaml
               subPath: config_template.yaml
+            - name: config
+              mountPath: /etc/cadence/config/dynamicconfig/config.yaml
+              subPath: dynamic_config.yaml
           resources:
             {{- toYaml (default $.Values.server.resources $serviceValues.resources) | nindent 12 }}
       volumes:

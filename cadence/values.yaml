@@ -241,6 +241,10 @@ web:
 
   affinity: {}
 
+dynamicConfig:
+  values: {}
+  pollInterval: "10s"
+
 schema:
   setup:
     enabled: true
