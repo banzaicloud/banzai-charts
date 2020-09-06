@@ -1,0 +1,21 @@
+{{- if  .Values.defaultDatasouce.enabled }}
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDataSource
+metadata:
+  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "defaultdatasource" | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
+spec:
+  name: middleware.yaml
+  datasources:
+    - name: {{ .Values.defaultDatasouce.name }}
+      type: {{ .Values.defaultDatasouce.type }}
+      access: {{ .Values.defaultDatasouce.access }}
+      url: {{ .Values.defaultDatasouce.url }}
+      isDefault: {{ .Values.defaultDatasouce.isDefault }}
+      version: {{ .Values.defaultDatasouce.version }}
+      editable: {{ .Values.defaultDatasouce.editable }}
+      jsonData:
+        tlsSkipVerify: {{ .Values.defaultDatasouce.jsonData.tlsSkipVerify }}
+        timeInterval: {{ .Values.defaultDatasouce.jsonData.timeInterval }}
+{{- end }}
+
