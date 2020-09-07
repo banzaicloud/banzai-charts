@@ -99,6 +99,10 @@ spec:
               value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
             - name: SQL_PASSWORD
               value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
+            {{- with $storeConfig.sql.connectAttributes }}
+            - name: SQL_CONNECT_ATTRIBUTES
+              value: {{ include "to-query" . }}
+            {{- end }}
             {{- end }}
         {{- end }}
         {{- else }}
@@ -141,6 +145,10 @@ spec:
               value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
             - name: SQL_PASSWORD
               value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
+            {{- with $storeConfig.sql.connectAttributes }}
+            - name: SQL_CONNECT_ATTRIBUTES
+              value: {{ include "to-query" . }}
+            {{- end }}
             {{- end }}
         {{- end }}
 
@@ -249,6 +257,10 @@ spec:
               value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
             - name: SQL_PASSWORD
               value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
+            {{- with $storeConfig.sql.connectAttributes }}
+            - name: SQL_CONNECT_ATTRIBUTES
+              value: {{ include "to-query" . }}
+            {{- end }}
             {{- end }}
         {{- end }}
 {{- end }}
