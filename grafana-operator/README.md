@@ -102,7 +102,34 @@ The following tables lists the configurable parameters of the grafana-operator c
 | `prometheus.serviceMonitor.interval`                  | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall                   | `""`                                                    |
 | `prometheus.serviceMonitor.metricRelabelings`         | Specify additional relabeling of metrics.                                                            | `[]`                                                    |
 | `prometheus.serviceMonitor.relabelings`               | Specify general relabeling.                                                                          | `[]`                                                    |
-
+| `defaultDashboards.enabled`                           | Enable Default Dashboards                                                                            | `true`                                                  |
+| `defaultDashboards.kubeScheduler.enabled`             | Enable kubeScheduler Dashboard                                                                       | `true`                                                  |
+| `defaultDashboards.kubelet.enabled`                   | Enable kubelet Dashboard                                                                             | `true`                                                  |
+| `defaultDashboards.kubeEtcd.enabled`                  | Enable kubeEtcd Dashboard                                                                            | `true`                                                  |
+| `defaultDashboards.kubeControllerManager.enabled`     | Enable kubeControllerManager Dashboard                                                               | `true`                                                  |
+| `defaultDashboards.prometheus.prometheusSpec.remoteWriteDashboards`  | Enable Remove Write Protmetheus Dashboards                                            | `false`                                                 |
+| `defaultDashboards.nodeExporter.enabled`              | Enable NodeExporter Dashboard                                                                        | `true`                                                  |
+| `defaultDeployment.enabled`                           | Enable Default Grafana Instance                                                                      | `true`                                                  |
+| `defaultDeployment.ingress.enabled`                   | Enable Default Grafana Instance Ingress                                                              | `true`                                                  |
+| `defaultDeployment.log.mode`                          | Set Default Grafana Instance Log mode                                                                | `console`                                               |
+| `defaultDeployment.log.level`                         | Set Default Grafana Instance Log Level                                                               | `warn`                                                  |
+| `defaultDeployment.log.level`                         | Set Default Grafana Instance Log Level                                                               | `warn`                                                  |
+| `defaultDeployment.security.adminUser`                | Set Default Grafana Instance admin username                                                          | `root`                                                  |
+| `defaultDeployment.security.adminPassword`            | Set Default Grafana Instance admin password                                                          | `secret`                                                |
+| `defaultDeployment.auth.disableLoginForm`             | Set Default Grafana Instance login form disabled                                                     | `False`                                                 |
+| `defaultDeployment.auth.disableSignoutMenu`           | Set Default Grafana Instance signeout menu disabled                                                  | `True`                                                  |
+| `defaultDeployment.auth.anonymous`                    | Enable Default Grafana Instance anonymous login                                                      | `False`                                                 |
+| `defaultDeployment.resources`                         | Set Default Grafana Instance resources                                                               | `{}`                                                    |
+| `defaultDatasouce.enabled`                            | Enable Default Datasource                                                                            | `true`                                                  |
+| `defaultDatasouce.name`                               | Set Default Datasource Name                                                                          | `Prometheus`                                            | 
+| `defaultDatasouce.type`                               | Set Default Datasource type                                                                          | `prometheus`                                            |
+| `defaultDatasouce.access`                             | Set Default Datasource access                                                                        | `proxy`                                                 |
+| `defaultDatasouce.url`                                | Set Default Datasource URL                                                                           | `http://monitor-prometheus-operato-prometheus:9090`     |
+| `defaultDatasouce.isDefault`                          | Set Default Datasource default flag                                                                  | `true`                                                  |
+| `defaultDatasouce.version`                            | Set Default Datasource default version                                                               | `1`                                                     |
+| `defaultDatasouce.editable`                           | Set Default Datasource editable                                                                      | `true`                                                  |
+| `defaultDatasouce.jsonData.tlsSkipVerify`             | Enable Default Datasource TLS Skip Verify                                                            | `true`                                                  |
+| `defaultDatasouce.jsonData.timeInterval`              | Set Default Datasource Time Interval                                                                 | `5s`                                                    |
 
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example:

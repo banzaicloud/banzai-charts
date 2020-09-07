@@ -78,6 +78,72 @@ grafanaPluginInit:
     repository: integreatly/grafana_plugins_init
     tag: 0.0.3
 
+#Enable Default Dashboards
+defaultDashboards:
+  enabled: true
+#Enable kubeScheduler Dashboard
+  kubeScheduler:
+    enabled: true
+#Enable kubeProxy Dashboard
+  kubeProxy:
+    enabled: true
+#Enable kubelet Dashboard
+  kubelet:
+    enabled: true
+#Enable kubeEtcd Dashboard
+  kubeEtcd:
+    enabled: true
+#Enable kubeControllerManager Dashboard
+  kubeControllerManager:
+    enable: true
+#Enable kubeApiServer Dashboard
+  kubeApiServer:
+    enabled: true
+#Enable prometheus Dashboard
+  prometheus:
+    prometheusSpec:
+      remoteWriteDashboards: false
+#Enable Node Exporter Dashboard
+  nodeExporter:
+    enabled: true
+
+#Enable Default Grafana Instance
+defaultDeployment:
+  enabled: True
+
+  ingress:
+    enabled: True
+
+  log:
+    mode: console
+    level: warn
+
+  security:
+    adminUser: "root"
+    adminPassword: "secret"
+
+  auth:
+    disableLoginForm: False
+    disableSignoutMenu: True
+    anonymous: False
+
+  resources: {}
+
+
+defaultDatasouce:
+  enabled: True
+
+  name: Prometheus
+  type: prometheus
+  access: proxy
+  url: http://monitor-prometheus-operato-prometheus:9090
+  isDefault: true
+  version: 1
+  editable: true
+  jsonData:
+    tlsSkipVerify: true
+    timeInterval: "5s"
+
 rbac:
   # create specifies whether to install and use RBAC rules.
   create: true

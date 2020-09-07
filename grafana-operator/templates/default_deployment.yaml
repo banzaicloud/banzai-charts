@@ -1,0 +1,28 @@
+{{- if  .Values.defaultDeployment.enabled }}
+apiVersion: integreatly.org/v1alpha1
+kind: Grafana
+metadata:
+  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "defaultdeployment" | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
+spec:
+  ingress:
+    enabled: {{ .Values.defaultDeployment.ingress.enabled }}
+  config:
+    log:
+      mode: {{ .Values.defaultDeployment.log.mode }}
+      level: {{ .Values.defaultDeployment.log.level }}
+    security:
+      admin_user: {{ .Values.defaultDeployment.security.adminUser }}
+      admin_password: {{ .Values.defaultDeployment.security.adminPassword }}
+    auth:
+      disable_login_form: {{ .Values.defaultDeployment.auth.disableLoginForm }}
+      disable_signout_menu: {{ .Values.defaultDeployment.auth.disableSignoutMenu }}
+    auth.anonymous:
+      enabled: {{ .Values.defaultDeployment.auth.anonymous }}
+  dashboardLabelSelector:
+    - matchExpressions:
+        - {key: app.kubernetes.io/instance, operator: In, values: [{{ .Release.Name }}]}
+
+  resources: {{- toYaml .Values.defaultDeployment | nindent 12 }}
+{{- end }}
+
