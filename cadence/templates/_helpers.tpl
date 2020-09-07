@@ -277,3 +277,17 @@ MySQL host.
 {{- define "mysql.host" -}}
 {{- printf "%s.%s.svc.cluster.local" (include "call-nested" (list . "mysql" "mysql.fullname")) .Release.Namespace -}}
 {{- end -}}
+
+{{/*
+Format a string map as a query string.
+*/}}
+{{- define "to-query" }}
+{{- trimSuffix "&" (include "_to-query" .)  }}
+{{- end }}
+
+{{/*
+Format a string map as a query string.
+*/}}
+{{- define "_to-query" }}
+{{- range $key, $value := . -}}{{ $key }}={{ $value }}&{{- end -}}
+{{- end }}
