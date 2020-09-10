@@ -81,31 +81,86 @@ grafanaPluginInit:
 #Enable Default Dashboards
 defaultDashboards:
   enabled: true
-#Enable kubeScheduler Dashboard
-  kubeScheduler:
-    enabled: true
-#Enable kubeProxy Dashboard
-  kubeProxy:
-    enabled: true
 #Enable kubelet Dashboard
   kubelet:
-    enabled: true
-#Enable kubeEtcd Dashboard
-  kubeEtcd:
-    enabled: true
-#Enable kubeControllerManager Dashboard
-  kubeControllerManager:
-    enable: true
-#Enable kubeApiServer Dashboard
-  kubeApiServer:
     enabled: true
 #Enable prometheus Dashboard
   prometheus:
     prometheusSpec:
       remoteWriteDashboards: false
-#Enable Node Exporter Dashboard
-  nodeExporter:
+  statefulset:
     enabled: true
+    plugins: {}
+  scheduler:
+    enabled: true
+    plugins: {}
+  proxy:
+    enabled: true
+    plugins: {}
+  prometheus_remote_write:
+    enabled: true
+    plugins: {}
+  pod_total:
+    enabled: true
+    plugins: {}
+  persistentvolumesusage:
+    enabled: true
+    plugins: {}
+  nodes:
+    enabled: true
+    plugins: {}
+  node_rsrc_use:
+    enabled: true
+    plugins: {}
+  node_cluster_rsrc_use:
+    enabled: true
+    plugins: {}
+  namespace_by_workload:
+    enabled: true
+    plugins: {}
+  namespace_by_pod:
+    enabled: true
+    plugins: { }
+  workload_total:
+    enabled: true
+    plugins: {}
+  k8s_resources_workloads_namespace:
+    enabled: true
+    plugins: {}
+  k8s_resources_workload:
+    enabled: true
+    plugins: {}
+  k8s_resources_pod:
+    enabled: true
+    plugins: {}
+  k8s_resources_node:
+    enabled: true
+    plugins: {}
+  k8s_resources_namespace:
+    enabled: true
+    plugins: {}
+  k8s_resources_cluster:
+    enabled: true
+    plugins: {}
+  etcd:
+    enabled: true
+    plugins: {}
+  controller_manager:
+    enabled: true
+    plugins: {}
+  cluster_total:
+    enabled: true
+    plugins: {}
+  apiserver:
+    enabled: true
+    plugins: {}
+  logging_dashboard:
+    enabled: true
+    plugins:
+      - name: "grafana-piechart-panel"
+        version: "1.6.0"
+      - name: "grafana-clock-panel"
+        version: "1.1.1"
 
 #Enable Default Grafana Instance
 defaultDeployment:

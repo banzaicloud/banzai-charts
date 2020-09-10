@@ -6,7 +6,7 @@ https://github.com/banzaicloud/banzai-charts/tree/master/grafana-operator/hack
 This script is based on: https://github.com/helm/charts/tree/master/stable/prometheus-operator/hack great works thanks!
 
 */ -}}
-{{- if  .Values.defaultDashboards.enabled }}
+{{- if and .Values.defaultDashboards.enabled .Values.defaultDashboards.prometheus.enabled }}
 
 apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
@@ -15,6 +15,10 @@ metadata:
   labels: {{- include "grafana-operator.labels" . | nindent 8 }}
 spec:
   name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "prometheus" | trunc 63 | trimSuffix "-" }}
+  {{- if .Values.defaultDashboards.prometheus.plugins }}
+  plugins:
+    {{- toYaml .Values.defaultDashboards.prometheus.plugins | nindent 8 }}
+  {{- end }}
   configMapRef:
     name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "prometheus" | trunc 63 | trimSuffix "-" }}
     key: prometheus.json
