@@ -14,7 +14,7 @@ spec:
     security:
       admin_user: {{ .Values.defaultDeployment.security.adminUser }}
       admin_password: {{ .Values.defaultDeployment.security.adminPassword }}
-      allow_embedding: {{ .Values.allow_embedding.security.allow_embedding }}
+      allow_embedding: {{ .Values.defaultDeployment.security.allow_embedding }}
     auth:
       disable_login_form: {{ .Values.defaultDeployment.auth.disableLoginForm }}
       disable_signout_menu: {{ .Values.defaultDeployment.auth.disableSignoutMenu }}
