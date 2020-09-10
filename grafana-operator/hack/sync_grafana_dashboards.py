@@ -48,14 +48,14 @@ charts = [
 # Additional conditions map
 condition_map = {
     'grafana-coredns-k8s': ' .Values.defaultDashboards.coreDns.enabled',
-    'etcd': ' .Values.defaultDashboards.kubeEtcd.enabled',
-    'apiserver': ' .Values.defaultDashboards.kubeApiServer.enabled',
-    'controller-manager': ' .Values.defaultDashboards.kubeControllerManager.enabled',
+    'etcd': ' .Values.defaultDashboards.etcd.enabled',
+    'apiserver': ' .Values.defaultDashboards.apiserver.enabled',
+    'controller-manager': ' .Values.defaultDashboards.controller_manager.enabled',
     'kubelet': ' .Values.defaultDashboards.kubelet.enabled',
-    'proxy': ' .Values.defaultDashboards.kubeProxy.enabled',
-    'scheduler': ' .Values.defaultDashboards.kubeScheduler.enabled',
-    'node-rsrc-use': ' .Values.defaultDashboards.nodeExporter.enabled',
-    'node-cluster-rsrc-use': ' .Values.defaultDashboards.nodeExporter.enabled',
+    'proxy': ' .Values.defaultDashboards.proxy.enabled',
+    'scheduler': ' .Values.defaultDashboards.scheduler.enabled',
+    'node-rsrc-use': ' .Values.defaultDashboards.node_rsrc_use.enabled',
+    'node-cluster-rsrc-use': ' .Values.defaultDashboards.node_cluster_rsrc_use.enabled',
     'prometheus-remote-write': ' .Values.defaultDashboards.prometheus.prometheusSpec.remoteWriteDashboards'
 }
 
@@ -68,7 +68,7 @@ https://github.com/banzaicloud/banzai-charts/tree/master/grafana-operator/hack
 This script is based on: https://github.com/helm/charts/tree/master/stable/prometheus-operator/hack great works thanks!
 
 */ -}}
-{{- if  .Values.defaultDashboards.enabled }}
+{{- if and .Values.defaultDashboards.enabled .Values.defaultDashboards.%(var_name)s.enabled }}
 
 apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
@@ -77,6 +77,10 @@ metadata:
   labels: {{- include "grafana-operator.labels" . | nindent 8 }}
 spec:
   name: {{ printf "%%s-%%s" (include "grafana-operator.fullname" $) "%(name)s" | trunc 63 | trimSuffix "-" }}
+  {{- if .Values.defaultDashboards.%(var_name)s.plugins }}
+  plugins:
+    {{- toYaml .Values.defaultDashboards.%(var_name)s.plugins | nindent 8 }}
+  {{- end }}
   configMapRef:
     name: {{ printf "%%s-%%s" (include "grafana-operator.fullname" $) "%(name)s" | trunc 63 | trimSuffix "-" }}
     key: %(name)s.json
@@ -115,6 +119,7 @@ def write_group_to_file(resource_name, content, url, destination, min_kubernetes
     # initialize header
     lines = header % {
         'name': resource_name,
+        'var_name': resource_name.replace('-','_'),
         'url': url,
         'condition': condition_map.get(resource_name, ''),
         'min_kubernetes': min_kubernetes,
