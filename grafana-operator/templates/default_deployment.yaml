@@ -21,7 +21,7 @@ spec:
     auth.anonymous:
       enabled: {{ .Values.defaultDeployment.auth.anonymous }}
     server:
-      root_url: {{ .Values.defaultDeployment.server.root_url }}
+      root_url: {{ .Values.defaultDeployment.server.root_url | quote }}
       serve_from_sub_path: {{ .Values.defaultDeployment.server.serve_from_sub_path }}
   dashboardLabelSelector:
     - matchExpressions:
