@@ -166,6 +166,10 @@ defaultDashboards:
 defaultDeployment:
   enabled: True
 
+  server:
+    root_url: ""
+    serve_from_sub_path: False
+
   ingress:
     enabled: True
 
@@ -176,6 +180,7 @@ defaultDeployment:
   security:
     adminUser: "root"
     adminPassword: "secret"
+    allow_embedding: False
 
   auth:
     disableLoginForm: False
