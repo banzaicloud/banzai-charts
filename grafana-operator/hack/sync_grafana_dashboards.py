@@ -81,21 +81,10 @@ spec:
   plugins:
     {{- toYaml .Values.defaultDashboards.%(var_name)s.plugins | nindent 8 }}
   {{- end }}
-  configMapRef:
-    name: {{ printf "%%s-%%s" (include "grafana-operator.fullname" $) "%(name)s" | trunc 63 | trimSuffix "-" }}
-    key: %(name)s.json
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%%s-%%s" (include "grafana-operator.fullname" $) "%(name)s" | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
-data:
 '''
 
 def init_yaml_styles():
-    represent_literal_str = change_style('|', SafeRepresenter.represent_str)
+    represent_literal_str = change_style('>', SafeRepresenter.represent_str)
     yaml.add_representer(LiteralStr, represent_literal_str)
 
 
@@ -126,7 +115,7 @@ def write_group_to_file(resource_name, content, url, destination, min_kubernetes
         'max_kubernetes': max_kubernetes
     }
 
-    filename_struct = {resource_name + '.json': (LiteralStr(content))}
+    filename_struct = {'json': (LiteralStr(content))}
     # rules themselves
     lines += yaml_str_repr(filename_struct)
 

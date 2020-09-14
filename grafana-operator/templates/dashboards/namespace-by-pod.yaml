@@ -19,18 +19,7 @@ spec:
   plugins:
     {{- toYaml .Values.defaultDashboards.namespace_by_pod.plugins | nindent 8 }}
   {{- end }}
-  configMapRef:
-    name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "namespace-by-pod" | trunc 63 | trimSuffix "-" }}
-    key: namespace-by-pod.json
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "namespace-by-pod" | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
-data:
-  namespace-by-pod.json: |-
+  json: >-
     {
         "__inputs": [
 
@@ -382,6 +371,9 @@ data:
                 "id": 5,
                 "lines": true,
                 "linewidth": 1,
+                "links": [
+
+                ],
                 "minSpan": 24,
                 "nullPointMode": "null as zero",
                 "renderer": "flot",

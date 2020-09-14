@@ -1,0 +1,12 @@
+{{- if  .Values.defaultDatasouce.enabled }}
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDataSource
+metadata:
+  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "defaultdatasource" | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
+spec:
+  name: middleware.yaml
+  datasources:
+    {{- toYaml .Values.defaultDatasouce.datasources | nindent 8 }}
+{{- end }}
+

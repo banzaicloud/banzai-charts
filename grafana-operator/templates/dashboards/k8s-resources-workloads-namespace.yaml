@@ -19,18 +19,7 @@ spec:
   plugins:
     {{- toYaml .Values.defaultDashboards.k8s_resources_workloads_namespace.plugins | nindent 8 }}
   {{- end }}
-  configMapRef:
-    name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "k8s-resources-workloads-namespace" | trunc 63 | trimSuffix "-" }}
-    key: k8s-resources-workloads-namespace.json
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "k8s-resources-workloads-namespace" | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
-data:
-  k8s-resources-workloads-namespace.json: |-
+  json: >-
     {
         "annotations": {
             "list": [
