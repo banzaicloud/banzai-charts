@@ -19,18 +19,7 @@ spec:
   plugins:
     {{- toYaml .Values.defaultDashboards.kubelet.plugins | nindent 8 }}
   {{- end }}
-  configMapRef:
-    name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "kubelet" | trunc 63 | trimSuffix "-" }}
-    key: kubelet.json
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "kubelet" | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
-data:
-  kubelet.json: |-
+  json: >-
     {
         "__inputs": [
 

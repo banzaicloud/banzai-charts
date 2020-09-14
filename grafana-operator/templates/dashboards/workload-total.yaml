@@ -19,18 +19,7 @@ spec:
   plugins:
     {{- toYaml .Values.defaultDashboards.workload_total.plugins | nindent 8 }}
   {{- end }}
-  configMapRef:
-    name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "workload-total" | trunc 63 | trimSuffix "-" }}
-    key: workload-total.json
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "workload-total" | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
-data:
-  workload-total.json: |-
+  json: >-
     {
         "__inputs": [
 

@@ -19,18 +19,7 @@ spec:
   plugins:
     {{- toYaml .Values.defaultDashboards.scheduler.plugins | nindent 8 }}
   {{- end }}
-  configMapRef:
-    name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "scheduler" | trunc 63 | trimSuffix "-" }}
-    key: scheduler.json
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "scheduler" | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
-data:
-  scheduler.json: |-
+  json: >-
     {
         "__inputs": [
 

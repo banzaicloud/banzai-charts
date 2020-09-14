@@ -19,18 +19,7 @@ spec:
   plugins:
     {{- toYaml .Values.defaultDashboards.k8s_resources_pod.plugins | nindent 8 }}
   {{- end }}
-  configMapRef:
-    name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "k8s-resources-pod" | trunc 63 | trimSuffix "-" }}
-    key: k8s-resources-pod.json
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "k8s-resources-pod" | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
-data:
-  k8s-resources-pod.json: |-
+  json: >-
     {
         "annotations": {
             "list": [
@@ -942,7 +931,7 @@ data:
                                 "step": 10
                             },
                             {
-                                "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", image!=\"\"}) by (container) / sum(kube_pod_container_resource_requests_memory_bytes{namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
+                                "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", image!=\"\"}) by (container) / sum(kube_pod_container_resource_requests_memory_bytes{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                                 "format": "table",
                                 "instant": true,
                                 "intervalFactor": 2,
@@ -960,7 +949,7 @@ data:
                                 "step": 10
                             },
                             {
-                                "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container!=\"\", image!=\"\"}) by (container) / sum(kube_pod_container_resource_limits_memory_bytes{namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
+                                "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container!=\"\", image!=\"\"}) by (container) / sum(kube_pod_container_resource_limits_memory_bytes{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                                 "format": "table",
                                 "instant": true,
                                 "intervalFactor": 2,

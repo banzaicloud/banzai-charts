@@ -19,18 +19,7 @@ spec:
   plugins:
     {{- toYaml .Values.defaultDashboards.etcd.plugins | nindent 8 }}
   {{- end }}
-  configMapRef:
-    name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "etcd" | trunc 63 | trimSuffix "-" }}
-    key: etcd.json
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "etcd" | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
-data:
-  etcd.json: |-
+  json: >-
     {
         "annotations": {
             "list": []

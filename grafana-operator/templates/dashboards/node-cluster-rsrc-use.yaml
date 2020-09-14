@@ -19,18 +19,7 @@ spec:
   plugins:
     {{- toYaml .Values.defaultDashboards.node_cluster_rsrc_use.plugins | nindent 8 }}
   {{- end }}
-  configMapRef:
-    name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "node-cluster-rsrc-use" | trunc 63 | trimSuffix "-" }}
-    key: node-cluster-rsrc-use.json
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "node-cluster-rsrc-use" | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
-data:
-  node-cluster-rsrc-use.json: |-
+  json: >-
     {
         "annotations": {
             "list": [
