@@ -8,4 +8,4 @@ keywords:
 - operator
 - prometheus
 name: prometheus-operator-standalone
-version: 9.2.3
+version: 9.2.4
