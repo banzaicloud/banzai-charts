@@ -63,12 +63,11 @@ spec:
             - --logtostderr=true
             - --localhost=127.0.0.1
             {{- if .Values.prometheusOperator.prometheusConfigReloaderImage.sha }}
-            - --prometheus-config-reloader={{ .Values.prometheusOperator.prometheusConfigReloaderImage.repository }}:{{ .Values.prometheusOperator.prometheusConfigReloaderImage.tag }}@sha256:{{ .Values.prometheusOperator.prometheusConfigReloaderImage.sha }}
+            - --prometheus-config-reloader={{ .Values.prometheusOperator.prometheusConfigReloaderImage.repository }}:{{ semverCompare ">= 1.16.0-0" $kubeTargetVersion | ternary .Values.prometheusOperator.prometheusConfigReloaderImage.tag .Values.prometheusOperator.prometheusConfigReloaderImage.tagFallback }}@sha256:{{ .Values.prometheusOperator.prometheusConfigReloaderImage.sha }}
             {{- else }}
-            - --prometheus-config-reloader={{ .Values.prometheusOperator.prometheusConfigReloaderImage.repository }}:{{ .Values.prometheusOperator.prometheusConfigReloaderImage.tag }}
+            - --prometheus-config-reloader={{ .Values.prometheusOperator.prometheusConfigReloaderImage.repository }}:{{ semverCompare ">= 1.16.0-0" $kubeTargetVersion | ternary .Values.prometheusOperator.prometheusConfigReloaderImage.tag .Values.prometheusOperator.prometheusConfigReloaderImage.tagFallback }}
             {{- end }}
-            - --config-reloader-image={{ .Values.prometheusOperator.configmapReloadImage.repository }}:{{ semverCompare ">= 1.16.0-0" $kubeTargetVersion | ternary .Values.prometheusOperator.configmapReloadImage.tag .Values.prometheusOperator.configmapReloadImage.tagFallback }}
-            - --config-reloader-cpu={{ .Values.prometheusOperator.configReloaderCpu }}
+            - --config-reloader-image={{ .Values.prometheusOperator.configmapReloadImage.repository }}:{{ .Values.prometheusOperator.configmapReloadImage.tag }}            - --config-reloader-cpu={{ .Values.prometheusOperator.configReloaderCpu }}
             - --config-reloader-memory={{ .Values.prometheusOperator.configReloaderMemory }}
           {{- if .Values.prometheusOperator.kubeletService }}
             - --kubelet-service={{ .Values.prometheusOperator.kubeletService.namespace }}/{{ .Values.prometheusOperator.kubeletService.serviceName }}
