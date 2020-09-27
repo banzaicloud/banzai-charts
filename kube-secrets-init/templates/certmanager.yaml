@@ -1,0 +1,59 @@
+{{- if .Values.certificate.useCertManager }}
+# Create a selfsigned Issuer, in order to create a root CA certificate for
+# signing webhook serving certificates
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "kube-secrets-init.componentname" (list . "selfsign") }}
+  labels:
+    {{- include "kube-secrets-init.labels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+
+---
+# Generate a CA Certificate used to sign certificates for the webhook
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "kube-secrets-init.componentname" (list . "ca") }}
+  labels:
+    {{- include "kube-secrets-init.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "kube-secrets-init.componentname" (list . "ca") }}
+  duration: 43800h # 5y
+  issuerRef:
+    name: {{ include "kube-secrets-init.componentname" (list . "selfsign") }}
+  commonName: "ca.kube-secrets-init.cert-manager"
+  isCA: true
+
+---
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "kube-secrets-init.componentname" (list . "ca") }}
+  labels:
+    {{- include "kube-secrets-init.labels" . | nindent 4 }}
+spec:
+  ca:
+    secretName: {{ include "kube-secrets-init.componentname" (list . "ca") }}
+
+---
+# Finally, generate a certificate for the webhook to use
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "kube-secrets-init.tlsCertificate" . }}
+  labels:
+    {{- include "kube-secrets-init.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "kube-secrets-init.certificateSecretName" . }}
+  duration: 8760h # 1y
+  issuerRef:
+    name: {{ include "kube-secrets-init.componentname" (list . "ca") }}
+  dnsNames:
+    - {{ include "kube-secrets-init.fullname" . }}
+    - {{ include "kube-secrets-init.fullname" . }}.{{ .Release.Namespace }}
+    - {{ include "kube-secrets-init.fullname" . }}.{{ .Release.Namespace }}.svc
+    - {{ include "kube-secrets-init.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+{{- end }}
