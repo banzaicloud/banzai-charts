@@ -1,0 +1,90 @@
+{{- $caCrt := "" }}
+{{- if .Values.certificate.generate }}
+{{- $tlsCrt := "" }}
+{{- $tlsKey := "" }}
+{{- $ca := genCA "svc-cat-ca" 3650 }}
+{{- $svcName := include "kube-secrets-init.fullname" . }}
+{{- $cn := printf "%s.%s.svc" $svcName .Release.Namespace }}
+{{- $altName1 := printf "%s.cluster.local" $cn }}
+{{- $altName2 := printf "%s" $cn }}
+{{- $server := genSignedCert $cn nil (list $altName1 $altName2) 365 $ca }}
+{{- $tlsCrt = b64enc $server.Cert }}
+{{- $tlsKey = b64enc $server.Key }}
+{{- $caCrt =  b64enc $ca.Cert }}
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/tls
+metadata:
+  name: {{ include "kube-secrets-init.certificateSecretName" . }}
+  labels:
+    {{- include "kube-secrets-init.labels" . | nindent 4 }}
+  annotations:
+    cert-manager.io/allow-direct-injection: "true"
+data:
+  tls.crt: {{ $tlsCrt }}
+  tls.key: {{ $tlsKey }}
+  ca.crt:  {{ $caCrt }}
+---
+{{- end }}
+
+{{- if semverCompare ">=1.16-0" .Capabilities.KubeVersion.GitVersion }}
+apiVersion: admissionregistration.k8s.io/v1
+{{- else }}
+apiVersion: admissionregistration.k8s.io/v1beta1
+{{- end }}
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "kube-secrets-init.fullname" . }}
+  labels:
+    {{- include "kube-secrets-init.labels" . | nindent 4 }}
+  annotations:
+  {{- if .Values.certificate.useCertManager }}
+    cert-manager.io/inject-ca-from: "{{ .Release.Namespace }}/{{ include "kube-secrets-init.tlsCertificate" . }}"
+  {{- else }}
+    cert-manager.io/inject-ca-from-secret: "{{ .Release.Namespace }}/{{ include "kube-secrets-init.certificateSecretName" . }}"
+  {{- end }}
+webhooks:
+  - name: pods.{{ template "kube-secrets-init.name" . }}.admission.doit-intl.com
+    admissionReviewVersions: ["v1beta1"]
+    clientConfig:
+      service:
+        name: {{ include "kube-secrets-init.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+        path: "/pods"
+      caBundle: {{ $caCrt }}
+    rules:
+      - operations:
+          - CREATE
+        apiGroups:
+          - "*"
+        apiVersions:
+          - "*"
+        resources:
+          - pods
+    namespaceSelector:
+    {{- with .Values.namespaceSelector.matchLabels }}
+      matchLabels:
+        {{- toYaml . | indent 8 }}
+    {{- end }}
+      matchExpressions:
+      {{- with .Values.namespaceSelector.matchExpressions }}
+{{ toYaml . | indent 8 }}
+      {{- end }}
+        - key: name
+          operator: NotIn
+          values:
+            - {{ .Release.Namespace }}
+  {{- if semverCompare ">=1.15-0" .Capabilities.KubeVersion.GitVersion }}
+    objectSelector:
+      matchExpressions:
+      {{- with .Values.objectSelector.matchExpressions }}
+{{ toYaml . | indent 8 }}
+      {{- end }}
+        - key: kube-init-secrets.doit-intl.com/mutate
+          operator: NotIn
+          values:
+            - skip
+  {{- end }}
+  {{- if semverCompare ">=1.12-0" .Capabilities.KubeVersion.GitVersion }}
+    sideEffects: {{ .Values.apiSideEffectValue }}
+  {{- end }}

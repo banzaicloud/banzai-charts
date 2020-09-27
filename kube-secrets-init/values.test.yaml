@@ -1,0 +1,30 @@
+# WEBHOOK_NS=${WEBHOOK_NS:-kube-secrets-init}
+# kubectl create namespace "${WEBHOOK_NS}"
+# kubectl label ns "${WEBHOOK_NS}" name="${WEBHOOK_NS}"
+# helm install -f values.test.yaml --namespace $WEBHOOK_NS kube-secrets-init .
+provider: aws
+
+certificate:
+  # helm repo add jetstack https://charts.jetstack.io
+  # helm repo update
+  # kubectl create namespace cert-manager
+  # helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.0.2 --set installCRDs=true
+  useCertManager: true
+  generate: false
+
+telemetry:
+  enabled: true
+
+  # helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  # helm repo update
+  # kubectl create namespace monitoring
+  # helm install monitoring prometheus-community/kube-prometheus-stack --namespace monitoring
+  serviceMonitor:
+    enabled: true
+
+namespaceSelector:
+  matchExpressions:
+    - key: name
+      operator: In
+      values:
+        - default
