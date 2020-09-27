@@ -40,9 +40,9 @@ The default option is to let Helm generate the CA and TLS certificates during in
 
 This will renew the certificates on each deployment.
 
-```
+```yaml
 certificate:
-    generate: true
+  generate: true
 ```
 
 #### Using cert-manager
