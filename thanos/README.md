@@ -69,7 +69,6 @@ config:
   access_key: ""
   insecure: false
   signature_version2: false
-  encrypt_sse: false
   secret_key: ""
   put_user_metadata: {}
   http_config:
