@@ -239,6 +239,8 @@ Global options overridable per service are marked with an asterisk.
 | `server.metrics.prometheus.timerType`*            | Prometheus timer type                                 | `histogram`           |
 | `server.metrics.statsd.hostPort`*                 | Statsd daemon host and port                           | ``                    |
 | `server.podAnnotations`*                          | Server pod annotations                                | `{}`                  |
+| `server.podSecurityContext`*                      | Server pod security context                           | `{}`                  |
+| `server.securityContext`*                         | Server security context                               | `{}`                  |
 | `server.resources`*                               | Server CPU/Memory resource requests/limits            | `{}`                  |
 | `server.nodeSelector`*                            | Node labels for pod assignment                        | `{}`                  |
 | `server.tolerations`*                             | Toleration labels for pod assignment                  | `[]`                  |
@@ -255,6 +257,8 @@ Global options overridable per service are marked with an asterisk.
 | `server.[service].metrics.prometheus.timerType`   | `[service]` Prometheus timer type                     | ``                    |
 | `server.[service].metrics.statsd.hostPort`        | `[service]` Statsd daemon host and port               | ``                    |
 | `server.[service].podAnnotations`                 | `[service]` pod annotations                           | `{}`                  |
+| `server.[service].podSecurityContext`             | `[service]` pod security context                      | `{}`                  |
+| `server.[service].securityContext`                | `[service]` security context                          | `{}`                  |
 | `server.[service].resources`                      | `[service]` CPU/Memory resource requests/limits       | `{}`                  |
 | `server.[service].nodeSelector`                   | `[service]` Node labels for pod assignment            | `{}`                  |
 | `server.[service].tolerations`                    | `[service]` Toleration labels for pod assignment      | `[]`                  |
@@ -273,6 +277,8 @@ Global options overridable per service are marked with an asterisk.
 | `web.ingress.annotations`                         | WebUI Ingress annotations                             | `{}`                  |
 | `web.ingress.hosts`                               | WebUI Ingress hosts                                   | `/`                   |
 | `web.ingress.tls`                                 | WebUI Ingress tls config                              | `[]`                  |
+| `web.podSecurityContext`                          | WebUI pod security context                            | `{}`                  |
+| `web.securityContext`                             | WebUI security context                                | `{}`                  |
 | `web.resources`                                   | WebUI CPU/Memory resource requests/limits             | `{}`                  |
 | `web.nodeSelector`                                | Node labels for pod assignment                        | `{}`                  |
 | `web.tolerations`                                 | Toleration labels for pod assignment                  | `[]`                  |

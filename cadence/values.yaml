@@ -29,6 +29,18 @@ server:
       #   hostPort: localhost:8125
 
   podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -126,6 +138,8 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -146,6 +160,8 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -166,6 +182,8 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -186,6 +204,8 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -222,6 +242,16 @@ web:
     #    hosts:
     #      - chart-example.local
 
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
 
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious

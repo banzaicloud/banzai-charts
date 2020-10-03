@@ -29,12 +29,18 @@ spec:
         app.kubernetes.io/component: web
         app.kubernetes.io/part-of: {{ .Chart.Name }}
     spec:
+      securityContext:
+        {{- toYaml .Values.web.podSecurityContext | nindent 8 }}
       initContainers:
-      - name: check-frontend
-        image: "banzaicloud/tcheck:latest"
-        command: ['sh', '-c', 'until tcheck --peer {{ include "cadence.fullname" . }}-frontend:{{ .Values.server.frontend.service.port }} --serviceName cadence-frontend; do echo waiting for frontend; sleep 2; done;']
+        - name: check-frontend
+          securityContext:
+            {{- toYaml .Values.web.securityContext | nindent 12 }}
+          image: "banzaicloud/tcheck:latest"
+          command: ['sh', '-c', 'until tcheck --peer {{ include "cadence.fullname" . }}-frontend:{{ .Values.server.frontend.service.port }} --serviceName cadence-frontend; do echo waiting for frontend; sleep 2; done;']
       containers:
         - name: {{ .Chart.Name }}-web
+          securityContext:
+            {{- toYaml .Values.web.securityContext | nindent 12 }}
           image: "{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}"
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           env:

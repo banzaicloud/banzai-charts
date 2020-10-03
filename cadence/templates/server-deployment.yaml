@@ -39,28 +39,42 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      securityContext:
+        {{- toYaml (default $.Values.server.podSecurityContext $serviceValues.podSecurityContext) | nindent 8 }}
       initContainers:
         {{- if $.Values.cassandra.enabled }}
         - name: check-cassandra-service
+          securityContext:
+            {{- toYaml (default $.Values.server.securityContext $serviceValues.securityContext) | nindent 12 }}
           image: busybox
           command: ['sh', '-c', 'until nslookup {{ include "cassandra.host" $ }}; do echo waiting for cassandra service; sleep 1; done;']
         - name: check-cassandra
+          securityContext:
+            {{- toYaml (default $.Values.server.securityContext $serviceValues.securityContext) | nindent 12 }}
           image: "{{ $.Values.cassandra.image.repo }}:{{ $.Values.cassandra.image.tag }}"
           imagePullPolicy: {{ $.Values.cassandra.image.pullPolicy }}
           command: ['sh', '-c', 'until cqlsh {{ include "cassandra.host" $ }} {{ $.Values.cassandra.config.ports.cql }} -e "SHOW VERSION"; do echo waiting for cassandra to start; sleep 1; done;']
         - name: check-cassandra-cadence-schema
+          securityContext:
+            {{- toYaml (default $.Values.server.securityContext $serviceValues.securityContext) | nindent 12 }}
           image: "{{ $.Values.cassandra.image.repo }}:{{ $.Values.cassandra.image.tag }}"
           imagePullPolicy: {{ $.Values.cassandra.image.pullPolicy }}
           command: ['sh', '-c', 'until cqlsh {{ include "cassandra.host" $ }} {{ $.Values.cassandra.config.ports.cql }} -e "SELECT keyspace_name FROM system_schema.keyspaces" | grep {{ $.Values.server.config.persistence.default.cassandra.keyspace }}$; do echo waiting for default keyspace to become ready; sleep 1; done;']
         - name: check-cassandra-visibility-schema
+          securityContext:
+            {{- toYaml (default $.Values.server.securityContext $serviceValues.securityContext) | nindent 12 }}
           image: "{{ $.Values.cassandra.image.repo }}:{{ $.Values.cassandra.image.tag }}"
           imagePullPolicy: {{ $.Values.cassandra.image.pullPolicy }}
           command: ['sh', '-c', 'until cqlsh {{ include "cassandra.host" $ }} {{ $.Values.cassandra.config.ports.cql }} -e "SELECT keyspace_name FROM system_schema.keyspaces" | grep {{ $.Values.server.config.persistence.visibility.cassandra.keyspace }}$; do echo waiting for visibility keyspace to become ready; sleep 1; done;']
         {{- else if $.Values.mysql.enabled  }}
         - name: check-mysql-service
+          securityContext:
+            {{- toYaml (default $.Values.server.securityContext $serviceValues.securityContext) | nindent 12 }}
           image: busybox
           command: ['sh', '-c', 'until nslookup {{ include "mysql.host" $ }}; do echo waiting for mysql service; sleep 1; done;']
         - name: check-mysql-port
+          securityContext:
+            {{- toYaml (default $.Values.server.securityContext $serviceValues.securityContext) | nindent 12 }}
           image: busybox
           command: ['sh', '-c', 'until echo STATUS | nc -w 2 {{ include "mysql.host" $ }} {{ $.Values.mysql.service.port }}; do echo waiting for mysql to start; sleep 1; done;']
         {{- else }}
@@ -68,6 +82,8 @@ spec:
         {{- end }}
       containers:
         - name: {{ $.Chart.Name }}-{{ $service }}
+          securityContext:
+            {{- toYaml (default $.Values.server.securityContext $serviceValues.securityContext) | nindent 12 }}
           image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
           env:
