@@ -37,6 +37,8 @@ spec:
         - name: {{ .Chart.Name }}-web
           image: "{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}"
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          securityContext:
+            runAsUser: 1001
           env:
           - name: CADENCE_TCHANNEL_PEERS
             value: "{{ include "cadence.fullname" . }}-frontend:{{ .Values.server.frontend.service.port }}"

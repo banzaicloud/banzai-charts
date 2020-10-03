@@ -69,6 +69,8 @@ spec:
           args: ['sh', '-c', 'cadence-sql-tool create --db {{ $storeConfig.sql.database }}']
           {{- end }}
           {{- end }}
+          securityContext:
+            runAsUser: 1001
           env:
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
             - name: CASSANDRA_HOST
@@ -115,6 +117,8 @@ spec:
           image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
           args: ["cadence-{{ include "cadence.persistence.driver" (list $ $store) }}-tool", "setup-schema", "-v", "0.0"]
+          securityContext:
+            runAsUser: 1001
           env:
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
             - name: CASSANDRA_HOST
@@ -227,6 +231,8 @@ spec:
           args: ['sh', '-c', 'cadence-sql-tool update-schema -d /etc/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned']
           {{- end }}
           {{- end }}
+          securityContext:
+            runAsUser: 1001
           env:
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
             - name: CASSANDRA_HOST

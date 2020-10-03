@@ -70,6 +70,8 @@ spec:
         - name: {{ $.Chart.Name }}-{{ $service }}
           image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
+          securityContext:
+            runAsUser: 1001
           env:
             - name: POD_IP
               valueFrom:

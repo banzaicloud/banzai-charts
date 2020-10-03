@@ -44,6 +44,8 @@ server:
   tolerations: []
   affinity: {}
 
+  securityContext:
+    runAsUser: 1001
   config:
     logLevel: "debug,info"
 

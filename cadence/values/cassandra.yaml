@@ -16,3 +16,5 @@ env:
     -Dcassandra.initial_token=0
   persistence:
     enabled: true
+securityContext:
+  runAsUser: 1001
