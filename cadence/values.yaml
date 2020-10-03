@@ -221,6 +221,12 @@ web:
     tag: 3.18.1
     pullPolicy: IfNotPresent
 
+  tcheck:
+    image:
+      repository: ghcr.io/banzaicloud/tcheck
+      tag: latest
+      pullPolicy: IfNotPresent
+
   service:
     type: ClusterIP
     port: 80

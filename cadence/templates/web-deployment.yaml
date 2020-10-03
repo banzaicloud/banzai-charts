@@ -35,7 +35,8 @@ spec:
         - name: check-frontend
           securityContext:
             {{- toYaml .Values.web.securityContext | nindent 12 }}
-          image: "banzaicloud/tcheck:latest"
+          image: "{{ .Values.web.tcheck.image.repository }}:{{ .Values.web.tcheck.image.tag }}"
+          imagePullPolicy: {{ .Values.web.tcheck.image.pullPolicy }}
           command: ['sh', '-c', 'until tcheck --peer {{ include "cadence.fullname" . }}-frontend:{{ .Values.server.frontend.service.port }} --serviceName cadence-frontend; do echo waiting for frontend; sleep 2; done;']
       containers:
         - name: {{ .Chart.Name }}-web
