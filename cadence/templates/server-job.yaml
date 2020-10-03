@@ -36,27 +36,39 @@ spec:
         app.kubernetes.io/part-of: {{ .Chart.Name }}
     spec:
       restartPolicy: "OnFailure"
+      securityContext:
+        {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
       initContainers:
         {{- if or .Values.cassandra.enabled .Values.mysql.enabled }}
         {{- if .Values.cassandra.enabled }}
         - name: check-cassandra-service
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: busybox
           command: ['sh', '-c', 'until nslookup {{ include "cassandra.host" $ }}; do echo waiting for cassandra service; sleep 1; done;']
         - name: check-cassandra
           image: "{{ .Values.cassandra.image.repo }}:{{ .Values.cassandra.image.tag }}"
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
           imagePullPolicy: {{ .Values.cassandra.image.pullPolicy }}
           command: ['sh', '-c', 'until cqlsh {{ include "cassandra.host" $ }} {{ .Values.cassandra.config.ports.cql }} -e "SHOW VERSION"; do echo waiting for cassandra to start; sleep 1; done;']
         {{- else if .Values.mysql.enabled }}
         - name: check-mysql-service
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: busybox
           command: ['sh', '-c', 'until nslookup {{ include "mysql.host" $ }}; do echo waiting for mysql service; sleep 1; done;']
         - name: check-mysql-port
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: busybox
           command: ['sh', '-c', 'until echo STATUS | nc -w 2 {{ include "mysql.host" $ }} {{ .Values.mysql.service.port }}; do echo waiting for mysql to start; sleep 1; done;']
         {{- end }}
         {{- range $store := (list "default" "visibility") }}
         {{- $storeConfig := index $.Values.server.config.persistence $store }}
         - name: create-{{ $store }}-store
+          securityContext:
+            {{- toYaml $.Values.server.securityContext | nindent 12 }}
           image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
@@ -112,6 +124,8 @@ spec:
         {{- range $store := (list "default" "visibility") }}
         {{- $storeConfig := index $.Values.server.config.persistence $store }}
         - name: {{ $store }}-schema
+          securityContext:
+            {{- toYaml $.Values.server.securityContext | nindent 12 }}
           image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
           args: ["cadence-{{ include "cadence.persistence.driver" (list $ $store) }}-tool", "setup-schema", "-v", "0.0"]
@@ -192,20 +206,30 @@ spec:
         app.kubernetes.io/part-of: {{ .Chart.Name }}
     spec:
       restartPolicy: "OnFailure"
+      securityContext:
+        {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
       initContainers:
         {{- if .Values.cassandra.enabled }}
         - name: check-cassandra-service
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: busybox
           command: ['sh', '-c', 'until nslookup {{ include "cassandra.host" $ }}; do echo waiting for cassandra service; sleep 1; done;']
         - name: check-cassandra
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: "{{ .Values.cassandra.image.repo }}:{{ .Values.cassandra.image.tag }}"
           imagePullPolicy: {{ .Values.cassandra.image.pullPolicy }}
           command: ['sh', '-c', 'until cqlsh {{ include "cassandra.host" $ }} {{ .Values.cassandra.config.ports.cql }} -e "SHOW VERSION"; do echo waiting for cassandra to start; sleep 1; done;']
         {{- else if .Values.mysql.enabled }}
         - name: check-mysql-service
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: busybox
           command: ['sh', '-c', 'until nslookup {{ include "mysql.host" $ }}; do echo waiting for mysql service; sleep 1; done;']
         - name: check-mysql-port
+          securityContext:
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: busybox
           command: ['sh', '-c', 'until echo STATUS | nc -w 2 {{ include "mysql.host" $ }} {{ .Values.mysql.service.port }}; do echo waiting for mysql to start; sleep 1; done;']
         {{- else }}
@@ -215,6 +239,8 @@ spec:
         {{- range $store := (list "default" "visibility") }}
         {{- $storeConfig := index $.Values.server.config.persistence $store }}
         - name: {{ $store }}-schema
+          securityContext:
+            {{- toYaml $.Values.server.securityContext | nindent 12 }}
           image: "{{ $.Values.server.image.repository }}:{{ $.Values.server.image.tag }}"
           imagePullPolicy: {{ $.Values.server.image.pullPolicy }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
