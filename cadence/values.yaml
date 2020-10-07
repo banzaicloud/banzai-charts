@@ -8,7 +8,7 @@ debug: true
 server:
   image:
     repository: prclqz/cadence-server
-    tag: 0.01
+    tag: 0.02
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
