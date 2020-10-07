@@ -7,6 +7,8 @@ metadata:
 spec:
   ingress:
     enabled: {{ .Values.defaultDeployment.ingress.enabled }}
+    path: {{ .Values.defaultDeployment.ingress.path }}
+    hostname: {{ .Values.defaultDeployment.ingress.hostname }}
   config:
     log:
       mode: {{ .Values.defaultDeployment.log.mode }}
