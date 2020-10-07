@@ -119,18 +119,13 @@ spec:
             tcpSocket:
               port: rpc
           volumeMounts:
-            - name: config
-              mountPath: /etc/cadence/config/config_template.yaml
-              subPath: config_template.yaml
-            - name: config
-              mountPath: /etc/cadence/config/dynamicconfig/config.yaml
-              subPath: dynamic_config.yaml
+            - mountPath: /etc/cadence/config
+              name: sandbox
           resources:
             {{- toYaml (default $.Values.server.resources $serviceValues.resources) | nindent 12 }}
       volumes:
-        - name: config
-          configMap:
-            name: {{ include "cadence.fullname" $ }}
+        - emptyDir: {}
+          name: sandbox
       {{- with (default $.Values.server.nodeSelector $serviceValues.nodeSelector) }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

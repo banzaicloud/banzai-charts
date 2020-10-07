@@ -7,8 +7,8 @@ debug: true
 
 server:
   image:
-    repository: ubercadence/server
-    tag: 0.14.1
+    repository: prclqz/cadence-server
+    tag: 0.01
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
