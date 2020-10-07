@@ -31,11 +31,11 @@ server:
   podAnnotations: {}
 
   podSecurityContext:
-    runAsUser: 1001
+    runAsUser: 1000
     # fsGroup: 2000
 
   securityContext:
-    runAsUser: 1001
+    runAsUser: 1000
     # capabilities:
     #   drop:
     #   - ALL
@@ -141,9 +141,9 @@ server:
       #   hostPort: localhost:8125
     podAnnotations: {}
     podSecurityContext:
-      runAsUser: 1001
+      runAsUser: 1000
     securityContext:
-      runAsUser: 1001
+      runAsUser: 1000
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -165,9 +165,9 @@ server:
       #   hostPort: localhost:8125
     podAnnotations: {}
     podSecurityContext:
-      runAsUser: 1001
+      runAsUser: 1000
     securityContext:
-      runAsUser: 1001
+      runAsUser: 1000
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -189,9 +189,9 @@ server:
       #   hostPort: localhost:8125
     podAnnotations: {}
     podSecurityContext:
-      runAsUser: 1001
+      runAsUser: 1000
     securityContext:
-      runAsUser: 1001
+      runAsUser: 1000
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -213,9 +213,9 @@ server:
       #   hostPort: localhost:8125
     podAnnotations: {}
     podSecurityContext:
-      runAsUser: 1001
+      runAsUser: 1000
     securityContext:
-      runAsUser: 1001
+      runAsUser: 1000
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -259,11 +259,11 @@ web:
     #      - chart-example.local
 
   podSecurityContext:
-    runAsUser: 1001
+    runAsUser: 1000
     # fsGroup: 2000
 
   securityContext:
-    runAsUser: 1001
+    runAsUser: 1000
     # capabilities:
     #   drop:
     #   - ALL
