@@ -3,7 +3,7 @@ fullnameOverride: ""
 
 # Chart debug mode
 # (eg. disable helm hook delete policy)
-debug: false
+debug: true
 
 server:
   image:
@@ -30,10 +30,12 @@ server:
 
   podAnnotations: {}
 
-  podSecurityContext: {}
+  podSecurityContext:
+    runAsUser: 1001
     # fsGroup: 2000
 
-  securityContext: {}
+  securityContext:
+    runAsUser: 1001
     # capabilities:
     #   drop:
     #   - ALL
@@ -138,8 +140,10 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
-    podSecurityContext: {}
-    securityContext: {}
+    podSecurityContext:
+      runAsUser: 1001
+    securityContext:
+      runAsUser: 1001
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -160,8 +164,10 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
-    podSecurityContext: {}
-    securityContext: {}
+    podSecurityContext:
+      runAsUser: 1001
+    securityContext:
+      runAsUser: 1001
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -182,8 +188,10 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
-    podSecurityContext: {}
-    securityContext: {}
+    podSecurityContext:
+      runAsUser: 1001
+    securityContext:
+      runAsUser: 1001
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -204,8 +212,10 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
-    podSecurityContext: {}
-    securityContext: {}
+    podSecurityContext:
+      runAsUser: 1001
+    securityContext:
+      runAsUser: 1001
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -248,10 +258,12 @@ web:
     #    hosts:
     #      - chart-example.local
 
-  podSecurityContext: {}
+  podSecurityContext:
+    runAsUser: 1001
     # fsGroup: 2000
 
-  securityContext: {}
+  securityContext:
+    runAsUser: 1001
     # capabilities:
     #   drop:
     #   - ALL
@@ -283,10 +295,10 @@ dynamicConfig:
 
 schema:
   setup:
-    enabled: true
+    enabled: false
     backoffLimit: 100
   update:
-    enabled: true
+    enabled: false
     backoffLimit: 100
 
 cassandra:
