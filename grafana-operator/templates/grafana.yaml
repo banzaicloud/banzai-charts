@@ -9,6 +9,27 @@ spec:
     enabled: {{ .Values.defaultDeployment.ingress.enabled }}
     path: {{ .Values.defaultDeployment.ingress.path }}
     hostname: {{ .Values.defaultDeployment.ingress.hostname }}
+    tlsEnabled: {{ .Values.defaultDeployment.ingress.tlsEnabled }}
+    tlsSecretName: {{ .Values.defaultDeployment.ingress.tlsSecretName }}
+    annotations:
+      {{- range $key, $value := .Values.defaultDeployment.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+      {{- end }}
+  service:
+    type: {{ .Values.defaultDeployment.service.type }}
+    {{- if .Values.defaultDeployment.service.ports }}
+    ports:
+      {{- range .Values.defaultDeployment.service.ports }}
+      - name: {{ .name }}
+        port: {{ .port }}
+        protocol: {{ .protocol }}
+        targetPort: {{ .targetPort }}
+      {{- end }}
+    {{ end }}
+    annotations:
+      {{- range $key, $value := .Values.defaultDeployment.service.annotations }}
+      {{ $key }}: {{ $value | quote }}
+      {{- end }}
   config:
     log:
       mode: {{ .Values.defaultDeployment.log.mode }}

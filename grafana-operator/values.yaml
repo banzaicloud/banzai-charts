@@ -172,6 +172,13 @@ defaultDeployment:
 
   ingress:
     enabled: true
+    tlsEnabled: false
+    tlsSecretName: ""
+    annotations: {}
+
+  service:
+    type: ClusterIP
+    annotations: {}
 
   log:
     mode: console
