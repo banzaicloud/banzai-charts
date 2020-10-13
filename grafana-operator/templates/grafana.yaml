@@ -7,8 +7,31 @@ metadata:
 spec:
   ingress:
     enabled: {{ .Values.defaultDeployment.ingress.enabled }}
+  {{- if .Values.defaultDeployment.ingress.enabled }}
     path: {{ .Values.defaultDeployment.ingress.path }}
     hostname: {{ .Values.defaultDeployment.ingress.hostname }}
+    tlsEnabled: {{ .Values.defaultDeployment.ingress.tlsEnabled }}
+    tlsSecretName: {{ .Values.defaultDeployment.ingress.tlsSecretName }}
+  {{- with .Values.defaultDeployment.ingress.annotations }}
+    annotations:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{ end }}
+  service:
+    type: {{ .Values.defaultDeployment.service.type }}
+    {{- if .Values.defaultDeployment.service.ports }}
+    ports:
+      {{- range .Values.defaultDeployment.service.ports }}
+      - name: {{ .name }}
+        port: {{ .port }}
+        protocol: {{ .protocol }}
+        targetPort: {{ .targetPort }}
+      {{- end }}
+    {{ end }}
+  {{- with .Values.defaultDeployment.service.annotations }}
+    annotations:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
   config:
     log:
       mode: {{ .Values.defaultDeployment.log.mode }}
