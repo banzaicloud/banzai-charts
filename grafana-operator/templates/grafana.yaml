@@ -5,6 +5,8 @@ metadata:
   name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "defaultdeployment" | trunc 63 | trimSuffix "-" }}
   labels: {{- include "grafana-operator.labels" . | nindent 8 }}
 spec:
+  client:
+    preferService: {{ {{ .Values.defaultDeployment.client.preferService }} }}
   ingress:
     enabled: {{ .Values.defaultDeployment.ingress.enabled }}
   {{- if .Values.defaultDeployment.ingress.enabled }}

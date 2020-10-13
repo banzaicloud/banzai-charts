@@ -197,6 +197,10 @@ defaultDashboards:
 defaultDeployment:
   enabled: false
 
+  # Don't use ingress to communicate with Grafana
+  client:
+    preferService: true
+
   server:
     root_url: ""
     serve_from_sub_path: false
