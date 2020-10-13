@@ -52,6 +52,6 @@ spec:
     - matchExpressions:
         - {key: app.kubernetes.io/instance, operator: In, values: [{{ .Release.Name }}]}
 
-  resources: {{- toYaml .Values.defaultDeployment | nindent 12 }}
+  resources: {{- toYaml .Values.defaultDeployment.resources | nindent 4 }}
 {{- end }}
 

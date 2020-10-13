@@ -44,9 +44,10 @@ customResourceGroupRemap:
   newGroup: "" # name of the new group to map the monitoring.coreos.com to
 
 image:
-  registry: quay.io
-  repository: integreatly/grafana-operator
-  tag: v3.5.0
+  ## TODO change to original repo after release of UID fixes
+  registry: ghcr.io
+  repository: banzaicloud/grafana-operator
+  tag: master
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
