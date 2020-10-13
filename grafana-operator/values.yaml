@@ -87,7 +87,9 @@ defaultDashboards:
 #Enable prometheus Dashboard
   prometheus:
     prometheusSpec:
-      remoteWriteDashboards: false
+      remoteWriteDashboards:
+        enabled: true
+
   statefulset:
     enabled: true
 
@@ -127,6 +129,9 @@ defaultDashboards:
   k8s_resources_workloads_namespace:
     enabled: true
 
+  k8s_resources_workloads_pod:
+    enabled: true
+
   k8s_resources_workload:
     enabled: true
 
@@ -162,6 +167,31 @@ defaultDashboards:
       - name: "grafana-clock-panel"
         version: "1.1.1"
 
+  thanos:
+    bucket_replicate:
+      enabled: false
+
+    compact:
+      enabled: false
+
+    overview:
+      enabled: false
+
+    query:
+      enabled: false
+
+    receive:
+      enabled: false
+
+    rule:
+      enabled: false
+
+    sidecar:
+      enabled: false
+
+    store:
+      enabled: false
+
 #Enable Default Grafana Instance
 defaultDeployment:
   enabled: false
@@ -171,15 +201,16 @@ defaultDeployment:
     serve_from_sub_path: false
 
   ingress:
-    enabled: true
+    enabled: false
     tlsEnabled: false
     tlsSecretName: ""
     annotations: {}
+    hostname: ""
+    path: "/"
 
   service:
     type: ClusterIP
     annotations: {}
-
   log:
     mode: console
     level: warn
