@@ -6,7 +6,7 @@ metadata:
   labels: {{- include "grafana-operator.labels" . | nindent 8 }}
 spec:
   client:
-    preferService: {{ {{ .Values.defaultDeployment.client.preferService }} }}
+    preferService: {{ .Values.defaultDeployment.client.preferService }}
   ingress:
     enabled: {{ .Values.defaultDeployment.ingress.enabled }}
   {{- if .Values.defaultDeployment.ingress.enabled }}
@@ -56,4 +56,3 @@ spec:
 
   resources: {{- toYaml .Values.defaultDeployment.resources | nindent 4 }}
 {{- end }}
-
