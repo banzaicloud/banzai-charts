@@ -1,5 +1,5 @@
 {{- /*
-Generated from 'compact' from https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/compact.json
+Generated from 'compact' from https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/compact.json
 Do not change in-place! In order to change this file first read following link:
 https://github.com/banzaicloud/banzai-charts/tree/master/grafana-operator/hack
 
@@ -1473,7 +1473,7 @@ spec:
                     "useTags": false
                 },
                 {
-                    "allValue": "thanos-compact.*",
+                    "allValue": "one-eye-compact.*",
                     "current": {
                         "text": "all",
                         "value": "$__all"
@@ -1485,7 +1485,7 @@ spec:
                     "multi": false,
                     "name": "job",
                     "options": [],
-                    "query": "label_values(up{namespace=\"$namespace\",job=~\"thanos-compact.*\"}, job)",
+                    "query": "label_values(up{namespace=\"$namespace\",job=~\"one-eye-compact.*\"}, job)",
                     "refresh": 1,
                     "regex": "",
                     "sort": 2,
@@ -1508,7 +1508,7 @@ spec:
                     "multi": false,
                     "name": "pod",
                     "options": [],
-                    "query": "label_values(kube_pod_info{namespace=\"$namespace\",created_by_name=~\"thanos-compact.*\"}, pod)",
+                    "query": "label_values(kube_pod_info{namespace=\"$namespace\",created_by_name=~\"one-eye-compact.*\"}, pod)",
                     "refresh": 1,
                     "regex": "",
                     "sort": 2,

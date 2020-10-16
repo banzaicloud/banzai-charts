@@ -47,56 +47,56 @@ charts = [
         'prefix': ''
     },
     {
-        'source': 'https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/bucket-replicate.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/bucket-replicate.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/compact.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/compact.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/overview.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/overview.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/query.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/query.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/receive.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/receive.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/rule.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/rule.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/sidecar.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/sidecar.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/store.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/store.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
