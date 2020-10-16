@@ -1,5 +1,5 @@
 {{- /*
-Generated from 'bucket-replicate' from https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/bucket-replicate.json
+Generated from 'bucket-replicate' from https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/bucket-replicate.json
 Do not change in-place! In order to change this file first read following link:
 https://github.com/banzaicloud/banzai-charts/tree/master/grafana-operator/hack
 
@@ -69,7 +69,7 @@ spec:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "sum(rate(thanos_replicate_replication_runs_total{result=\"error\", namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval])) / sum(rate(thanos_replicate_replication_runs_total{namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval]))",
+                                "expr": "sum(rate(thanos_replicate_replication_runs_total{result=\"error\", namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval])) / sum(rate(thanos_replicate_replication_runs_total{namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval]))",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "error",
@@ -146,7 +146,7 @@ spec:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "sum(rate(thanos_replicate_replication_runs_total{result=\"error\", namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval])) by (result)",
+                                "expr": "sum(rate(thanos_replicate_replication_runs_total{result=\"error\", namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval])) by (result)",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "{{`{{`}}result{{`}}`}}",
@@ -223,7 +223,7 @@ spec:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "histogram_quantile(0.99, sum(rate(thanos_replicate_replication_run_duration_seconds_bucket{result=\"success\", namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval])) by (job, le)) * 1",
+                                "expr": "histogram_quantile(0.99, sum(rate(thanos_replicate_replication_run_duration_seconds_bucket{result=\"success\", namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval])) by (job, le)) * 1",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "P99 {{`{{`}}job{{`}}`}}",
@@ -231,7 +231,7 @@ spec:
                                 "step": 10
                             },
                             {
-                                "expr": "sum(rate(thanos_replicate_replication_run_duration_seconds_sum{result=\"success\", namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval])) by (job) * 1 / sum(rate(thanos_replicate_replication_run_duration_seconds_count{result=\"success\", namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval])) by (job)",
+                                "expr": "sum(rate(thanos_replicate_replication_run_duration_seconds_sum{result=\"success\", namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval])) by (job) * 1 / sum(rate(thanos_replicate_replication_run_duration_seconds_count{result=\"success\", namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval])) by (job)",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "mean {{`{{`}}job{{`}}`}}",
@@ -239,7 +239,7 @@ spec:
                                 "step": 10
                             },
                             {
-                                "expr": "histogram_quantile(0.50, sum(rate(thanos_replicate_replication_run_duration_seconds_bucket{result=\"success\", namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval])) by (job, le)) * 1",
+                                "expr": "histogram_quantile(0.50, sum(rate(thanos_replicate_replication_run_duration_seconds_bucket{result=\"success\", namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval])) by (job, le)) * 1",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "P50 {{`{{`}}job{{`}}`}}",
@@ -327,7 +327,7 @@ spec:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "sum(rate(thanos_replicate_origin_iterations_total{namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval]))",
+                                "expr": "sum(rate(thanos_replicate_origin_iterations_total{namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval]))",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "iterations",
@@ -335,7 +335,7 @@ spec:
                                 "step": 10
                             },
                             {
-                                "expr": "sum(rate(thanos_replicate_origin_meta_loads_total{namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval]))",
+                                "expr": "sum(rate(thanos_replicate_origin_meta_loads_total{namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval]))",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "meta loads",
@@ -343,7 +343,7 @@ spec:
                                 "step": 10
                             },
                             {
-                                "expr": "sum(rate(thanos_replicate_origin_partial_meta_reads_total{namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval]))",
+                                "expr": "sum(rate(thanos_replicate_origin_partial_meta_reads_total{namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval]))",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "partial meta reads",
@@ -351,7 +351,7 @@ spec:
                                 "step": 10
                             },
                             {
-                                "expr": "sum(rate(thanos_replicate_blocks_already_replicated_total{namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval]))",
+                                "expr": "sum(rate(thanos_replicate_blocks_already_replicated_total{namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval]))",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "already replicated blocks",
@@ -359,7 +359,7 @@ spec:
                                 "step": 10
                             },
                             {
-                                "expr": "sum(rate(thanos_replicate_blocks_replicated_total{namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval]))",
+                                "expr": "sum(rate(thanos_replicate_blocks_replicated_total{namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval]))",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "replicated blocks",
@@ -367,7 +367,7 @@ spec:
                                 "step": 10
                             },
                             {
-                                "expr": "sum(rate(thanos_replicate_objects_replicated_total{namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}[$interval]))",
+                                "expr": "sum(rate(thanos_replicate_objects_replicated_total{namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}[$interval]))",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "replicated objects",
@@ -462,7 +462,7 @@ spec:
                     "useTags": false
                 },
                 {
-                    "allValue": "thanos-bucket-replicate.*",
+                    "allValue": "one-eye--bucket-replicate.*",
                     "current": {
                         "text": "all",
                         "value": "$__all"
@@ -474,7 +474,7 @@ spec:
                     "multi": false,
                     "name": "job",
                     "options": [],
-                    "query": "label_values(up{namespace=\"$namespace\",job=~\"thanos-bucket-replicate.*\"}, job)",
+                    "query": "label_values(up{namespace=\"$namespace\",job=~\"one-eye--bucket-replicate.*\"}, job)",
                     "refresh": 1,
                     "regex": "",
                     "sort": 2,

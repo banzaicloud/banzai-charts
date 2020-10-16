@@ -1,5 +1,5 @@
 {{- /*
-Generated from 'receive' from https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/receive.json
+Generated from 'receive' from https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/receive.json
 Do not change in-place! In order to change this file first read following link:
 https://github.com/banzaicloud/banzai-charts/tree/master/grafana-operator/hack
 
@@ -1923,7 +1923,7 @@ spec:
                     "useTags": false
                 },
                 {
-                    "allValue": "thanos-receive.*",
+                    "allValue": "one-eye-receive.*",
                     "current": {
                         "text": "all",
                         "value": "$__all"
@@ -1935,7 +1935,7 @@ spec:
                     "multi": false,
                     "name": "job",
                     "options": [],
-                    "query": "label_values(up{namespace=\"$namespace\",job=~\"thanos-receive.*\"}, job)",
+                    "query": "label_values(up{namespace=\"$namespace\",job=~\"one-eye-receive.*\"}, job)",
                     "refresh": 1,
                     "regex": "",
                     "sort": 2,
@@ -1958,7 +1958,7 @@ spec:
                     "multi": false,
                     "name": "pod",
                     "options": [],
-                    "query": "label_values(kube_pod_info{namespace=\"$namespace\",created_by_name=~\"thanos-receive.*\"}, pod)",
+                    "query": "label_values(kube_pod_info{namespace=\"$namespace\",created_by_name=~\"one-eye-receive.*\"}, pod)",
                     "refresh": 1,
                     "regex": "",
                     "sort": 2,
