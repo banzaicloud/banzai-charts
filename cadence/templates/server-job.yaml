@@ -76,10 +76,8 @@ spec:
           args: ['sh', '-c', 'cadence-cassandra-tool create -k {{ $storeConfig.cassandra.keyspace }}']
           {{- end }}
           {{- if eq (include "cadence.persistence.driver" (list $ $store)) "sql" }}
-          {{- if eq (include "cadence.persistence.sql.pluginName" (list $ $store)) "mysql" }}
           # args: ["cadence-sql-tool", "create", "--db", "{{ $storeConfig.sql.database }}"]
           args: ['sh', '-c', 'cadence-sql-tool create --db {{ $storeConfig.sql.database }}']
-          {{- end }}
           {{- end }}
           env:
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
@@ -251,6 +249,8 @@ spec:
           {{- if eq (include "cadence.persistence.sql.pluginName" (list $ $store)) "mysql" }}
           # args: ["cadence-sql-tool", "update-schema", "-d", "/etc/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned"]
           args: ['sh', '-c', 'cadence-sql-tool update-schema -d /etc/cadence/schema/mysql/v57/{{ include "cadence.persistence.schema" $store }}/versioned']
+          {{- else if eq (include "cadence.persistence.sql.pluginName" (list $ $store)) "postgres" }}
+          args: ['sh', '-c', 'cadence-sql-tool update-schema -d /etc/cadence/schema/postgres/{{ include "cadence.persistence.schema" $store }}/versioned']
           {{- end }}
           {{- end }}
           env:
