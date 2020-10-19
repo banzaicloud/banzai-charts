@@ -60,7 +60,7 @@ spec:
           {{- if .Values.bucket.label }}
           - "--label={{ .Values.bucket.label }}"
           {{- end }}
-          {{ with .Values.bucket.extraArgs }}{{ toYaml . | nindent 8 }}{{- end }}
+          {{ with .Values.bucket.extraArgs }}{{ toYaml . | nindent 10 }}{{- end }}
         ports:
           - name: http
             containerPort: {{ .Values.bucket.http.port }}
