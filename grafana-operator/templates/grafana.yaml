@@ -50,9 +50,13 @@ spec:
     server:
       root_url: {{ .Values.defaultDeployment.server.root_url | quote }}
       serve_from_sub_path: {{ .Values.defaultDeployment.server.serve_from_sub_path }}
+  {{- if .Values.defaultDeployment.dashboardLabelSelector }}
+  dashboardLabelSelector: {{- tpl (.Values.defaultDeployment.dashboardLabelSelector | toYaml) . | nindent 4}}
+  {{- else }}
   dashboardLabelSelector:
     - matchExpressions:
         - {key: app.kubernetes.io/instance, operator: In, values: [{{ .Release.Name }}]}
+  {{- end }}
 
   resources: {{- toYaml .Values.defaultDeployment.resources | nindent 4 }}
 {{- end }}
