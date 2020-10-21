@@ -386,7 +386,10 @@ query:
     httpGet:
       path: /-/healthy
       port: http
-  readinessProbe: {}
+  readinessProbe:
+    httpGet:
+      path: /-/ready
+      port: http
 
 compact:
   enabled: true
