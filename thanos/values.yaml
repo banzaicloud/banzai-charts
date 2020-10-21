@@ -382,7 +382,10 @@ query:
   affinity: {}
   # set up store readinessProbe & livenessProbe
   # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-  livenessProbe: {}
+  livenessProbe:
+    httpGet:
+      path: /-/healthy
+      port: http
   readinessProbe: {}
 
 compact:
