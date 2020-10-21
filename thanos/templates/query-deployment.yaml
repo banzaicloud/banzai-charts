@@ -117,14 +117,14 @@ spec:
           name: {{ .Values.query.certSecretName }}
           readOnly: true
         {{- end }}
+        {{- if .Values.query.livenessProbe }}
         livenessProbe:
-          httpGet:
-            path: /-/healthy
-            port: http
+        {{ toYaml .Values.query.livenessProbe | nindent 10 }}
+        {{- end }}
+        {{- if .Values.query.readinessProbe }}
         readinessProbe:
-          httpGet:
-            path: /-/ready
-            port: http
+        {{ toYaml .Values.query.readinessProbe | nindent 10 }}
+        {{- end }}
       volumes:
       {{- range .Values.query.serviceDiscoveryFileConfigMaps }}
       - name: {{ . }}

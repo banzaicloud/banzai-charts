@@ -380,6 +380,16 @@ query:
   # Pod affinity
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
+  # set up store readinessProbe & livenessProbe
+  # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+  livenessProbe:
+    httpGet:
+      path: /-/healthy
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /-/ready
+      port: http
 
 compact:
   enabled: true
