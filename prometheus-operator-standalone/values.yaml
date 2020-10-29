@@ -195,8 +195,8 @@ prometheusOperator:
   ## K8S image
   k8sProxy:
     image:
-      repository: banzaicloud/k8s-proxy
-      tag: "0.0.3"
+      repository: ghcr.io/banzaicloud/k8s-proxy
+      tag: "0.0.4"
       pullPolicy: IfNotPresent
     resources:
       limits:
