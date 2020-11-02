@@ -44,10 +44,10 @@ spec:
             - --telemetry-listen-address=:9090
             - --provider={{ required "Secret provider is required!" .Values.provider }}
             {{- with .Values.defaultImagePullSecret }}
-            - default_image_pull_secret={{ . }}
+            - --default_image_pull_secret={{ . }}
             {{- end }}
             {{- with .Values.defaultImagePullSecretNamespace }}
-            - default_image_pull_secret_namespace={{ . }}
+            - --default_image_pull_secret_namespace={{ . }}
             {{- end }}
           volumeMounts:
             - name: certs
