@@ -15,6 +15,10 @@ image:
 #   - aws (AWS Secrets Manager and SSM Parameter Store)
 provider: ""
 
+# When no image pull secret is found in the Pod this secret will be used as default
+defaultImagePullSecret: ""
+defaultImagePullSecretNamespace: ""
+
 certificate:
   # Use jetstack/cert-manager for creating the necessary certificates.
   # This is usually preferred as cert-manager automatically renews certificates.
