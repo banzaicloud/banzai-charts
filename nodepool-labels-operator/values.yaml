@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: banzaicloud/nodepool-labels-operator
-  tag: 0.0.2
+  repository: ghcr.io/banzaicloud/nodepool-labels-operator
+  tag: v0.0.7
   pullPolicy: IfNotPresent
 
 healthcheck:
