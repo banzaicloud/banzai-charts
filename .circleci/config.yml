@@ -1,16 +1,16 @@
 version: 2.1
 
 orbs:
-  helm: banzaicloud/helm@0.0.7
+  helm: banzaicloud/helm@dev:0.0.8
 
 executors:
   helm2:
     docker:
-      - image: banzaicloud/helm:0.0.4
+      - image: ghcr.io/banzaicloud/helm:0.0.4
 
 helm-repositories: &helm_repositories
   - run: helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
-  - run: helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
+  - run: helm repo add incubator https://charts.helm.sh/incubator
   - run: helm repo add rimusz https://charts.rimusz.net
 
 workflows:
