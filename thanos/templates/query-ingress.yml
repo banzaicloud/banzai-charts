@@ -1,6 +1,6 @@
 ---
 {{- if and .Values.query.enabled .Values.query.http.ingress.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ .Values.query.http.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "query") }}-http

@@ -1,5 +1,5 @@
 {{ if and .Values.bucket.enabled .Values.bucket.http.ingress.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ .Values.bucket.http.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "bucket") }}

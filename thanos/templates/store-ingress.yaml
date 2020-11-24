@@ -1,5 +1,5 @@
 {{- if and .Values.store.enabled .Values.store.http.ingress.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ .Values.sidecar.http.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "store") }}-http
