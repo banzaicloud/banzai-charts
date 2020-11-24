@@ -19,6 +19,39 @@ spec:
       {{- toYaml . | nindent 6 }}
   {{- end }}
   {{ end }}
+  deployment:
+  {{- with .Values.grafana.deployment.annotations }}
+    annotations:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with .Values.grafana.deployment.labels }}
+    labels:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with .Values.grafana.deployment.nodeSelector }}
+    nodeSelector:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- if .Values.grafana.deployment.tolerations }}
+    tolerations:
+  {{- with .Values.grafana.deployment.tolerations }}
+      - {{ . }}
+  {{- end }}
+  {{- end }}
+  {{- with .Values.grafana.deployment.affinity }}
+    affinity:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- if .Values.grafana.deployment.envFrom }}
+    envFrom:
+  {{- with .Values.grafana.deployment.envFrom }}
+      - {{ . }}
+  {{- end }}
+  {{- end }}
+    skipCreateAdminAccount: {{ .Values.grafana.deployment.skipCreateAdminAccount }}
+  {{- if .Values.grafana.deployment.priorityClassName }}
+    priorityClassName: {{ .Values.grafana.deployment.priorityClassName }}
+  {{- end }}
   service:
     type: {{ .Values.defaultDeployment.service.type }}
     {{- if .Values.defaultDeployment.service.ports }}
