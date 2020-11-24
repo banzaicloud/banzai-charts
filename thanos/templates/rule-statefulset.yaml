@@ -119,7 +119,16 @@ spec:
         {{- end }}
       volumes:
       - name: data
+      {{- if .Values.rule.dataVolume.backend }}
+        {{- if .Values.rule.persistentVolumeClaim }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.rule.dataVolume.backend.persistentVolumeClaim.claimName }}
+        {{- else }}
+        {{ toYaml .Values.rule.dataVolume.backend | nindent 8 }}
+        {{- end }}
+      {{- else }}
         emptyDir: {}
+      {{- end }}
       - name: config-volume
         secret:
           {{- if .Values.objstoreSecretOverride }}

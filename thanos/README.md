@@ -285,6 +285,8 @@ timePartioning:
 | rule.alertLabelDrop | Labels by name to drop before sending to alertmanager. This allows alert to be deduplicated on replica label (repeated). Similar Prometheus alert relabelling | [] |
 | rule.ruleOverrideName | Override rules file with custom configmap | "" |
 | rule.ruleFiles | See example in values.yaml | {}" |
+| rule.dataVolume.backend    | Data volume for the rule to store temporary data defaults to emptyDir.      | {} |
+| rule.persistentVolumeClaim    | Create the specified persistentVolumeClaim in case persistentVolumeClaim is used for the dataVolume.backend above and needs to be created. | {} |
 
 ## Compact
 
