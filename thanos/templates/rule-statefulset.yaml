@@ -166,7 +166,7 @@ spec:
   {{- if .Values.rule.persistentVolumeClaim }}
   volumeClaimTemplates:
   - metadata:
-      name: {{ .Values.rule.dataVolume.backend.persistentVolumeClaim.claimName }}
+      name: {{ .Values.rule.persistentVolumeClaim.name }}
       labels:
         app.kubernetes.io/name: {{ include "thanos.name" . }}
         helm.sh/chart: {{ include "thanos.chart" . }}
