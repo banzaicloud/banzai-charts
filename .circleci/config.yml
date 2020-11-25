@@ -10,7 +10,7 @@ executors:
 
 helm-repositories: &helm_repositories
   - run: helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
-  - run: helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
+  - run: helm repo add incubator https://charts.helm.sh/incubator
   - run: helm repo add rimusz https://charts.rimusz.net
 
 workflows:
