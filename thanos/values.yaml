@@ -687,11 +687,6 @@ rule:
   replicaCount: 1
   # Kubernetes update strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   updateStrategy: {}
-  # Data volume for the rule to store temporary data defaults to emptyDir
-  dataVolume:
-    backend: {}
-    #  persistentVolumeClaim:
-    #    claimName: rule-data-volume
   # Create the specified persistentVolumeClaim in case persistentVolumeClaim is
   # used for the dataVolume.backend above and needs to be created.
   persistentVolumeClaim: {}
