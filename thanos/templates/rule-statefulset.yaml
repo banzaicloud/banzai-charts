@@ -118,7 +118,7 @@ spec:
           readOnly: true
         {{- end }}
       volumes:
-      {{- if not .Values.rule.dataVolume.backend }}
+      {{- if not .Values.rule.persistentVolumeClaim }}
       - name: data
         emptyDir: {}
       {{- end }}
