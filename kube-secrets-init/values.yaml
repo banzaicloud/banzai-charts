@@ -1,0 +1,117 @@
+# Default values for kube-secrets-init.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: doitintl/kube-secrets-init
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# One of the supported secret providers:
+#   - google (Google Cloud Secrets Manager)
+#   - aws (AWS Secrets Manager and SSM Parameter Store)
+provider: ""
+
+# When no image pull secret is found in the Pod this secret will be used as default
+defaultImagePullSecret: ""
+defaultImagePullSecretNamespace: ""
+
+certificate:
+  # Use jetstack/cert-manager for creating the necessary certificates.
+  # This is usually preferred as cert-manager automatically renews certificates.
+  useCertManager: false
+  # Generate the necessary certificates during chart install.
+  generate: true
+  # The name of the secret to use.
+  # If not set and useCertManager or generate is true, a name is generated using the fullname template.
+  secretName: ""
+
+telemetry:
+  # Specifies whether the telemetry address should be exposed.
+  enabled: false
+  serviceMonitor:
+    # Specifies whether Prometheus ServiceMonitor resources should be created.
+    enabled: false
+    interval: 30s
+    # additionalLabels: {}
+    # relabellings: []
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+rbac:
+  # Specifies whether RBAC resources should be created.
+  # If disabled, the operator is responsible for creating the necessary resources based on the templates.
+  create: true
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+apiSideEffectValue: NoneOnDryRun
+
+# Namespace selector for the mutating webhook config.
+namespaceSelector:
+  matchExpressions:
+    - key: name
+      operator: NotIn
+      values:
+        - kube-system
+  # matchLabels:
+  #   secret-injection: enabled
+
+# Object selector for the mutating webhook config.
+# Available since Kubernetes 1.15
+objectSelector: {}
+  # matchExpressions:
+  #   - key: kube-init-secrets.doit-intl.com/mutate
+  #     operator: NotIn
+  #     values:
+  #       - skip

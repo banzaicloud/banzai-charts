@@ -8,7 +8,7 @@ debug: false
 server:
   image:
     repository: ubercadence/server
-    tag: 0.13.0
+    tag: 0.14.1
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
@@ -29,6 +29,18 @@ server:
       #   hostPort: localhost:8125
 
   podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -126,6 +138,8 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -146,6 +160,8 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -166,6 +182,8 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -186,6 +204,8 @@ server:
       statsd: {}
       #   hostPort: localhost:8125
     podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
     resources: {}
     nodeSelector: {}
     tolerations: []
@@ -200,6 +220,12 @@ web:
     repository: ubercadence/web
     tag: 3.18.1
     pullPolicy: IfNotPresent
+
+  tcheck:
+    image:
+      repository: ghcr.io/banzaicloud/tcheck
+      tag: latest
+      pullPolicy: IfNotPresent
 
   service:
     type: ClusterIP
@@ -222,6 +248,16 @@ web:
     #    hosts:
     #      - chart-example.local
 
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
 
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious

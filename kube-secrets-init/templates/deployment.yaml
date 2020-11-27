@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kube-secrets-init.fullname" . }}
+  labels:
+    {{- include "kube-secrets-init.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "kube-secrets-init.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/mutatingwebhook.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+{{ toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "kube-secrets-init.selectorLabels" . | nindent 8 }}
+        kube-init-secrets.doit-intl.com/mutate: skip
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "kube-secrets-init.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - --log-level=debug
+            - server
+            - --listen-address=:8443
+            - --tls-cert-file=/etc/webhook/certs/tls.crt
+            - --tls-private-key-file=/etc/webhook/certs/tls.key
+            - --telemetry-listen-address=:9090
+            - --provider={{ required "Secret provider is required!" .Values.provider }}
+            {{- with .Values.defaultImagePullSecret }}
+            - --default-image-pull-secret={{ . }}
+            {{- end }}
+            {{- with .Values.defaultImagePullSecretNamespace }}
+            - --default-image-pull-secret-namespace={{ . }}
+            {{- end }}
+          volumeMounts:
+            - name: certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+          ports:
+            - name: http
+              containerPort: 8443
+              protocol: TCP
+          {{- if .Values.telemetry.enabled }}
+            - name: telemetry
+              containerPort: 9090
+              protocol: TCP
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /healthz
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: certs
+          secret:
+            secretName: {{ include "kube-secrets-init.certificateSecretName" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

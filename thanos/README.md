@@ -69,7 +69,6 @@ config:
   access_key: ""
   insecure: false
   signature_version2: false
-  encrypt_sse: false
   secret_key: ""
   put_user_metadata: {}
   http_config:
@@ -206,7 +205,9 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | store.livenessProbe  | Set up liveness probe for store available for Thanos v0.8.0+) |  {} |
 | store.readinessProbe  | Set up readinessProbe for store (available for Thanos v0.8.0+) | {}  |
 | timePartioning   |  list of min/max time for store partitions. See more details below. Setting this will create mutlipale thanos store deployments based on the number of items in the list  | [{min: "", max: ""}] |
+| hashPartioning.shards   | The number of shared used to partition the blocks based on the hashmod of the blocks. Can not be used with time partitioning | "" |
 | initContainers   |  InitContainers allows injecting specialized containers that run before app containers. This is meant to pre-configure and tune mounted volume permissions.  | [] |
+
 
 ### Store time partions
 Thanos store supports partition based on time.
@@ -260,6 +261,8 @@ timePartioning:
 | query.serviceAccount | Name of the Kubernetes service account to use | "" |
 | query.psp.enabled | Enable pod security policy, it also requires the `query.rbac.enabled` to be set to `true`. | false |
 | query.rbac.enabled | Enable RBAC to use the PSP | false |
+| query.livenessProbe | Set up liveness probe for query | {} |
+| query.readinessProbe | Set up readinessProbe for query | {} |
 
 ## Rule
 |Name|Description| Default Value|

@@ -1,0 +1,95 @@
+{{- if  .Values.defaultDeployment.enabled }}
+apiVersion: integreatly.org/v1alpha1
+kind: Grafana
+metadata:
+  name: {{ printf "%s-%s" (include "grafana-operator.fullname" $) "defaultdeployment" | trunc 63 | trimSuffix "-" }}
+  labels: {{- include "grafana-operator.labels" . | nindent 8 }}
+spec:
+  client:
+    preferService: {{ .Values.defaultDeployment.client.preferService }}
+  ingress:
+    enabled: {{ .Values.defaultDeployment.ingress.enabled }}
+  {{- if .Values.defaultDeployment.ingress.enabled }}
+    path: {{ .Values.defaultDeployment.ingress.path }}
+    hostname: {{ .Values.defaultDeployment.ingress.hostname }}
+    tlsEnabled: {{ .Values.defaultDeployment.ingress.tlsEnabled }}
+    tlsSecretName: {{ .Values.defaultDeployment.ingress.tlsSecretName }}
+  {{- with .Values.defaultDeployment.ingress.annotations }}
+    annotations:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{ end }}
+  deployment:
+  {{- with .Values.grafana.deployment.annotations }}
+    annotations:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with .Values.grafana.deployment.labels }}
+    labels:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with .Values.grafana.deployment.nodeSelector }}
+    nodeSelector:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- if .Values.grafana.deployment.tolerations }}
+    tolerations:
+  {{- with .Values.grafana.deployment.tolerations }}
+      - {{ . }}
+  {{- end }}
+  {{- end }}
+  {{- with .Values.grafana.deployment.affinity }}
+    affinity:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- if .Values.grafana.deployment.envFrom }}
+    envFrom:
+  {{- with .Values.grafana.deployment.envFrom }}
+      - {{ . }}
+  {{- end }}
+  {{- end }}
+    skipCreateAdminAccount: {{ .Values.grafana.deployment.skipCreateAdminAccount }}
+  {{- if .Values.grafana.deployment.priorityClassName }}
+    priorityClassName: {{ .Values.grafana.deployment.priorityClassName }}
+  {{- end }}
+  service:
+    type: {{ .Values.defaultDeployment.service.type }}
+    {{- if .Values.defaultDeployment.service.ports }}
+    ports:
+      {{- range .Values.defaultDeployment.service.ports }}
+      - name: {{ .name }}
+        port: {{ .port }}
+        protocol: {{ .protocol }}
+        targetPort: {{ .targetPort }}
+      {{- end }}
+    {{ end }}
+  {{- with .Values.defaultDeployment.service.annotations }}
+    annotations:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+  config:
+    log:
+      mode: {{ .Values.defaultDeployment.log.mode }}
+      level: {{ .Values.defaultDeployment.log.level }}
+    security:
+      admin_user: {{ .Values.defaultDeployment.security.adminUser }}
+      admin_password: {{ .Values.defaultDeployment.security.adminPassword }}
+      allow_embedding: {{ .Values.defaultDeployment.security.allow_embedding }}
+    auth:
+      disable_login_form: {{ .Values.defaultDeployment.auth.disableLoginForm }}
+      disable_signout_menu: {{ .Values.defaultDeployment.auth.disableSignoutMenu }}
+    auth.anonymous:
+      enabled: {{ .Values.defaultDeployment.auth.anonymous }}
+    server:
+      root_url: {{ .Values.defaultDeployment.server.root_url | quote }}
+      serve_from_sub_path: {{ .Values.defaultDeployment.server.serve_from_sub_path }}
+  {{- if .Values.defaultDeployment.dashboardLabelSelector }}
+  dashboardLabelSelector: {{- tpl (.Values.defaultDeployment.dashboardLabelSelector | toYaml) . | nindent 4}}
+  {{- else }}
+  dashboardLabelSelector:
+    - matchExpressions:
+        - {key: app.kubernetes.io/instance, operator: In, values: [{{ .Release.Name }}]}
+  {{- end }}
+
+  resources: {{- toYaml .Values.defaultDeployment.resources | nindent 4 }}
+{{- end }}

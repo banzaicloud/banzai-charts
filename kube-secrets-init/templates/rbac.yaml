@@ -1,0 +1,55 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "kube-secrets-init.fullname" . }}
+  labels:
+    {{- include "kube-secrets-init.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - events
+    verbs:
+      - "*"
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+    verbs:
+      - "*"
+  - apiGroups:
+      - autoscaling
+    resources:
+      - "*"
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+      - secrets
+      - configmaps
+    verbs:
+      - get
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "kube-secrets-init.fullname" . }}
+  labels:
+    {{- include "kube-secrets-init.labels" . | nindent 4 }}
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: {{ include "kube-secrets-init.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "kube-secrets-init.serviceAccountName" . }}
+{{- end }}

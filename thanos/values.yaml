@@ -1,6 +1,6 @@
 image:
   repository: quay.io/thanos/thanos
-  tag: v0.13.0
+  tag: v0.17.1
   pullPolicy: IfNotPresent
 
 store:
@@ -176,10 +176,12 @@ store:
   timePartioning:
     - min: ""
       max: ""
-
+  # Setting hashPartioning will create multiple store deployments based on the number of shards specified using the hashmod of the blocks
+  # See https://thanos.io/sharding.md/#relabelling
+  hashPartioning: {}
+    # shards:
   # InitContainers allows injecting specialized containers that run before app containers. This is meant to pre-configure and tune mounted volume permissions.
   initContainers: []
-
 query:
   enabled: true
   # Labels to treat as a replica indicator along which data is deduplicated.
@@ -378,6 +380,16 @@ query:
   # Pod affinity
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
+  # set up store readinessProbe & livenessProbe
+  # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+  livenessProbe:
+    httpGet:
+      path: /-/healthy
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /-/ready
+      port: http
 
 queryFrontend:
   enabled: false
