@@ -390,15 +390,6 @@ queryFrontend:
   extraArgs: []
   # - "--extraargs=extravalue"
   #
-  # URL of downstream Prometheus Query compatible API.
-  # downstream-url="<thanos-querier>:<querier-http-port>"
-  downstreamUrl:
-  # Compress HTTP responses.
-  compressResponses: true
-  # Log queries that are slower than the specified duration.
-  # Set to 0 to disable.
-  # Set to < 0 to enable on all queries.
-  logQueriesLongerThan: 0
   # Number of replicas running from query-frontend component
   replicaCount: 1
   # Kubernetes deployment strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -481,13 +472,43 @@ queryFrontend:
       #    hosts:
       #      - chart-example.local
 
+  # URL of downstream Prometheus Query compatible API.
+  # downstream-url="<thanos-querier>:<querier-http-port>"
+  downstreamUrl:
+  # Compress HTTP responses.
+  compressResponses: true
+  # Log queries that are slower than the specified duration.
+  # Set to 0 to disable.
+  # Set to < 0 to enable on all queries.
+  logQueriesLongerThan: 0
+  cacheCompressionType: ""
+
   queryRange:
+    align-range-with-step: false
     splitInterval: 24h
     maxRetriesPerRequest: 5
     maxQueryLength: 0
     maxQueryParallelism: 14
     responseCacheMaxFreshness: 1m
     noPartialResponse: false
+    cache:
+      maxSize: 128MB
+      maxSizeItems: 0
+      validity: 0s
+
+  labels:
+    splitInterval: 24h
+    maxRetriesPerRequest: 5
+    maxQueryParallelism: 14
+    responseCacheMaxFreshness: 1m
+    noPartialResponse: false
+    defaultTimeRange: 24h
+    responseCacheConfig: |-
+      type: IN-MEMORY
+      config:
+        max_size: "128MB"
+        max_size_items: 0
+        validity: 0s
 
   log:
     level: info

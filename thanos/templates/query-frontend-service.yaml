@@ -43,7 +43,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
-    app.kubernetes.io/component: query
+    app.kubernetes.io/component: query-frontend
 {{ with .Values.queryFrontend.http.service.labels }}{{ toYaml . | indent 4 }}{{ end }}
 spec:
   type: {{ .Values.queryFrontend.http.service.type }}
@@ -58,6 +58,6 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "thanos.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/component: query
+    app.kubernetes.io/component: query-frontend
 {{ with .Values.queryFrontend.http.service.matchLabels }}{{ toYaml . | indent 4 }}{{ end }}
 {{- end -}}
