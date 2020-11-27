@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thanos.componentname" (list $ "query") }}-grpc
+  name: {{ include "thanos.componentname" (list $ "query-frontend") }}-grpc
   {{- with .Values.queryFrontend.grpc.service.annotations }}
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
-    app.kubernetes.io/component: query
+    app.kubernetes.io/component: query-frontend
 {{ with .Values.queryFrontend.grpc.service.labels }}{{ toYaml . | indent 4 }}{{ end }}
 spec:
   type: ClusterIP
@@ -25,7 +25,7 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "thanos.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/component: query
+    app.kubernetes.io/component: query-frontend
 {{ with .Values.queryFrontend.grpc.service.matchLabels }}{{ toYaml . | indent 4 }}{{ end }}
 
 ---
@@ -33,7 +33,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thanos.componentname" (list $ "query") }}-http
+  name: {{ include "thanos.componentname" (list $ "query-frontend") }}-http
   {{- with .Values.queryFrontend.http.service.annotations }}
   annotations: {{ toYaml .| nindent 4 }}
   {{- end }}
