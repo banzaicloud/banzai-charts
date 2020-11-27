@@ -481,10 +481,13 @@ queryFrontend:
   # Set to 0 to disable.
   # Set to < 0 to enable on all queries.
   logQueriesLongerThan: 0
+  # Use compression in results cache. Supported
+  # values are: 'snappy' and ” (disable compression).
   cacheCompressionType: ""
 
+  # query-range parameters, see https://thanos.io/tip/components/query-frontend.md/#flags
   queryRange:
-    align-range-with-step: false
+    alignRangeWithStep: false
     splitInterval: 24h
     maxRetriesPerRequest: 5
     maxQueryLength: 0
@@ -496,20 +499,6 @@ queryFrontend:
       maxSize:
       maxSizeItems:
       validity:
-
-  labels:
-    splitInterval: 24h
-    maxRetriesPerRequest: 5
-    maxQueryParallelism: 14
-    responseCacheMaxFreshness: 1m
-    noPartialResponse: false
-    defaultTimeRange: 24h
-    responseCacheConfig: |-
-      type: IN-MEMORY
-      config:
-        max_size: "128MB"
-        max_size_items: 0
-        validity: 0s
 
   log:
     level: info
