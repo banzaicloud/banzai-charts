@@ -176,7 +176,7 @@ store:
   timePartioning:
     - min: ""
       max: ""
-  
+
   # InitContainers allows injecting specialized containers that run before app containers. This is meant to pre-configure and tune mounted volume permissions.
   initContainers: []
 
@@ -371,6 +371,171 @@ query:
   #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
   #
   # Node labels for query pod assignment
+  # Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  #
+  nodeSelector: {}
+  #
+  # Pod affinity
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  affinity: {}
+
+query-frontend:
+  enabled: false
+  # Log filtering level.
+  logLevel: info
+  # Log format to use. Possible options: logfmt or json.
+  logFormat: logfmt
+  # Add extra environment variables to query-frontend
+  extraEnv: []
+  # - name: ENV
+  #   value: value
+  #
+  # Add extra arguments to the query-frontend service
+  extraArgs: []
+  # - "--extraargs=extravalue"
+  #
+  # URL of downstream Prometheus Query compatible API.
+  # downstream-url="<thanos-querier>:<querier-http-port>"
+  downstream-url:
+  # Compress HTTP responses.
+  compress-responses: true
+  # Log queries that are slower than the specified duration.
+  # Set to 0 to disable.
+  # Set to < 0 to enable on all queries.
+  log-queries-longer-than: 0
+  # Number of replicas running from query-frontend component
+  replicaCount: 1
+  # Kubernetes deployment strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
+  # Enable HPA for query-frontend component
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+  # Enable podDisruptionBudget for query-frontend component
+  podDisruptionBudget:
+    enabled: false
+      # minAvailable and maxUnavailable can't be used simultaneous. Choose one.
+    minAvailable: 1
+    #  maxUnavailable: 50%
+
+  # The grpc endpoint to communicate with other components
+  grpc:
+    # grpc listen port number
+    port: 10901
+    # Service definition for query-frontend grpc service
+    service:
+      # Annotations to query-frontend grpc service
+      annotations: {}
+      # Labels to query-frontend grpc service
+      labels: {}
+      # Match labels for service selector
+      matchLabels: {}
+    # Set up ingress for the grpc service
+    ingress:
+      enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
+      annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+  serviceAccount: ""
+
+  psp:
+    enabled: false
+  rbac:
+    enabled: false
+
+  # The http endpoint to communicate with other components
+  http:
+    # http listen port number
+    port: 10902
+    # Service definition for query-frontend http service
+    service:
+      type: ClusterIP
+      # Annotations to query-frontend http service
+      annotations: {}
+      # Labels to query-frontend http service
+      labels: {}
+      # Match labels for service selector
+      matchLabels: {}
+    # Set up ingress for the http service
+    ingress:
+      enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+  certSecretName: ""
+  # Extra labels for query-frontend pod template
+  labels: {}
+  #  cluster: example
+  #
+  # Extra annotations for query-frontend pod template
+  annotations: {}
+  #  example.com: default
+  #
+  # Add extra labels to query-frontend deployment
+  deploymentLabels: {}
+  #  extraLabel: extraLabelValue
+  #
+  # Add extra annotations to query-frontend deployment
+  deploymentAnnotations: {}
+  #  extraAnnotation: extraAnnotationValue
+  #
+  # Add extra selector matchLabels to query-frontend deployment
+  deploymentMatchLabels: {}
+  #
+  # Enable metrics collecting for query-frontend service
+  metrics:
+    # This is the Prometheus annotation type scraping configuration
+    annotations:
+      enabled: false
+    # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
+    serviceMonitor:
+      enabled: false
+      # Labels for prometheus-operator to find servicemonitor
+      labels: {}
+
+  # Optional securityContext
+  securityContext: {}
+  resources: {}
+  #  limits:
+  #    cpu: 2000m
+  #    memory: 16Gi
+  #  requests:
+  #    cpu: 1000m
+  #    memory: 4Gi
+  #
+  # Node tolerations for server scheduling to nodes with taints
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  tolerations: []
+  # - key: "key"
+  #   operator: "Equal|Exists"
+  #   value: "value"
+  #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+  #
+  # Node labels for query-frontend pod assignment
   # Ref: https://kubernetes.io/docs/user-guide/node-selection/
   #
   nodeSelector: {}
