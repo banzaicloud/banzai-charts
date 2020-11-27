@@ -58,33 +58,32 @@ spec:
         - "--log.request.decision={{ .Values.queryFrontend.log.request.decision }}"
         {{- end }}
         - "--http-address=0.0.0.0:{{ .Values.queryFrontend.http.port }}"
-        - "--query-range.partial-response"
         {{- if .Values.queryFrontend.queryRange.splitInterval }}
-        - "--query-range.split-interval"
+        - "--query-range.split-interval={{ .Values.queryFrontend.queryRange.splitInterval }}"
         {{- end }}
         {{- if .Values.queryFrontend.queryRange.maxRetriesPerRequest }}
-        - "--query-range.max-retries-per-request"
+        - "--query-range.max-retries-per-request={{ .Values.queryFrontend.queryRange.maxRetriesPerRequest }}"
         {{- end }}
         {{- if .Values.queryFrontend.queryRange.maxQueryLength }}
-        - "--query-range.max-query-length"
+        - "--query-range.max-query-length={{ .Values.queryFrontend.queryRange.maxQueryLength }}"
         {{- end }}
         {{- if .Values.queryFrontend.queryRange.maxQueryParallelism }}
-        - "--query-range.max-query-parallelism"
+        - "--query-range.max-query-parallelism={{ .Values.queryFrontend.queryRange.maxQueryParallelism }}"
         {{- end }}
         {{- if .Values.queryFrontend.queryRange.responseCacheMaxFreshness }}
-        - "--query-range.response-cache-max-freshness"
+        - "--query-range.response-cache-max-freshness={{ .Values.queryFrontend.queryRange.responseCacheMaxFreshness }}"
         {{- end }}
         {{- if .Values.queryFrontend.queryRange.noPartialResponse }}
         - "--no-query-range.partial-response"
         {{- end }}
         {{- if .Values.queryFrontend.downstreamUrl }}
-        - "--query-frontend.downstream-url"
+        - "--query-frontend.downstream-url={{ .Values.queryFrontend.downstreamUrl }}"
         {{- end }}
         {{- if .Values.queryFrontend.compressResponses }}
         - "--query-frontend.compress-responses"
         {{- end }}
         {{- if .Values.queryFrontend.logQueriesLongerThan }}
-        - "--query-frontend.log_queries_longer_than"
+        - "--query-frontend.log_queries_longer_than={{ .Values.queryFrontend.logQueriesLongerThan }}"
         {{- end }}
         {{/*
         TODO:
