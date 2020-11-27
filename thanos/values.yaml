@@ -379,12 +379,8 @@ query:
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
 
-query-frontend:
+queryFrontend:
   enabled: false
-  # Log filtering level.
-  logLevel: info
-  # Log format to use. Possible options: logfmt or json.
-  logFormat: logfmt
   # Add extra environment variables to query-frontend
   extraEnv: []
   # - name: ENV
@@ -396,13 +392,13 @@ query-frontend:
   #
   # URL of downstream Prometheus Query compatible API.
   # downstream-url="<thanos-querier>:<querier-http-port>"
-  downstream-url:
+  downstreamUrl:
   # Compress HTTP responses.
-  compress-responses: true
+  compressResponses: true
   # Log queries that are slower than the specified duration.
   # Set to 0 to disable.
   # Set to < 0 to enable on all queries.
-  log-queries-longer-than: 0
+  logQueriesLongerThan: 0
   # Number of replicas running from query-frontend component
   replicaCount: 1
   # Kubernetes deployment strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -449,7 +445,6 @@ query-frontend:
       #  - secretName: chart-example-tls
       #    hosts:
       #      - chart-example.local
-  serviceAccount: ""
 
   psp:
     enabled: false
@@ -485,6 +480,20 @@ query-frontend:
       #  - secretName: chart-example-tls
       #    hosts:
       #      - chart-example.local
+
+  queryRange:
+    splitInterval: 24h
+    maxRetriesPerRequest: 5
+    maxQueryLength: 0
+    maxQueryParallelism: 14
+    responseCacheMaxFreshness: 1m
+    noPartialResponse: true
+
+  log:
+    level: info
+    format: logfmt
+    request:
+      decision: LogFinishCall
 
   certSecretName: ""
   # Extra labels for query-frontend pod template
