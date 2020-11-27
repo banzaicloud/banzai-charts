@@ -492,9 +492,10 @@ queryFrontend:
     responseCacheMaxFreshness: 1m
     noPartialResponse: false
     cache:
-      maxSize: 128MB
-      maxSizeItems: 0
-      validity: 0s
+      inMemory: false
+      maxSize:
+      maxSizeItems:
+      validity:
 
   labels:
     splitInterval: 24h

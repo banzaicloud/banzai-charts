@@ -85,13 +85,20 @@ spec:
         {{- if .Values.queryFrontend.logQueriesLongerThan }}
         - "--query-frontend.log_queries_longer_than={{ .Values.queryFrontend.logQueriesLongerThan }}"
         {{- end }}
-        {{/*
-        TODO:
-        --tracing.config-file
-        --tracing.config
-        --query-range.response-cache-config-file
-        --query-range.response-cache-config
-        */}}
+        {{- if .Values.queryFrontend.queryRange.cache.inMemory }}
+        - |-
+          --query-range.response-cache-config="type": "IN-MEMORY"
+          "config":
+            {{- if .Values.queryFrontend.queryRange.cache.maxSize }}
+            "max_size": "{{ .Values.queryFrontend.queryRange.cache.maxSize }}"
+            {{- end }}
+            {{- if .Values.queryFrontend.queryRange.cache.maxSizeItems }}
+            "max_size_items": {{ .Values.queryFrontend.queryRange.cache.maxSizeItems }}
+            {{- end }}
+            {{- if .Values.queryFrontend.queryRange.cache.validity }}
+            "validity": "{{ .Values.queryFrontend.queryRange.cache.validity }}"
+            {{- end }}
+        {{- end }}
         {{- if .Values.queryFrontend.extraArgs }}
         {{ toYaml .Values.queryFrontend.extraArgs | nindent 8 }}
         {{- end }}
