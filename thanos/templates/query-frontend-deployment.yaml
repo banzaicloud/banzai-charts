@@ -78,6 +78,8 @@ spec:
         {{- end }}
         {{- if .Values.queryFrontend.downstreamUrl }}
         - "--query-frontend.downstream-url={{ .Values.queryFrontend.downstreamUrl }}"
+        {{- else }}
+        - "--query-frontend.downstream-url=http://{{ include "thanos.componentname" (list $ "query") }}-http.svc.cluster.local:{{ .Values.query.http.port }}"
         {{- end }}
         {{- if .Values.queryFrontend.compressResponses }}
         - "--query-frontend.compress-responses"
