@@ -512,6 +512,20 @@ queryFrontend:
       maxSizeItems:
       validity:
 
+  # labels parameters, see https://thanos.io/tip/components/query-frontend.md/#flags
+  qflabels:
+    splitInterval: 24h
+    maxRetriesPerRequest: 5
+    maxQueryParallelism: 14
+    responseCacheMaxFreshness: 1m
+    noPartialResponse: false
+    defaultTimeRange: 24h
+    cache:
+      inMemory: false
+      maxSize:
+      maxSizeItems:
+      validity:
+
   log:
     level: info
     format: logfmt

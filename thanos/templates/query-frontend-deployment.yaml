@@ -101,6 +101,35 @@ spec:
             "validity": "{{ .Values.queryFrontend.queryRange.cache.validity }}"
             {{- end }}
         {{- end }}
+        {{- if .Values.queryFrontend.qflabels.splitInterval }}
+        - "--labels.split-interval={{ .Values.queryFrontend.qflabels.splitInterval }}"
+        {{- end }}
+        {{- if .Values.queryFrontend.qflabels.maxRetriesPerRequest }}
+        - "--labels.max-retries-per-request={{ .Values.queryFrontend.qflabels.maxRetriesPerRequest }}"
+        {{- end }}
+        {{- if .Values.queryFrontend.qflabels.maxQueryParallelism }}
+        - "--labels.max-query-parallelism={{ .Values.queryFrontend.qflabels.maxQueryParallelism }}"
+        {{- end }}
+        {{- if .Values.queryFrontend.qflabels.responseCacheMaxFreshness }}
+        - "--labels.response-cache-max-freshness={{ .Values.queryFrontend.qflabels.responseCacheMaxFreshness }}"
+        {{- end }}
+        {{- if .Values.queryFrontend.qflabels.noPartialResponse }}
+        - "--no-labels.partial-response"
+        {{- end }}
+        {{- if .Values.queryFrontend.qflabels.cache.inMemory }}
+        - |-
+          --labels.response-cache-config="type": "IN-MEMORY"
+          "config":
+            {{- if .Values.queryFrontend.qflabels.cache.maxSize }}
+            "max_size": "{{ .Values.queryFrontend.qflabels.cache.maxSize }}"
+            {{- end }}
+            {{- if .Values.queryFrontend.qflabels.cache.maxSizeItems }}
+            "max_size_items": {{ .Values.queryFrontend.qflabels.cache.maxSizeItems }}
+            {{- end }}
+            {{- if .Values.queryFrontend.qflabels.cache.validity }}
+            "validity": "{{ .Values.queryFrontend.qflabels.cache.validity }}"
+            {{- end }}
+        {{- end }}
         {{- if .Values.queryFrontend.extraArgs }}
         {{ toYaml .Values.queryFrontend.extraArgs | nindent 8 }}
         {{- end }}
