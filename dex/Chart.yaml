@@ -1,5 +1,5 @@
 name: dex
-version: 0.3.4
+version: 0.3.5
 appVersion: 0.6.0
 description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable Connectors
 icon: https://raw.githubusercontent.com/dexidp/dex/master/Documentation/logos/dex-glyph-color.png
