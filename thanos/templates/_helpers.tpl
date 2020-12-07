@@ -53,3 +53,10 @@ Create a default name for service account if not provided.
 {{- printf "%s" .Values.query.serviceAccount -}}
 {{- end -}}
 {{- end -}}
+{{- define "thanos.queryFrontend.serviceaccount" -}}
+{{- if .Values.queryFrontend.rbac.enabled -}}
+{{- default (include "thanos.componentname" (list $ "query-frontend")) .Values.queryFrontend.serviceAccount -}}
+{{- else -}}
+{{- printf "%s" .Values.queryFrontend.serviceAccount -}}
+{{- end -}}
+{{- end -}}
