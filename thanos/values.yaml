@@ -128,6 +128,10 @@ store:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
@@ -310,6 +314,10 @@ query:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
@@ -535,6 +543,10 @@ bucket:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
       # kubernetes.io/ingress.class: nginx
@@ -748,6 +760,10 @@ rule:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
@@ -879,6 +895,10 @@ sidecar:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx

@@ -176,6 +176,7 @@ These setting applicable to nearly all components.
 | $component.http.service.annotations | Service definition for http service | {} |
 | $component.http.service.matchLabels | Pod label selector to match http service on. | `{}` |
 | $component.http.ingress.enabled | Set up ingress for the http service | false |
+| $component.http.ingress.apiVersion | Set API version for ingress | extensions/v1beta1 |
 | $component.http.ingress.defaultBackend | Set up default backend for ingress | false |
 | $component.http.ingress.annotations | Add annotations to ingress | {} |
 | $component.http.ingress.labels | Add labels to ingress | {} |
