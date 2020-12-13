@@ -118,8 +118,10 @@ spec:
           readOnly: true
         {{- end }}
       volumes:
+      {{- if not .Values.rule.persistentVolumeClaim }}
       - name: data
         emptyDir: {}
+      {{- end }}
       - name: config-volume
         secret:
           {{- if .Values.objstoreSecretOverride }}
@@ -161,4 +163,18 @@ spec:
       {{- with  .Values.rule.serviceAccount }}
       serviceAccountName: "{{ . }}"
       {{- end }}
+  {{- if .Values.rule.persistentVolumeClaim }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.rule.persistentVolumeClaim.name }}
+      labels:
+        app.kubernetes.io/name: {{ include "thanos.name" . }}
+        helm.sh/chart: {{ include "thanos.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+        app.kubernetes.io/component: rule
+    spec:
+      {{- toYaml .Values.rule.persistentVolumeClaim.spec | nindent 6 }}
+  {{- end }}
 {{- end }}

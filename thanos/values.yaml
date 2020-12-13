@@ -699,6 +699,19 @@ rule:
   replicaCount: 1
   # Kubernetes update strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   updateStrategy: {}
+  # Create the specified persistentVolumeClaim in case persistentVolumeClaim is
+  # used for the dataVolume.backend above and needs to be created.
+  persistentVolumeClaim: {}
+  #  name: rule-data-volume
+  #  spec:
+  #    storageClassName: ""
+  #    accessModes: ["ReadWriteOnce"]
+  #    resources:
+  #      requests:
+  #        storage: 100Gi
+  #    selector: {}
+  #    volumeName: ""
+  #    volumeMode: ""
   # Enable HPA for rule component
   autoscaling:
     enabled: false
