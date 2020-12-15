@@ -90,6 +90,14 @@ spec:
     - matchExpressions:
         - {key: app.kubernetes.io/instance, operator: In, values: [{{ .Release.Name }}]}
   {{- end }}
+  {{- with .Values.defaultDeployment.readinessProbe }}
+  readinessProbeSpec:
+      {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.defaultDeployment.livenessProbe }}
+  livenessProbeSpec:
+      {{- toYaml . | nindent 4 }}
+  {{- end }}
 
   resources: {{- toYaml .Values.defaultDeployment.resources | nindent 4 }}
 {{- end }}
