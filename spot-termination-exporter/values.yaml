@@ -54,6 +54,7 @@ resources:
     memory: 256Mi
     cpu: 120m
 
+useHostNetwork: true
 nodeSelector: {}
 
 tolerations: []
