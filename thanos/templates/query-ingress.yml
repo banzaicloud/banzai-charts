@@ -11,12 +11,12 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: query
-    {{- if .Values.query.http.ingress.labels }}
-  {{ toYaml .Values.query.http.ingress.labels | indent 4 }}
+  {{- if .Values.query.http.ingress.labels }}
+{{ toYaml .Values.query.http.ingress.labels | indent 4 }}
     {{- end }}
-    {{- with .Values.query.http.ingress.annotations }}
+  {{- with .Values.query.http.ingress.annotations }}
   annotations: {{ toYaml . | nindent 4 }}
-    {{- end }}
+  {{- end }}
 spec:
   {{- if .Values.query.http.ingress.defaultBackend }}
   backend:
@@ -37,13 +37,13 @@ spec:
   {{- end }}
   rules:
   {{- range .Values.query.http.ingress.hosts }}
-    - host: {{ . }}
-      http:
-        paths:
-          - path: {{ $.Values.query.http.ingress.path }}
-            backend:
-              serviceName: {{ include "thanos.componentname" (list $ "query") }}-http
-              servicePort: {{ $.Values.query.http.port }}
+  - host: {{ . }}
+    http:
+      paths:
+        - path: {{ $.Values.query.http.ingress.path }}
+          backend:
+            serviceName: {{ include "thanos.componentname" (list $ "query") }}-http
+            servicePort: {{ $.Values.query.http.port }}
   {{- end }}
 {{- end }}
 
@@ -60,12 +60,12 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: query
-    {{- if .Values.query.grpc.ingress.labels }}
-  {{ toYaml .Values.query.grpc.ingress.labels | indent 4 }}
-    {{- end }}
-    {{- with .Values.query.grpc.ingress.annotations }}
+  {{- if .Values.query.grpc.ingress.labels }}
+{{ toYaml .Values.query.grpc.ingress.labels | indent 4 }}
+  {{- end }}
+  {{- with .Values.query.grpc.ingress.annotations }}
   annotations: {{ toYaml . | nindent 4 }}
-    {{- end }}
+  {{- end }}
 spec:
   {{- if .Values.query.grpc.ingress.defaultBackend }}
   backend:
@@ -86,12 +86,12 @@ spec:
   {{- end }}
   rules:
   {{- range .Values.query.grpc.ingress.hosts }}
-    - host: {{ . }}
-      http:
-        paths:
-          - path: {{ $.Values.query.grpc.ingress.path }}
-            backend:
-              serviceName: {{ include "thanos.componentname" (list $ "query") }}-grpc
-              servicePort: {{ $.Values.query.grpc.port }}
+  - host: {{ . }}
+    http:
+      paths:
+        - path: {{ $.Values.query.grpc.ingress.path }}
+          backend:
+            serviceName: {{ include "thanos.componentname" (list $ "query") }}-grpc
+            servicePort: {{ $.Values.query.grpc.port }}
   {{- end }}
 {{- end }}
