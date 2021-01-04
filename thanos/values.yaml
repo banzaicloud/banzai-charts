@@ -1126,6 +1126,15 @@ sidecar:
 
 receive:
   enabled: false
+  # Where the TSDB data directory is located.
+  mountPath: ./data/
+  # How long to retain samples in the TSDB.
+  retention: 15d
+  # How many times to replicate incoming write requests.
+  replicationFactor: 1
+  # A label that identifies the Receive replica
+  receiveReplica: 0
+  # Log filtering level.
   logLevel: info
   # Log format to use. Possible options: logfmt or json.
   logFormat: logfmt
