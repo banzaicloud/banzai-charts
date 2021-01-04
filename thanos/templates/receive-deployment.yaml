@@ -15,7 +15,6 @@ metadata:
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  # Could add autoscaling?
   replicas: {{ .Values.receive.replicaCount | default 1 }}
   strategy: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -101,5 +100,4 @@ spec:
           {{- else }}
           secretName: {{ include "thanos.fullname" . }}
           {{- end }}
-            {{- if .Values.query.livenessProbe }}
 {{ end }}

@@ -1126,17 +1126,27 @@ sidecar:
 
 receive:
   enabled: false
-  labels: {}
-  deploymentLabels: {}
-  deploymentMatchLabels: {}
-  resources: {}
-  metrics:
-    annotations:
-      enabled: false
-  dataVolume:
-    backend: {}
+  logLevel: info
+  # Log format to use. Possible options: logfmt or json.
+  logFormat: logfmt
+  # Add extra environment variables to receive
+  extraEnv: []
+  # - name: ENV
+  #   value: value
+  #
+  # Add extra arguments to the receive service
+  extraArgs: []
+  # - "--extraargs=extravalue"
+  #
+  # Number of replicas running from receive component
+  replicaCount: 1
+  # Kubernetes deployment strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
+  # The grpc endpoint to communicate with other components
   grpc:
+    # grpc listen port number
     port: 10907
+    # Service definition for receive grpc service
     service:
       # Annotations to receive grpc service
       annotations: {}
@@ -1144,6 +1154,7 @@ receive:
       labels: {}
       # Match labels for service selector
       matchLabels: {}
+    # Set up ingress for the grpc service
     ingress:
       enabled: false
       # Set default backend for ingress
@@ -1159,27 +1170,75 @@ receive:
       #  - secretName: chart-example-tls
       #    hosts:
       #      - chart-example.local
-  http:
-    port: 10909
-    service:
-      annotations: {}
-      labels: {}
-      matchLabels: {}
+  # The endpoint to receive series sent by Prometheus remote write
   write:
+    # receive listen port number
     port: 10908
+    # Service definition for receive service
     service:
+      # Annotations to receive service
       annotations: {}
+      # Labels to receive service
       labels: {}
+      # Match labels for service selector
       matchLabels: {}
+    # Set up ingress for the receive service
     ingress:
       enabled: false
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
       hosts:
         - "/"
       tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+  # The http endpoint to communicate with other components
+  http:
+    # http listen port number
+    port: 10909
+    # Service definition for receive http service
+    service:
+      type: ClusterIP
+      # Annotations to receive http service
+      annotations: {}
+      # Labels to query http service
+      labels: {}
+      # Match labels for service selector
+      matchLabels: {}
+  # Extra labels for receive pod template
+  labels: {}
+  #  cluster: example
+  #
+  # Extra annotations for receive pod template
+  deploymentLabels: {}
+  #  extraLabel: extraLabelValue
+  #
+  # Add extra annotations to receive deployment
+  deploymentAnnotations: {}
+  #  extraAnnotation: extraAnnotationValue
+  #
+  # Add extra selector matchLabels to receive deployment
+  deploymentMatchLabels: {}
+  metrics:
+    annotations:
+      enabled: false
+  resources: {}
+  #  limits:
+  #    cpu: 2000m
+  #    memory: 16Gi
+  #  requests:
+  #    cpu: 1000m
+  #    memory: 4Gi
+  dataVolume:
+    backend: {}
+  # set up store readinessProbe & livenessProbe
+  # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe:
     httpGet:
       path: /-/healthy
