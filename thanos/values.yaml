@@ -1,6 +1,6 @@
 image:
   repository: quay.io/thanos/thanos
-  tag: v0.15.0
+  tag: v0.17.1
   pullPolicy: IfNotPresent
 
 store:
@@ -128,6 +128,10 @@ store:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
@@ -310,6 +314,10 @@ query:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
@@ -390,6 +398,205 @@ query:
     httpGet:
       path: /-/ready
       port: http
+
+queryFrontend:
+  enabled: false
+  # Add extra environment variables to query-frontend
+  extraEnv: []
+  # - name: ENV
+  #   value: value
+  #
+  # Add extra arguments to the query-frontend service
+  extraArgs: []
+  # - "--extraargs=extravalue"
+  #
+  # Number of replicas running from query-frontend component
+  replicaCount: 1
+  # Kubernetes deployment strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
+  # Enable HPA for query-frontend component
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+  # Enable podDisruptionBudget for query-frontend component
+  podDisruptionBudget:
+    enabled: false
+      # minAvailable and maxUnavailable can't be used simultaneous. Choose one.
+    minAvailable: 1
+    #  maxUnavailable: 50%
+
+  # The grpc endpoint to communicate with other components
+  grpc:
+    # grpc listen port number
+    port: 10901
+    # Service definition for query-frontend grpc service
+    service:
+      # Annotations to query-frontend grpc service
+      annotations: {}
+      # Labels to query-frontend grpc service
+      labels: {}
+      # Match labels for service selector
+      matchLabels: {}
+    # Set up ingress for the grpc service
+    ingress:
+      enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
+      annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+  psp:
+    enabled: false
+  rbac:
+    enabled: false
+
+  # The http endpoint to communicate with other components
+  http:
+    # http listen port number
+    port: 10902
+    # Service definition for query-frontend http service
+    service:
+      type: ClusterIP
+      # Annotations to query-frontend http service
+      annotations: {}
+      # Labels to query-frontend http service
+      labels: {}
+      # Match labels for service selector
+      matchLabels: {}
+    # Set up ingress for the http service
+    ingress:
+      enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+  # URL of downstream Prometheus Query compatible API.
+  # downstream-url="<thanos-querier>:<querier-http-port>"
+  downstreamUrl:
+  # Compress HTTP responses.
+  compressResponses: true
+  # Log queries that are slower than the specified duration.
+  # Set to 0 to disable.
+  # Set to < 0 to enable on all queries.
+  logQueriesLongerThan: 0
+  # Use compression in results cache. Supported
+  # values are: 'snappy' and ” (disable compression).
+  cacheCompressionType: ""
+
+  # query-range parameters, see https://thanos.io/tip/components/query-frontend.md/#flags
+  queryRange:
+    alignRangeWithStep: false
+    splitInterval: 24h
+    maxRetriesPerRequest: 5
+    maxQueryLength: 0
+    maxQueryParallelism: 14
+    responseCacheMaxFreshness: 1m
+    noPartialResponse: false
+    cache:
+      inMemory: false
+      maxSize:
+      maxSizeItems:
+      validity:
+
+  # labels parameters, see https://thanos.io/tip/components/query-frontend.md/#flags
+  qflabels:
+    splitInterval: 24h
+    maxRetriesPerRequest: 5
+    maxQueryParallelism: 14
+    responseCacheMaxFreshness: 1m
+    noPartialResponse: false
+    defaultTimeRange: 24h
+    cache:
+      inMemory: false
+      maxSize:
+      maxSizeItems:
+      validity:
+
+  log:
+    level: info
+    format: logfmt
+    request:
+      decision: LogFinishCall
+
+  certSecretName: ""
+  # Extra labels for query-frontend pod template
+  labels: {}
+  #  cluster: example
+  #
+  # Extra annotations for query-frontend pod template
+  annotations: {}
+  #  example.com: default
+  #
+  # Add extra labels to query-frontend deployment
+  deploymentLabels: {}
+  #  extraLabel: extraLabelValue
+  #
+  # Add extra annotations to query-frontend deployment
+  deploymentAnnotations: {}
+  #  extraAnnotation: extraAnnotationValue
+  #
+  # Add extra selector matchLabels to query-frontend deployment
+  deploymentMatchLabels: {}
+  #
+  # Enable metrics collecting for query-frontend service
+  metrics:
+    # This is the Prometheus annotation type scraping configuration
+    annotations:
+      enabled: false
+    # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
+    serviceMonitor:
+      enabled: false
+      # Labels for prometheus-operator to find servicemonitor
+      labels: {}
+
+  # Optional securityContext
+  securityContext: {}
+  resources: {}
+  #  limits:
+  #    cpu: 2000m
+  #    memory: 16Gi
+  #  requests:
+  #    cpu: 1000m
+  #    memory: 4Gi
+  #
+  # Node tolerations for server scheduling to nodes with taints
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  tolerations: []
+  # - key: "key"
+  #   operator: "Equal|Exists"
+  #   value: "value"
+  #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+  #
+  # Node labels for query-frontend pod assignment
+  # Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  #
+  nodeSelector: {}
+  #
+  # Pod affinity
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
+  affinity: {}
 
 compact:
   enabled: true
@@ -535,6 +742,10 @@ bucket:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
       # kubernetes.io/ingress.class: nginx
@@ -687,6 +898,19 @@ rule:
   replicaCount: 1
   # Kubernetes update strategy object as documented in https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   updateStrategy: {}
+  # Create the specified persistentVolumeClaim in case persistentVolumeClaim is
+  # used for the dataVolume.backend above and needs to be created.
+  persistentVolumeClaim: {}
+  #  name: rule-data-volume
+  #  spec:
+  #    storageClassName: ""
+  #    accessModes: ["ReadWriteOnce"]
+  #    resources:
+  #      requests:
+  #        storage: 100Gi
+  #    selector: {}
+  #    volumeName: ""
+  #    volumeMode: ""
   # Enable HPA for rule component
   autoscaling:
     enabled: false
@@ -748,6 +972,10 @@ rule:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
@@ -879,6 +1107,10 @@ sidecar:
     ingress:
       enabled: false
       # Set default backend for ingress
+
+      apiVersion: extensions/v1beta1
+      # Set API version for ingress
+
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx

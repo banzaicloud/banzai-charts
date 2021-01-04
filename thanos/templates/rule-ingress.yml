@@ -1,6 +1,6 @@
 ---
 {{- if and .Values.rule.enabled .Values.rule.http.ingress.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ .Values.rule.http.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "rule") }}-http

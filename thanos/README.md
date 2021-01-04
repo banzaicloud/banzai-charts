@@ -176,6 +176,7 @@ These setting applicable to nearly all components.
 | $component.http.service.annotations | Service definition for http service | {} |
 | $component.http.service.matchLabels | Pod label selector to match http service on. | `{}` |
 | $component.http.ingress.enabled | Set up ingress for the http service | false |
+| $component.http.ingress.apiVersion | Set API version for ingress | extensions/v1beta1 |
 | $component.http.ingress.defaultBackend | Set up default backend for ingress | false |
 | $component.http.ingress.annotations | Add annotations to ingress | {} |
 | $component.http.ingress.labels | Add labels to ingress | {} |
@@ -285,6 +286,7 @@ timePartioning:
 | rule.alertLabelDrop | Labels by name to drop before sending to alertmanager. This allows alert to be deduplicated on replica label (repeated). Similar Prometheus alert relabelling | [] |
 | rule.ruleOverrideName | Override rules file with custom configmap | "" |
 | rule.ruleFiles | See example in values.yaml | {}" |
+| rule.persistentVolumeClaim    | Create the specified persistentVolumeClaim in case persistentVolumeClaim is used for the dataVolume.backend above and needs to be created. | {} |
 
 ## Compact
 
@@ -327,6 +329,31 @@ timePartioning:
 |----|-----------|--------------|
 | sidecar.enabled | NOTE: This is only the service references for the sidecar. | true |
 | sidecar.selector | Pod label selector to match sidecar services on. | `{"app": "prometheus"}` |
+
+## Query Frontend
+
+|Name|Description| Default Value|
+|----|-----------|--------------|
+| queryFrontend.enabled | Enable component | false |
+| queryFrontend.replicaCount | Pod replica count | 1 |
+| queryFrontend.logLevel | Log level | info |
+| queryFrontend.logFormat | Log format to use. Possible options: logfmt or json. | logfmt |
+| queryFrontend.downstreamUrl | URL of downstream Prometheus Query compatible API. | |
+| queryFrontend.compressResponses | Compress HTTP responses. | `true` |
+| queryFrontend.logQueriesLongerThan | Log queries that are slower than the specified duration. | `0` (disabled) |
+| queryFrontend.cacheCompressionType | Use compression in results cache. Supported values are: `snappy` and `` (disable compression). | `` |
+| queryFrontend.queryRange.alignRangeWithStep | See https://thanos.io/tip/components/query-frontend.md/#flags | `false` |
+| queryFrontend.queryRange.splitInterval | See https://thanos.io/tip/components/query-frontend.md/#flags  | `24h` |
+| queryFrontend.queryRange.maxRetriesPerRequest | See https://thanos.io/tip/components/query-frontend.md/#flags  | `5` |
+| queryFrontend.queryRange.maxQueryLength | See https://thanos.io/tip/components/query-frontend.md/#flags  | `0` |
+| queryFrontend.queryRange.maxQueryParallelism | See https://thanos.io/tip/components/query-frontend.md/#flags  | `14` |
+| queryFrontend.queryRange.responseCacheMaxFreshness | See https://thanos.io/tip/components/query-frontend.md/#flag | `1m` |
+| queryFrontend.queryRange.noPartialResponse | See https://thanos.io/tip/components/query-frontend.md/#flags | `false` |
+| queryFrontend.cache.inMemory | Use inMemory cache? | `false` |
+| queryFrontend.cache.maxSize | Maximum Size of the cache. Use either this or `maxSizeItems`. | `` |
+| queryFrontend.cache.maxSizeItems | Maximum number of items in the cache. Use either this or `maxSize`. | `` |
+| queryFrontend.cache.validity | | `` |
+| queryFrontend.log.request.decision | Request Logging for logging the start and end of requests | `LogFinishCall` |
 
 ## Contributing
 Contributions are very welcome!
