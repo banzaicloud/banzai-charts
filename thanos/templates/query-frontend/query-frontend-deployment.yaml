@@ -87,19 +87,9 @@ spec:
         {{- if .Values.queryFrontend.logQueriesLongerThan }}
         - "--query-frontend.log_queries_longer_than={{ .Values.queryFrontend.logQueriesLongerThan }}"
         {{- end }}
-        {{- if .Values.queryFrontend.queryRange.cache.inMemory }}
-        - |-
-          --query-range.response-cache-config="type": "IN-MEMORY"
-          "config":
-            {{- if .Values.queryFrontend.queryRange.cache.maxSize }}
-            "max_size": "{{ .Values.queryFrontend.queryRange.cache.maxSize }}"
-            {{- end }}
-            {{- if .Values.queryFrontend.queryRange.cache.maxSizeItems }}
-            "max_size_items": {{ .Values.queryFrontend.queryRange.cache.maxSizeItems }}
-            {{- end }}
-            {{- if .Values.queryFrontend.queryRange.cache.validity }}
-            "validity": "{{ .Values.queryFrontend.queryRange.cache.validity }}"
-            {{- end }}
+        {{- if .Values.queryFrontend.indexCacheConfig }}
+        - "--query-range.response-cache-config-file=/config/config.yml"
+        - "--labels.response-cache-config-file=/config/config.yml"
         {{- end }}
         {{- if .Values.queryFrontend.qflabels.splitInterval }}
         - "--labels.split-interval={{ .Values.queryFrontend.qflabels.splitInterval }}"
@@ -115,20 +105,6 @@ spec:
         {{- end }}
         {{- if .Values.queryFrontend.qflabels.noPartialResponse }}
         - "--no-labels.partial-response"
-        {{- end }}
-        {{- if .Values.queryFrontend.qflabels.cache.inMemory }}
-        - |-
-          --labels.response-cache-config="type": "IN-MEMORY"
-          "config":
-            {{- if .Values.queryFrontend.qflabels.cache.maxSize }}
-            "max_size": "{{ .Values.queryFrontend.qflabels.cache.maxSize }}"
-            {{- end }}
-            {{- if .Values.queryFrontend.qflabels.cache.maxSizeItems }}
-            "max_size_items": {{ .Values.queryFrontend.qflabels.cache.maxSizeItems }}
-            {{- end }}
-            {{- if .Values.queryFrontend.qflabels.cache.validity }}
-            "validity": "{{ .Values.queryFrontend.qflabels.cache.validity }}"
-            {{- end }}
         {{- end }}
         {{- if .Values.queryFrontend.extraArgs }}
         {{ toYaml .Values.queryFrontend.extraArgs | nindent 8 }}
@@ -148,6 +124,11 @@ spec:
         {{- if .Values.queryFrontend.certSecretName }}
         - mountPath: /etc/certs
           name: {{ .Values.queryFrontend.certSecretName }}
+          readOnly: true
+        {{- end }}
+        {{- if .Values.queryFrontend.indexCacheConfig }}
+        - name: config
+          mountPath: "/config"
           readOnly: true
         {{- end }}
         livenessProbe:
@@ -173,6 +154,14 @@ spec:
       {{- end }}
       {{- with .Values.queryFrontend.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.indexCacheConfig }}
+      - name: config
+        configMap:
+          name: {{ include "thanos.fullname" . }}-query-frontend
+          items:
+          - key: config.yml
+            path: config.yml
       {{- end }}
       {{- with .Values.queryFrontend.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}

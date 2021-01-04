@@ -186,6 +186,10 @@ store:
     # shards:
   # InitContainers allows injecting specialized containers that run before app containers. This is meant to pre-configure and tune mounted volume permissions.
   initContainers: []
+
+  # Configuration for the index cache, see https://thanos.io/tip/components/store.md/#index-cache
+  indexCacheConfig: {}
+
 query:
   enabled: true
   # Labels to treat as a replica indicator along which data is deduplicated.
@@ -505,6 +509,9 @@ queryFrontend:
   # values are: 'snappy' and ” (disable compression).
   cacheCompressionType: ""
 
+  # Configuration for the index cache, see https://thanos.io/tip/components/query-frontend.md/#caching
+  indexCacheConfig: {}
+
   # query-range parameters, see https://thanos.io/tip/components/query-frontend.md/#flags
   queryRange:
     alignRangeWithStep: false
@@ -514,11 +521,6 @@ queryFrontend:
     maxQueryParallelism: 14
     responseCacheMaxFreshness: 1m
     noPartialResponse: false
-    cache:
-      inMemory: false
-      maxSize:
-      maxSizeItems:
-      validity:
 
   # labels parameters, see https://thanos.io/tip/components/query-frontend.md/#flags
   qflabels:
@@ -528,11 +530,6 @@ queryFrontend:
     responseCacheMaxFreshness: 1m
     noPartialResponse: false
     defaultTimeRange: 24h
-    cache:
-      inMemory: false
-      maxSize:
-      maxSizeItems:
-      validity:
 
   log:
     level: info

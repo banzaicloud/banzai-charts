@@ -119,6 +119,9 @@ spec:
         {{- if $root.Values.store.extraArgs }}
         {{ toYaml $root.Values.store.extraArgs | nindent 8 }}
         {{- end }}
+        {{- if $root.Values.store.indexCacheConfig }}
+        - "--index-cache.config-file=/config/config.yml"
+        {{- end }}
         ports:
         - name: http
           containerPort: {{ $root.Values.store.http.port }}
@@ -133,6 +136,11 @@ spec:
         {{- if $root.Values.store.certSecretName }}
         - mountPath: /etc/certs
           name: {{ $root.Values.store.certSecretName }}
+          readOnly: true
+        {{- end }}
+        {{- if $root.Values.store.indexCacheConfig }}
+        - name: config
+          mountPath: "/config"
           readOnly: true
         {{- end }}
         {{- if $root.Values.store.livenessProbe }}
@@ -169,6 +177,14 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ $root.Values.store.certSecretName }}
+      {{- end }}
+      {{- if $root.Values.store.indexCacheConfig }}
+      - name: config
+        configMap:
+          name: {{ include "thanos.fullname" $root }}-store
+          items:
+          - key: config.yml
+            path: config.yml
       {{- end }}
       {{- with $root.Values.store.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
