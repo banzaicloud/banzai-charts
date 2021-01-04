@@ -16,6 +16,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.receive.replicaCount | default 1 }}
+  {{- with  .Values.query.strategy }}
   strategy: {{ toYaml . | nindent 4 }}
   {{- end }}
   selector:
@@ -100,4 +101,4 @@ spec:
           {{- else }}
           secretName: {{ include "thanos.fullname" . }}
           {{- end }}
-{{ end }}
+{{- end -}}
