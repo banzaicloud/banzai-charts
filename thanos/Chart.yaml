@@ -14,3 +14,10 @@ icon: https://raw.githubusercontent.com/thanos-io/thanos/master/docs/img/Thanos-
 maintainers:
 - name: Banzai Cloud
   email: info@banzaicloud.com
+annotations:
+  artifacthub.io/changes: |
+    - Added ability to provide a cache configuration file
+    - Added artifact hub annotations
+  artifacthub.io/images: |
+    - name: thanos
+      image: quay.io/thanos/thanos:v0.17.1
