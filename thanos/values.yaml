@@ -892,6 +892,70 @@ sidecar:
       #    hosts:
       #      - chart-example.local
 
+receive:
+  enabled: false
+  labels: {}
+  deploymentLabels: {}
+  deploymentMatchLabels: {}
+  resources: {}
+  metrics:
+    annotations:
+      enabled: false
+  dataVolume:
+    backend: {}
+  grpc:
+    port: 10907
+    service:
+      # Annotations to receive grpc service
+      annotations: {}
+      # Labels to receive grpc service
+      labels: {}
+      # Match labels for service selector
+      matchLabels: {}
+    ingress:
+      enabled: false
+      # Set default backend for ingress
+      defaultBackend: false
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+  http:
+    port: 10909
+    service:
+      annotations: {}
+      labels: {}
+      matchLabels: {}
+  write:
+    port: 10908
+    service:
+      annotations: {}
+      labels: {}
+      matchLabels: {}
+    ingress:
+      enabled: false
+      defaultBackend: false
+      annotations: {}
+      labels: {}
+      path: "/"
+      hosts:
+        - "/"
+      tls: []
+  livenessProbe:
+    httpGet:
+      path: /-/healthy
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /-/ready
+      port: http
 
 # This is the general backend configuration. Please se the examples below to configurate object store.
 # More information can be found at thanos github repositoriy: https://github.com/thanos-io/thanos/blob/master/docs/storage.md
