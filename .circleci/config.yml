@@ -1,11 +1,15 @@
 version: 2.1
 
 orbs:
-  helm: banzaicloud/helm@0.0.7
+  helm: banzaicloud/helm@0.0.8
+
+executors:
+  helm311:
+    docker:
+      - image: ghcr.io/banzaicloud/helm:0.0.7
 
 helm-repositories: &helm_repositories
   - run: helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
-  - run: helm repo add incubator https://charts.helm.sh/incubator
   - run: helm repo add rimusz https://charts.rimusz.net
 
 workflows:
@@ -14,7 +18,7 @@ workflows:
     jobs:
       - helm/lint-chart:
           name: Lint (Helm 3)
-          executor: helm/helm3
+          executor: helm311
           charts-dir: '.'
           add-extra-repositories: *helm_repositories
           filters:
@@ -24,6 +28,7 @@ workflows:
     jobs:
       - helm/publish-chart:
           context: helm
+          executor: helm311
           charts-dir: '.'
           add-extra-repositories: *helm_repositories
           filters:
