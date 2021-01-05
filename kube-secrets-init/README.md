@@ -1,3 +1,7 @@
+> # Deprecated
+>
+> This chart is no longer maintained. A maintained fork can be found [here](https://github.com/sagikazarmark/helm-charts/tree/master/charts/kube-secrets-init).
+
 # kube-secrets-init
 
 [kube-secrets-init](https://github.com/doitintl/kube-secrets-init) is a Kubernetes mutating admission webhook, that mutates any Pod that is using specially prefixed environment variables, directly or from Kubernetes as Secret or ConfigMap.
