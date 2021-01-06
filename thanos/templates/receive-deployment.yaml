@@ -16,7 +16,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.receive.replicaCount | default 1 }}
-  {{- with  .Values.query.strategy }}
+  {{- with  .Values.receive.strategy }}
   strategy: {{ toYaml . | nindent 4 }}
   {{- end }}
   selector:
@@ -45,7 +45,7 @@ spec:
       - name: thanos-receive
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- with .Values.query.extraEnv }}
+        {{- with .Values.receive.extraEnv }}
         env: {{ toYaml . | nindent 8 }}
         {{- end }}
         args:
@@ -61,8 +61,8 @@ spec:
         - "--remote-write.address=0.0.0.0:{{ .Values.receive.write.port }}"
         - "--objstore.config-file=/etc/config/object-store.yaml"
         - "--label=receive_replica={{ .Values.receive.receiveReplica }}"
-        {{- if .Values.query.extraArgs }}
-        {{ toYaml .Values.query.extraArgs | nindent 8 }}
+        {{- if .Values.receive.extraArgs }}
+        {{ toYaml .Values.receive.extraArgs | nindent 8 }}
         {{- end }}
         ports:
         - name: http
@@ -83,9 +83,9 @@ spec:
         livenessProbe:
         {{ toYaml .Values.receive.livenessProbe | nindent 10 }}
         {{- end }}
-        {{- if .Values.query.readinessProbe }}
+        {{- if .Values.receive.readinessProbe }}
         readinessProbe:
-        {{ toYaml .Values.query.readinessProbe | nindent 10 }}
+        {{ toYaml .Values.receive.readinessProbe | nindent 10 }}
         {{- end }}
       volumes:
       - name: data
