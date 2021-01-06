@@ -1,0 +1,26 @@
+{{- if .Values.prometheusOperator.kubeletService }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: kubelet
+{{ include "prometheus-operator.labels" . | indent 4 }}
+  name: {{ .Values.prometheusOperator.kubeletService.serviceName }}
+  namespace: {{ .Values.prometheusOperator.kubeletService.namespace }}
+spec:
+  clusterIP: None
+  ports:
+  - name: https-metrics
+    port: 10250
+    protocol: TCP
+    targetPort: 10250
+  - name: http-metrics
+    port: 10255
+    protocol: TCP
+    targetPort: 10255
+  - name: cadvisor
+    port: 4194
+    protocol: TCP
+    targetPort: 4194
+  type: ClusterIP
+{{- end }}
