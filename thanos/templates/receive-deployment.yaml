@@ -60,7 +60,7 @@ spec:
         - "--receive.local-endpoint=127.0.0.1:{{ .Values.receive.grpc.port }}"
         - "--remote-write.address=0.0.0.0:{{ .Values.receive.write.port }}"
         - "--objstore.config-file=/etc/config/object-store.yaml"
-        - "--label=receive_replica={{ .Values.receive.receiveReplica }}"
+        - "--label=receive_replica=\"{{ .Values.receive.receiveReplica }}\""
         {{- if .Values.receive.extraArgs }}
         {{ toYaml .Values.receive.extraArgs | nindent 8 }}
         {{- end }}
