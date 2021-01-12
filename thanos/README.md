@@ -355,5 +355,17 @@ timePartioning:
 | queryFrontend.cache.validity | | `` |
 | queryFrontend.log.request.decision | Request Logging for logging the start and end of requests | `LogFinishCall` |
 
+## Receive
+
+|Name|Description| Default Value|
+|----|-----------|--------------|
+| receive.enabled | Enable component | false |
+| receive.mountPath | Where the TSDB data directory is located. | './data' |
+| receive.retention | How long to retain samples in the TSDB | 15d |
+| receive.replicationFactor | How many times to replicate incoming write requests | 1 |
+| receive.receiveReplica | A label that identifies the receive replica. | 0 |
+| receive.write.port | The port on which Receive will listen for write requests. | 10908 |
+| receive.ingress.enabled | Enable ingress.  If false, no series will be accepted. | false |
+
 ## Contributing
 Contributions are very welcome!
