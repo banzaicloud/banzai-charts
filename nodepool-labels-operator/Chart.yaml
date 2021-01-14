@@ -1,5 +1,0 @@
-name: nodepool-labels-operator
-description: Banzai K8s Nodepool Labels Operator
-apiVersion: v1
-appVersion: 0.0.7
-version: 0.0.5
