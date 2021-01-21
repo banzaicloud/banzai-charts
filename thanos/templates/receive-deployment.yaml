@@ -54,7 +54,7 @@ spec:
         - "--log.format={{ .Values.receive.logFormat }}"
         - "--tsdb.path={{ .Values.receive.mountPath }}"
         - "--tsdb.retention={{ .Values.receive.retention}}"
-        - "--receive.replication-factor={{ .Values.reveive.replicationFactor }}"
+        - "--receive.replication-factor={{ .Values.receive.replicationFactor }}"
         - "--grpc-address=0.0.0.0:{{ .Values.receive.grpc.port }}"
         - "--http-address=0.0.0.0:{{ .Values.receive.http.port }}"
         - "--receive.local-endpoint=127.0.0.1:{{ .Values.receive.grpc.port }}"
