@@ -194,6 +194,7 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | store.replicaCount | Pod replica count | 1 |
 | store.logLevel | Log level | info |
 | store.logFormat | Log format to use. Possible options: logfmt or json. | logfmt |
+| store.indexCacheConfig | Index Cache Configuration as described in https://thanos.io/tip/components/store.md/#index-cache | {} |
 | store.indexCacheSize | Maximum size of items held in the index cache. | 250MB |
 | store.chunkPoolSize | Maximum size of concurrently allocatable bytes for chunks. | 2GB |
 | store.grpcSeriesSampleLimit | Maximum amount of samples returned via a single series call. 0 means no limit. NOTE: for efficiency we take 120 as the number of samples in chunk (it cannot be bigger than that), so the actual number of samples might be lower, even though the maximum could be hit. | 0 |
@@ -341,6 +342,7 @@ timePartioning:
 | queryFrontend.downstreamUrl | URL of downstream Prometheus Query compatible API. | |
 | queryFrontend.compressResponses | Compress HTTP responses. | `true` |
 | queryFrontend.logQueriesLongerThan | Log queries that are slower than the specified duration. | `0` (disabled) |
+| queryFrontend.indexCacheConfig | Index Cache Configuration as described in https://thanos.io/tip/components/query-frontend.md/#caching | {} |
 | queryFrontend.cacheCompressionType | Use compression in results cache. Supported values are: `snappy` and `` (disable compression). | `` |
 | queryFrontend.queryRange.alignRangeWithStep | See https://thanos.io/tip/components/query-frontend.md/#flags | `false` |
 | queryFrontend.queryRange.splitInterval | See https://thanos.io/tip/components/query-frontend.md/#flags  | `24h` |
@@ -349,10 +351,6 @@ timePartioning:
 | queryFrontend.queryRange.maxQueryParallelism | See https://thanos.io/tip/components/query-frontend.md/#flags  | `14` |
 | queryFrontend.queryRange.responseCacheMaxFreshness | See https://thanos.io/tip/components/query-frontend.md/#flag | `1m` |
 | queryFrontend.queryRange.noPartialResponse | See https://thanos.io/tip/components/query-frontend.md/#flags | `false` |
-| queryFrontend.cache.inMemory | Use inMemory cache? | `false` |
-| queryFrontend.cache.maxSize | Maximum Size of the cache. Use either this or `maxSizeItems`. | `` |
-| queryFrontend.cache.maxSizeItems | Maximum number of items in the cache. Use either this or `maxSize`. | `` |
-| queryFrontend.cache.validity | | `` |
 | queryFrontend.log.request.decision | Request Logging for logging the start and end of requests | `LogFinishCall` |
 
 ## Contributing
