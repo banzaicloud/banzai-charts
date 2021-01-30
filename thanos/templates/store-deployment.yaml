@@ -185,6 +185,9 @@ spec:
       {{- with  $root.Values.store.serviceAccount }}
       serviceAccountName: "{{ . }}"
       {{- end }}
+      {{- if $root.Values.priorityClassName }}
+      priorityClassName: {{ $root.Values.priorityClassName }}
+      {{- end }}
 ---
 {{- end }}
 {{- end }}
