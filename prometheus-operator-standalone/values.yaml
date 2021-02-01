@@ -186,10 +186,8 @@ prometheusOperator:
   ## Prometheus-operator image
   ##
   image:
-    repository: quay.io/coreos/prometheus-operator
-    tag: v0.40.0
-    tagFallback: v0.38.1 # Tag to use when having a 1.15 k8s cluster,
-    # as prometheus-operator >= v0.39 requires kubernetes 1.16
+    repository: quay.io/prometheus-operator/prometheus-operator
+    tag: v0.45.0
     pullPolicy: IfNotPresent
 
   ## K8S image
@@ -212,19 +210,11 @@ prometheusOperator:
     enabled: false
     newGroup: "" # name of the new group to map the monitoring.coreos.com to
 
-  ## Configmap-reload image to use for reloading configmaps
-  ##
-  configmapReloadImage:
-    repository: docker.io/jimmidyson/configmap-reload
-    tag: v0.3.0
-    sha: ""
-
   ## Prometheus-config-reloader image to use for config and rule reloading
   ##
   prometheusConfigReloaderImage:
-    repository: quay.io/coreos/prometheus-config-reloader
-    tag: v0.40.0
-    tagFallback: v0.38.1  # Tag to use when having a 1.15 k8s cluster
+    repository: quay.io/prometheus-operator/prometheus-config-reloader
+    tag: v0.45.0
     sha: ""
 
   ## Set the prometheus config reloader side-car CPU limit

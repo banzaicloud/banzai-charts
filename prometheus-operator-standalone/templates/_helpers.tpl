@@ -44,7 +44,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
 app.kubernetes.io/component: application
 {{- $kubeTargetVersion := default .Capabilities.KubeVersion.GitVersion .Values.kubeTargetVersionOverride }}
-prometheusoperator.coreos.com/version: {{ semverCompare ">= 1.16.0-0" $kubeTargetVersion | ternary .Values.prometheusOperator.image.tag .Values.prometheusOperator.image.tagFallback }}
+prometheusoperator.coreos.com/version: {{ .Values.prometheusOperator.image.tag }}
 {{- end }}
 
 {{- define "prometheus-operator.label-selectors" -}}
@@ -53,5 +53,5 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
 app.kubernetes.io/component: application
 {{- $kubeTargetVersion := default .Capabilities.KubeVersion.GitVersion .Values.kubeTargetVersionOverride }}
-prometheusoperator.coreos.com/version: {{ semverCompare ">= 1.16.0-0" $kubeTargetVersion | ternary .Values.prometheusOperator.image.tag .Values.prometheusOperator.image.tagFallback }}
+prometheusoperator.coreos.com/version: {{ .Values.prometheusOperator.image.tag }}
 {{- end }}
