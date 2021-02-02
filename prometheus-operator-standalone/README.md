@@ -1,6 +1,8 @@
 # Prometheus operator standalone
 
-This is a stripped down version of the upstream prometheus-operator chart.
+This is a stripped down version of the upstream
+[kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack)
+(originally prometheus-operator) chart.
 
 This chart can be used to install the prometheus operator only, additionally using
 the `.Values.prometheusOperator.customResourceGroupRemap` settings you can make it
