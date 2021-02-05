@@ -210,10 +210,6 @@ defaultDeployment:
   client:
     preferService: true
 
-  server:
-    root_url: ""
-    serve_from_sub_path: false
-
   ingress:
     enabled: false
     tlsEnabled: false
@@ -225,19 +221,26 @@ defaultDeployment:
   service:
     type: ClusterIP
     annotations: {}
-  log:
-    mode: console
-    level: warn
+  config:
+    log:
+      mode: console
+      level: warn
 
-  security:
-    adminUser: "root"
-    adminPassword: "secret"
-    allow_embedding: false
+    server:
+      root_url: ""
+      serve_from_sub_path: false
 
-  auth:
-    disableLoginForm: false
-    disableSignoutMenu: true
-    anonymous: false
+    security:
+      admin_user: "root"
+      admin_password: "secret"
+      allow_embedding: false
+
+    auth:
+      disable_login_form: false
+      disable_signout_menu: true
+
+    auth.anonymous:
+      enabled: true
 
   resources: {}
   readinessProbe:
