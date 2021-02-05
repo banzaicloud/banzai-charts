@@ -67,22 +67,9 @@ spec:
     annotations:
       {{- toYaml . | nindent 6 }}
   {{- end }}
-  config:
-    log:
-      mode: {{ .Values.defaultDeployment.log.mode }}
-      level: {{ .Values.defaultDeployment.log.level }}
-    security:
-      admin_user: {{ .Values.defaultDeployment.security.adminUser }}
-      admin_password: {{ .Values.defaultDeployment.security.adminPassword }}
-      allow_embedding: {{ .Values.defaultDeployment.security.allow_embedding }}
-    auth:
-      disable_login_form: {{ .Values.defaultDeployment.auth.disableLoginForm }}
-      disable_signout_menu: {{ .Values.defaultDeployment.auth.disableSignoutMenu }}
-    auth.anonymous:
-      enabled: {{ .Values.defaultDeployment.auth.anonymous }}
-    server:
-      root_url: {{ .Values.defaultDeployment.server.root_url | quote }}
-      serve_from_sub_path: {{ .Values.defaultDeployment.server.serve_from_sub_path }}
+  {{- with .Values.defaultDeployment.config }}
+  config: {{ toYaml . | nindent 4 }}
+  {{- end }}
   {{- if .Values.defaultDeployment.dashboardLabelSelector }}
   dashboardLabelSelector: {{- tpl (.Values.defaultDeployment.dashboardLabelSelector | toYaml) . | nindent 4}}
   {{- else }}
