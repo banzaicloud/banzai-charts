@@ -1096,6 +1096,7 @@ sidecar:
   http:
     # http listen port number
     port: 10902
+    targetPort: 10902
     # Service definition for sidecar http service
     service:
       type: ClusterIP
