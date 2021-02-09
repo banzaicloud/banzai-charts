@@ -10,7 +10,7 @@ imagePullPolicy: "IfNotPresent"
 replicas: 1
 
 postgresql:
-  enabled: true
+  enabled: false
   postgresqlUsername: dex
   postgresqlPassword: foo
   postgresqlDatabase: dex_db
@@ -89,20 +89,21 @@ config:
     skipApprovalScreen: false
 
   storage:
-    type: ""
+    type: "kubernetes"
     config:
-      database: ""
-      user: ""
-      password: ""
-      host: ""
-      ssl:
-        mode: ""
+      inCluster: true
+      # database: ""
+      # user: ""
+      # password: ""
+      # host: ""
+      # ssl:
+      #   mode: ""
 
   staticClients: []
 
   connectors: {}
 
-  enablePasswordDB: false
+  enablePasswordDB: true
   staticPasswords: []
 
 nodeSelector: {}
