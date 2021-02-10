@@ -20,7 +20,7 @@ Set up environment variables:
 
 ```bash
 export CASSANDRA_HOST=docker.for.mac.host.internal
-export CASSANDRA_PORT=9042
+export CASSANDRA_DB_PORT=9042
 # Optionally:
 # export CASSANDRA_USER=
 # export CASSANDRA_PASSWORD=
