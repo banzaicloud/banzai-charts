@@ -13,6 +13,7 @@ rules:
 {{- end  }}
   resources:
   - alertmanagers
+  - alertmanagerconfigs
   - prometheuses
   - thanosrulers
   - prometheuses/finalizers
@@ -20,8 +21,8 @@ rules:
   - thanosrulers/finalizers
   - servicemonitors
   - podmonitors
+  - probes
   - prometheusrules
-  - podmonitors
   verbs:
   - '*'
 - apiGroups:

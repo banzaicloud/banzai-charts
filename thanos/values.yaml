@@ -1096,6 +1096,7 @@ sidecar:
   http:
     # http listen port number
     port: 10902
+    targetPort: 10902
     # Service definition for sidecar http service
     service:
       type: ClusterIP
@@ -1132,6 +1133,9 @@ objstoreSecretOverride: ""
 # Text representation of the configuration
 objstoreFile: ""
 # YAML representation of the configuration. It's mutually exclusive with objstoreFile.
+# Priority class name to be used for all the pods
+# https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+priorityClassName: ""
 objstore: {}
   # type: GCS
   # config:

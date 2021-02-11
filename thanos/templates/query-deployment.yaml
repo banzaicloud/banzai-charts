@@ -153,4 +153,7 @@ spec:
       {{- with  (include "thanos.query.serviceaccount" . ) }}
       serviceAccountName: "{{ . }}"
       {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
 {{ end }}
