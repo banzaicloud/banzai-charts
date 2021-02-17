@@ -85,7 +85,7 @@ spec:
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
             - name: CASSANDRA_HOST
               value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
-            - name: CASSANDRA_PORT
+            - name: CASSANDRA_DB_PORT
               value: {{ include "cadence.persistence.cassandra.port" (list $ $store) | quote }}
             - name: CASSANDRA_KEYSPACE
               value: {{ $storeConfig.cassandra.keyspace }}
@@ -133,7 +133,7 @@ spec:
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
             - name: CASSANDRA_HOST
               value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
-            - name: CASSANDRA_PORT
+            - name: CASSANDRA_DB_PORT
               value: {{ include "cadence.persistence.cassandra.port" (list $ $store) | quote }}
             - name: CASSANDRA_KEYSPACE
               value: {{ $storeConfig.cassandra.keyspace }}
@@ -257,7 +257,7 @@ spec:
             {{- if eq (include "cadence.persistence.driver" (list $ $store)) "cassandra" }}
             - name: CASSANDRA_HOST
               value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
-            - name: CASSANDRA_PORT
+            - name: CASSANDRA_DB_PORT
               value: {{ include "cadence.persistence.cassandra.port" (list $ $store) | quote }}
             - name: CASSANDRA_KEYSPACE
               value: {{ $storeConfig.cassandra.keyspace }}

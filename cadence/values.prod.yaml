@@ -1,7 +1,7 @@
 server:
   podAnnotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '9090'
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
 
   config:
     persistence:
@@ -17,7 +17,7 @@ server:
           password: ""
 
         sql:
-          driver: "" # mysql
+          pluginName: "" # mysql
           host: ""
           # port: 3306
           database: cadence
@@ -36,7 +36,7 @@ server:
           password: ""
 
         sql:
-          driver: "" # mysql
+          pluginName: "" # mysql
           host: ""
           # port: 3306
           database: cadence_visibility
