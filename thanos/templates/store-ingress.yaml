@@ -10,9 +10,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: store
-  {{- if .Values.store.http.ingress.labels }}
-  {{ toYaml .Values.store.http.ingress.labels | indent 4 }}
-  {{- end }}
+{{- if .Values.store.http.ingress.labels }}
+{{ toYaml .Values.store.http.ingress.labels | indent 4 }}
+{{- end }}
   {{- with .Values.store.http.ingress.annotations }}
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -58,9 +58,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: store
-  {{- if .Values.store.grpc.ingress.labels }}
-  {{ toYaml .Values.store.grpc.ingress.labels | indent 4 }}
-  {{- end }}
+{{- if .Values.store.grpc.ingress.labels }}
+{{ toYaml .Values.store.grpc.ingress.labels | indent 4 }}
+{{- end }}
   {{- with .Values.store.grpc.ingress.annotations }}
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
