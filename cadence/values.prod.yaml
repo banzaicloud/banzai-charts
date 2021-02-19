@@ -23,6 +23,8 @@ server:
           database: cadence
           user: ""
           password: ""
+          encodingType: "thriftrw" # Note: required only until 0.18.0.
+          decodingTypes: ["thriftrw"] # Note: required only until 0.18.0.
 
       visibility:
         driver: "" # cassandra or sql
@@ -42,6 +44,8 @@ server:
           database: cadence_visibility
           user: ""
           password: ""
+          encodingType: "thriftrw" # Note: required only until 0.18.0.
+          decodingTypes: ["thriftrw"] # Note: required only until 0.18.0.
 
 schema:
   setup: false
