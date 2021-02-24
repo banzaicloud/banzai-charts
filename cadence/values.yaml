@@ -8,7 +8,7 @@ debug: false
 server:
   image:
     repository: ubercadence/server
-    tag: 0.17.0
+    tag: 0.18.0
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
@@ -92,8 +92,6 @@ server:
           # maxQPS: 1000
           # connectAttributes:
             # tx_isolation: "READ-COMMITTED"
-          encodingType: "thriftrw" # Note: required only until 0.18.0.
-          decodingTypes: ["thriftrw"] # Note: required only until 0.18.0.
 
       visibility:
         driver: "" # cassandra or sql
@@ -124,8 +122,6 @@ server:
           # maxQPS: 1000
           # connectAttributes:
             # tx_isolation: "READ-COMMITTED"
-          encodingType: "thriftrw" # Note: required only until 0.18.0.
-          decodingTypes: ["thriftrw"] # Note: required only until 0.18.0.
 
   frontend:
     # replicaCount: 1
