@@ -1,6 +1,6 @@
 name: cadence
-version: 0.16.1
-appVersion: 0.18.1
+version: 0.16.2
+appVersion: 0.18.2
 description: Cadence is a distributed, scalable, durable, and highly available orchestration engine to execute asynchronous long-running business logic in a scalable and resilient way.
 icon: https://raw.githubusercontent.com/uber/cadence-web/master/client/assets/logo.svg
 apiVersion: v1
