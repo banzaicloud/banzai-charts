@@ -8,7 +8,7 @@ keywords:
 - operator
 - prometheus
 name: prometheus-operator-standalone
-version: 13.2.1
+version: 13.2.2
 kubeVersion: ">=1.16.0-0"
 sources:
   - https://github.com/banzaicloud/banzai-charts
