@@ -231,7 +231,7 @@ Global options overridable per service are marked with an asterisk.
 | `nameOverride`                                    | Override name of the application                      | ``                    |
 | `fullnameOverride`                                | Override full name of the application                 | ``                    |
 | `server.image.repository`                         | Server image repository                               | `ubercadence/server`  |
-| `server.image.tag`                                | Server image tag                                      | `0.18.1`              |
+| `server.image.tag`                                | Server image tag                                      | `0.18.2`              |
 | `server.image.pullPolicy`                         | Server image pull policy                              | `IfNotPresent`        |
 | `server.replicaCount`*                            | Server replica count                                  | `1`                   |
 | `server.metrics.annotations.enabled`*             | Annotate pods with Prometheus annotations             | `false`               |
