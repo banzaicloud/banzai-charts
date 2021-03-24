@@ -52,7 +52,7 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.store.http.port }}
-      targetPort: {{ .Values.store.http.targetPort }}
+      targetPort: http
       protocol: TCP
       name: http
   selector:
