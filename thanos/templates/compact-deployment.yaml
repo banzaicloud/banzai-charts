@@ -79,7 +79,7 @@ spec:
         - name: relabel-configs-volume
           mountPath: /var/thanos/relabel-configs
         {{ end }}
-         resources: {{ toYaml .Values.compact.resources | nindent 10 }}
+        resources: {{ toYaml .Values.compact.resources | nindent 10 }}
       volumes:
       - name: data-volume
       {{- if .Values.compact.dataVolume.backend }}

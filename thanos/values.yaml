@@ -714,7 +714,7 @@ compact:
   #relael-configs to use for sharding the compactor
   #https://thanos.io/tip/components/compact.md/#flags
   #https://thanos.io/tip/thanos/sharding.md/#relabelling
-  relabel-configs: []
+  relabel_configs: []
 
 bucket:
   enabled: true
