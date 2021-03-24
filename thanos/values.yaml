@@ -186,6 +186,10 @@ store:
     # shards:
   # InitContainers allows injecting specialized containers that run before app containers. This is meant to pre-configure and tune mounted volume permissions.
   initContainers: []
+
+  #relael-configs to use for sharding the store
+  #https://thanos.io/tip/thanos/sharding.md/#relabelling
+  relabel_configs: []
 query:
   enabled: true
   # Labels to treat as a replica indicator along which data is deduplicated.
