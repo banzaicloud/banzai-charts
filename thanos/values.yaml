@@ -711,10 +711,14 @@ compact:
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
 
-  #relael-configs to use for sharding the compactor
+  #relabel-configs to use for sharding the compactor
   #https://thanos.io/tip/components/compact.md/#flags
   #https://thanos.io/tip/thanos/sharding.md/#relabelling
   relabel_configs: []
+   #- action: drop
+   #  regex: "A"
+   #  source_labels:
+   #  - cluster
 
 bucket:
   enabled: true
