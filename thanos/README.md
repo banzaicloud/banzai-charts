@@ -260,7 +260,7 @@ timePartioning:
 | query.autoscaling.targetCPUUtilizationPercentage | 	Target CPU utilization percentage to scale | 50 |
 | query.autoscaling.targetMemoryUtilizationPercentage |	Target memory utilization percentage to scale 50 |
 | query.serviceAccount | Name of the Kubernetes service account to use | "" |
-| query.serviceAccountAnnotations | Optional annotations to be added to the query ServiceAccount | {} |
+| query.serviceAccountAnnotations | Optional annotations to be added to the ServiceAccount | {} |
 | query.psp.enabled | Enable pod security policy, it also requires the `query.rbac.enabled` to be set to `true`. | false |
 | query.rbac.enabled | Enable RBAC to use the PSP | false |
 | query.livenessProbe | Set up liveness probe for query | {} |
@@ -355,7 +355,7 @@ timePartioning:
 | queryFrontend.cache.maxSizeItems | Maximum number of items in the cache. Use either this or `maxSize`. | `` |
 | queryFrontend.cache.validity | | `` |
 | queryFrontend.log.request.decision | Request Logging for logging the start and end of requests | `LogFinishCall` |
-| queryFrontend.serviceAccountAnnotations | Optional annotations to be added to the queryFrontend ServiceAccount | {} |
+| queryFrontend.serviceAccountAnnotations | Optional annotations to be added to the ServiceAccount | {} |
 
 ## Contributing
 Contributions are very welcome!
