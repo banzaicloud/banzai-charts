@@ -956,9 +956,9 @@ spec:
                 "30d"
             ]
         },
-        "timezone": "UTC",
+        "timezone": "utc",
         "title": "USE Method / Cluster",
-        "uid": "3e97d1d02672cdd0861f4c97c64f89b2",
+        "uid": "",
         "version": 0
     }
 {{- end }}

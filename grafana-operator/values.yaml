@@ -47,7 +47,7 @@ image:
   ## TODO change to original repo after release of UID fixes
   registry: quay.io
   repository: integreatly/grafana-operator
-  tag: v3.8.1
+  tag: v3.9.0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -71,7 +71,7 @@ grafana:
   image:
     registry: docker.io
     repository: grafana/grafana
-    tag: 7.3.7
+    tag: 7.5.3
   deployment:
     annotations: {}
     labels: {}
