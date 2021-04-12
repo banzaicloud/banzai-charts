@@ -304,3 +304,11 @@ installing the chart. For example:
 ```bash
 $ helm install --name my-release --values values.yaml banzaicloud-stable/cadence
 ```
+
+## Contributing
+
+### Chart upgrade
+
+For contributions involving an upgrade to the Cadence server version or
+modifying the chart and subsequently releasing new chart versions, please refer
+to the [Cadence chart upgrade documentation](docs/cadence_chart_upgrade.md)
