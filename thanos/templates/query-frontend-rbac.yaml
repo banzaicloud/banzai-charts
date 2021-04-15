@@ -3,6 +3,9 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  {{- with .Values.queryFrontend.serviceAccountAnnotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
   name: {{ include "thanos.componentname" (list $ "query-frontend") }}
   labels:
     app.kubernetes.io/name: {{ include "thanos.name" . }}

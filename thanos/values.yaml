@@ -291,6 +291,8 @@ query:
       #    hosts:
       #      - chart-example.local
   serviceAccount: ""
+  # Optional annotations to be added to the ServiceAccount
+  serviceAccountAnnotations: {}
 
   psp:
     enabled: false
@@ -597,6 +599,9 @@ queryFrontend:
   # Pod affinity
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
+
+  # Optional annotations to be added to the ServiceAccount
+  serviceAccountAnnotations: {}
 
 compact:
   enabled: true
