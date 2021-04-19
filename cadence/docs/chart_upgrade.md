@@ -105,22 +105,24 @@ breaking changes of major version 0.Minor.Patch.
 
 2. In case of changing the server version:
 
-   1. update the latest supported version at the
-      [`cadence/README.md`](https://github.com/banzaicloud/banzai-charts/blob/master/cadence/README.md)'s
-      `Prerequisites` section and the `Configuration / server.image.tag`
-      parameter's default value to the new **server version**,
+   1. update the required version at the [`Prerequisites` section of the
+      `cadence/README.md`](../README.md#Prerequisites)'s to the new **server
+      version**,
 
-   2. update the value of the
-      [`cadence/Chart.yaml`](https://github.com/banzaicloud/banzai-charts/blob/master/cadence/Chart.yaml)'s
-      `appVersion` field to the new **server version**,
+   2. Also update the default value of the [`Configuration / server.image.tag`
+      parameter in the `cadence/README.md`](../README.md#Configuration) to the
+      new **server version**,
 
-   3. update the value of the
-      [`cadence/values.yaml`](https://github.com/banzaicloud/banzai-charts/blob/master/cadence/values.yaml)'s
-      `server.image.tag` field to the new **server version**,
+   3. update the chart's default application version at the [`appVersion` field
+      in the `cadence/Chart.yaml`](../Chart.yaml)'s to the new **server
+      version**,
 
-3. Update the value of the
-   [`cadence/Chart.yaml`](https://github.com/banzaicloud/banzai-charts/blob/master/cadence/Chart.yaml)'s
-   `version` field to the newly determined **chart version**,
+   4. update the image tag version at the [`server.image.tag` field in the
+      `cadence/values.yaml`](../values.yaml)'s, to the new **server version**
+
+3. Update the chart's version at the [`version` field in the
+   `cadence/Chart.yaml`](../Chart.yaml)'s to the newly determined **chart
+   version**,
 
 4. **If there are any minor or major (breaking) changes affecting the chart,
    update the chart files accordingly to incorporate those changes.** Make sure
@@ -145,7 +147,6 @@ method.
    ```shell
    export BANZAI_INSTALLER_WORKSPACE_NAME="cadence-chart-upgrade"
    export BANZAI_INSTALLER_WORKSPACE="${HOME}/.banzai/pipeline/${BANZAI_INSTALLER_WORKSPACE_NAME}"
-   export BANZAI_INSTALLER_WORKSPACE_VALUES="${BANZAI_INSTALLER_WORKSPACE}/values.yaml"
    ```
 
 2. **If you have no Pipeline control plane workspace set up for testing**
@@ -160,6 +161,12 @@ method.
    (for the following steps you **MAY** use the [yq CLI Yaml
    processor](https://github.com/mikefarah/yq).)
 
+   b, Save the workspace values YAML file's location for reuse.
+
+   ```shell
+   export BANZAI_INSTALLER_WORKSPACE_VALUES="${BANZAI_INSTALLER_WORKSPACE}/values.yaml"
+   ```
+
    b, You **MUST** set up a
    [CloudInfo](https://github.com/banzaicloud/cloudinfo/) instance to be used
    for test cluster creation. Currently there is no publicly available hosted
@@ -168,6 +175,7 @@ method.
    ```shell
    yq eval ".pipeline.configuration.cloudinfo.endpoint = \"${YOUR_CLOUDINFO_INSTANCE_ENDPOINT}\"" "${BANZAI_INSTALLER_WORKSPACE_VALUES}" --inplace
    ```
+
    c, You **MAY** change the workspace `values.yaml` 's ` installer.image` value
    to `banzaicloud/pipeline-installer:latest` so it always uses the latest
    available tag, automatically keeping it up to date.
@@ -262,7 +270,7 @@ method.
 
     ```shell
     banzai secret create
-    banzai cluster create --name "${BANZAI_INSTALLER_WORKSPACE_NAME}-pre"
+    banzai cluster create --name "${BANZAI_INSTALLER_WORKSPACE_NAME}-pre" --file ...
     watch banzai cluster list
     ```
 
@@ -270,7 +278,7 @@ method.
     to the new server version you are testing.
 
     ```shell
-    helm upgrade --debug --install--kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud cadence ./cadence # where ${PWD} == local banzaicloud/banzai-charts repository.
+    helm upgrade --debug --install --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud cadence ./cadence # where ${PWD} == local banzaicloud/banzai-charts repository.
     ```
 
 13. If the upgrade finishes successfully, wait for the old pods being terminated
@@ -289,7 +297,7 @@ method.
 15. Start creating a new cluster
 
     ```shell
-    banzai cluster create --name "${BANZAI_INSTALLER_WORKSPACE_NAME}-post"
+    banzai cluster create --name "${BANZAI_INSTALLER_WORKSPACE_NAME}-post" --file ...
     ```
 
 16. Upgrade the previously existing cluster's node pool. Wait for it to finish
