@@ -278,7 +278,8 @@ method.
     to the new server version you are testing.
 
     ```shell
-    helm upgrade --debug --install --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud cadence ./cadence # where ${PWD} == local banzaicloud/banzai-charts repository.
+    helm dep build cadence # where ${PWD} == local banzaicloud/banzai-charts repository.
+    helm upgrade --debug --install --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud cadence ./cadence
     ```
 
 13. If the upgrade finishes successfully, wait for the old pods being terminated
