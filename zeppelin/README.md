@@ -2,6 +2,10 @@
 
 [Zeppelin](https://zeppelin.apache.org/) is a web based notebook for interactive data analytics with Spark, SQL and Scala.
 
+## DEPRECATION NOTICE
+
+This chart is deprecated and no longer supported.
+
 ## Chart Details
 
 ## Installing the Chart

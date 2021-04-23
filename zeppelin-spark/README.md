@@ -8,6 +8,10 @@ This is a composite chart deploying the following sub-charts:
   - [Spark Resource Staging Server](https://github.com/banzaicloud/banzai-charts/tree/master/spark-rss) only if enabled (default *resourceStagingServer.enabled=false*)
   - [Spark Shuffle Service](https://github.com/banzaicloud/banzai-charts/tree/master/spark-shuffle) only if enabled (default *sparkShuffle.enabled=false*)
 
+## DEPRECATION NOTICE
+
+This chart is deprecated and no longer supported.
+
 ## Chart Details
 
 ## Installing the Chart
