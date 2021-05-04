@@ -61,6 +61,9 @@ spec:
         - "--retention.resolution-1h={{ .Values.compact.retentionResolution1h }}"
         - "--block-sync-concurrency={{ .Values.compact.blockSyncConcurrency }}"
         - "--compact.concurrency={{ .Values.compact.compactConcurrency }}"
+        {{- if .Values.compact.relabel_configs  }}
+        - "--selector.relabel-config-file=/var/thanos/relabel-configs/relabel-configs.yaml"
+        {{- end }}
         - "--wait"
 {{ with .Values.compact.extraArgs }}{{ toYaml . | indent 8 }}{{- end }}
         ports:
@@ -72,6 +75,10 @@ spec:
           readOnly: true
         - name: data-volume
           mountPath: /var/thanos/compact
+        {{- if .Values.compact.relabel_configs  }}
+        - name: relabel-configs-volume
+          mountPath: /var/thanos/relabel-configs
+        {{ end }}
         resources: {{ toYaml .Values.compact.resources | nindent 10 }}
       volumes:
       - name: data-volume
@@ -87,6 +94,11 @@ spec:
           {{- else }}
           secretName: {{ include "thanos.fullname" . }}
           {{- end }}
+      {{- if .Values.compact.relabel_configs  }}
+      - name: relabel-configs-volume
+        configMap:
+          name: {{ include "thanos.componentname" (list $ "compact") }}-relabel-configs
+      {{- end }}
       {{- with .Values.compact.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
       {{- end }}

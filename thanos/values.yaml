@@ -716,6 +716,15 @@ compact:
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity
   affinity: {}
 
+  #relabel-configs to use for sharding the compactor
+  #https://thanos.io/tip/components/compact.md/#flags
+  #https://thanos.io/tip/thanos/sharding.md/#relabelling
+  relabel_configs: []
+   #- action: drop
+   #  regex: "A"
+   #  source_labels:
+   #  - cluster
+
 bucket:
   enabled: true
   # Number of replicas running from bucket component
