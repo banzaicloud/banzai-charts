@@ -89,7 +89,7 @@ data:
         {{- if or .Values.server.metrics.statsd .Values.server.frontend.metrics.statsd }}
           statsd:
             hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.frontend.metrics.statsd.hostPort | quote }}
-            prefix: "cadence.frontend"
+            prefix: {{ `{{ default .Env.STATSD_FRONTEND_PREFIX "cadence.frontend" }}` }}
         {{- end}}
 
       history:
@@ -105,7 +105,7 @@ data:
         {{- if or .Values.server.metrics.statsd .Values.server.history.metrics.statsd }}
           statsd:
             hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.history.metrics.statsd.hostPort | quote }}
-            prefix: "cadence.history"
+            prefix: {{ `{{ default .Env.STATSD_HISTORY_PREFIX "cadence.history" }}` }}
         {{- end}}
 
       matching:
@@ -121,7 +121,7 @@ data:
         {{- if or .Values.server.metrics.statsd .Values.server.matching.metrics.statsd }}
           statsd:
             hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.matching.metrics.statsd.hostPort | quote }}
-            prefix: "cadence.matching"
+            prefix: {{ `{{ default .Env.STATSD_FRONTEND_PREFIX "cadence.matching" }}` }}
         {{- end}}
 
       worker:
@@ -137,23 +137,34 @@ data:
         {{- if or .Values.server.metrics.statsd .Values.server.worker.metrics.statsd }}
           statsd:
             hostPort: {{ default .Values.server.metrics.statsd.hostPort .Values.server.worker.metrics.statsd.hostPort | quote }}
-            prefix: "cadence.worker"
+            prefix: {{ `{{ default .Env.STATSD_WORKER_PREFIX "cadence.worker" }}` }}
         {{- end}}
 
     clusterMetadata:
-      enableGlobalDomain: false
+      enableGlobalDomain: {{ `{{ default .Env.ENABLE_GLOBAL_DOMAIN "false" }}` }}
       failoverVersionIncrement: 10
-      masterClusterName: "active"
-      currentClusterName: "active"
+      masterClusterName: "primary"
+    {{- if `{{ .Env.IS_NOT_PRIMARY }}` }}
+      currentClusterName: "secondary"
+    {{- else }}
+      currentClusterName: "primary"
+    {{- end }}
       clusterInformation:
-        active:
+        primary:
           enabled: true
           initialFailoverVersion: 0
           rpcName: "cadence-frontend"
-          rpcAddress: "127.0.0.1:7933"
+          rpcAddress: {{ `{{ default .Env.PRIMARY_SEEDS "cadence" }}` }}:7933
+      {{- if `{{ .Env.ENABLE_GLOBAL_DOMAIN }}` }}
+        secondary:
+            enabled: true
+            initialFailoverVersion: 2
+            rpcName: "cadence-frontend"
+            rpcAddress: {{ `{{ default .Env.SECONDARY_SEEDS "cadence-secondary" }}` }}:7933
+      {{- end }}
 
     dcRedirectionPolicy:
-      policy: "noop"
+      policy: {{ `{{ default .Env.DC_REDIRECT_POLICY "selected-apis-forwarding" }}` }}
       toDC: ""
 
     archival:

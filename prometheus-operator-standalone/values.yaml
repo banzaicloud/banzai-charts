@@ -199,10 +199,10 @@ prometheusOperator:
     resources:
       limits:
         cpu: 100m
-        memory: 100Mi
+        memory: 300Mi
       requests:
         cpu: 50m
-        memory: 50Mi
+        memory: 150Mi
 
   createCustomResource: true
 

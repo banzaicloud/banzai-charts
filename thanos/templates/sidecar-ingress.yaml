@@ -11,9 +11,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: sidecar
-    {{- if .Values.sidecar.http.ingress.labels }}
-  {{ toYaml .Values.sidecar.ingress.http.labels | indent 4 }}
-  {{- end }}
+{{- if .Values.sidecar.http.ingress.labels }}
+{{ toYaml .Values.sidecar.ingress.http.labels | indent 4 }}
+{{- end }}
   {{- with .Values.sidecar.http.ingress.annotations }}
   annotations: {{ toYaml . | nindent 4 }}
     {{- end }}
@@ -60,9 +60,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: sidecar
-    {{- if .Values.sidecar.grpc.ingress.labels }}
-  {{ toYaml .Values.sidecar.grpc.ingress.labels | indent 4 }}
-  {{- end }}
+{{- if .Values.sidecar.grpc.ingress.labels }}
+{{ toYaml .Values.sidecar.grpc.ingress.labels | indent 4 }}
+{{- end }}
   {{- with .Values.sidecar.grpc.ingress.annotations }}
   annotations: {{ toYaml . | nindent 4 }}
     {{- end }}
