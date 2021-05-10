@@ -20,8 +20,10 @@ metadata:
 spec:
   {{- if .Values.sidecar.http.ingress.defaultBackend }}
   backend:
-    serviceName: {{ include "thanos.componentname" (list $ "sidecar") }}-http
-    servicePort: {{ $.Values.sidecar.http.port }}
+    service:
+      name: {{ include "thanos.componentname" (list $ "sidecar") }}-http
+      port:
+        number: {{ $.Values.sidecar.http.port }}
   {{- end }}
   {{- if .Values.sidecar.http.ingress.tls }}
   tls:

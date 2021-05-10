@@ -20,8 +20,10 @@ metadata:
 spec:
   {{- if .Values.query.http.ingress.defaultBackend }}
   backend:
-    serviceName: {{ include "thanos.componentname" (list $ "query") }}-http
-    servicePort: {{ $.Values.query.http.port }}
+    service:
+      name: {{ include "thanos.componentname" (list $ "query") }}-http
+      port:
+        number: {{ $.Values.query.http.port }}
   {{- end }}
   {{- if .Values.query.http.ingress.tls }}
   tls:
