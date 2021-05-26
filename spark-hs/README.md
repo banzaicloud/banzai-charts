@@ -2,6 +2,10 @@
 
 [SHS](https://apache-spark-on-k8s.github.io/userdocs/running-on-kubernetes.html) Spark History Server is the web UI for completed and running (aka incomplete) Spark applications. It is an extension of Spark’s web UI.
 
+## DEPRECATION NOTICE
+
+This chart is deprecated and no longer supported.
+
 ## Chart Details
 
 ## Installing the Chart
