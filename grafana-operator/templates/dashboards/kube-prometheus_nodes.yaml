@@ -55,6 +55,7 @@ spec:
                         "dashes": false,
                         "datasource": "$datasource",
                         "fill": 1,
+                        "fillGradient": 0,
                         "gridPos": {
 
                         },
@@ -91,9 +92,8 @@ spec:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "(\n  (1 - rate(node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\", instance=\"$instance\"}[$__interval]))\n/ ignoring(cpu) group_left\n  count without (cpu)( node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\", instance=\"$instance\"})\n)\n",
+                                "expr": "(\n  (1 - rate(node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\", instance=\"$instance\"}[$__rate_interval]))\n/ ignoring(cpu) group_left\n  count without (cpu)( node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\", instance=\"$instance\"})\n)\n",
                                 "format": "time_series",
-                                "interval": "1m",
                                 "intervalFactor": 5,
                                 "legendFormat": "{{`{{`}}cpu{{`}}`}}",
                                 "refId": "A"
@@ -106,7 +106,7 @@ spec:
                         "timeShift": null,
                         "title": "CPU Usage",
                         "tooltip": {
-                            "shared": false,
+                            "shared": true,
                             "sort": 0,
                             "value_type": "individual"
                         },
@@ -148,6 +148,7 @@ spec:
                         "dashes": false,
                         "datasource": "$datasource",
                         "fill": 0,
+                        "fillGradient": 0,
                         "gridPos": {
 
                         },
@@ -219,7 +220,7 @@ spec:
                         "timeShift": null,
                         "title": "Load Average",
                         "tooltip": {
-                            "shared": false,
+                            "shared": true,
                             "sort": 0,
                             "value_type": "individual"
                         },
@@ -274,6 +275,7 @@ spec:
                         "dashes": false,
                         "datasource": "$datasource",
                         "fill": 1,
+                        "fillGradient": 0,
                         "gridPos": {
 
                         },
@@ -345,7 +347,7 @@ spec:
                         "timeShift": null,
                         "title": "Memory Usage",
                         "tooltip": {
-                            "shared": false,
+                            "shared": true,
                             "sort": 0,
                             "value_type": "individual"
                         },
@@ -448,9 +450,6 @@ spec:
                         ],
                         "thresholds": "80, 90",
                         "title": "Memory Usage",
-                        "tooltip": {
-                            "shared": false
-                        },
                         "type": "singlestat",
                         "valueFontSize": "80%",
                         "valueMaps": [
@@ -484,6 +483,7 @@ spec:
                         "dashes": false,
                         "datasource": "$datasource",
                         "fill": 0,
+                        "fillGradient": 0,
                         "gridPos": {
 
                         },
@@ -527,25 +527,22 @@ spec:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "rate(node_disk_read_bytes_total{job=\"node-exporter\", instance=\"$instance\", device=~\"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\"}[$__interval])",
+                                "expr": "rate(node_disk_read_bytes_total{job=\"node-exporter\", instance=\"$instance\", device=~\"mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\"}[$__rate_interval])",
                                 "format": "time_series",
-                                "interval": "1m",
                                 "intervalFactor": 2,
                                 "legendFormat": "{{`{{`}}device{{`}}`}} read",
                                 "refId": "A"
                             },
                             {
-                                "expr": "rate(node_disk_written_bytes_total{job=\"node-exporter\", instance=\"$instance\", device=~\"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\"}[$__interval])",
+                                "expr": "rate(node_disk_written_bytes_total{job=\"node-exporter\", instance=\"$instance\", device=~\"mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\"}[$__rate_interval])",
                                 "format": "time_series",
-                                "interval": "1m",
                                 "intervalFactor": 2,
                                 "legendFormat": "{{`{{`}}device{{`}}`}} written",
                                 "refId": "B"
                             },
                             {
-                                "expr": "rate(node_disk_io_time_seconds_total{job=\"node-exporter\", instance=\"$instance\", device=~\"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\"}[$__interval])",
+                                "expr": "rate(node_disk_io_time_seconds_total{job=\"node-exporter\", instance=\"$instance\", device=~\"mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\"}[$__rate_interval])",
                                 "format": "time_series",
-                                "interval": "1m",
                                 "intervalFactor": 2,
                                 "legendFormat": "{{`{{`}}device{{`}}`}} io time",
                                 "refId": "C"
@@ -558,7 +555,7 @@ spec:
                         "timeShift": null,
                         "title": "Disk I/O",
                         "tooltip": {
-                            "shared": false,
+                            "shared": true,
                             "sort": 0,
                             "value_type": "individual"
                         },
@@ -600,6 +597,7 @@ spec:
                         "dashes": false,
                         "datasource": "$datasource",
                         "fill": 1,
+                        "fillGradient": 0,
                         "gridPos": {
 
                         },
@@ -664,7 +662,7 @@ spec:
                         "timeShift": null,
                         "title": "Disk Space Usage",
                         "tooltip": {
-                            "shared": false,
+                            "shared": true,
                             "sort": 0,
                             "value_type": "individual"
                         },
@@ -719,6 +717,7 @@ spec:
                         "dashes": false,
                         "datasource": "$datasource",
                         "fill": 0,
+                        "fillGradient": 0,
                         "gridPos": {
 
                         },
@@ -755,9 +754,8 @@ spec:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "rate(node_network_receive_bytes_total{job=\"node-exporter\", instance=\"$instance\", device!=\"lo\"}[$__interval])",
+                                "expr": "rate(node_network_receive_bytes_total{job=\"node-exporter\", instance=\"$instance\", device!=\"lo\"}[$__rate_interval])",
                                 "format": "time_series",
-                                "interval": "1m",
                                 "intervalFactor": 2,
                                 "legendFormat": "{{`{{`}}device{{`}}`}}",
                                 "refId": "A"
@@ -770,7 +768,7 @@ spec:
                         "timeShift": null,
                         "title": "Network Received",
                         "tooltip": {
-                            "shared": false,
+                            "shared": true,
                             "sort": 0,
                             "value_type": "individual"
                         },
@@ -812,6 +810,7 @@ spec:
                         "dashes": false,
                         "datasource": "$datasource",
                         "fill": 0,
+                        "fillGradient": 0,
                         "gridPos": {
 
                         },
@@ -848,9 +847,8 @@ spec:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "rate(node_network_transmit_bytes_total{job=\"node-exporter\", instance=\"$instance\", device!=\"lo\"}[$__interval])",
+                                "expr": "rate(node_network_transmit_bytes_total{job=\"node-exporter\", instance=\"$instance\", device!=\"lo\"}[$__rate_interval])",
                                 "format": "time_series",
-                                "interval": "1m",
                                 "intervalFactor": 2,
                                 "legendFormat": "{{`{{`}}device{{`}}`}}",
                                 "refId": "A"
@@ -863,7 +861,7 @@ spec:
                         "timeShift": null,
                         "title": "Network Transmitted",
                         "tooltip": {
-                            "shared": false,
+                            "shared": true,
                             "sort": 0,
                             "value_type": "individual"
                         },
@@ -986,9 +984,8 @@ spec:
                 "30d"
             ]
         },
-        "timezone": "UTC",
+        "timezone": "browser",
         "title": "Nodes",
-        "uid": "fa49a4706d07a042595b664c87fb33ea",
         "version": 0
     }
 {{- end }}
