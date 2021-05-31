@@ -69,16 +69,16 @@ data:
       name: cadence
       bootstrapMode: dns
       bootstrapHosts:
-        - {{ include "cadence.componentname" (list . "frontend-headless") }}:{{ .Values.server.frontend.service.port }}
-        - {{ include "cadence.componentname" (list . "history-headless") }}:{{ .Values.server.history.service.port }}
-        - {{ include "cadence.componentname" (list . "matching-headless") }}:{{ .Values.server.matching.service.port }}
-        - {{ include "cadence.componentname" (list . "worker-headless") }}:{{ .Values.server.worker.service.port }}
+        - {{ include "cadence.componentname" (list . "frontend-headless") }}:{{ .Values.server.frontend.service.port | default `{{ .Env.FRONTEND_PORT | default 7933 }}` }}
+        - {{ include "cadence.componentname" (list . "history-headless") }}:{{ .Values.server.history.service.port | default `{{ .Env.HISTORY_PORT | default 7934 }}` }}
+        - {{ include "cadence.componentname" (list . "matching-headless") }}:{{ .Values.server.matching.service.port | default `{{ .Env.MATCHING_PORT | default 7935 }}` }}
+        - {{ include "cadence.componentname" (list . "worker-headless") }}:{{ .Values.server.worker.service.port | default `{{ .Env.WORKER_PORT | default 7939 }}` }}
       maxJoinDuration: 30s
 
     services:
       frontend:
         rpc:
-          port: {{ include "cadence.frontend.internalPort" . }}
+          port: {{ include "cadence.frontend.internalPort" . | default `{{ .Env.FRONTEND_PORT | default 7933 }}` }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
@@ -95,7 +95,7 @@ data:
 
       history:
         rpc:
-          port: {{ include "cadence.history.internalPort" . }}
+          port: {{ include "cadence.history.internalPort" . | default `{{ .Env.HISTORY_PORT | default 7934 }}` }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
@@ -112,7 +112,7 @@ data:
 
       matching:
         rpc:
-          port: {{ include "cadence.matching.internalPort" . }}
+          port: {{ include "cadence.matching.internalPort" . | default `{{ .Env.MATCHING_PORT | default 7935 }}` }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
@@ -129,7 +129,7 @@ data:
 
       worker:
         rpc:
-          port: {{ include "cadence.worker.internalPort" . }}
+          port: {{ include "cadence.worker.internalPort" . | default `{{ .Env.WORKER_PORT | default 7939 }}` }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
@@ -158,13 +158,13 @@ data:
           enabled: true
           initialFailoverVersion: 0
           rpcName: "cadence-frontend"
-          rpcAddress: {{ `{{ default .Env.PRIMARY_SEEDS "cadence" }}` }}:7933
+          rpcAddress: {{ `{{ .Env.PRIMARY_FRONTEND_SERVICE | default "cadence" }}` }}:{{ .Values.server.frontend.service.port | default `{{ .Env.FRONTEND_PORT | default 7933 }}` }}
       {{- if `{{ .Env.ENABLE_GLOBAL_DOMAIN }}` }}
         secondary:
             enabled: true
             initialFailoverVersion: 2
             rpcName: "cadence-frontend"
-            rpcAddress: {{ `{{ default .Env.SECONDARY_SEEDS "cadence-secondary" }}` }}:7933
+            rpcAddress: {{ `{{ .Env.SECONDARY_FRONTEND_SERVICE | default "cadence-secondary" }}` }}:{{ .Values.server.frontend.service.port | default `{{ .Env.FRONTEND_PORT | default 7933 }}` }}
       {{- end }}
 
     dcRedirectionPolicy:
@@ -175,7 +175,7 @@ data:
       status: "disabled"
 
     publicClient:
-      hostPort: "{{ include "cadence.componentname" (list . "frontend") }}:{{ .Values.server.frontend.service.port }}"
+      hostPort: "{{ include "cadence.componentname" (list . "frontend") | default `{{ .Env.FRONTEND_SERVICE | default "127.0.0.1" }}` }}:{{ .Values.server.frontend.service.port | default `{{ .Env.FRONTEND_PORT | default 7933 }}` }}"
 
     dynamicConfigClient:
       filepath: "/etc/cadence/config/dynamicconfig/config.yaml"
