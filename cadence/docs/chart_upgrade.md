@@ -70,6 +70,20 @@ section II. should be skipped.
    API's libraries and binaries (and the public interface of those) with an
    emphasis on the static configuration.
 
+4. Check the available [Cadence web
+   tags](https://github.com/uber/cadence-web/tags).
+
+   If there is a **web version** to upgrade to, pick the latest
+   available patch version of the chosen minor version.
+
+5. Note down any potential major (breaking) change between the last **chart
+   supported** web version and the chosen next web version. Breaking
+   changes are usually listed as notes or breaking changes at the upstream tag
+   description.
+
+6. Make sure the selected **web version** is compatible with the chosen **server
+   version** (the latter takes precedence when determining the baseline).
+
 ## III. Determine the new chart version
 
 [Note: major version 0.Minor.Patch may contain breaking changes in any version
@@ -110,19 +124,22 @@ breaking changes of major version 0.Minor.Patch.
       version**,
 
    2. Also update the default value of the [`Configuration / server.image.tag`
-      parameter in the `cadence/README.md`](../README.md#Configuration) to the
-      new **server version**,
+      and optionally the `Configuration / web.image.tag` parameters in the
+      `cadence/README.md`](../README.md#Configuration) to the new **server
+      version** and **web version** respectively,
 
    3. update the chart's default application version at the [`appVersion` field
       in the `cadence/Chart.yaml`](../Chart.yaml)'s to the new **server
       version**,
 
-   4. update the image tag version at the [`server.image.tag` field in the
+   4. update the image tag version at the [`server.image.tag`  and optionally
+      the `web.image.tag` fields in the
       `cadence/values.yaml`](../values.yaml)'s, to the new **server version**
+      and **web version** respectively.
 
 3. Update the chart's version at the [`version` field in the
    `cadence/Chart.yaml`](../Chart.yaml)'s to the newly determined **chart
-   version**,
+   version**.
 
 4. **If there are any minor or major (breaking) changes affecting the chart,
    update the chart files accordingly to incorporate those changes.** Make sure
@@ -176,7 +193,13 @@ method.
    yq eval ".pipeline.configuration.cloudinfo.endpoint = \"${YOUR_CLOUDINFO_INSTANCE_ENDPOINT}\"" "${BANZAI_INSTALLER_WORKSPACE_VALUES}" --inplace
    ```
 
-   c, You **MAY** change the workspace `values.yaml` 's ` installer.image` value
+   c, You **MUST** enable the Cadence web frontend in case you need it.
+
+   ```shell
+   yq eval ".cadence.web.enabled = true" "${BANZAI_INSTALLER_WORKSPACE_VALUES}" --inplace
+   ```
+
+   d, You **MAY** change the workspace `values.yaml` 's ` installer.image` value
    to `banzaicloud/pipeline-installer:latest` so it always uses the latest
    available tag, automatically keeping it up to date.
 
@@ -184,7 +207,7 @@ method.
    yq eval ".installer.image = \"$(yq eval .installer.image ${BANZAI_INSTALLER_WORKSPACE_VALUES} | sed -E 's/banzaicloud\/pipeline\-installer\@sha256\:.+/banzaicloud\/pipeline\-installer\:latest/g')\"" "${BANZAI_INSTALLER_WORKSPACE_VALUES}" --inplace
    ```
 
-   d, You **MAY** also change the Kind cluster name to a unique one to avoid
+   e, You **MAY** also change the Kind cluster name to a unique one to avoid
    name clashing.
 
    ```shell
@@ -195,6 +218,9 @@ method.
    look like the following:
 
    ```shell
+   cadence:
+      web:
+         enabled: true
    defaultStorageBackend: mysql
    externalHost: default.localhost.banzaicloud.io
    ingressHostPort: true
@@ -338,7 +364,18 @@ method.
     watch banzai cluster list
     ```
 
-21. Tear down the Kind control plane cluster.
+21. If you want to check the Cadence web frontend you **MUST** port forward the
+    pod's port locally.
+
+    ```shell
+    KUBERNETES_POD_NAME_CADENCE_WEB="$(kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud get pod --selector "app.kubernetes.io/instance=cadence,app.kubernetes.io/component=web" -o name)"
+    kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud port-forward "${KUBERNETES_POD_NAME_CADENCE_WEB}" 8088:8088
+    ```
+
+    Then as long as the port forwarding is active, you can view the Cadence web
+    at http://localhost:8088.
+
+22. Tear down the Kind control plane cluster.
 
     ```shell
     banzai pipeline down --workspace ${BANZAI_INSTALLER_WORKSPACE}
