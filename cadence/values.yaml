@@ -127,6 +127,7 @@ server:
     # replicaCount: 1
     service:
       type: ClusterIP
+      grpcPort: 7833
       port: 7933
     metrics:
       annotations: {}
@@ -149,6 +150,7 @@ server:
     # replicaCount: 1
     service:
       # type: ClusterIP
+      grpcPort: 7834
       port: 7934
     metrics:
       annotations: {}
@@ -171,6 +173,7 @@ server:
     # replicaCount: 1
     service:
       # type: ClusterIP
+      grpcPort: 7835
       port: 7935
     metrics:
       annotations: {}

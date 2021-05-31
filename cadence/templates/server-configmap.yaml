@@ -70,8 +70,11 @@ data:
       name: cadence
       bootstrapMode: dns
       bootstrapHosts:
+        - {{ include "cadence.componentname" (list . "frontend-headless") }}:{{ .Values.server.frontend.service.grpcPort | default `{{ .Env.FRONTEND_GRPC_PORT | default 7833 }}` }}
         - {{ include "cadence.componentname" (list . "frontend-headless") }}:{{ .Values.server.frontend.service.port | default `{{ .Env.FRONTEND_PORT | default 7933 }}` }}
+        - {{ include "cadence.componentname" (list . "history-headless") }}:{{ .Values.server.history.service.grpcPort | default `{{ .Env.HISTORY_GRPC_PORT | default 7834 }}` }}
         - {{ include "cadence.componentname" (list . "history-headless") }}:{{ .Values.server.history.service.port | default `{{ .Env.HISTORY_PORT | default 7934 }}` }}
+        - {{ include "cadence.componentname" (list . "matching-headless") }}:{{ .Values.server.matching.service.grpcPort | default `{{ .Env.MATCHING_GRPC_PORT | default 7835 }}` }}
         - {{ include "cadence.componentname" (list . "matching-headless") }}:{{ .Values.server.matching.service.port | default `{{ .Env.MATCHING_PORT | default 7935 }}` }}
         - {{ include "cadence.componentname" (list . "worker-headless") }}:{{ .Values.server.worker.service.port | default `{{ .Env.WORKER_PORT | default 7939 }}` }}
       maxJoinDuration: 30s
@@ -79,6 +82,7 @@ data:
     services:
       frontend:
         rpc:
+          grpcPort: {{ include "cadence.frontend.internalGRPCPort" . | default `{{ .Env.FRONTEND_GRPC_PORT | default 7833 }}` }}
           port: {{ include "cadence.frontend.internalPort" . | default `{{ .Env.FRONTEND_PORT | default 7933 }}` }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
@@ -96,6 +100,7 @@ data:
 
       history:
         rpc:
+          grpcPort: {{ include "cadence.history.internalGRPCPort" . | default `{{ .Env.HISTORY_GRPC_PORT | default 7834 }}` }}
           port: {{ include "cadence.history.internalPort" . | default `{{ .Env.HISTORY_PORT | default 7934 }}` }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
@@ -113,6 +118,7 @@ data:
 
       matching:
         rpc:
+          grpcPort: {{ include "cadence.matching.internalGRPCPort" . | default `{{ .Env.MATCHING_GRPC_PORT | default 7835 }}` }}
           port: {{ include "cadence.matching.internalPort" . | default `{{ .Env.MATCHING_PORT | default 7935 }}` }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
