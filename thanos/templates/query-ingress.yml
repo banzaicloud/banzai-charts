@@ -5,12 +5,8 @@ kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "query") }}-http
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: query
+    {{- include "thanos.labels" . | indent 4 }}
   {{- if .Values.query.http.ingress.labels }}
 {{ toYaml .Values.query.http.ingress.labels | indent 4 }}
     {{- end }}
@@ -54,12 +50,8 @@ kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "query") }}-grpc
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: query
+    {{- include "thanos.labels" . | indent 4 }}
   {{- if .Values.query.grpc.ingress.labels }}
 {{ toYaml .Values.query.grpc.ingress.labels | indent 4 }}
   {{- end }}

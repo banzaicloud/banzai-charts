@@ -20,6 +20,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ $.Release.Service }}
     app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: store
+    {{- if $.Values.customLabels }}
+    {{ toYaml $.Values.customLabels }}
+    {{- end }}
 {{ with $root.Values.store.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end -}}
   {{- with $root.Values.store.deploymentAnnotations }}
   annotations: {{ toYaml . | nindent 4 }}

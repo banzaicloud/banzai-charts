@@ -4,12 +4,8 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "thanos.componentname" (list $ "compact") }}
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: compact
+    {{- include "thanos.labels" . | indent 4 }}
 {{ with .Values.compact.metrics.serviceMonitor.labels }}{{ toYaml . | indent 4 }}{{ end }}
 spec:
   jobLabel: thanos-compact
