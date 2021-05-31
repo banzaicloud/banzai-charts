@@ -220,6 +220,19 @@ and create a domain:
 docker run --rm ubercadence/cli:master --address host.docker.internal:7933 --domain samples-domain domain register --global_domain false
 ```
 
+## Metrics
+
+Note: from chart version 0.19.0, the metrics collection services (Prometheus,
+StatsD) are mutually exclusive - only one of those can be enabled at the same
+time based on the values configuration. The default configuration enables
+Prometheus.
+
+If you want to enable StatsD (and disable Prometheus), you may edit the global
+metrics configuration values accordingly. If you want to use them in a mixed
+fashion, make sure to disable both in the global metrics configuration values
+and enable the desired one in the service-specific configuration values (this is
+required, because global configurations take precedence over service-specific
+configurations).
 
 ## Configuration
 
