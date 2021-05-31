@@ -14,6 +14,7 @@ data:
     log:
       stdout: true
       level: {{ .Values.server.config.logLevel | quote }}
+      levelKey: "level"
 
     persistence:
       defaultStore: default
