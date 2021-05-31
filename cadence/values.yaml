@@ -8,7 +8,7 @@ debug: false
 server:
   image:
     repository: ubercadence/server
-    tag: 0.20.0
+    tag: 0.21.0
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
@@ -127,6 +127,7 @@ server:
     # replicaCount: 1
     service:
       type: ClusterIP
+      grpcPort: 7833
       port: 7933
     metrics:
       annotations: {}
@@ -149,6 +150,7 @@ server:
     # replicaCount: 1
     service:
       # type: ClusterIP
+      grpcPort: 7834
       port: 7934
     metrics:
       annotations: {}
@@ -171,6 +173,7 @@ server:
     # replicaCount: 1
     service:
       # type: ClusterIP
+      grpcPort: 7835
       port: 7935
     metrics:
       annotations: {}
@@ -218,7 +221,7 @@ web:
 
   image:
     repository: ubercadence/web
-    tag: v3.24.0
+    tag: v3.26.0
     pullPolicy: IfNotPresent
 
   tcheck:
