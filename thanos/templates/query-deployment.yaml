@@ -4,12 +4,8 @@ kind: Deployment
 metadata:
   name: {{ include "thanos.componentname" (list $ "query") }}
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: query
+    {{- include "thanos.labels" . | indent 4 }}
 {{ with .Values.query.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end }}
   {{- with .Values.query.deploymentAnnotations }}
   annotations: {{ toYaml . | nindent 4 }}
@@ -30,9 +26,8 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "thanos.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: query
+        {{- include "thanos.labels" . | indent 8 }}
 {{ with  .Values.query.labels }}{{ toYaml . | indent 8 }}{{ end }}
       {{- if or .Values.query.annotations .Values.query.metrics.annotations.enabled }}
       annotations:

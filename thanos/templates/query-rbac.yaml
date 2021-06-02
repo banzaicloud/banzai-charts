@@ -8,24 +8,16 @@ metadata:
   {{- end }}
   name: {{ include "thanos.componentname" (list $ "query") }}
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: query
+    {{- include "thanos.labels" . | indent 4 }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: {{ include "thanos.componentname" (list $ "query") }}
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: query
+    {{- include "thanos.labels" . | indent 4 }}
 rules:
 - apiGroups: ['policy']
   resources: ['podsecuritypolicies']
@@ -38,12 +30,8 @@ kind: RoleBinding
 metadata:
   name: {{ include "thanos.componentname" (list $ "query") }}
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: query
+    {{- include "thanos.labels" . | indent 4 }}
 roleRef:
   kind: ClusterRole
   name: {{ include "thanos.componentname" (list $ "query") }}

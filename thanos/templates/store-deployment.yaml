@@ -26,6 +26,9 @@ metadata:
     app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: store
     app.kubernetes.io/partition: "{{ $index }}"
+    {{- if $.Values.customLabels }}
+    {{ toYaml $.Values.customLabels }}
+    {{- end }} 
 {{ with $root.Values.store.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end }}
   {{- with $root.Values.store.deploymentAnnotations }}
   annotations: {{ toYaml . | nindent 4 }}
@@ -50,6 +53,9 @@ spec:
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app.kubernetes.io/component: store
         app.kubernetes.io/partition: "{{ $index }}"
+        {{- if $.Values.customLabels }}
+        {{ toYaml $.Values.customLabels }}
+        {{- end }} 
       {{- if or $root.Values.store.annotations $root.Values.store.metrics.annotations.enabled }}
       annotations:
       {{- end }}

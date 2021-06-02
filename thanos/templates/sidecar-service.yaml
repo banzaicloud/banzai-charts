@@ -7,12 +7,8 @@ metadata:
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: sidecar
+    {{- include "thanos.labels" . | indent 4 }}
 {{ with .Values.sidecar.grpc.service.labels }}{{ toYaml . | indent 4 }}{{ end }}
 spec:
   type: {{ .Values.sidecar.grpc.service.type }}
@@ -41,12 +37,8 @@ metadata:
   annotations: {{ toYaml .| nindent 4 }}
   {{- end }}
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: sidecar
+    {{- include "thanos.labels" . | indent 4 }}
 {{ with .Values.store.http.service.labels }}{{ toYaml . | indent 4 }}{{ end }}
 spec:
   type: {{ .Values.sidecar.http.service.type }}

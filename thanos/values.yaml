@@ -3,6 +3,10 @@ image:
   tag: v0.17.1
   pullPolicy: IfNotPresent
 
+## Additional labels to add to all resources
+customLabels: #{}
+  app: thanos
+
 store:
   enabled: true
   # Maximum size of items held in the index cache.

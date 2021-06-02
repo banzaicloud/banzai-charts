@@ -60,3 +60,16 @@ Create a default name for service account if not provided.
 {{- printf "%s" .Values.queryFrontend.serviceAccount -}}
 {{- end -}}
 {{- end -}}
+
+{{/* Generate basic labels */}}
+{{- define "thanos.labels" }}
+app.kubernetes.io/name: {{ template "thanos.name" . }}
+app.kubernetes.io/instance: "{{ .Release.Name }}"
+app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+app.kubernetes.io/version: "{{ .Chart.AppVersion | replace "+" "_" }}"
+app.kubernetes.io/part-of: {{ template "thanos.name" . }} 
+helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+{{- if .Values.customLabels }}
+{{ toYaml .Values.customLabels }}
+{{- end }}
+{{- end }}
