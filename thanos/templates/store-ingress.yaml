@@ -41,15 +41,17 @@ spec:
       paths:
         - path: {{ $.Values.store.http.ingress.path }}
           backend:
-            serviceName: {{ include "thanos.componentname" (list $ "store") }}-http
-            servicePort: {{ $.Values.store.http.port }}
+            service:
+              name: {{ include "thanos.componentname" (list $ "store") }}-http
+              port:
+                number: {{ $.Values.store.http.port }}
   {{- end }}
 {{- end }}
 
 ---
 
   {{- if and .Values.store.enabled .Values.store.grpc.ingress.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ .Values.sidecar.grpc.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "store") }}-grpc
@@ -69,8 +71,10 @@ metadata:
 spec:
   {{- if .Values.store.grpc.ingress.defaultBackend }}
   backend:
-    serviceName: {{ include "thanos.componentname" (list $ "store") }}-grpc
-    servicePort: {{ $.Values.store.grpc.port }}
+    service:
+      name: {{ include "thanos.componentname" (list $ "store") }}-grpc
+      port:
+        number: {{ $.Values.store.grpc.port }}
   {{- end }}
   {{- if .Values.store.grpc.ingress.tls }}
   tls:
@@ -89,7 +93,9 @@ spec:
       paths:
         - path: {{ $.Values.store.grpc.ingress.path }}
           backend:
-            serviceName: {{ include "thanos.componentname" (list $ "store") }}-grpc
-            servicePort: {{ $.Values.store.grpc.port }}
+            service:
+              name: {{ include "thanos.componentname" (list $ "store") }}-grpc
+              port:
+                number: {{ $.Values.store.grpc.port }}
   {{- end }}
 {{- end }}

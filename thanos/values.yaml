@@ -97,6 +97,10 @@ store:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -127,11 +131,11 @@ store:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
@@ -277,6 +281,10 @@ query:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -315,11 +323,11 @@ query:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
@@ -445,6 +453,10 @@ queryFrontend:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -480,6 +492,10 @@ queryFrontend:
     # Set up ingress for the http service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -746,11 +762,11 @@ bucket:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
       # kubernetes.io/ingress.class: nginx
@@ -945,6 +961,10 @@ rule:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -976,11 +996,11 @@ rule:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
@@ -1083,6 +1103,10 @@ sidecar:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -1112,11 +1136,11 @@ sidecar:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
