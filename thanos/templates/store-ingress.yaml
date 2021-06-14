@@ -51,7 +51,7 @@ spec:
 ---
 
   {{- if and .Values.store.enabled .Values.store.grpc.ingress.enabled }}
-apiVersion: {{ .Values.sidecar.grpc.ingress.apiVersion }}
+apiVersion: {{ .Values.store.grpc.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "store") }}-grpc
