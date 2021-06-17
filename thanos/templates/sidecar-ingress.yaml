@@ -41,6 +41,7 @@ spec:
     http:
       paths:
         - path: {{ $.Values.sidecar.http.ingress.path }}
+          pathType: {{ $.Values.sidecar.http.ingress.pathType }}
           backend:
             serviceName: {{ include "thanos.componentname" (list $ "sidecar") }}-http
             servicePort: {{ $.Values.sidecar.http.port }}
@@ -90,6 +91,7 @@ spec:
     http:
       paths:
         - path: {{ $.Values.sidecar.grpc.ingress.path }}
+          pathType: {{ $.Values.sidecar.http.ingress.pathType }}        
           backend:
             serviceName: {{ include "thanos.componentname" (list $ "sidecar") }}-grpc
             servicePort: {{ $.Values.sidecar.grpc.port }}
