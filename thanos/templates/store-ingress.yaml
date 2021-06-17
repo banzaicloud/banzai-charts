@@ -38,6 +38,7 @@ spec:
     http:
       paths:
         - path: {{ $.Values.store.http.ingress.path }}
+          pathType: {{ $.Values.store.http.ingress.pathType }}
           backend:
             serviceName: {{ include "thanos.componentname" (list $ "store") }}-http
             servicePort: {{ $.Values.store.http.port }}
@@ -86,6 +87,7 @@ spec:
     http:
       paths:
         - path: {{ $.Values.store.grpc.ingress.path }}
+          pathType: {{ $.Values.store.http.ingress.pathType }}          
           backend:
             serviceName: {{ include "thanos.componentname" (list $ "store") }}-grpc
             servicePort: {{ $.Values.store.grpc.port }}
