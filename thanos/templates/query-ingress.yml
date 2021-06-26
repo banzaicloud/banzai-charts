@@ -43,6 +43,7 @@ spec:
     http:
       paths:
         - path: {{ $.Values.query.http.ingress.path }}
+          pathType: {{ $.Values.query.http.ingress.pathType }}
           backend:
             service:
               name: {{ include "thanos.componentname" (list $ "query") }}-http
@@ -96,6 +97,7 @@ spec:
     http:
       paths:
         - path: {{ $.Values.query.grpc.ingress.path }}
+          pathType: {{ $.Values.query.grpc.ingress.pathType }}
           backend:
             service:
               name: {{ include "thanos.componentname" (list $ "query") }}-grpc
@@ -103,3 +105,4 @@ spec:
                 number: {{ $.Values.query.grpc.port }}
   {{- end }}
 {{- end }}
+

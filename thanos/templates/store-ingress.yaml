@@ -40,6 +40,7 @@ spec:
     http:
       paths:
         - path: {{ $.Values.store.http.ingress.path }}
+          pathType: {{ $.Values.store.http.ingress.pathType }}
           backend:
             service:
               name: {{ include "thanos.componentname" (list $ "store") }}-http
@@ -51,7 +52,7 @@ spec:
 ---
 
   {{- if and .Values.store.enabled .Values.store.grpc.ingress.enabled }}
-apiVersion: {{ .Values.store.grpc.ingress.apiVersion }}
+apiVersion: {{ .Values.sidecar.grpc.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "store") }}-grpc
@@ -92,6 +93,7 @@ spec:
     http:
       paths:
         - path: {{ $.Values.store.grpc.ingress.path }}
+          pathType: {{ $.Values.store.grpc.ingress.pathType }}
           backend:
             service:
               name: {{ include "thanos.componentname" (list $ "store") }}-grpc

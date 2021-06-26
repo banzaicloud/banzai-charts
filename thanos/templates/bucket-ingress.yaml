@@ -40,8 +40,11 @@ spec:
     http:
       paths:
         - path: {{ $.Values.bucket.http.ingress.path }}
+          pathType: {{ $.Values.bucket.http.ingress.pathType }}
           backend:
-            serviceName: {{ include "thanos.componentname" (list $ "bucket") }}
-            servicePort: {{ $.Values.bucket.http.port }}
+            service:
+              name: {{ include "thanos.componentname" (list $ "bucket") }}
+              port:
+                number: {{ $.Values.bucket.http.port }}
   {{- end }}
 {{ end }}

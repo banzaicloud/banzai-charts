@@ -43,6 +43,7 @@ spec:
       http:
         paths:
           - path: {{ $.Values.rule.http.ingress.path }}
+            pathType: {{ $.Values.rule.http.ingress.pathType }}
             backend:
               service:
                 name: {{ include "thanos.componentname" (list $ "rule") }}-http
@@ -96,6 +97,7 @@ spec:
       http:
         paths:
           - path: {{ $.Values.rule.grpc.ingress.path }}
+            pathType: {{ $.Values.rule.grpc.ingress.pathType }}
             backend:
               service:
                 name: {{ include "thanos.componentname" (list $ "rule") }}-grpc
