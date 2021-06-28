@@ -116,6 +116,9 @@ spec:
               source_labels: ["shard"]
               regex: {{ $index }}
         {{- end }}
+        {{- if $root.Values.store.relabel_configs }}
+        - "--selector.relabel-config-file=/var/thanos/relabel-configs/relabel-configs.yaml"
+        {{- end }}
         {{- if $root.Values.store.extraArgs }}
         {{ toYaml $root.Values.store.extraArgs | nindent 8 }}
         {{- end }}
@@ -135,6 +138,10 @@ spec:
           name: {{ $root.Values.store.certSecretName }}
           readOnly: true
         {{- end }}
+        {{- if $root.Values.store.relabel_configs  }}
+        - name: relabel-configs-volume
+          mountPath: /var/thanos/relabel-configs
+        {{ end }}
         {{- if $root.Values.store.livenessProbe }}
         livenessProbe:
         {{ toYaml $root.Values.store.livenessProbe | nindent 10 }}
@@ -169,6 +176,11 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ $root.Values.store.certSecretName }}
+      {{- end }}
+      {{- if $root.Values.store.relabel_configs  }}
+      - name: relabel-configs-volume
+        configMap:
+          name: {{ include "thanos.componentname" (list $ "store") }}-relabel-configs
       {{- end }}
       {{- with $root.Values.store.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
