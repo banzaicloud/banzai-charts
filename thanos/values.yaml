@@ -97,6 +97,10 @@ store:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -104,6 +108,7 @@ store:
       # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -127,17 +132,18 @@ store:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -277,6 +283,10 @@ query:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -284,6 +294,7 @@ query:
       # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -315,17 +326,18 @@ query:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -445,6 +457,10 @@ queryFrontend:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -452,6 +468,7 @@ queryFrontend:
       # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -480,6 +497,10 @@ queryFrontend:
     # Set up ingress for the http service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -487,6 +508,7 @@ queryFrontend:
         # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -746,17 +768,18 @@ bucket:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -945,6 +968,10 @@ rule:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -952,6 +979,7 @@ rule:
       # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -976,17 +1004,18 @@ rule:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -1083,6 +1112,10 @@ sidecar:
     # Set up ingress for the grpc service
     ingress:
       enabled: false
+
+      # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
+
       # Set default backend for ingress
       defaultBackend: false
       annotations: {}
@@ -1090,6 +1123,7 @@ sidecar:
       # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
@@ -1112,17 +1146,18 @@ sidecar:
     # Set up ingress for the http service
     ingress:
       enabled: false
-      # Set default backend for ingress
 
-      apiVersion: extensions/v1beta1
       # Set API version for ingress
+      apiVersion: networking.k8s.io/v1
 
+      # Set default backend for ingress
       defaultBackend: false
       annotations: {}
         # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
       labels: {}
       path: "/"
+      pathType: ImplementationSpecific
       hosts:
         - "/"
       tls: []
