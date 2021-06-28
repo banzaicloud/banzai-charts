@@ -1086,7 +1086,7 @@ sidecar:
   # NOTE: This is only the service references for the sidecar
   enabled: true
   selector:
-    app: prometheus
+    app.kubernetes.io/name: prometheus
   # Enable metrics collecting for sidecar service
   metrics:
     # Enable ServiceMonitor https://github.com/coreos/prometheus-operator
