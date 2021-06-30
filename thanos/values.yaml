@@ -651,6 +651,10 @@ compact:
       labels: {}
       # Match labels for service selector
       matchLabels: {}
+  # Setting hashPartioning will create multiple compactor deployments based on the number of shards specified using the hashmod of the blocks
+  # See https://thanos.io/sharding.md/#relabelling
+  hashPartioning: {}
+    # shards:
   # Add extra environment variables to compact
   extraEnv:
   # - name: ENV
