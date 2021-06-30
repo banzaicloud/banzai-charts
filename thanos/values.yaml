@@ -187,7 +187,7 @@ store:
     - min: ""
       max: ""
   # Setting hashPartioning will create multiple store deployments based on the number of shards specified using the hashmod of the blocks
-  # See https://thanos.io/sharding.md/#relabelling
+  # See https://thanos.io/tip/thanos/sharding.md/#relabelling
   hashPartioning: {}
     # shards:
   # InitContainers allows injecting specialized containers that run before app containers. This is meant to pre-configure and tune mounted volume permissions.
@@ -652,9 +652,10 @@ compact:
       # Match labels for service selector
       matchLabels: {}
   # Setting hashPartioning will create multiple compactor deployments based on the number of shards specified using the hashmod of the blocks
-  # See https://thanos.io/sharding.md/#relabelling
+  # See https://thanos.io/tip/thanos/sharding.md/#relabelling
   hashPartioning: {}
     # shards:
+    # sourceLabels: []
   # Add extra environment variables to compact
   extraEnv:
   # - name: ENV

@@ -80,7 +80,8 @@ spec:
         - |
           --selector.relabel-config=
             - action: hashmod
-              source_labels: ["__block_id"]
+              source_labels: 
+{{ with $root.Values.compact.hashPartioning.sourceLabels }}{{ toYaml . | indent 14 }}{{- end }}
               target_label: shard
               modulus: {{ $shards }}
             - action: keep
