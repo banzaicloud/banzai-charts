@@ -162,8 +162,8 @@ method.
    paths derived from it.
 
    ```shell
-   export BANZAI_INSTALLER_WORKSPACE_NAME="cadence-chart-upgrade"
-   export BANZAI_INSTALLER_WORKSPACE="${HOME}/.banzai/pipeline/${BANZAI_INSTALLER_WORKSPACE_NAME}"
+   BANZAI_INSTALLER_WORKSPACE_NAME="cadence-chart-upgrade" && echo "BANZAI_INSTALLER_WORKSPACE_NAME=${BANZAI_INSTALLER_WORKSPACE_NAME}"
+   BANZAI_INSTALLER_WORKSPACE="${HOME}/.banzai/pipeline/${BANZAI_INSTALLER_WORKSPACE_NAME}" && echo "BANZAI_INSTALLER_WORKSPACE=${BANZAI_INSTALLER_WORKSPACE}"
    ```
 
 2. **If you have no Pipeline control plane workspace set up for testing**
@@ -181,7 +181,7 @@ method.
    b, Save the workspace values YAML file's location for reuse.
 
    ```shell
-   export BANZAI_INSTALLER_WORKSPACE_VALUES="${BANZAI_INSTALLER_WORKSPACE}/values.yaml"
+   export BANZAI_INSTALLER_WORKSPACE_VALUES="${BANZAI_INSTALLER_WORKSPACE}/values.yaml" && echo "BANZAI_INSTALLER_WORKSPACE_VALUES=${BANZAI_INSTALLER_WORKSPACE_VALUES}"
    ```
 
    b, You **MUST** set up a
@@ -250,7 +250,7 @@ method.
 5. Use the Kind cluster's Kubernetes configuration.
 
    ```shell
-   export BANZAI_INSTALLER_WORKSPACE_KUBECONFIG="${BANZAI_INSTALLER_WORKSPACE}/.kube/config"
+   BANZAI_INSTALLER_WORKSPACE_KUBECONFIG="${BANZAI_INSTALLER_WORKSPACE}/.kube/config" && echo "BANZAI_INSTALLER_WORKSPACE_KUBECONFIG=${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}"
    ```
 
 6. Check and wait for the cadence pods (frontend, history, matching, worker) to
@@ -294,9 +294,31 @@ method.
 
 11. Create a cluster.
 
+   ```yaml
+   # banzai_cluster_create.yaml
+   name: cluster-name
+   location: eu-central-1
+   cloud: amazon
+   secretName: banzai-secret-name
+   properties:
+   eks:
+      version: "1.18"
+      nodePools:
+         pool1:
+            autoscaling: true
+            count: 5
+            instanceType: t3a.small
+            maxCount: 10
+            minCount: 2
+   ```
+
     ```shell
-    banzai secret create
-    banzai cluster create --name "${BANZAI_INSTALLER_WORKSPACE_NAME}-pre" --file ...
+    AWS_PROFILE=profile && echo "AWS_PROFILE=${AWS_PROFILE}"
+    BANZAI_CLUSTER_CREATE_YAML=banzai_cluster_create.yaml && echo "BANZAI_CLUSTER_CREATE_YAML=${BANZAI_CLUSTER_CREATE_YAML}"
+    BANZAI_SECRET_NAME=banzai-secret-name && echo "BANZAI_SECRET_NAME=${BANZAI_SECRET_NAME}"
+
+    AWS_PROFILE=${AWS_PROFILE} banzai secret create --magic --type "amazon" --validate true --tag "" --name "${BANZAI_SECRET_NAME}"
+    banzai cluster create --name "${BANZAI_INSTALLER_WORKSPACE_NAME}-pre" --file "${BANZAI_CLUSTER_CREATE_YAML}"
     watch banzai cluster list
     ```
 
@@ -324,15 +346,17 @@ method.
 15. Start creating a new cluster
 
     ```shell
-    banzai cluster create --name "${BANZAI_INSTALLER_WORKSPACE_NAME}-post" --file ...
+    banzai cluster create --name "${BANZAI_INSTALLER_WORKSPACE_NAME}-post" --file "${BANZAI_CLUSTER_CREATE_YAML}"
     ```
 
 16. Upgrade the previously existing cluster's node pool. Wait for it to finish
     and observe its successful completion.
 
     ```shell
+    BANZAI_CLUSTER_NODEPOOL_UPGRADE_YAML=banzai_cluster_node_pool_upgrade.yaml && echo "BANZAI_CLUSTER_NODEPOOL_UPGRADE_YAML=${BANZAI_CLUSTER_NODEPOOL_UPGRADE_YAML}"
+
     banzai cluster nodepool list --cluster-name "${BANZAI_INSTALLER_WORKSPACE_NAME}-pre"
-    banzai cluster nodepool upgrade pool1 --cluster-name "${BANZAI_INSTALLER_WORKSPACE_NAME}-pre" --file ...
+    banzai cluster nodepool upgrade pool1 --cluster-name "${BANZAI_INSTALLER_WORKSPACE_NAME}-pre" --file "${BANZAI_CLUSTER_NODEPOOL_UPGRADE_YAML}"
     banzai cluster nodepool list --cluster-name "${BANZAI_INSTALLER_WORKSPACE_NAME}-pre"
     ```
 
@@ -353,7 +377,7 @@ method.
 
     ```shell
     banzai cluster nodepool list --cluster-name "${BANZAI_INSTALLER_WORKSPACE_NAME}-post"
-    banzai cluster nodepool upgrade pool1 --cluster-name "${BANZAI_INSTALLER_WORKSPACE_NAME}-post" --file ...
+    banzai cluster nodepool upgrade pool1 --cluster-name "${BANZAI_INSTALLER_WORKSPACE_NAME}-post" --file "${BANZAI_CLUSTER_NODEPOOL_UPGRADE_YAML}"
     banzai cluster nodepool list --cluster-name "${BANZAI_INSTALLER_WORKSPACE_NAME}-post"
     ```
 
@@ -368,7 +392,7 @@ method.
     pod's port locally.
 
     ```shell
-    KUBERNETES_POD_NAME_CADENCE_WEB="$(kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud get pod --selector "app.kubernetes.io/instance=cadence,app.kubernetes.io/component=web" -o name)"
+    KUBERNETES_POD_NAME_CADENCE_WEB="$(kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud get pod --selector "app.kubernetes.io/instance=cadence,app.kubernetes.io/component=web" -o name)" && echo "KUBERNETES_POD_NAME_CADENCE_WEB=${KUBERNETES_POD_NAME_CADENCE_WEB}"
     kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud port-forward "${KUBERNETES_POD_NAME_CADENCE_WEB}" 8088:8088
     ```
 
