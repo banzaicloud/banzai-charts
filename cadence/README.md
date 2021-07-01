@@ -244,7 +244,7 @@ Global options overridable per service are marked with an asterisk.
 | `nameOverride`                                    | Override name of the application                      | ``                    |
 | `fullnameOverride`                                | Override full name of the application                 | ``                    |
 | `server.image.repository`                         | Server image repository                               | `ubercadence/server`  |
-| `server.image.tag`                                | Server image tag                                      | `0.21.0`              |
+| `server.image.tag`                                | Server image tag                                      | `0.21.3`              |
 | `server.image.pullPolicy`                         | Server image pull policy                              | `IfNotPresent`        |
 | `server.replicaCount`*                            | Server replica count                                  | `1`                   |
 | `server.metrics.annotations.enabled`*             | Annotate pods with Prometheus annotations             | `false`               |
@@ -280,7 +280,7 @@ Global options overridable per service are marked with an asterisk.
 | `web.enabled`                                     | Enable WebUI service                                  | `true`                |
 | `web.replicaCount`                                | Number of WebUI service Replicas                      | `1`                   |
 | `web.image.repository`                            | WebUI image repository                                | `ubercadence/web`     |
-| `web.image.tag`                                   | WebUI image tag                                       | `3.26.0`              |
+| `web.image.tag`                                   | WebUI image tag                                       | `3.27.0`              |
 | `web.image.pullPolicy`                            | WebUI image pull policy                               | `IfNotPresent`        |
 | `web.service.annotations`                         | WebUI service annotations                             | `{}`                  |
 | `web.service.type`                                | WebUI service type                                    | `ClusterIP`           |
