@@ -33,7 +33,7 @@ replicaCount: 1
 ##    maxUnavailable: 25%
 ##
 updateStrategy:
-  type: RollingUpdate
+  type: Recreate
 
 ## Deploy CRDs
 ##
