@@ -306,6 +306,8 @@ timePartioning:
 | compact.compactConcurrency | Number of goroutines to use when compacting groups. | 1 |
 | compact.dataVolume.backend | Data volume for the compactor to store temporary data defaults to emptyDir. | {} |
 | compact.persistentVolumeClaim | Create the specified persistentVolumeClaim in case persistentVolumeClaim is used for the dataVolume.backend above and needs to be created. | {} |
+| compact.hashPartioning.shards |	The number of shared used to partition the blocks based on the hashmod of the blocks. |	"" |
+| compact.hashPartitioning.sourceLabels | Source labels used to group the blocks together for compactor sharding | [] |
 
 ## Bucket
 
