@@ -1,0 +1,25 @@
+{{- if .Values.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "spotTerminationexporter.fullname" .  }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "spotTerminationexporter.name" . }}
+    chart: {{ template "spotTerminationexporter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    {{- if .Values.serviceMonitor.additionalLabels }}
+{{ toYaml .Values.serviceMonitor.additionalLabels | indent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+  - port: http
+  jobLabel: {{ include "spotTerminationexporter.name" . }}
+  namespaceSelector:
+    matchNames:
+    - "{{ $.Release.Namespace }}"
+  selector:
+    matchLabels:
+      app: {{ include "spotTerminationexporter.name" . }}
+{{ end }}
