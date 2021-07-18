@@ -14,6 +14,6 @@ data:
   {{- $root := . -}}
   {{- range $key, $value := .Values.rule.ruleFiles }}
   {{ $key }}: |
-{{ toYaml $value | default "{}" | nindent 4 }}
+  {{- toYaml $value | default "{}" | nindent 4 }}
   {{- end -}}
 {{- end -}}
