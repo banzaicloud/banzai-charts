@@ -152,22 +152,22 @@ data:
         {{- end}}
 
     clusterMetadata:
-      enableGlobalDomain: {{ `{{ default .Env.ENABLE_GLOBAL_DOMAIN "true" }}` }}
-      failoverVersionIncrement: 10
-      masterClusterName: "primary"
-      currentClusterName: "primary"
+      enableGlobalDomain: {{ .Values.server.config.clusterMetadata.enableGlobalDomains }}
+      failoverVersionIncrement: {{ .Values.server.config.clusterMetadata.maximumClusterCount }}
+      masterClusterName: {{ .Values.server.config.clusterMetadata.masterClusterName }}
+      currentClusterName: {{ .Values.server.config.clusterMetadata.currentClusterName }}
       clusterInformation:
-        primary:
-          enabled: true
-          initialFailoverVersion: 0
-          rpcName: "cadence-frontend"
-          rpcAddress: {{ `{{ default .Env.PRIMARY_FRONTEND_SERVICE "cadence" }}` }}:{{ .Values.server.frontend.service.port | default `{{ default .Env.FRONTEND_PORT 7933 }}` }}
-      {{- if `{{ .Env.ENABLE_GLOBAL_DOMAIN }}` }}
-        secondary:
-            enabled: true
-            initialFailoverVersion: 2
-            rpcName: "cadence-frontend"
-            rpcAddress: {{ `{{ default .Env.SECONDARY_FRONTEND_SERVICE "cadence-secondary" }}` }}:{{ .Values.server.frontend.service.port | default `{{ default .Env.FRONTEND_PORT 7933 }}` }}
+      {{- $currentClusterName := .Values.server.config.clusterMetadata.currentClusterName }}
+      {{- $currentClusterIndex := 0 }}
+      {{- $frontendComponentName := (include "cadence.componentname" (list . "frontend")) }}
+      {{- $serverFrontendServicePort := .Values.server.frontend.service.port }}
+      {{- range $clusterIndex, $clusterInfo := .Values.server.config.clusterMetadata.clusterInformation }}
+        {{- if eq $clusterInfo.name $currentClusterName }}{{ $currentClusterIndex = $clusterIndex }}{{ end }}
+        {{ $clusterInfo.name }}:
+          enabled: {{ $clusterInfo.enabled }}
+          initialFailoverVersion: {{ $clusterIndex }}
+          rpcName: "{{ $frontendComponentName }}"
+          rpcAddress: "{{ $clusterInfo.rpcAddress | default (printf "%s%s%.0f" $frontendComponentName ":" $serverFrontendServicePort ) }}"
       {{- end }}
 
     dcRedirectionPolicy:
@@ -178,7 +178,8 @@ data:
       status: "disabled"
 
     publicClient:
-      hostPort: "{{ include "cadence.componentname" (list . "frontend") }}:{{ .Values.server.frontend.service.port }}"
+      {{- $currentClusterInfo := (index .Values.server.config.clusterMetadata.clusterInformation $currentClusterIndex) }}
+      hostPort:  "{{ $currentClusterInfo.rpcAddress | default (printf "%s%s%.0f" $frontendComponentName ":" $serverFrontendServicePort ) }}"
 
     dynamicConfigClient:
       filepath: "/etc/cadence/config/dynamicconfig/config.yaml"
