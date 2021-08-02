@@ -155,24 +155,13 @@ data:
       enableGlobalDomain: {{ `{{ default .Env.ENABLE_GLOBAL_DOMAIN "false" }}` }}
       failoverVersionIncrement: 10
       masterClusterName: "primary"
-    {{- if `{{ .Env.IS_NOT_PRIMARY }}` }}
-      currentClusterName: "secondary"
-    {{- else }}
       currentClusterName: "primary"
-    {{- end }}
       clusterInformation:
         primary:
           enabled: true
           initialFailoverVersion: 0
           rpcName: "cadence-frontend"
-          rpcAddress: {{ `{{ default .Env.PRIMARY_FRONTEND_SERVICE "cadence" }}` }}:{{ .Values.server.frontend.service.port | default `{{ default .Env.FRONTEND_PORT 7933 }}` }}
-      {{- if `{{ .Env.ENABLE_GLOBAL_DOMAIN }}` }}
-        secondary:
-            enabled: true
-            initialFailoverVersion: 2
-            rpcName: "cadence-frontend"
-            rpcAddress: {{ `{{ default .Env.SECONDARY_FRONTEND_SERVICE "cadence-secondary" }}` }}:{{ .Values.server.frontend.service.port | default `{{ default .Env.FRONTEND_PORT 7933 }}` }}
-      {{- end }}
+          rpcAddress: {{ `{{ default .Env.PRIMARY_FRONTEND_SERVICE "cadence" }}` }}:{{ .Values.server.frontend.service.port }}
 
     dcRedirectionPolicy:
       policy: {{ `{{ default .Env.DC_REDIRECT_POLICY "selected-apis-forwarding" }}` }}
