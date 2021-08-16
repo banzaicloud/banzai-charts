@@ -3,7 +3,7 @@ name: spot-termination-exporter
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/banzai-charts
-version: 0.1.0
+version: 0.0.10
 description: Spot Termination exporter Helm chart for Kubernetes
 keywords:
 - spot
