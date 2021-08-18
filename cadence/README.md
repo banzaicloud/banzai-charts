@@ -33,6 +33,90 @@ $ helm install --name my-release --namespace cadence banzaicloud-stable/cadence
 > **Tip**: List all releases using `helm list`
 
 
+## Upgrading Chart
+
+```console
+# Helm
+$ helm upgrade [RELEASE_NAME] banzaicloud-stable/cadence
+```
+
+### From 0.20.x (or below) to 0.21.y (or above)
+
+Version 0.21.0 extends the configuration interface by introducing
+`clusterMetadata` settings to the `values.yaml` in a backward incompatible
+manner with existing Cadence clusters.
+
+To upgrade the Cadence deployment under **existing** Cadence clusters from
+version 0.20.x (or below) to 0.21.y (or above) you **MUST** set the existing
+cluster's configuration in the `values.yaml` file's
+`.server.config.clusterMetadata` section to be used for the upgrade.
+
+#### Example configuration for upgrading from version 0.16.x (or below)
+
+```yaml
+server:
+  # ...
+  config:
+    clusterMetadata:
+      enableGlobalDomain: true
+      maximumClusterCount: 10
+      masterClusterName: "active"
+      currentClusterName: "active"
+      clusterInformation:
+        - name: active
+          enabled: true
+```
+
+#### Example configuration for upgrading from version 0.17.x
+
+```yaml
+server:
+  # ...
+  config:
+    clusterMetadata:
+      enableGlobalDomain: true
+      maximumClusterCount: 10
+      masterClusterName: "master"
+      currentClusterName: "master"
+      clusterInformation:
+        - name: master
+          enabled: true
+```
+
+#### Example configuration for upgrading from 0.18.x (or above), single Cadence cluster
+
+```yaml
+server:
+  # ...
+  config:
+    clusterMetadata:
+      enableGlobalDomain: true
+      maximumClusterCount: 10
+      masterClusterName: "primary"
+      currentClusterName: "primary"
+      clusterInformation:
+        - name: primary
+          enabled: true
+```
+
+#### Example configuration for upgrading from 0.18.x (or above), multiple Cadence clusters
+
+```yaml
+server:
+  # ...
+  config:
+    clusterMetadata:
+      enableGlobalDomain: true
+      maximumClusterCount: 10
+      masterClusterName: "primary"
+      currentClusterName: "primary" # "secondary" # Note: use the name of the Cadence cluster you are using on the cluster/namespace/release you are upgrading.
+      clusterInformation:
+        - name: primary
+          enabled: true
+        - name: secondary
+          enabled: true
+```
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` deployment:
