@@ -138,8 +138,8 @@ server:
           # the chart configured release name and frontend port, but can be
           # manually overridden here if necessary.
           # rpcAddress: cadence-frontend:7933
-        - name: cluster-1
-          enabled: true
+        # - name: cluster-1
+        #   enabled: true
 
     logLevel: "debug,info"
 
