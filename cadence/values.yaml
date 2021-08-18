@@ -221,7 +221,7 @@ web:
 
   image:
     repository: ubercadence/web
-    tag: v3.28.2
+    tag: v3.28.4
     pullPolicy: IfNotPresent
 
   tcheck:
