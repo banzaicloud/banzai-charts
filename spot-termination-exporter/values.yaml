@@ -38,7 +38,6 @@ spotTerminationexporter:
     enabled: true
     # additionalLabels is the set of additional labels to add to the ServiceMonitor
     additionalLabels: {}
-    jobLabel: ""
 
   logLevel: "debug"
 
