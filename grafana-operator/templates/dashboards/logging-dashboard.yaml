@@ -31,12 +31,12 @@ spec:
         "gnetId": 7752,
         "graphTooltip": 0,
         "id": null,
-        "iteration": 1586183840102,
+        "iteration": 1624107210080,
         "links": [],
         "panels": [
             {
                 "collapsed": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
                 "gridPos": {
                     "h": 1,
                     "w": 24,
@@ -58,7 +58,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#299c46"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -90,7 +96,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "postfix": "",
                 "postfixFontSize": "50%",
                 "prefix": "",
@@ -108,7 +113,7 @@ spec:
                     "lineColor": "rgb(31, 120, 193)",
                     "show": false
                 },
-                "tableColumn": "",
+                "tableColumn": "Active Fluent-bit",
                 "targets": [
                     {
                         "expr": "sum(kube_pod_info{pod=~\".*fluentbit.*\",cluster=\"$cluster\"})",
@@ -141,7 +146,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#299c46"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -173,7 +184,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "postfix": "",
                 "postfixFontSize": "50%",
                 "prefix": "",
@@ -224,7 +234,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "cps",
                 "gauge": {
                     "maxValue": 100,
@@ -256,7 +272,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -309,7 +324,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "cps",
                 "gauge": {
                     "maxValue": 100,
@@ -341,7 +362,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -395,7 +415,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "cps",
                 "gauge": {
                     "maxValue": 100,
@@ -427,7 +453,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -481,7 +506,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "percentunit",
                 "gauge": {
                     "maxValue": 100,
@@ -513,7 +544,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -567,7 +597,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "percentunit",
                 "gauge": {
                     "maxValue": 100,
@@ -599,7 +635,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -653,7 +688,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "percentunit",
                 "gauge": {
                     "maxValue": 100,
@@ -685,7 +726,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -739,7 +779,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#299c46"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -771,7 +817,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "postfix": "",
                 "postfixFontSize": "50%",
                 "prefix": "",
@@ -824,7 +869,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "short",
                 "gauge": {
                     "maxValue": 100,
@@ -856,7 +907,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "postfix": "",
                 "postfixFontSize": "50%",
                 "prefix": "",
@@ -908,7 +958,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "Bps",
                 "gauge": {
                     "maxValue": 100,
@@ -940,7 +996,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -993,7 +1048,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "Bps",
                 "gauge": {
                     "maxValue": 100,
@@ -1025,7 +1086,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -1078,7 +1138,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "cps",
                 "gauge": {
                     "maxValue": 100,
@@ -1110,7 +1176,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -1164,7 +1229,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "percentunit",
                 "gauge": {
                     "maxValue": 100,
@@ -1196,7 +1267,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -1250,7 +1320,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "percentunit",
                 "gauge": {
                     "maxValue": 100,
@@ -1282,7 +1358,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -1336,7 +1411,13 @@ spec:
                     "rgba(237, 129, 40, 0.89)",
                     "#d44a3a"
                 ],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "format": "percentunit",
                 "gauge": {
                     "maxValue": 100,
@@ -1368,7 +1449,6 @@ spec:
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "options": {},
                 "pluginVersion": "6.5.2",
                 "postfix": "",
                 "postfixFontSize": "50%",
@@ -1415,7 +1495,7 @@ spec:
             },
             {
                 "collapsed": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
                 "gridPos": {
                     "h": 1,
                     "w": 24,
@@ -1432,7 +1512,13 @@ spec:
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -1524,7 +1610,13 @@ spec:
             },
             {
                 "columns": [],
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fontSize": "100%",
                 "gridPos": {
                     "h": 6,
@@ -1533,7 +1625,6 @@ spec:
                     "y": 6
                 },
                 "id": 27,
-                "options": {},
                 "pageSize": null,
                 "showHeader": true,
                 "sort": {
@@ -1543,12 +1634,14 @@ spec:
                 "styles": [
                     {
                         "alias": "Time",
+                        "align": "auto",
                         "dateFormat": "YYYY-MM-DD HH:mm:ss",
                         "pattern": "Time",
                         "type": "date"
                     },
                     {
                         "alias": "",
+                        "align": "auto",
                         "colorMode": null,
                         "colors": [
                             "rgba(245, 54, 54, 0.9)",
@@ -1576,19 +1669,25 @@ spec:
                 "timeShift": null,
                 "title": "Top Aggregated Fluentd Routes",
                 "transform": "table",
-                "type": "table"
+                "type": "table-old"
             },
             {
                 "aliasColors": {},
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
                     "h": 6,
-                    "w": 12,
+                    "w": 8,
                     "x": 0,
                     "y": 12
                 },
@@ -1627,12 +1726,15 @@ spec:
                         "expr": "fluentd_output_status_buffer_total_bytes{pod=~\"$fluentd\",plugin_id=~\"$fluentdplugin\"}",
                         "format": "time_series",
                         "hide": false,
+                        "interval": "",
                         "intervalFactor": 1,
                         "legendFormat": "{{`{{`}} plugin_id {{`}}`}}",
                         "refId": "A"
                     },
                     {
                         "expr": "fluentd_output_status_buffer_queue_length{pod=~\"$fluentd\",plugin_id=~\"$fluentdplugin\"}",
+                        "interval": "",
+                        "legendFormat": "",
                         "refId": "B"
                     }
                 ],
@@ -1682,13 +1784,128 @@ spec:
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
                     "h": 6,
-                    "w": 12,
-                    "x": 12,
+                    "w": 8,
+                    "x": 8,
+                    "y": 12
+                },
+                "hiddenSeries": false,
+                "id": 42,
+                "legend": {
+                    "alignAsTable": false,
+                    "avg": false,
+                    "current": true,
+                    "max": false,
+                    "min": false,
+                    "rightSide": false,
+                    "show": true,
+                    "sort": "current",
+                    "sortDesc": true,
+                    "total": false,
+                    "values": true
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "expr": "node_filesystem_size_bytes{pod=~\"$fluentd\",mountpoint=\"/buffers\",endpoint=\"buffer-metrics\", fstype!=\"\"} - node_filesystem_free_bytes{pod=~\"$fluentd\",mountpoint=\"/buffers\",endpoint=\"buffer-metrics\", fstype!=\"\"}",
+                        "hide": false,
+                        "interval": "",
+                        "legendFormat": "Used: {{`{{`}}pod{{`}}`}}",
+                        "refId": "D"
+                    },
+                    {
+                        "expr": "node_filesystem_size_bytes{pod=~\"$fluentd\",mountpoint=\"/buffers\",endpoint=\"buffer-metrics\", fstype!=\"\"}",
+                        "interval": "",
+                        "legendFormat": "Total: {{`{{`}}pod{{`}}`}}",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Fluentd Buffer Disk",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 2,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "$$hashKey": "object:419",
+                        "format": "bytes",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": "0",
+                        "show": true
+                    },
+                    {
+                        "$$hashKey": "object:420",
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 6,
+                    "w": 8,
+                    "x": 16,
                     "y": 12
                 },
                 "hiddenSeries": false,
@@ -1726,6 +1943,7 @@ spec:
                         "expr": "sum(rate(fluentd_output_status_retry_count{pod=~\"$fluentd\",plugin_id=~\"$fluentdplugin\"}[1m])) by (pod)",
                         "format": "time_series",
                         "hide": false,
+                        "interval": "",
                         "intervalFactor": 1,
                         "legendFormat": "Retry {{`{{`}}pod{{`}}`}}",
                         "refId": "A"
@@ -1781,7 +1999,7 @@ spec:
             },
             {
                 "collapsed": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
                 "gridPos": {
                     "h": 1,
                     "w": 24,
@@ -1798,7 +2016,13 @@ spec:
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -1893,7 +2117,13 @@ spec:
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -1988,7 +2218,13 @@ spec:
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -2083,7 +2319,13 @@ spec:
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -2178,7 +2420,13 @@ spec:
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -2254,6 +2502,7 @@ spec:
                 },
                 "yaxes": [
                     {
+                        "$$hashKey": "object:535",
                         "decimals": null,
                         "format": "short",
                         "label": "",
@@ -2263,6 +2512,7 @@ spec:
                         "show": true
                     },
                     {
+                        "$$hashKey": "object:536",
                         "format": "short",
                         "label": null,
                         "logBase": 1,
@@ -2281,7 +2531,13 @@ spec:
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "$datasource",
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -2370,16 +2626,225 @@ spec:
                     "align": false,
                     "alignLevel": null
                 }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 0,
+                    "y": 37
+                },
+                "hiddenSeries": false,
+                "id": 43,
+                "legend": {
+                    "alignAsTable": false,
+                    "avg": false,
+                    "current": true,
+                    "max": false,
+                    "min": false,
+                    "rightSide": false,
+                    "show": true,
+                    "sort": "current",
+                    "sortDesc": true,
+                    "total": false,
+                    "values": true
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "expr": "sum(rate(fluentbit_output_dropped_records_total{pod=~\"$fluentbit\"}[5m])) by (pod, name)",
+                        "format": "time_series",
+                        "hide": false,
+                        "interval": "",
+                        "intervalFactor": 1,
+                        "legendFormat": "{{`{{`}} pod {{`}}`}}/{{`{{`}}name{{`}}`}}",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Fluentbit Output Dropped Records",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "$$hashKey": "object:621",
+                        "format": "cps",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": "0",
+                        "show": true
+                    },
+                    {
+                        "$$hashKey": "object:622",
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "${datasource}",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 12,
+                    "y": 37
+                },
+                "hiddenSeries": false,
+                "id": 44,
+                "legend": {
+                    "alignAsTable": false,
+                    "avg": false,
+                    "current": true,
+                    "max": false,
+                    "min": false,
+                    "rightSide": false,
+                    "show": true,
+                    "sort": "current",
+                    "sortDesc": true,
+                    "total": false,
+                    "values": true
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "expr": "sum(rate(fluentbit_output_retried_records_total{pod=~\"$fluentbit\"}[5m])) by (pod, name)",
+                        "format": "time_series",
+                        "hide": false,
+                        "interval": "",
+                        "intervalFactor": 1,
+                        "legendFormat": "{{`{{`}} pod {{`}}`}}/{{`{{`}}name{{`}}`}}",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Fluentbit Output Retried Records",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "$$hashKey": "object:683",
+                        "format": "cps",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": "0",
+                        "show": true
+                    },
+                    {
+                        "$$hashKey": "object:684",
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
             }
         ],
         "refresh": "5s",
-        "schemaVersion": 21,
+        "schemaVersion": 25,
         "style": "dark",
         "tags": [],
         "templating": {
             "list": [
                 {
                     "current": {
+                        "selected": false,
                         "text": "Prometheus",
                         "value": "Prometheus"
                     },
@@ -2398,7 +2863,7 @@ spec:
                 {
                     "allValue": null,
                     "current": {},
-                    "datasource": "$datasource",
+                    "datasource": "${datasource}",
                     "definition": "label_values(node_cpu_seconds_total, cluster)",
                     "hide": 0,
                     "includeAll": false,
@@ -2420,7 +2885,7 @@ spec:
                 {
                     "allValue": null,
                     "current": {},
-                    "datasource": "$datasource",
+                    "datasource": "${datasource}",
                     "definition": "label_values(fluentd_output_status_emit_records, plugin_id)",
                     "hide": 0,
                     "includeAll": true,
@@ -2442,7 +2907,7 @@ spec:
                 {
                     "allValue": null,
                     "current": {},
-                    "datasource": "$datasource",
+                    "datasource": "${datasource}",
                     "definition": "label_values(fluentbit_input_bytes_total,pod)",
                     "hide": 0,
                     "includeAll": true,
@@ -2464,7 +2929,7 @@ spec:
                 {
                     "allValue": null,
                     "current": {},
-                    "datasource": "$datasource",
+                    "datasource": "${datasource}",
                     "definition": "label_values(fluentd_output_status_emit_count,pod)",
                     "hide": 0,
                     "includeAll": true,
@@ -2517,6 +2982,6 @@ spec:
         "timezone": "",
         "title": "Logging Dashboard",
         "uid": "bNn5LUtiz",
-        "version": 21
+        "version": 1
     }
 {{- end }}

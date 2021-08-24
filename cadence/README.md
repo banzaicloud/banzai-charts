@@ -19,7 +19,7 @@ This chart bootstraps a [Cadence](https://github.com/uber/cadence) and a [Cadenc
 ## Prerequisites
 
 - Kubernetes 1.7+ with Beta APIs enabled
-- Cadence 0.20.0+
+- Cadence 0.21.0+
 
 
 ## Installing the Chart
@@ -32,6 +32,90 @@ $ helm install --name my-release --namespace cadence banzaicloud-stable/cadence
 
 > **Tip**: List all releases using `helm list`
 
+
+## Upgrading Chart
+
+```console
+# Helm
+$ helm upgrade [RELEASE_NAME] banzaicloud-stable/cadence
+```
+
+### From 0.20.x (or below) to 0.21.y (or above)
+
+Version 0.21.0 extends the configuration interface by introducing
+`clusterMetadata` settings to the `values.yaml` in a backward incompatible
+manner with existing Cadence clusters.
+
+To upgrade the Cadence deployment under **existing** Cadence clusters from
+version 0.20.x (or below) to 0.21.y (or above) you **MUST** set the existing
+cluster's configuration in the `values.yaml` file's
+`.server.config.clusterMetadata` section to be used for the upgrade.
+
+#### Example configuration for upgrading from version 0.16.x (or below)
+
+```yaml
+server:
+  # ...
+  config:
+    clusterMetadata:
+      enableGlobalDomain: true
+      maximumClusterCount: 10
+      masterClusterName: "active"
+      currentClusterName: "active"
+      clusterInformation:
+        - name: active
+          enabled: true
+```
+
+#### Example configuration for upgrading from version 0.17.x
+
+```yaml
+server:
+  # ...
+  config:
+    clusterMetadata:
+      enableGlobalDomain: true
+      maximumClusterCount: 10
+      masterClusterName: "master"
+      currentClusterName: "master"
+      clusterInformation:
+        - name: master
+          enabled: true
+```
+
+#### Example configuration for upgrading from 0.18.x (or above), single Cadence cluster
+
+```yaml
+server:
+  # ...
+  config:
+    clusterMetadata:
+      enableGlobalDomain: true
+      maximumClusterCount: 10
+      masterClusterName: "primary"
+      currentClusterName: "primary"
+      clusterInformation:
+        - name: primary
+          enabled: true
+```
+
+#### Example configuration for upgrading from 0.18.x (or above), multiple Cadence clusters
+
+```yaml
+server:
+  # ...
+  config:
+    clusterMetadata:
+      enableGlobalDomain: true
+      maximumClusterCount: 10
+      masterClusterName: "primary"
+      currentClusterName: "primary" # "secondary" # Note: use the name of the Cadence cluster you are using on the cluster/namespace/release you are upgrading.
+      clusterInformation:
+        - name: primary
+          enabled: true
+        - name: secondary
+          enabled: true
+```
 
 ## Uninstalling the Chart
 
@@ -220,6 +304,19 @@ and create a domain:
 docker run --rm ubercadence/cli:master --address host.docker.internal:7933 --domain samples-domain domain register --global_domain false
 ```
 
+## Metrics
+
+Note: from chart version 0.19.0, the metrics collection services (Prometheus,
+StatsD) are mutually exclusive - only one of those can be enabled at the same
+time based on the values configuration. The default configuration enables
+Prometheus.
+
+If you want to enable StatsD (and disable Prometheus), you may edit the global
+metrics configuration values accordingly. If you want to use them in a mixed
+fashion, make sure to disable both in the global metrics configuration values
+and enable the desired one in the service-specific configuration values (this is
+required, because global configurations take precedence over service-specific
+configurations).
 
 ## Configuration
 
@@ -231,7 +328,7 @@ Global options overridable per service are marked with an asterisk.
 | `nameOverride`                                    | Override name of the application                      | ``                    |
 | `fullnameOverride`                                | Override full name of the application                 | ``                    |
 | `server.image.repository`                         | Server image repository                               | `ubercadence/server`  |
-| `server.image.tag`                                | Server image tag                                      | `0.20.0`              |
+| `server.image.tag`                                | Server image tag                                      | `0.21.3`              |
 | `server.image.pullPolicy`                         | Server image pull policy                              | `IfNotPresent`        |
 | `server.replicaCount`*                            | Server replica count                                  | `1`                   |
 | `server.metrics.annotations.enabled`*             | Annotate pods with Prometheus annotations             | `false`               |
@@ -267,7 +364,7 @@ Global options overridable per service are marked with an asterisk.
 | `web.enabled`                                     | Enable WebUI service                                  | `true`                |
 | `web.replicaCount`                                | Number of WebUI service Replicas                      | `1`                   |
 | `web.image.repository`                            | WebUI image repository                                | `ubercadence/web`     |
-| `web.image.tag`                                   | WebUI image tag                                       | `3.22.2`              |
+| `web.image.tag`                                   | WebUI image tag                                       | `3.28.4`              |
 | `web.image.pullPolicy`                            | WebUI image pull policy                               | `IfNotPresent`        |
 | `web.service.annotations`                         | WebUI service annotations                             | `{}`                  |
 | `web.service.type`                                | WebUI service type                                    | `ClusterIP`           |

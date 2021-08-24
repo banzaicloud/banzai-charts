@@ -1,6 +1,6 @@
 ---
 {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.http.ingress.enabled }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ .Values.queryFrontend.http.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "query-frontend") }}-http
@@ -20,8 +20,10 @@ metadata:
 spec:
   {{- if .Values.queryFrontend.http.ingress.defaultBackend }}
   backend:
-    serviceName: {{ include "thanos.componentname" (list $ "query-frontend") }}-http
-    servicePort: {{ $.Values.queryFrontend.http.port }}
+    service:
+      name: {{ include "thanos.componentname" (list $ "query-frontend") }}-http
+      port:
+        number: {{ $.Values.queryFrontend.http.port }}
   {{- end }}
   {{- if .Values.queryFrontend.http.ingress.tls }}
   tls:
@@ -41,15 +43,18 @@ spec:
       http:
         paths:
           - path: {{ $.Values.queryFrontend.http.ingress.path }}
+            pathType: {{ $.Values.queryFrontend.http.ingress.pathType }}
             backend:
-              serviceName: {{ include "thanos.componentname" (list $ "query-frontend") }}-http
-              servicePort: {{ $.Values.queryFrontend.http.port }}
+              service:
+                name: {{ include "thanos.componentname" (list $ "query-frontend") }}-http
+                port:
+                  number: {{ $.Values.queryFrontend.http.port }}
   {{- end }}
 {{- end }}
 
 {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.grpc.ingress.enabled }}
 ---
-apiVersion: extensions/v1beta1
+apiVersion: {{ .Values.queryFrontend.grpc.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "query-frontend") }}-grpc
@@ -69,8 +74,10 @@ metadata:
 spec:
   {{- if .Values.queryFrontend.grpc.ingress.defaultBackend }}
   backend:
-    serviceName: {{ include "thanos.componentname" (list $ "query-frontend") }}-grpc
-    servicePort: {{ $.Values.queryFrontend.grpc.port }}
+    service:
+      name: {{ include "thanos.componentname" (list $ "query-frontend") }}-grpc
+      port:
+        number: {{ $.Values.queryFrontend.grpc.port }}
   {{- end }}
   {{- if .Values.queryFrontend.grpc.ingress.tls }}
   tls:
@@ -90,8 +97,11 @@ spec:
       http:
         paths:
           - path: {{ $.Values.queryFrontend.grpc.ingress.path }}
+            pathType: {{ $.Values.queryFrontend.grpc.ingress.pathType }}
             backend:
-              serviceName: {{ include "thanos.componentname" (list $ "query-frontend") }}-grpc
-              servicePort: {{ $.Values.queryFrontend.grpc.port }}
+              service:
+                name: {{ include "thanos.componentname" (list $ "query-frontend") }}-grpc
+                port:
+                  number: {{ $.Values.queryFrontend.grpc.port }}
   {{- end }}
 {{- end }}

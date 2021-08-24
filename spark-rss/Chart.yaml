@@ -1,7 +1,8 @@
 apiVersion: v1
 name: spark-rss
 version: 0.0.6
-description: A Helm chart for Spark RSS in Kubernetes
+deprecated: true
+description: DEPRECATED A Helm chart for Spark RSS in Kubernetes
 home: https://banzaicloud.com
 sources:
   - https://github.com/banzaicloud/spark

@@ -20,8 +20,10 @@ metadata:
 spec:
   {{- if .Values.rule.http.ingress.defaultBackend }}
   backend:
-    serviceName: {{ include "thanos.componentname" (list $ "rule") }}-http
-    servicePort: {{ $.Values.rule.http.port }}
+    service:
+      name: {{ include "thanos.componentname" (list $ "rule") }}-http
+      port:
+        number: {{ $.Values.rule.http.port }}
   {{- end }}
   {{- if .Values.rule.http.ingress.tls }}
   tls:
@@ -41,15 +43,18 @@ spec:
       http:
         paths:
           - path: {{ $.Values.rule.http.ingress.path }}
+            pathType: {{ $.Values.rule.http.ingress.pathType }}
             backend:
-              serviceName: {{ include "thanos.componentname" (list $ "rule") }}-http
-              servicePort: {{ $.Values.rule.http.port }}
+              service:
+                name: {{ include "thanos.componentname" (list $ "rule") }}-http
+                port:
+                  number: {{ $.Values.rule.http.port }}
   {{- end }}
 {{- end }}
 
 {{- if and .Values.rule.enabled .Values.rule.grpc.ingress.enabled }}
 ---
-apiVersion: extensions/v1beta1
+apiVersion: {{ .Values.rule.grpc.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ include "thanos.componentname" (list $ "rule") }}-grpc
@@ -69,8 +74,10 @@ metadata:
 spec:
   {{- if .Values.rule.grpc.ingress.defaultBackend }}
   backend:
-    serviceName: {{ include "thanos.componentname" (list $ "rule") }}-grpc
-    servicePort: {{ $.Values.rule.grpc.port }}
+    service:
+      name: {{ include "thanos.componentname" (list $ "rule") }}-grpc
+      port:
+        number: {{ $.Values.rule.grpc.port }}
   {{- end }}
   {{- if .Values.rule.grpc.ingress.tls }}
   tls:
@@ -90,8 +97,11 @@ spec:
       http:
         paths:
           - path: {{ $.Values.rule.grpc.ingress.path }}
+            pathType: {{ $.Values.rule.grpc.ingress.pathType }}
             backend:
-              serviceName: {{ include "thanos.componentname" (list $ "rule") }}-grpc
-              servicePort: {{ $.Values.rule.grpc.port }}
+              service:
+                name: {{ include "thanos.componentname" (list $ "rule") }}-grpc
+                port:
+                  number: {{ $.Values.rule.grpc.port }}
   {{- end }}
 {{- end }}

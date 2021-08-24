@@ -8,7 +8,7 @@ debug: false
 server:
   image:
     repository: ubercadence/server
-    tag: 0.20.0
+    tag: 0.21.3
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
@@ -57,6 +57,90 @@ server:
   affinity: {}
 
   config:
+    # clusterMetadata contains the settings of the Cadence clusters
+    # participating in a Cadence cluster group.
+    clusterMetadata:
+      # enableGlobalDomain when set to true allows creating global domains which
+      # are replicated between all Cadence clusters distributed among different
+      # Kubernetes clusters and whose tasks are served by the active Cadence
+      # cluster in the replication.
+      #
+      # WARNING: This value **MUST NOT** be changed after launching the first
+      # Cadence cluster of the Cadence cluster group.
+      enableGlobalDomain: true
+
+      # maximumClusterCount defines and locks the maximum number of Cadence
+      # clusters of a Cadence cluster group at any point in the future included
+      # clusters added later.
+      #
+      # The requirement for this is to be able to safely determine a
+      # failoverVersionIncrement and initialFailoverVersion for each cluster
+      # automatically, accounting for clusters which are potentially being added
+      # later on to the cluster group and ensuring unique failover versions for
+      # each cluster all the time.
+      #
+      # failoverVersionIncrement is the increment of each cluster version when
+      # failover happens.
+      #
+      # initialFailoverVersion is the failover version a cluster starts at when
+      # launched.
+      #
+      # WARNING: For each Cadence cluster, (initialFailoverVersion +
+      # i*failoverVersionIncrement) **MUST** result in a unique value, not used
+      # by any other cluster.
+      #
+      # WARNING: This value **MUST NOT** be changed after launching the first
+      # Cadence cluster of the Cadence cluster group.
+      maximumClusterCount: 100
+
+      # masterClusterName is the name of the Cadence leader cluster in a Cadence
+      # cluster group which can register a domain, while each cluster can update
+      # domains and do domain failover.
+      #
+      # WARNING: it **MUST** be set to the same value for all Cadence clusters
+      # in a Cadence cluster group.
+      masterClusterName: "cluster-0"
+
+      # currentClusterName is the name of the Cadence cluster the configuration
+      # belongs to.
+      #
+      # In a Cadence cluster group, this is the particular Cadence
+      # cluster being installed with the chart on a Kubernetes cluster.
+      #
+      # WARNING: This value **MUST NOT** be changed after launching the Cadence
+      # cluster.
+      currentClusterName: "cluster-0"
+      
+      # clusterInformation contains the information about each Cadence cluster
+      # which participates in a Cadence cluster group.
+      #
+      # WARNING: for each Cadence cluster at any moment, the cluster names,
+      # initialFailoverVersion values and (initialFailoverVersion +
+      # i*failoverVersionIncrement) **MUST** be a unique value, not used by any
+      # other cluster.
+      #
+      # WARNING: once the Cadence cluster group is launched, you **MUST** only
+      # add Cadence clusters to the clusterInformation list and **MUST NOT**
+      # remove any Cadence cluster, although you **MAY** disable listed
+      # clusters.
+      #
+      # WARNING: you **MUST** list the Cadence clusters of a Cadence cluster
+      # group in the same order in each configuration to ensure the
+      # initialFailoverVersions are synchronized.
+      clusterInformation:
+        - name: cluster-0
+          # enabled defines whether the Cadence cluster is enabled.
+          enabled: true
+          # rpcAddress defines the address (host:port, host can be a DNS name)
+          # of the Cadence frontend remote service to use in a Cadence cluster.
+          #
+          # This is defaulted to the in-cluster Cadence frontend service, using
+          # the chart configured release name and frontend port, but can be
+          # manually overridden here if necessary.
+          # rpcAddress: cadence-frontend:7933
+        # - name: cluster-1
+        #   enabled: true
+
     logLevel: "debug,info"
 
     # IMPORTANT: This value cannot be changed, once it's set.
@@ -127,6 +211,7 @@ server:
     # replicaCount: 1
     service:
       type: ClusterIP
+      grpcPort: 7833
       port: 7933
     metrics:
       annotations: {}
@@ -149,6 +234,7 @@ server:
     # replicaCount: 1
     service:
       # type: ClusterIP
+      grpcPort: 7834
       port: 7934
     metrics:
       annotations: {}
@@ -171,6 +257,7 @@ server:
     # replicaCount: 1
     service:
       # type: ClusterIP
+      grpcPort: 7835
       port: 7935
     metrics:
       annotations: {}
@@ -218,7 +305,7 @@ web:
 
   image:
     repository: ubercadence/web
-    tag: v3.24.0
+    tag: v3.28.4
     pullPolicy: IfNotPresent
 
   tcheck:

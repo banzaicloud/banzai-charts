@@ -53,12 +53,24 @@ Source: https://stackoverflow.com/a/52024583/3027614
 {{- include $template (dict "Chart" (dict "Name" $subchart) "Values" (index $dot.Values $subchart) "Release" $dot.Release "Capabilities" $dot.Capabilities) }}
 {{- end }}
 
+{{- define "cadence.frontend.internalGRPCPort" -}}
+7833
+{{- end -}}
+
 {{- define "cadence.frontend.internalPort" -}}
 7933
 {{- end -}}
 
+{{- define "cadence.history.internalGRPCPort" -}}
+7834
+{{- end -}}
+
 {{- define "cadence.history.internalPort" -}}
 7934
+{{- end -}}
+
+{{- define "cadence.matching.internalGRPCPort" -}}
+7835
 {{- end -}}
 
 {{- define "cadence.matching.internalPort" -}}
