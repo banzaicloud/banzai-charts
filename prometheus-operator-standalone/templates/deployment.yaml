@@ -32,10 +32,6 @@ spec:
           image: "{{ .Values.prometheusOperator.image.repository }}:{{ .Values.prometheusOperator.image.tag }}"
           imagePullPolicy: "{{ .Values.prometheusOperator.image.pullPolicy }}"
           args:
-          {{- if semverCompare "< 1.16.0-0" $kubeTargetVersion }}
-          {{/* This is only valid for v0.38, v0.40 depricated this flag */}}
-            - --manage-crds=false
-          {{- end }}
           {{- if .Values.prometheusOperator.customResourceGroupRemap.enabled }}
             - --apiserver=http://127.0.0.1:6444
           {{- end }}
