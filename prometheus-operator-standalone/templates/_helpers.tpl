@@ -50,8 +50,5 @@ prometheusoperator.coreos.com/version: {{ .Values.prometheusOperator.image.tag }
 {{- define "prometheus-operator.label-selectors" -}}
 app: {{ template "prometheus-operator.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
 app.kubernetes.io/component: application
-{{- $kubeTargetVersion := default .Capabilities.KubeVersion.GitVersion .Values.kubeTargetVersionOverride }}
-prometheusoperator.coreos.com/version: {{ .Values.prometheusOperator.image.tag }}
 {{- end }}
