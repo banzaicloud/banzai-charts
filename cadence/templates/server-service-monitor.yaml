@@ -13,8 +13,8 @@ metadata:
     app.kubernetes.io/version: {{ $.Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: {{ $service }}
     app.kubernetes.io/part-of: {{ $.Chart.Name }}
-    {{- with (default $.Values.server.metrics.serviceMonitor.additionalLabels $serviceValues.metrics.serviceMonitor.additionalLabels) }}
-    {{- toYaml . | indent 4 }}
+    {{- range $key, $value := $.Values.server.metrics.serviceMonitor.additionalLabels }}
+    {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   endpoints:
