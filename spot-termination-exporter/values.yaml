@@ -35,7 +35,7 @@ spotTerminationexporter:
   
   serviceMonitor:
     # enabled should be set to true to enable prometheus-operator discovery of this service
-    enabled: true
+    enabled: false
     # additionalLabels is the set of additional labels to add to the ServiceMonitor
     additionalLabels: {}
 
