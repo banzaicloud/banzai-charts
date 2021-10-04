@@ -47,56 +47,56 @@ charts = [
         'prefix': ''
     },
     {
-        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/bucket-replicate.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos/mixin-job-pattern/examples/dashboards/bucket_replicate.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/compact.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos/mixin-job-pattern/examples/dashboards/compact.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/overview.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos/mixin-job-pattern/examples/dashboards/overview.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/query.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos/mixin-job-pattern/examples/dashboards/query.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/receive.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos/mixin-job-pattern/examples/dashboards/receive.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/rule.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos/mixin-job-pattern/examples/dashboards/rule.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/sidecar.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos/mixin-job-pattern/examples/dashboards/sidecar.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
         'prefix': 'thanos_'
     },
     {
-        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos-operator/master/dashboards/store.json',
+        'source': 'https://raw.githubusercontent.com/banzaicloud/thanos/mixin-job-pattern/examples/dashboards/store.json',
         'destination': '../templates/dashboards',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
