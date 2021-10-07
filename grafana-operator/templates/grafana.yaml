@@ -42,16 +42,17 @@ spec:
     affinity:
       {{- toYaml . | nindent 6 }}
   {{- end }}
-  {{- if .Values.grafana.deployment.envFrom }}
-    envFrom:
   {{- with .Values.grafana.deployment.envFrom }}
-      - {{ . }}
-  {{- end }}
+    envFrom: {{- toYaml . | nindent 6 }}
   {{- end }}
     skipCreateAdminAccount: {{ .Values.grafana.deployment.skipCreateAdminAccount }}
   {{- if .Values.grafana.deployment.priorityClassName }}
     priorityClassName: {{ .Values.grafana.deployment.priorityClassName }}
   {{- end }}
+  {{- with .Values.grafana.deployment.securityContext }}
+    securityContext: {{- toYaml . | nindent 6 }}
+  {{- end }}
+
   service:
     type: {{ .Values.defaultDeployment.service.type }}
     {{- if .Values.defaultDeployment.service.ports }}
@@ -87,4 +88,9 @@ spec:
   {{- end }}
 
   resources: {{- toYaml .Values.defaultDeployment.resources | nindent 4 }}
+
+  {{- with .Values.defaultDeployment.dataStorage }}
+  dataStorage: {{- toYaml . | nindent 4 }}
+  {{- end }}
+
 {{- end }}

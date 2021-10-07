@@ -79,8 +79,14 @@ grafana:
     tolerations: []
     affinity: {}
     envFrom: []
+#      - configMapRef:
+#          name: grafana-custom-config
     skipCreateAdminAccount: false
     priorityClassName: ""
+    securityContext: {}
+#      runAsUser: 472
+#      runAsGroup: 2000
+#      fsGroup: 2000
 
 grafanaPluginInit:
   image:
@@ -241,6 +247,11 @@ defaultDeployment:
 
     auth.anonymous:
       enabled: true
+
+  dataStorage: {}
+#    accessModes:
+#    - ReadWriteOnce
+#    size: "10Gi"
 
   resources: {}
   readinessProbe:
