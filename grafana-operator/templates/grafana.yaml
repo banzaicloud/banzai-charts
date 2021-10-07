@@ -52,6 +52,9 @@ spec:
   {{- with .Values.grafana.deployment.securityContext }}
     securityContext: {{- toYaml . | nindent 6 }}
   {{- end }}
+  {{- with .Values.grafana.deployment.strategy }}
+    strategy: {{- toYaml . | nindent 6 }}
+  {{- end }}
 
   service:
     type: {{ .Values.defaultDeployment.service.type }}

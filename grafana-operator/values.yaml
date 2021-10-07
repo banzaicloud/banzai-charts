@@ -87,6 +87,7 @@ grafana:
 #      runAsUser: 472
 #      runAsGroup: 2000
 #      fsGroup: 2000
+    strategy: {}
 
 grafanaPluginInit:
   image:
