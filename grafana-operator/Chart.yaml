@@ -2,7 +2,7 @@ apiVersion: v1
 name: grafana-operator
 description: Grafana-operator Helm chart for Kubernetes
 
-version: 0.3.15
+version: 0.3.16
 
 appVersion: master
 
