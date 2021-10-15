@@ -159,7 +159,6 @@ server:
           existingSecret: ""
           consistency: One
           # datacenter: "us-east-1a"
-          # maxQPS: 1000
           # maxConns: 2
 
         sql:
@@ -173,7 +172,6 @@ server:
           # maxConns: 20
           # maxIdleConns: 20
           # maxConnLifetime: "1h"
-          # maxQPS: 1000
           # connectAttributes:
             # tx_isolation: "READ-COMMITTED"
 
@@ -189,7 +187,6 @@ server:
           existingSecret: ""
           consistency: One
           # datacenter: "us-east-1a"
-          # maxQPS: 1000
           # maxConns: 2
 
         sql:
@@ -203,7 +200,6 @@ server:
           # maxConns: 20
           # maxIdleConns: 20
           # maxConnLifetime: "1h"
-          # maxQPS: 1000
           # connectAttributes:
             # tx_isolation: "READ-COMMITTED"
 
