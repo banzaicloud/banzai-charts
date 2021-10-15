@@ -161,6 +161,9 @@ server:
           # datacenter: "us-east-1a"
           # maxConns: 2
 
+          # protoVersion is the protocol Version to connect to cassandra host.
+          # protoVersion: 4
+
         sql:
           pluginName: "" # mysql
           host: ""
@@ -188,6 +191,9 @@ server:
           consistency: One
           # datacenter: "us-east-1a"
           # maxConns: 2
+
+          # protoVersion is the protocol Version to connect to cassandra host.
+          # protoVersion: 4
 
         sql:
           pluginName: "" # mysql
