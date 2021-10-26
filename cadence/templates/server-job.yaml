@@ -110,7 +110,10 @@ spec:
             - name: SQL_USER
               value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
             - name: SQL_PASSWORD
-              value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cadence.persistence.secretName" (list $ $store)  | quote }}
+                  key: {{ include "cadence.persistence.secretKey" (list $ $store) | quote }}
             {{- with $storeConfig.sql.connectAttributes }}
             - name: SQL_CONNECT_ATTRIBUTES
               value: {{ include "to-query" . }}
@@ -158,7 +161,10 @@ spec:
             - name: SQL_USER
               value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
             - name: SQL_PASSWORD
-              value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cadence.persistence.secretName" (list $ $store) | quote }}
+                  key: {{ include "cadence.persistence.secretKey" (list $ $store) | quote }}
             {{- with $storeConfig.sql.connectAttributes }}
             - name: SQL_CONNECT_ATTRIBUTES
               value: {{ include "to-query" . }}
@@ -282,7 +288,10 @@ spec:
             - name: SQL_USER
               value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
             - name: SQL_PASSWORD
-              value: {{ include "cadence.persistence.sql.password" (list $ $store) }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cadence.persistence.secretName" (list $ $store) | quote }}
+                  key: {{ include "cadence.persistence.secretKey" (list $ $store) | quote }}
             {{- with $storeConfig.sql.connectAttributes }}
             - name: SQL_CONNECT_ATTRIBUTES
               value: {{ include "to-query" . }}
