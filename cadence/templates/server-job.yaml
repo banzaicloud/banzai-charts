@@ -110,7 +110,7 @@ spec:
             - name: SQL_USER
               value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
             - name: SQL_PASSWORD
-              {{ - if or .Values.cassandra.enabled .Values.mysql.enabled }}
+              {{- if or .Values.cassandra.enabled .Values.mysql.enabled }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "cadence.persistence.secretName" (list $ $store)  | quote }}
@@ -165,7 +165,7 @@ spec:
             - name: SQL_USER
               value: {{ include "cadence.persistence.sql.user" (list $ $store) }}
             - name: SQL_PASSWORD
-              {{ - if or .Values.cassandra.enabled .Values.mysql.enabled }}
+              {{- if or .Values.cassandra.enabled .Values.mysql.enabled }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "cadence.persistence.secretName" (list $ $store)  | quote }}
