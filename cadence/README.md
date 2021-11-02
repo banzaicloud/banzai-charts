@@ -349,6 +349,7 @@ Global options overridable per service are marked with an asterisk.
 | `server.config.persistence.[store].sql`           | SQL connection details (see `values.yaml`)            | `{}`                  |
 | `server.[service].service.type`                   | `[service]` service type                              | `ClusterIP`           |
 | `server.[service].service.port`                   | `[service]` service port                              | `7933/7934/7935/7939` |
+| `server.[service].service.annotations`            | `[service]` service annotations                       | `{}`                  |
 | `server.[service].metrics.annotations.enabled`    | Annotate `[service]` pods with Prometheus annotations | ``                    |
 | `server.[service].metrics.serviceMonitor.enabled` | Enable Prometheus ServiceMonitor for `[service]`      | ``                    |
 | `server.[service].metrics.prometheus.timerType`   | `[service]` Prometheus timer type                     | ``                    |
