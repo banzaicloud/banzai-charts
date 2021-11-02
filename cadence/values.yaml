@@ -213,6 +213,7 @@ server:
       type: ClusterIP
       grpcPort: 7833
       port: 7933
+      annotations: {}
     metrics:
       annotations: {}
         # enabled: false
@@ -236,6 +237,7 @@ server:
       # type: ClusterIP
       grpcPort: 7834
       port: 7934
+      annotations: {}
     metrics:
       annotations: {}
         # enabled: false
@@ -259,6 +261,7 @@ server:
       # type: ClusterIP
       grpcPort: 7835
       port: 7935
+      annotations: {}
     metrics:
       annotations: {}
         # enabled: false
@@ -281,6 +284,7 @@ server:
     service:
       # type: ClusterIP
       port: 7939
+      annotations: {}
     metrics:
       annotations: {}
         # enabled: false
