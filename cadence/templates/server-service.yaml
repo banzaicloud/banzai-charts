@@ -17,6 +17,10 @@ metadata:
 spec:
   type: {{ .Values.server.frontend.service.type }}
   ports:
+    - port: {{ .Values.server.frontend.service.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
     - port: {{ .Values.server.frontend.service.port }}
       targetPort: rpc
       protocol: TCP

@@ -77,6 +77,10 @@ Source: https://stackoverflow.com/a/52024583/3027614
 7935
 {{- end -}}
 
+{{- define "cadence.worker.internalGRPCPort" -}}
+7839
+{{- end -}}
+
 {{- define "cadence.worker.internalPort" -}}
 7939
 {{- end -}}
