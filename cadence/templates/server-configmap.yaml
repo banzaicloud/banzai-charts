@@ -23,7 +23,8 @@ data:
       datastores:
         default:
           {{- if eq (include "cadence.persistence.driver" (list . "default")) "cassandra" }}
-          cassandra:
+          nosql:
+            pluginName: cassandra
             hosts: {{ include "cadence.persistence.cassandra.hosts" (list . "default") }}
             port: {{ include "cadence.persistence.cassandra.port" (list . "default") }}
             password: {{ `{{ .Env.CADENCE_STORE_PASSWORD }}` }}
@@ -45,7 +46,8 @@ data:
           {{- end }}
         visibility:
           {{- if eq (include "cadence.persistence.driver" (list . "visibility")) "cassandra" }}
-          cassandra:
+          nosql:
+            pluginName: cassandra
             hosts: {{ include "cadence.persistence.cassandra.hosts" (list . "visibility") }}
             port: {{ include "cadence.persistence.cassandra.port" (list . "visibility") }}
             password: {{ `{{ .Env.CADENCE_VISIBILITY_STORE_PASSWORD }}` }}

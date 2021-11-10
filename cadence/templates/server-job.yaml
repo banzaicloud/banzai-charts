@@ -87,6 +87,10 @@ spec:
               value: {{ first (splitList "," (include "cadence.persistence.cassandra.hosts" (list $ $store))) }}
             - name: CASSANDRA_DB_PORT
               value: {{ include "cadence.persistence.cassandra.port" (list $ $store) | quote }}
+            {{- if $storeConfig.cassandra.protoVersion }}
+            - name: CASSANDRA_PROTOCOL_VERSION
+              value: {{ $storeConfig.cassandra.protoVersion }}
+            {{- end }}
             - name: CASSANDRA_KEYSPACE
               value: {{ $storeConfig.cassandra.keyspace }}
             {{- if $storeConfig.cassandra.user }}

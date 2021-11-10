@@ -8,7 +8,7 @@ debug: false
 server:
   image:
     repository: ubercadence/server
-    tag: 0.21.3
+    tag: 0.22.3
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
@@ -159,8 +159,10 @@ server:
           existingSecret: ""
           consistency: One
           # datacenter: "us-east-1a"
-          # maxQPS: 1000
           # maxConns: 2
+
+          # protoVersion is the protocol Version to connect to cassandra host.
+          # protoVersion: 4
 
         sql:
           pluginName: "" # mysql
@@ -173,7 +175,6 @@ server:
           # maxConns: 20
           # maxIdleConns: 20
           # maxConnLifetime: "1h"
-          # maxQPS: 1000
           # connectAttributes:
             # tx_isolation: "READ-COMMITTED"
 
@@ -189,8 +190,10 @@ server:
           existingSecret: ""
           consistency: One
           # datacenter: "us-east-1a"
-          # maxQPS: 1000
           # maxConns: 2
+
+          # protoVersion is the protocol Version to connect to cassandra host.
+          # protoVersion: 4
 
         sql:
           pluginName: "" # mysql
@@ -203,7 +206,6 @@ server:
           # maxConns: 20
           # maxIdleConns: 20
           # maxConnLifetime: "1h"
-          # maxQPS: 1000
           # connectAttributes:
             # tx_isolation: "READ-COMMITTED"
 
@@ -309,7 +311,7 @@ web:
 
   image:
     repository: ubercadence/web
-    tag: v3.28.4
+    tag: v3.28.7
     pullPolicy: IfNotPresent
 
   tcheck:
