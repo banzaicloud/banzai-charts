@@ -142,6 +142,7 @@ server:
         #   enabled: true
 
     logLevel: "debug,info"
+    levelKey: "level"
 
     # IMPORTANT: This value cannot be changed, once it's set.
     numHistoryShards: 512
