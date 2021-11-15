@@ -329,7 +329,7 @@ timePartioning:
 |Name|Description| Default Value|
 |----|-----------|--------------|
 | sidecar.enabled | NOTE: This is only the service references for the sidecar. | true |
-| sidecar.selector | Pod label selector to match sidecar services on. | `{"app": "prometheus"}` |
+| sidecar.selector | REQUIRED: Pod label selector to match sidecar services on. | |
 
 ## Query Frontend
 
