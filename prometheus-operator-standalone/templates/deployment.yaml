@@ -57,8 +57,10 @@ spec:
             {{- else }}
             - --prometheus-config-reloader={{ .Values.prometheusOperator.prometheusConfigReloaderImage.repository }}:{{ .Values.prometheusOperator.prometheusConfigReloaderImage.tag }}
             {{- end }}
-            - --config-reloader-cpu={{ .Values.prometheusOperator.configReloaderCpu }}
-            - --config-reloader-memory={{ .Values.prometheusOperator.configReloaderMemory }}
+            - --config-reloader-cpu-limit={{ .Values.prometheusOperator.configReloaderCpu }}
+            - --config-reloader-cpu-request={{ .Values.prometheusOperator.configReloaderCpu }}
+            - --config-reloader-memory-limit={{ .Values.prometheusOperator.configReloaderMemory }}
+            - --config-reloader-memory-request={{ .Values.prometheusOperator.configReloaderMemory }}
           {{- if .Values.prometheusOperator.kubeletService }}
             - --kubelet-service={{ .Values.prometheusOperator.kubeletService.namespace }}/{{ .Values.prometheusOperator.kubeletService.serviceName }}
           {{- end }}
