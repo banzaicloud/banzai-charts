@@ -177,7 +177,10 @@ data:
       toDC: ""
 
     archival:
-      status: "disabled"
+      history:
+        status: "disabled"
+      visibility:
+        status: "disabled"
 
     dynamicconfig:
       client: filebased
