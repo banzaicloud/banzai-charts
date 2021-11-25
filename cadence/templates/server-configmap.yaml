@@ -154,7 +154,7 @@ data:
         {{- end}}
 
     clusterGroupMetadata:
-      enableGlobalDomain: {{ .Values.server.config.clusterMetadata.enableGlobalDomains }}
+      enableGlobalDomain: {{ .Values.server.config.clusterMetadata.enableGlobalDomain }}
       failoverVersionIncrement: {{ .Values.server.config.clusterMetadata.maximumClusterCount }}
       primaryClusterName: {{ .Values.server.config.clusterMetadata.masterClusterName }}
       currentClusterName: {{ .Values.server.config.clusterMetadata.currentClusterName }}
