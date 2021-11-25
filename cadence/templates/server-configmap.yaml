@@ -179,9 +179,11 @@ data:
     archival:
       status: "disabled"
 
-    dynamicConfigClient:
-      filepath: "/etc/cadence/config/dynamicconfig/config.yaml"
-      pollInterval: {{ .Values.dynamicConfig.pollInterval | default "10s" | quote }}
+    dynamicconfig:
+      client: filebased
+      filebased:
+        filepath: "/etc/cadence/config/dynamicconfig/config.yaml"
+        pollInterval: {{ .Values.dynamicConfig.pollInterval | default "10s" | quote }}
 
   dynamic_config.yaml: |-
     {{- toYaml .Values.dynamicConfig.values | nindent 12 }}
