@@ -153,7 +153,7 @@ data:
             prefix: {{ `{{ default .Env.STATSD_WORKER_PREFIX "cadence.worker" }}` }}
         {{- end}}
 
-    clusterMetadata:
+    clusterGroupMetadata:
       enableGlobalDomain: {{ .Values.server.config.clusterMetadata.enableGlobalDomains }}
       failoverVersionIncrement: {{ .Values.server.config.clusterMetadata.maximumClusterCount }}
       masterClusterName: {{ .Values.server.config.clusterMetadata.masterClusterName }}
