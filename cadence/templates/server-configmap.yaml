@@ -158,7 +158,7 @@ data:
       failoverVersionIncrement: {{ .Values.server.config.clusterMetadata.maximumClusterCount }}
       primaryClusterName: {{ .Values.server.config.clusterMetadata.masterClusterName }}
       currentClusterName: {{ .Values.server.config.clusterMetadata.currentClusterName }}
-      clusterInformation:
+      clusterGroup:
       {{- $currentClusterName := .Values.server.config.clusterMetadata.currentClusterName }}
       {{- $currentClusterIndex := 0 }}
       {{- $frontendComponentName := (include "cadence.componentname" (list . "frontend")) }}
