@@ -179,10 +179,6 @@ data:
     archival:
       status: "disabled"
 
-    publicClient:
-      {{- $currentClusterInfo := (index .Values.server.config.clusterMetadata.clusterInformation $currentClusterIndex) }}
-      hostPort:  "{{ $currentClusterInfo.rpcAddress | default (printf "%s%s%.0f" $frontendComponentName ":" $serverFrontendServicePort ) }}"
-
     dynamicConfigClient:
       filepath: "/etc/cadence/config/dynamicconfig/config.yaml"
       pollInterval: {{ .Values.dynamicConfig.pollInterval | default "10s" | quote }}
