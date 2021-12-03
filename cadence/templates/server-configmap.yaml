@@ -153,12 +153,12 @@ data:
             prefix: {{ `{{ default .Env.STATSD_WORKER_PREFIX "cadence.worker" }}` }}
         {{- end}}
 
-    clusterMetadata:
-      enableGlobalDomain: {{ .Values.server.config.clusterMetadata.enableGlobalDomains }}
+    clusterGroupMetadata:
+      enableGlobalDomain: {{ .Values.server.config.clusterMetadata.enableGlobalDomain }}
       failoverVersionIncrement: {{ .Values.server.config.clusterMetadata.maximumClusterCount }}
-      masterClusterName: {{ .Values.server.config.clusterMetadata.masterClusterName }}
+      primaryClusterName: {{ .Values.server.config.clusterMetadata.masterClusterName }}
       currentClusterName: {{ .Values.server.config.clusterMetadata.currentClusterName }}
-      clusterInformation:
+      clusterGroup:
       {{- $currentClusterName := .Values.server.config.clusterMetadata.currentClusterName }}
       {{- $currentClusterIndex := 0 }}
       {{- $frontendComponentName := (include "cadence.componentname" (list . "frontend")) }}
@@ -177,15 +177,16 @@ data:
       toDC: ""
 
     archival:
-      status: "disabled"
+      history:
+        status: "disabled"
+      visibility:
+        status: "disabled"
 
-    publicClient:
-      {{- $currentClusterInfo := (index .Values.server.config.clusterMetadata.clusterInformation $currentClusterIndex) }}
-      hostPort:  "{{ $currentClusterInfo.rpcAddress | default (printf "%s%s%.0f" $frontendComponentName ":" $serverFrontendServicePort ) }}"
-
-    dynamicConfigClient:
-      filepath: "/etc/cadence/config/dynamicconfig/config.yaml"
-      pollInterval: {{ .Values.dynamicConfig.pollInterval | default "10s" | quote }}
+    dynamicconfig:
+      client: filebased
+      filebased:
+        filepath: "/etc/cadence/config/dynamicconfig/config.yaml"
+        pollInterval: {{ .Values.dynamicConfig.pollInterval | default "10s" | quote }}
 
   dynamic_config.yaml: |-
     {{- toYaml .Values.dynamicConfig.values | nindent 12 }}
