@@ -365,7 +365,7 @@ Global options overridable per service are marked with an asterisk.
 | `web.enabled`                                     | Enable WebUI service                                  | `true`                |
 | `web.replicaCount`                                | Number of WebUI service Replicas                      | `1`                   |
 | `web.image.repository`                            | WebUI image repository                                | `ubercadence/web`     |
-| `web.image.tag`                                   | WebUI image tag                                       | `3.28.7`              |
+| `web.image.tag`                                   | WebUI image tag                                       | `3.29.5`              |
 | `web.image.pullPolicy`                            | WebUI image pull policy                               | `IfNotPresent`        |
 | `web.service.annotations`                         | WebUI service annotations                             | `{}`                  |
 | `web.service.type`                                | WebUI service type                                    | `ClusterIP`           |
