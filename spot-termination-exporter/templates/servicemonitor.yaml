@@ -5,7 +5,7 @@ metadata:
   name: {{ template "spotTerminationexporter.fullname" .  }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ template "spotTerminationexporter.name" . }}
+    app: {{ template "spotTerminationexporter.fullname" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     {{- if .Values.spotTerminationexporter.serviceMonitor.additionalLabels }}
@@ -20,5 +20,5 @@ spec:
     - "{{ $.Release.Namespace }}"
   selector:
     matchLabels:
-      app: {{ include "spotTerminationexporter.name" . }}
+      app: {{ include "spotTerminationexporter.fullname" . }}
 {{ end }}
