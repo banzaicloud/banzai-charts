@@ -263,7 +263,7 @@ method.
 7. Check the currently deployed Cadence **server version**.
 
    ```shell
-   kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud get pods --selector "app.kubernetes.io/instance=cadence" --output yaml |    grep -E "^\s+image: [^ ]+$"
+   kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud get pods --selector "app.kubernetes.io/instance=cadence" --output yaml | grep -E "^(\s+image: [^ ]+)|(\s+helm.sh/chart: [^ ]+)$"
    ```
 
    It is expected to output something like `      image:
@@ -289,7 +289,7 @@ method.
 10. Check the Cadence server version to be the latest chart supported one.
 
     ```shell
-    kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud get pods --selector "app.kubernetes.io/instance=cadence" --output yaml | grep -E "^\s+image: \S+$"
+    kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud get pods --selector "app.kubernetes.io/instance=cadence" --output yaml | grep -E "^(\s+image: [^ ]+)|(\s+helm.sh/chart: [^ ]+)$"
     ```
 
 11. Create a cluster.
@@ -340,7 +340,7 @@ method.
 14. Check the Cadence server version to be the new one.
 
     ```shell
-    kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud get pods --selector "app.kubernetes.io/instance=cadence" --output yaml | grep -E "^\s+image: [^ ]+$"
+    kubectl --kubeconfig "${BANZAI_INSTALLER_WORKSPACE_KUBECONFIG}" --namespace banzaicloud get pods --selector "app.kubernetes.io/instance=cadence" --output yaml | grep -E "^(\s+image: [^ ]+)|(\s+helm.sh/chart: [^ ]+)$"
     ```
 
 15. Start creating a new cluster
@@ -409,6 +409,9 @@ method.
 
 1. Commit your changes and open a PR to the default branch. Fill the description
    with the relevant information, especially regarding minor and major changes.
+   Also regarding minor/major server side changes it is useful to notify not
+   just chart maintainers but also at least one of the server development team
+   to take a look on the changes, see previous PRs for example.
 
 2. Merge the PR.
 
