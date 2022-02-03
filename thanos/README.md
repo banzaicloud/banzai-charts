@@ -306,6 +306,8 @@ timePartioning:
 | compact.compactConcurrency | Number of goroutines to use when compacting groups. | 1 |
 | compact.dataVolume.backend | Data volume for the compactor to store temporary data defaults to emptyDir. | {} |
 | compact.persistentVolumeClaim | Create the specified persistentVolumeClaim in case persistentVolumeClaim is used for the dataVolume.backend above and needs to be created. | {} |
+| compact.hashPartioning.shards | The number of shards used to partition the blocks based on the hashmod of compact.hashPartitioning.label. | "" |
+| compact.hashPartioning.label | The label used for sharding. Important: see [here](https://thanos.io/tip/components/compact.md/#warning-only-one-instance-of-compactor-may-run-against-a-single-stream-of-blocks-in-a-single-object-storage) for picking the right labels. | "" |
 
 ## Bucket
 
