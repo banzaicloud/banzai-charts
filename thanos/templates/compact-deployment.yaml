@@ -82,7 +82,7 @@ spec:
         - |
           --selector.relabel-config=
             - action: hashmod
-              source_labels: ["{{ $root.Values.compact.hashPartitioning.label }}"]
+              source_labels: [{{ $root.Values.compact.hashPartitioning.label }}]
               target_label: shard
               modulus: {{ $shards }}
             - action: keep
