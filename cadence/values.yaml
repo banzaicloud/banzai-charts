@@ -110,7 +110,7 @@ server:
       # WARNING: This value **MUST NOT** be changed after launching the Cadence
       # cluster.
       currentClusterName: "cluster-0"
-      
+
       # clusterInformation contains the information about each Cadence cluster
       # which participates in a Cadence cluster group.
       #
@@ -158,7 +158,6 @@ server:
           user: ""
           password: ""
           existingSecret: ""
-          consistency: One
           # datacenter: "us-east-1a"
           # maxConns: 2
 
@@ -189,7 +188,6 @@ server:
           user: ""
           password: ""
           existingSecret: ""
-          consistency: One
           # datacenter: "us-east-1a"
           # maxConns: 2
 
