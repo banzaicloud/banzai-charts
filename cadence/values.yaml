@@ -158,7 +158,6 @@ server:
           user: ""
           password: ""
           existingSecret: ""
-          consistency: One
           # datacenter: "us-east-1a"
           # maxConns: 2
 
@@ -189,7 +188,6 @@ server:
           user: ""
           password: ""
           existingSecret: ""
-          consistency: One
           # datacenter: "us-east-1a"
           # maxConns: 2
 
