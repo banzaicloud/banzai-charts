@@ -310,7 +310,7 @@ web:
 
   image:
     repository: ubercadence/web
-    tag: v3.29.5
+    tag: v3.32.0
     pullPolicy: IfNotPresent
 
   tcheck:
