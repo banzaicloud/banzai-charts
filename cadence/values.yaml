@@ -214,6 +214,7 @@ server:
       type: ClusterIP
       grpcPort: 7833
       port: 7933
+      transport: grpc # grpc or tchannel
       annotations: {}
     metrics:
       annotations: {}
