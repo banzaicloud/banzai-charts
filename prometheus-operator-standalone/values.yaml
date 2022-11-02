@@ -187,7 +187,7 @@ prometheusOperator:
   ##
   image:
     repository: quay.io/prometheus-operator/prometheus-operator
-    tag: v0.52.1
+    tag: v0.60.1
     pullPolicy: IfNotPresent
 
   ## K8S image
@@ -214,7 +214,7 @@ prometheusOperator:
   ##
   prometheusConfigReloaderImage:
     repository: quay.io/prometheus-operator/prometheus-config-reloader
-    tag: v0.52.1
+    tag: v0.60.1
     sha: ""
 
   ## Set the prometheus config reloader side-car CPU limit
