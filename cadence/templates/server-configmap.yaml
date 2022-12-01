@@ -162,14 +162,19 @@ data:
       {{- $currentClusterName := .Values.server.config.clusterMetadata.currentClusterName }}
       {{- $currentClusterIndex := 0 }}
       {{- $frontendComponentName := (include "cadence.componentname" (list . "frontend")) }}
-      {{- $serverFrontendServicePort := .Values.server.frontend.service.port }}
+      {{- $serverFrontendServiceTransport := .Values.server.frontend.service.transport | default "grpc" }}
+      {{- $serverFrontendServicePort := (.Values.server.frontend.service.grpcPort | int) | default 7833 }}
+      {{- if eq $serverFrontendServiceTransport "tchannel" }}
+        {{- $serverFrontendServicePort = (.Values.server.frontend.service.port | int) }}
+      {{- end }}
       {{- range $clusterIndex, $clusterInfo := .Values.server.config.clusterMetadata.clusterInformation }}
         {{- if eq $clusterInfo.name $currentClusterName }}{{ $currentClusterIndex = $clusterIndex }}{{ end }}
         {{ $clusterInfo.name }}:
           enabled: {{ $clusterInfo.enabled }}
           initialFailoverVersion: {{ $clusterIndex }}
           rpcName: "{{ $frontendComponentName }}"
-          rpcAddress: "{{ $clusterInfo.rpcAddress | default (printf "%s%s%.0f" $frontendComponentName ":" $serverFrontendServicePort ) }}"
+          rpcAddress: "{{ $clusterInfo.rpcAddress | default (printf "%s%s%d" $frontendComponentName ":" $serverFrontendServicePort ) }}"
+          rpcTransport: "{{ $serverFrontendServiceTransport }}"
       {{- end }}
 
     dcRedirectionPolicy:
