@@ -47,7 +47,7 @@ image:
   ## TODO change to original repo after release of UID fixes
   registry: quay.io
   repository: grafana-operator/grafana-operator
-  tag: v3.10.4
+  tag: v4.7.1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -71,7 +71,7 @@ grafana:
   image:
     registry: docker.io
     repository: grafana/grafana
-    tag: 7.5.7
+    tag: 9.3.2
   deployment:
     annotations: {}
     labels: {}
@@ -307,6 +307,34 @@ securityContext:
   runAsGroup: 1001
   fsGroup: 1001
   supplementalGroups: []
+
+persistence:
+  ## @param grafana.persistence.enabled Enable persistent storage for the grafana deployment
+  ## NOTE: In order to avoid deployment failure due to multi-attach of the same volume,
+  ## you might also want to set `grafana.updateStrategy` to Recreate.
+  ## More information can be found here: https://github.com/grafana-operator/grafana-operator/issues/453
+  ##
+  enabled: false
+  ## @param grafana.persistence.storageClass Define the storageClass for the persistent storage if not defined default is used
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param grafana.persistence.accessModes Define the accessModes for the persistent storage
+  ##
+  accessModes:
+    - ReadWriteOnce
+  labels: {}
+
+  ## @param grafana.persistence.annotations Add annotations to the persistent volume
+  ##
+  annotations: {}
+  ## @param grafana.persistence.size Define the size of the PersistentVolumeClaim to request for
+  ##
+  size: 10Gi
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
