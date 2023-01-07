@@ -13,7 +13,7 @@ spec:
     labels:
       {{- toYaml . | nindent 6 }}
   {{- end }}
-  {{- with .Values.defaultDeployment.persistence.annotations }}
+  {{- with .Values.grafana.persistence.annotations }}
     annotations:
       {{- toYaml . | nindent 6 }}
   {{- end }}
