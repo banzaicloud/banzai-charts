@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/pipeline-web
-  tag: 0.28.0
+  tag: 0.43.0
   pullPolicy: IfNotPresent
 
 nameOverride: ""
