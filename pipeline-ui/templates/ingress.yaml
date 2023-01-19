@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "pipeline-ui.fullname" . -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
@@ -14,6 +14,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
 {{- if .Values.ingress.tls }}
   tls:
   {{- range .Values.ingress.tls }}
@@ -31,8 +32,11 @@ spec:
       http:
         paths:
           - path: /{{ rest $url | join "/" }}
+            pathType: {{ .Values.ingress.pathType }}
             backend:
-              serviceName: {{ $fullName }}
-              servicePort: http
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ .Values.service.port }}
   {{- end}}
 {{- end }}
