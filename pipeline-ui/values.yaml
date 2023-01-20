@@ -17,21 +17,31 @@ service:
   port: 80
   
 ingress:
+  # -- Enable [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/).
   enabled: false
-  ingressClassName: traefik
+
+  # -- Ingress [class name](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class).
+  className: ""
+
+  # -- Annotations to be added to the ingress.
   annotations: {}
-    #kubernetes.io/ingress.class: traefik
-    #ingress.kubernetes.io/ssl-redirect: "false"
-    #traefik.frontend.rule.type: PathPrefix
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+
+  # -- Ingress host configuration.
+  # @default -- See [values.yaml](values.yaml).
   hosts:
-    # - "/"
-    # - "domain.com/xyz"
-    # - "domain.com"
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+  # -- Ingress TLS configuration.
+  # @default -- See [values.yaml](values.yaml).
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-  pathType: Prefix
 
 resources: #{}
   # We usually recommend not to specify default resources and to leave this as a conscious
