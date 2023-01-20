@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: banzaicloud/pipeline-web
-  tag: 0.28.0
+  tag: 0.43.0
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -18,6 +18,7 @@ service:
   
 ingress:
   enabled: false
+  ingressClassName: traefik
   annotations: {}
     #kubernetes.io/ingress.class: traefik
     #ingress.kubernetes.io/ssl-redirect: "false"
@@ -30,6 +31,7 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+  pathType: Prefix
 
 resources: #{}
   # We usually recommend not to specify default resources and to leave this as a conscious
