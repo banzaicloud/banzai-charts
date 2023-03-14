@@ -43,8 +43,7 @@ prometheusOperator:
   # additional:
   # - kube-system
 
-  kubeletService:
-    {}
+  kubeletService: {}
     # Namespace and service in which to maintain the kubelet service
     # namespace:
     # serviceName:
@@ -165,8 +164,7 @@ prometheusOperator:
   ## Assign custom affinity rules to the prometheus operator
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
   ##
-  affinity:
-    {}
+  affinity: {}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
