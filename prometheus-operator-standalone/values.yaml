@@ -18,6 +18,8 @@ kubeTargetVersionOverride: ""
 ##
 fullnameOverride: ""
 
+
+
 pspAnnotations: {}
 ## Specify pod annotations
 ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
@@ -39,9 +41,9 @@ prometheusOperator:
   ## This is mutually exclusive with denyNamespaces. Setting this to an empty object will disable the configuration
   ##
   namespaces: {}
-  # releaseNamespace: true
-  # additional:
-  # - kube-system
+    # releaseNamespace: true
+    # additional:
+    # - kube-system
 
   kubeletService: {}
     # Namespace and service in which to maintain the kubelet service
@@ -59,27 +61,27 @@ prometheusOperator:
     labels: {}
     clusterIP: ""
 
-    ## Port to expose on each node
-    ## Only used if service.type is 'NodePort'
-    ##
+  ## Port to expose on each node
+  ## Only used if service.type is 'NodePort'
+  ##
     nodePort: 30080
 
     nodePortTls: 30443
 
-    ## Additional ports to open for Prometheus service
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
-    ##
+  ## Additional ports to open for Prometheus service
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
+  ##
     additionalPorts: []
 
-    ## Loadbalancer IP
-    ## Only use if service.type is "loadbalancer"
-    ##
+  ## Loadbalancer IP
+  ## Only use if service.type is "loadbalancer"
+  ##
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
 
-    ## Service type
-    ## NodePort, ClusterIP, loadbalancer
-    ##
+  ## Service type
+  ## NodePort, ClusterIP, loadbalancer
+  ##
     type: ClusterIP
 
     ## List of IP addresses at which the Prometheus server service is available
