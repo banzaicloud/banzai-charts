@@ -13,11 +13,13 @@ rules:
 {{- end  }}
   resources:
   - alertmanagers
+  - alertmanagers/status
+  - alertmanagers/finalizers
   - alertmanagerconfigs
   - prometheuses
-  - thanosrulers
+  - prometheuses/status
   - prometheuses/finalizers
-  - alertmanagers/finalizers
+  - thanosrulers
   - thanosrulers/finalizers
   - servicemonitors
   - podmonitors
@@ -71,3 +73,21 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+    - networking.k8s.io
+  resources:
+    - ingresses
+  verbs:
+    - get
+    - list
+    - watch
+{{- if .Capabilities.APIVersions.Has "discovery.k8s.io/v1/EndpointSlice" }}
+- apiGroups:
+  - discovery.k8s.io
+resources:
+  - endpointslices
+verbs:
+  - get
+  - list
+  - watch
+{{- end }}

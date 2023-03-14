@@ -25,3 +25,7 @@ Will result in a setup that the usual monitoring CRDs will have a group name of
 will need to use the `monitoring.backyards.banzaicloud.io/v1/Prometheus` object.
 
 To achieve this effect, we are relying on [k8s-proxy](https://github.com/banzaicloud/k8s-proxy)
+
+### Note for developers to update chart
+1. Copy crds from upstream [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack/crds) into `resources` directory
+2. Update Charts.yaml with appVersion to match upstream version
