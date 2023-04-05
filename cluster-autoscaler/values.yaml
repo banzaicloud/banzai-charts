@@ -45,7 +45,7 @@ sslCertHostPath: /etc/ssl/certs/ca-certificates.crt
 cloudConfigPath: /etc/gce.conf
 
 image:
-  repository: k8s.gcr.io/cluster-autoscaler
+  repository: registry.k8s.io/cluster-autoscaler
   tag: v1.13.1
   pullPolicy: IfNotPresent
 
