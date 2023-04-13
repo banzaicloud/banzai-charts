@@ -27,7 +27,7 @@ This chart bootstraps a [Cadence](https://github.com/uber/cadence) and a [Cadenc
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release --namespace cadence banzaicloud-stable/cadence
+$ helm install my-release --namespace cadence banzaicloud-stable/cadence
 ```
 
 > **Tip**: List all releases using `helm list`
