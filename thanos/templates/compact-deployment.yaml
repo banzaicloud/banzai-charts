@@ -1,108 +1,142 @@
+{{- $root := . }}
 {{ if .Values.compact.enabled }}
+
+{{- $shards := int 0 }}
+
+{{- $hashPartitioning := false }}
+
+{{- if .Values.compact.hashPartitioning }}
+  {{- $shards = int .Values.compact.hashPartitioning.shards }}
+  {{- $hashPartitioning = true }}
+{{- end }}
+
+
+{{- range $index, $_ := until $shards }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "thanos.componentname" (list $ "compact") }}
+  name: {{ include "thanos.componentname" (list $ "compact") }}-{{ $index }}
   labels:
-    app.kubernetes.io/name: {{ include "thanos.name" . }}
-    helm.sh/chart: {{ include "thanos.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/name: {{ include "thanos.name" $root }}
+    helm.sh/chart: {{ include "thanos.chart" $root }}
+    app.kubernetes.io/instance: {{ $root.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $root.Release.Service }}
+    app.kubernetes.io/version: {{ $root.Chart.AppVersion | replace "+" "_" }}
     app.kubernetes.io/component: compact
-{{ with .Values.compact.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end -}}
-  {{- with .Values.compact.deploymentAnnotations }}
+    partition: "{{ $index }}"
+{{ with $root.Values.compact.deploymentLabels }}{{ toYaml . | indent 4 }}{{ end -}}
+  {{- with $root.Values.compact.deploymentAnnotations }}
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.compact.replicaCount | default 1 }}
-  {{- with  .Values.compact.strategy }}
+  replicas: {{ $root.Values.compact.replicaCount | default 1 }}
+  {{- with  $root.Values.compact.strategy }}
   strategy: {{ toYaml . | nindent 4 }}
   {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "thanos.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "thanos.name" $root }}
+      app.kubernetes.io/instance: {{ $root.Release.Name }}
       app.kubernetes.io/component: compact
-{{ with .Values.compact.deploymentMatchLabels }}{{ toYaml . | indent 6 }}{{ end }}
+      partition: "{{ $index }}"
+{{ with $root.Values.compact.deploymentMatchLabels }}{{ toYaml . | indent 6 }}{{ end }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "thanos.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "thanos.name" $root }}
+        app.kubernetes.io/instance: {{ $root.Release.Name }}
         app.kubernetes.io/component: compact
-{{ with  .Values.compact.labels }}{{ toYaml . | indent 8 }}{{ end }}
-      {{- if or .Values.compact.annotations .Values.compact.metrics.annotations.enabled }}
+        partition: "{{ $index }}"
+{{ with  $root.Values.compact.labels }}{{ toYaml . | indent 8 }}{{ end }}
+      {{- if or $root.Values.compact.annotations $root.Values.compact.metrics.annotations.enabled }}
       annotations:
       {{- end }}
-      {{- with  .Values.compact.annotations }}{{ toYaml . | nindent 8 }}{{- end }}
-      {{- if .Values.compact.metrics.annotations.enabled  }}
+      {{- with  $root.Values.compact.annotations }}{{ toYaml . | nindent 8 }}{{- end }}
+      {{- if $root.Values.compact.metrics.annotations.enabled  }}
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.compact.http.port }}"
+        prometheus.io/port: "{{ $root.Values.compact.http.port }}"
       {{- end }}
     spec:
       containers:
       - name: thanos-compact
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- with .Values.compact.extraEnv }}
+        image: "{{ $root.Values.image.repository }}:{{ $root.Values.image.tag }}"
+        imagePullPolicy: {{ $root.Values.image.pullPolicy }}
+        {{- with $root.Values.compact.extraEnv }}
         env: {{ toYaml . | nindent 8 }}
         {{- end }}
         args:
         - "compact"
-        - "--log.level={{ .Values.compact.logLevel }}"
-        - "--log.format={{ .Values.compact.logFormat }}"
-        - "--http-address=0.0.0.0:{{ .Values.compact.http.port }}"
+        - "--log.level={{ $root.Values.compact.logLevel }}"
+        - "--log.format={{ $root.Values.compact.logFormat }}"
+        - "--http-address=0.0.0.0:{{ $root.Values.compact.http.port }}"
         - "--objstore.config-file=/etc/config/object-store.yaml"
         - "--data-dir=/var/thanos/compact"
-        - "--consistency-delay={{ .Values.compact.consistencyDelay }}"
-        - "--retention.resolution-raw={{ .Values.compact.retentionResolutionRaw }}"
-        - "--retention.resolution-5m={{ .Values.compact.retentionResolution5m }}"
-        - "--retention.resolution-1h={{ .Values.compact.retentionResolution1h }}"
-        - "--block-sync-concurrency={{ .Values.compact.blockSyncConcurrency }}"
-        - "--compact.concurrency={{ .Values.compact.compactConcurrency }}"
+        - "--consistency-delay={{ $root.Values.compact.consistencyDelay }}"
+        - "--retention.resolution-raw={{ $root.Values.compact.retentionResolutionRaw }}"
+        - "--retention.resolution-5m={{ $root.Values.compact.retentionResolution5m }}"
+        - "--retention.resolution-1h={{ $root.Values.compact.retentionResolution1h }}"
+        - "--block-sync-concurrency={{ $root.Values.compact.blockSyncConcurrency }}"
+        - "--compact.concurrency={{ $root.Values.compact.compactConcurrency }}"
         - "--wait"
-{{ with .Values.compact.extraArgs }}{{ toYaml . | indent 8 }}{{- end }}
+        {{- if $hashPartitioning }}
+        - |
+          --selector.relabel-config=
+            - action: hashmod
+              source_labels: [{{ $root.Values.compact.hashPartitioning.label }}]
+              target_label: shard
+              modulus: {{ $shards }}
+            - action: keep
+              source_labels: ["shard"]
+              regex: {{ $index }}
+        {{- end }}
+{{ with $root.Values.compact.extraArgs }}{{ toYaml . | indent 8 }}{{- end }}
         ports:
         - name: http
-          containerPort: {{ .Values.compact.http.port }}
+          containerPort: {{ $root.Values.compact.http.port }}
         volumeMounts:
         - name: config-volume
           mountPath: /etc/config
           readOnly: true
         - name: data-volume
           mountPath: /var/thanos/compact
-        resources: {{ toYaml .Values.compact.resources | nindent 10 }}
+        resources: {{ toYaml $root.Values.compact.resources | nindent 10 }}
       volumes:
       - name: data-volume
-      {{- if .Values.compact.dataVolume.backend }}
-        {{ toYaml .Values.compact.dataVolume.backend | nindent 8 }}
+      {{- if $root.Values.compact.dataVolume.backend }}
+        {{- if $root.Values.compact.persistentVolumeClaim }}
+        persistentVolumeClaim:
+          claimName: {{ $root.Values.compact.dataVolume.backend.persistentVolumeClaim.claimName }}-{{ $index }}
+        {{- else }}
+        {{ toYaml $root.Values.compact.dataVolume.backend | nindent 8 }}
+        {{- end }}
       {{- else }}
         emptyDir: {}
       {{- end }}
       - name: config-volume
         secret:
-          {{- if .Values.objstoreSecretOverride }}
-          secretName: "{{ .Values.objstoreSecretOverride }}"
+          {{- if $root.Values.objstoreSecretOverride }}
+          secretName: "{{ $root.Values.objstoreSecretOverride }}"
           {{- else }}
-          secretName: {{ include "thanos.fullname" . }}
+          secretName: {{ include "thanos.fullname" $root }}
           {{- end }}
-      {{- with .Values.compact.securityContext }}
+      {{- with $root.Values.compact.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.compact.nodeSelector }}
+      {{- with $root.Values.compact.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.compact.affinity }}
+      {{- with $root.Values.compact.affinity }}
       affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.compact.tolerations }}
+      {{- with $root.Values.compact.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with  .Values.compact.serviceAccount }}
+      {{- with  $root.Values.compact.serviceAccount }}
       serviceAccountName: "{{ . }}"
       {{- end }}
-      {{- if .Values.priorityClassName }}
-      priorityClassName: {{ .Values.priorityClassName }}
+      {{- if $root.Values.priorityClassName }}
+      priorityClassName: {{ $root.Values.priorityClassName }}
       {{- end }}
+---
+{{- end }}
 {{- end }}
