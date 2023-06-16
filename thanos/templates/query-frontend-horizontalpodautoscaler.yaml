@@ -23,13 +23,17 @@ spec:
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ . }}
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
 {{- end }}
 {{- with .Values.queryFrontend.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ . }}
+        target:
+          type: Utilization
+          averageUtilization: {{ . }}
 {{- end }}
 {{- end }}
 {{- end }}
