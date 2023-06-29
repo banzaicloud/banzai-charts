@@ -127,6 +127,11 @@ server:
       # WARNING: you **MUST** list the Cadence clusters of a Cadence cluster
       # group in the same order in each configuration to ensure the
       # initialFailoverVersions are synchronized.
+
+      # clusterRedirectionPolicy contains redirection information between cluster components
+      clusterRedirectionPolicy:
+        policy: "selected-apis-forwarding"
+
       clusterInformation:
         - name: cluster-0
           # enabled defines whether the Cadence cluster is enabled.
@@ -370,9 +375,16 @@ web:
 
   affinity: {}
 
-dynamicConfig:
-  values: {}
-  pollInterval: "10s"
+dynamicconfig:
+  client: filebased
+  configstore:
+    pollInterval: "10s"
+    updateRetryAttempts: 2
+    FetchTimeout: "2s"
+    UpdateTimeout: "2s"
+  filebased:
+    filepath: "config/dynamicconfig/development_es.yaml"
+    pollInterval: "10s"
 
 schema:
   setup:
@@ -402,3 +414,11 @@ mysql:
   initializationFiles:
     user.sql: |-
       GRANT ALL PRIVILEGES ON *.* TO 'cadence'@'%';
+      
+#  Indicates if the tchannel and grpc connections will be enabled
+connectionType:
+  thrift:
+     enabled: true
+  grpc: 
+     enabled: true
+
