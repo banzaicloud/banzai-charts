@@ -1,3 +1,4 @@
+{{- if .Values.pspEnabled }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -46,3 +47,4 @@ spec:
       - min: 0
         max: 65535
   readOnlyRootFilesystem: false
+{{- end }}
