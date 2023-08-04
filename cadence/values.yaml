@@ -8,7 +8,7 @@ debug: false
 server:
   image:
     repository: ubercadence/server
-    tag: 0.24.0
+    tag: 1.0.0
     pullPolicy: IfNotPresent
 
   # Global default settings (can be overridden per service)
@@ -60,15 +60,6 @@ server:
     # clusterMetadata contains the settings of the Cadence clusters
     # participating in a Cadence cluster group.
     clusterMetadata:
-      # enableGlobalDomain when set to true allows creating global domains which
-      # are replicated between all Cadence clusters distributed among different
-      # Kubernetes clusters and whose tasks are served by the active Cadence
-      # cluster in the replication.
-      #
-      # WARNING: This value **MUST NOT** be changed after launching the first
-      # Cadence cluster of the Cadence cluster group.
-      enableGlobalDomain: true
-
       # maximumClusterCount defines and locks the maximum number of Cadence
       # clusters of a Cadence cluster group at any point in the future included
       # clusters added later.
