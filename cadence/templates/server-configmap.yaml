@@ -72,20 +72,30 @@ data:
       name: cadence
       bootstrapMode: dns
       bootstrapHosts:
-        - {{ include "cadence.componentname" (list . "frontend-headless") }}:{{ .Values.server.frontend.service.grpcPort | default `{{ default .Env.FRONTEND_GRPC_PORT 7833 }}` }}
+       {{- if ($.Values.connectionType.thrift.enabled) }}  
         - {{ include "cadence.componentname" (list . "frontend-headless") }}:{{ .Values.server.frontend.service.port | default `{{ default .Env.FRONTEND_PORT 7933 }}` }}
-        - {{ include "cadence.componentname" (list . "history-headless") }}:{{ .Values.server.history.service.grpcPort | default `{{ default .Env.HISTORY_GRPC_PORT 7834 }}` }}
         - {{ include "cadence.componentname" (list . "history-headless") }}:{{ .Values.server.history.service.port | default `{{ default .Env.HISTORY_PORT 7934 }}` }}
-        - {{ include "cadence.componentname" (list . "matching-headless") }}:{{ .Values.server.matching.service.grpcPort | default `{{ default .Env.MATCHING_GRPC_PORT 7835 }}` }}
         - {{ include "cadence.componentname" (list . "matching-headless") }}:{{ .Values.server.matching.service.port | default `{{ default .Env.MATCHING_PORT 7935 }}` }}
         - {{ include "cadence.componentname" (list . "worker-headless") }}:{{ .Values.server.worker.service.port | default `{{ default .Env.WORKER_PORT 7939 }}` }}
+      {{- end }}
+      {{- if ($.Values.connectionType.grpc.enabled) }}  
+        - {{ include "cadence.componentname" (list . "frontend-headless") }}:{{ .Values.server.frontend.service.grpcPort | default `{{ default .Env.FRONTEND_GRPC_PORT 7833 }}` }}
+        - {{ include "cadence.componentname" (list . "history-headless") }}:{{ .Values.server.history.service.grpcPort | default `{{ default .Env.HISTORY_GRPC_PORT 7834 }}` }}
+        - {{ include "cadence.componentname" (list . "matching-headless") }}:{{ .Values.server.matching.service.grpcPort | default `{{ default .Env.MATCHING_GRPC_PORT 7835 }}` }}
+        - {{ include "cadence.componentname" (list . "worker-headless") }}:{{ .Values.server.worker.service.grpcPort | default `{{ default .Env.WORKER_PORT 7839 }}` }}
+      {{- end }}
+
       maxJoinDuration: 30s
 
     services:
       frontend:
         rpc:
-          grpcPort: {{ include "cadence.frontend.internalGRPCPort" . | default `{{ default .Env.FRONTEND_GRPC_PORT 7833 }}` }}
+        {{- if ($.Values.connectionType.thrift.enabled) }}  
           port: {{ include "cadence.frontend.internalPort" . | default `{{ default .Env.FRONTEND_PORT 7933 }}` }}
+        {{- end }}
+        {{- if ($.Values.connectionType.grpc.enabled) }}  
+          grpcPort: {{ include "cadence.frontend.internalGRPCPort" . | default `{{ default .Env.FRONTEND_GRPC_PORT 7833 }}` }}
+        {{- end }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
@@ -102,8 +112,12 @@ data:
 
       history:
         rpc:
-          grpcPort: {{ include "cadence.history.internalGRPCPort" . | default `{{ default .Env.HISTORY_GRPC_PORT 7834 }}` }}
+        {{- if ($.Values.connectionType.thrift.enabled) }}  
           port: {{ include "cadence.history.internalPort" . | default `{{ default .Env.HISTORY_PORT default 7934 }}` }}
+        {{- end }}
+        {{- if ($.Values.connectionType.grpc.enabled) }}  
+          grpcPort: {{ include "cadence.history.internalGRPCPort" . | default `{{ default .Env.HISTORY_GRPC_PORT 7834 }}` }}
+        {{- end }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
@@ -120,8 +134,12 @@ data:
 
       matching:
         rpc:
-          grpcPort: {{ include "cadence.matching.internalGRPCPort" . | default `{{ default .Env.MATCHING_GRPC_PORT 7835 }}` }}
+        {{- if ($.Values.connectionType.thrift.enabled) }}  
           port: {{ include "cadence.matching.internalPort" . | default `{{ default .Env.MATCHING_PORT 7935 }}` }}
+        {{- end }}
+        {{- if ($.Values.connectionType.grpc.enabled) }}  
+          grpcPort: {{ include "cadence.matching.internalGRPCPort" . | default `{{ default .Env.MATCHING_GRPC_PORT 7835 }}` }}
+        {{- end }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
@@ -138,7 +156,12 @@ data:
 
       worker:
         rpc:
+        {{- if ($.Values.connectionType.thrift.enabled) }}  
           port: {{ include "cadence.worker.internalPort" . | default `{{ default .Env.WORKER_PORT 7939 }}` }}
+        {{- end }}
+        {{- if ($.Values.connectionType.grpc.enabled) }}  
+          grpcPort: {{ include "cadence.worker.internalGRPCPort" . | default `{{ default .Env.WORKER_GRPC_PORT 7839 }}` }}
+        {{- end }}
           bindOnIP: {{ `{{ default .Env.POD_IP "0.0.0.0" }}` }}
         metrics:
           tags:
@@ -154,10 +177,11 @@ data:
         {{- end}}
 
     clusterGroupMetadata:
-      enableGlobalDomain: {{ .Values.server.config.clusterMetadata.enableGlobalDomain }}
       failoverVersionIncrement: {{ .Values.server.config.clusterMetadata.maximumClusterCount }}
       primaryClusterName: {{ .Values.server.config.clusterMetadata.masterClusterName }}
       currentClusterName: {{ .Values.server.config.clusterMetadata.currentClusterName }}
+      clusterRedirectionPolicy:
+        policy: {{ $.Values.server.config.dcRedirectionPolicy.policy }}
       clusterGroup:
       {{- $currentClusterName := .Values.server.config.clusterMetadata.currentClusterName }}
       {{- $currentClusterIndex := 0 }}
@@ -188,10 +212,15 @@ data:
         status: "disabled"
 
     dynamicconfig:
-      client: filebased
+      client: {{ $.Values.dynamicconfig.client }}
+      configstore:
+        pollInterval: {{ $.Values.dynamicconfig.configstore.pollInterval | default "10s" | quote  }}
+        updateRetryAttempts: {{ $.Values.dynamicconfig.configstore.updateRetryAttempts }}
+        FetchTimeout: {{ $.Values.dynamicconfig.configstore.FetchTimeout | default "2s" | quote }}
+        UpdateTimeout: {{ $.Values.dynamicconfig.configstore.UpdateTimeout | default "2s" | quote }}
       filebased:
-        filepath: "/etc/cadence/config/dynamicconfig/config.yaml"
-        pollInterval: {{ .Values.dynamicConfig.pollInterval | default "10s" | quote }}
+        filepath: {{ $.Values.dynamicconfig.filebased.filepath }}
+        pollInterval: {{ $.Values.dynamicconfig.filebased.pollInterval | default "10s" | quote }}
 
   dynamic_config.yaml: |-
     {{- toYaml .Values.dynamicConfig.values | nindent 12 }}

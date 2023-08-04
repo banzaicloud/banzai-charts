@@ -39,6 +39,9 @@ $ helm install --name my-release --namespace cadence banzaicloud-stable/cadence
 # Helm
 $ helm upgrade [RELEASE_NAME] banzaicloud-stable/cadence
 ```
+### From 1.0.0
+
+It's added in `clustermetadata` the label clusterRedirectionPolicy.policy with default value  "selected-apis-forwarding" to specify the redirection policy between cluster components
 
 ### From 0.20.x (or below) to 0.21.y (or above)
 
@@ -388,6 +391,15 @@ Global options overridable per service are marked with an asterisk.
 | `cassandra.enabled`                               | Install Cassandra cluster                             | `true`                |
 | `cassandra.config.cluster_size`                   | Cassandra cluster node number                         | `1`                   |
 | `mysql.enabled`                                   | Install MySQL                                         | `false`               |
+| `dynamicconfig.client`                            | Dynamic configuration client                          | `filebased`           |
+| `dynamicconfig.configstore.pollInterval`          | ConfigStore polling interval                          | `10s`                 |
+| `dynamicconfig.configstore.updateRetryAttempts`   | Number update retries                                 | `2`                   |
+| `dynamicconfig.configstore.FetchTimeout`          | Fetch timeout                                         | `2s`                  |
+| `dynamicconfig.configstore.UpdateTimeout`         | Configstore update timeout                            | `2s`                  |
+| `dynamicconfig.filebased.filepath`                | Path of the dynamic configuration file                | `config/dynamicconfig/development_es.yaml`                 |
+| `dynamicconfig.filebased.pollInterval`            | Polling interval                                      | `10s`                 |
+| `connectionType.thrift.enabled`                   | Enable connection tchannel                            | `true`                |
+| `connectionType.grpc.enabled`                     | Enable connection grcp                                | `true`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
