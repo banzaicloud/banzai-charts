@@ -173,6 +173,9 @@ spec:
       {{- with $root.Values.store.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
       {{- end }}
+      {{- with $root.Values.store.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ . }}
+      {{- end }}
       {{- with $root.Values.store.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}

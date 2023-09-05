@@ -205,6 +205,7 @@ These values are just samples, for more fine-tuning please check the values.yaml
 | store.serviceAccount | Name of the Kubernetes service account to use | "" |
 | store.livenessProbe  | Set up liveness probe for store available for Thanos v0.8.0+) |  {} |
 | store.readinessProbe  | Set up readinessProbe for store (available for Thanos v0.8.0+) | {}  |
+| store.terminationGracePeriodSeconds | Set up terminationGracePeriodSeconds for store - default in kubernetes is 30 | "" |
 | timePartioning   |  list of min/max time for store partitions. See more details below. Setting this will create mutlipale thanos store deployments based on the number of items in the list  | [{min: "", max: ""}] |
 | hashPartioning.shards   | The number of shared used to partition the blocks based on the hashmod of the blocks. Can not be used with time partitioning | "" |
 | initContainers   |  InitContainers allows injecting specialized containers that run before app containers. This is meant to pre-configure and tune mounted volume permissions.  | [] |
@@ -265,6 +266,7 @@ timePartioning:
 | query.rbac.enabled | Enable RBAC to use the PSP | false |
 | query.livenessProbe | Set up liveness probe for query | {} |
 | query.readinessProbe | Set up readinessProbe for query | {} |
+| query.terminationGracePeriodSeconds | Set up terminationGracePeriodSeconds for query - default in kubernetes is 30 | "" |
 
 ## Rule
 |Name|Description| Default Value|
@@ -356,6 +358,7 @@ timePartioning:
 | queryFrontend.cache.validity | | `` |
 | queryFrontend.log.request.decision | Request Logging for logging the start and end of requests | `LogFinishCall` |
 | queryFrontend.serviceAccountAnnotations | Optional annotations to be added to the ServiceAccount | {} |
+| queryFrontend.terminationGracePeriodSeconds | Set up terminationGracePeriodSeconds for query frontend - default in kubernetes is 30 | "" |
 
 ## Contributing
 Contributions are very welcome!

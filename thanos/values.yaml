@@ -1,6 +1,6 @@
 image:
   repository: quay.io/thanos/thanos
-  tag: v0.17.1
+  tag: v0.28.1
   pullPolicy: IfNotPresent
 
 store:

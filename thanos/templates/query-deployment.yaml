@@ -141,6 +141,9 @@ spec:
       {{- with .Values.query.securityContext }}
       securityContext: {{ toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.query.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ . }}
+      {{- end }}
       {{- with .Values.query.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
