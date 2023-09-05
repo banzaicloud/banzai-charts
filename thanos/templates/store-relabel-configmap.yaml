@@ -1,0 +1,16 @@
+{{ if .Values.compact.relabel_configs  }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "thanos.componentname" (list $ "store") }}-relabel-configs
+  labels:
+    app.kubernetes.io/name: {{ include "thanos.name" . }}
+    helm.sh/chart: {{ include "thanos.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | replace "+" "_" }}
+    app.kubernetes.io/component: store
+data:
+  relabel-configs.yaml: |-
+    {{- toYaml .Values.compact.relabel_configs | nindent 5}}
+{{- end}}
