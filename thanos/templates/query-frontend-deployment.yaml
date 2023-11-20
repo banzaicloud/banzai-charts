@@ -140,6 +140,8 @@ spec:
           containerPort: {{ .Values.queryFrontend.grpc.port }}
         resources:
           {{ toYaml .Values.queryFrontend.resources | nindent 10 }}
+        securityContext:
+          { { toYaml .Values.queryFrontend.containerSecurityContext | nindent 10 } }
         volumeMounts:
         {{- range .Values.queryFrontend.serviceDiscoveryFileConfigMaps }}
         - mountPath: /etc/query-frontend/{{ . }}

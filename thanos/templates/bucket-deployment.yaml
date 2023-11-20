@@ -69,6 +69,7 @@ spec:
             mountPath: /etc/config
             readOnly: true
         resources: {{ toYaml .Values.bucket.resources | nindent 10 }}
+        securityContext: {{ toYaml .Values.bucket.containerSecurityContext | nindent 10 }}
       volumes:
       - name: config-volume
         secret:

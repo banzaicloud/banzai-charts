@@ -145,6 +145,8 @@ spec:
         {{- end }}
         resources:
           {{ toYaml $root.Values.store.resources | nindent 10 }}
+        securityContext:
+          { { toYaml $root.Values.store.containerSecurityContext | nindent 10 } }
       volumes:
       - name: data
       {{- if $root.Values.store.dataVolume.backend }}

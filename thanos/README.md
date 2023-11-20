@@ -146,43 +146,44 @@ This section describes the values available
 
 These setting applicable to nearly all components.
 
-|Name|Description| Default Value|
-|----|-----------|--------------|
-| $component.labels | Additional labels to the Pod | {} |
-| $component.annotations | Additional annotations to the Pod | {} |
-| $component.deploymentLabels | Additional labels to the deployment | {} |
-| $component.deploymentAnnotations | Additional annotations to the deployment | {} |
-| $component.extraEnv | Add extra environment variables | [] |
-| $component.strategy | Kubernetes [deployment update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) object | {} |
-| $component.updateStrategy | Kubernetes [statefulset update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) object | {} |
-| $component.metrics.annotations.enabled | Prometheus annotation for component | false |
-| $component.metrics.serviceMonitor.enabled | Prometheus ServiceMonitor definition for component | false |
-| $component.securityContext | SecurityContext for Pod | {} |
-| $component.resources | Resource definition for container | {} |
-| $component.tolerations | [Node tolerations for server scheduling to nodes with taints](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) | {} |
-| $component.nodeSelector | [Node labels for compact pod assignment](https://kubernetes.io/docs/user-guide/node-selection/) | {} |
-| $component.affinity | [Pod affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity) | {} |
-| $component.grpc.port | grpc listen port number | 10901 |
-| $component.grpc.service.annotations | Service definition for grpc service | {} |
-| $component.grpc.service.matchLabels | Pod label selector to match grpc service on. | `{}` |
-| $component.grpc.ingress.enabled | Set up ingress for the grpc service | false |
-| $component.grpc.ingress.defaultBackend | Set up default backend for ingress | false |
-| $component.grpc.ingress.annotations | Add annotations to ingress | {} |
-| $component.grpc.ingress.labels | Add labels to ingress | {} |
-| $component.grpc.ingress.path | Ingress path | "/" |
-| $component.grpc.ingress.hosts | Ingress hosts | [] |
-| $component.grpc.ingress.tls | Ingress TLS configuration | [] |
-| $component.http.port | http listen port number | 10902 |
-| $component.http.service.annotations | Service definition for http service | {} |
-| $component.http.service.matchLabels | Pod label selector to match http service on. | `{}` |
-| $component.http.ingress.enabled | Set up ingress for the http service | false |
-| $component.http.ingress.apiVersion | Set API version for ingress | extensions/v1beta1 |
-| $component.http.ingress.defaultBackend | Set up default backend for ingress | false |
-| $component.http.ingress.annotations | Add annotations to ingress | {} |
-| $component.http.ingress.labels | Add labels to ingress | {} |
-| $component.http.ingress.path | Ingress path | "/" |
-| $component.http.ingress.hosts | Ingress hosts | [] |
-| $component.http.ingress.tls | Ingress TLS configuration | [] |
+| Name                                      | Description                                                                                                                               | Default Value|
+|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| $component.labels                         | Additional labels to the Pod                                                                                                              | {} |
+| $component.annotations                    | Additional annotations to the Pod                                                                                                         | {} |
+| $component.deploymentLabels               | Additional labels to the deployment                                                                                                       | {} |
+| $component.deploymentAnnotations          | Additional annotations to the deployment                                                                                                  | {} |
+| $component.extraEnv                       | Add extra environment variables                                                                                                           | [] |
+| $component.strategy                       | Kubernetes [deployment update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) object            | {} |
+| $component.updateStrategy                 | Kubernetes [statefulset update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) object | {} |
+| $component.metrics.annotations.enabled    | Prometheus annotation for component                                                                                                       | false |
+| $component.metrics.serviceMonitor.enabled | Prometheus ServiceMonitor definition for component                                                                                        | false |
+| $component.securityContext                | SecurityContext for Pod                                                                                                                   | {} |
+| $component.containerSecurityContext       | SecurityContext for Container                                                                                                             | {} |
+| $component.resources                      | Resource definition for container                                                                                                         | {} |
+| $component.tolerations                    | [Node tolerations for server scheduling to nodes with taints](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/)         | {} |
+| $component.nodeSelector                   | [Node labels for compact pod assignment](https://kubernetes.io/docs/user-guide/node-selection/)                                           | {} |
+| $component.affinity                       | [Pod affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity)                                          | {} |
+| $component.grpc.port                      | grpc listen port number                                                                                                                   | 10901 |
+| $component.grpc.service.annotations       | Service definition for grpc service                                                                                                       | {} |
+| $component.grpc.service.matchLabels       | Pod label selector to match grpc service on.                                                                                              | `{}` |
+| $component.grpc.ingress.enabled           | Set up ingress for the grpc service                                                                                                       | false |
+| $component.grpc.ingress.defaultBackend    | Set up default backend for ingress                                                                                                        | false |
+| $component.grpc.ingress.annotations       | Add annotations to ingress                                                                                                                | {} |
+| $component.grpc.ingress.labels            | Add labels to ingress                                                                                                                     | {} |
+| $component.grpc.ingress.path              | Ingress path                                                                                                                              | "/" |
+| $component.grpc.ingress.hosts             | Ingress hosts                                                                                                                             | [] |
+| $component.grpc.ingress.tls               | Ingress TLS configuration                                                                                                                 | [] |
+| $component.http.port                      | http listen port number                                                                                                                   | 10902 |
+| $component.http.service.annotations       | Service definition for http service                                                                                                       | {} |
+| $component.http.service.matchLabels       | Pod label selector to match http service on.                                                                                              | `{}` |
+| $component.http.ingress.enabled           | Set up ingress for the http service                                                                                                       | false |
+| $component.http.ingress.apiVersion        | Set API version for ingress                                                                                                               | extensions/v1beta1 |
+| $component.http.ingress.defaultBackend    | Set up default backend for ingress                                                                                                        | false |
+| $component.http.ingress.annotations       | Add annotations to ingress                                                                                                                | {} |
+| $component.http.ingress.labels            | Add labels to ingress                                                                                                                     | {} |
+| $component.http.ingress.path              | Ingress path                                                                                                                              | "/" |
+| $component.http.ingress.hosts             | Ingress hosts                                                                                                                             | [] |
+| $component.http.ingress.tls               | Ingress TLS configuration                                                                                                                 | [] |
 
 ## Store
 
