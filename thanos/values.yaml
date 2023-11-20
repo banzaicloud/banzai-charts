@@ -152,6 +152,8 @@ store:
       #      - chart-example.local
   # Optional securityContext
   securityContext: {}
+  # Optional containerSecurityContext
+  containerSecurityContext: {}
   resources: {}
   #  limits:
   #    cpu: 2000m
@@ -378,6 +380,8 @@ query:
 
   # Optional securityContext
   securityContext: {}
+  # Optional containerSecurityContext
+  containerSecurityContext: { }
   resources: {}
   #  limits:
   #    cpu: 2000m
@@ -597,6 +601,8 @@ queryFrontend:
 
   # Optional securityContext
   securityContext: {}
+  # Optional containerSecurityContext
+  containerSecurityContext: { }
   resources: {}
   #  limits:
   #    cpu: 2000m
@@ -713,6 +719,8 @@ compact:
 
   # Optional securityContext
   securityContext: {}
+  # Optional containerSecurityContext
+  containerSecurityContext: { }
   resources: {}
   #  limits:
   #    cpu: 2000m
@@ -824,6 +832,8 @@ bucket:
 
   # Optional securityContext
   securityContext: {}
+  # Optional containerSecurityContext
+  containerSecurityContext: { }
   resources: {}
   #  limits:
   #    cpu: 2000m
@@ -1056,6 +1066,8 @@ rule:
 
   # Optional securityContext
   securityContext: {}
+  # Optional containerSecurityContext
+  containerSecurityContext: { }
   resources: {}
   #  limits:
   #    cpu: 2000m

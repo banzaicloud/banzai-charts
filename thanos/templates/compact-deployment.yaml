@@ -73,6 +73,7 @@ spec:
         - name: data-volume
           mountPath: /var/thanos/compact
         resources: {{ toYaml .Values.compact.resources | nindent 10 }}
+        securityContext: {{ toYaml .Values.compact.containerSecurityContext | nindent 10 }}
       volumes:
       - name: data-volume
       {{- if .Values.compact.dataVolume.backend }}
